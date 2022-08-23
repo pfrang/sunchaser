@@ -12,7 +12,7 @@ justify-content: center;
 align-items: center;
 margin: 200px;
 border: 2px solid green;
-background-color: green
+background-color: #4a804a;
 box-shadow: 0px 2px 1px;
 `
 
