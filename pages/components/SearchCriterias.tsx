@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Calendar } from 'react-calendar'
 import styled from 'styled-components'
 import TransportChoice from './TransportChoice'
 import 'react-calendar/dist/Calendar.css';
 
-const Wrapper2 = styled.div`
+import { useRouter } from 'next/router';
+
+const Wrapper2 = styled.form`
 display: flex;
 flex-direction: column;
 gap: 50px;
@@ -18,25 +20,45 @@ box-shadow: 0px 2px 1px;
 
 export default function SearchCriterias() {
 
-  const [transport, setTransport] = useState('')
   const [townSearch, setTownSearch] = useState('')
   const [highlightedTransport, setHighlightedTransport] = useState('')
-  const [calendarValue, setCalendarValue] = useState(new Date())
+  const [calendarValue, setCalendarValue] = useState(undefined)
+  const [hours, setHours] = useState('')
+  const [minutes, setMinutes] = useState('')
 
   const travelItems = ["Walk", "Car", "Boat", "Public Transport"]
-  const timeValues = ["Hours", "Minutes"]
+  // const timeValues = ["Hours", "Minutes"]
 
-  const onClick = () => {
+  const router = useRouter()
 
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    const params = {
+      town: townSearch,
+      transport: highlightedTransport,
+      date: new Intl.DateTimeFormat().format(calendarValue),
+      hrs: hours,
+      mins: minutes
+    }
+
+    console.log(params);
+
+
+    const urlPar = Object.keys(params).map(key => key + "=" + params[key]).join("&")
+
+    router.push(`search?${urlPar}`)
   }
 
-  console.log(calendarValue);
+  useEffect(() => {
+    setCalendarValue(new Date());
+  }, []);
 
   return (
-    <Wrapper2>
+    <Wrapper2 onSubmit={onSubmit}>
       <div>
         <h3>Where are you?</h3>
-        <input className='border-2 h-10 text-xl' placeholder='Location' key={'inputBox'} onChange={(e) => setTownSearch(e.target.value)} type="text" name="" id="" value={townSearch} />
+        <input required className='border-2 h-10 text-xl' placeholder='Location' key={'inputBox'} onChange={(e) => setTownSearch(e.target.value)} type="text" name="" id="" value={townSearch} />
       </div>
       <div className=''>
         <h3>How can you travel?</h3>
@@ -49,20 +71,19 @@ export default function SearchCriterias() {
       <div>
         <h3>For how far are you willing to travel with your desired way of transportation</h3>
         <div className='flex justify-between'>
-          {timeValues.map((item, i) => {
-              return (
-                <div key={item + i} className='flex flex-col'>
-                  <label htmlFor='hrs'>{item}</label>
-                  <input className='border-2' type="number" name={item} id="" />
-                </div>
-              )
-          })}
-
+          <div className='flex flex-col'>
+            <label htmlFor='hrs'>Hours</label>
+            <input onChange={(e) => setHours(e.target.value)} className='border-2' type="number" required name="hrs" id="" />
+          </div>
+          <div className='flex flex-col'>
+            <label htmlFor='mns'>Minutes</label>
+            <input onChange={(e) => setMinutes(e.target.value)} max="60" className='border-2' type="number" required name="mns" id="" />
+          </div>
         </div>
       </div>
-      <Calendar onChange={setCalendarValue} value={calendarValue} />
+      {calendarValue && <Calendar onChange={setCalendarValue} value={calendarValue} />}
       <div>
-        <button className='border-2 bg-[#70b67f] p-2 w-48' onClick={onClick}>Submit</button>
+        <button className='border-2 bg-[#70b67f] p-2 w-48'>Submit</button>
       </div>
     </Wrapper2>
   )
