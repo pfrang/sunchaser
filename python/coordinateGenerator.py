@@ -1,5 +1,5 @@
 from math import radians, cos, sin, asin, sqrt, atan2,degrees
-import pandas as pd
+
 
 global radiusEarth # Radius of earth in kilometers.
 radiusEarth=6371
@@ -40,14 +40,21 @@ def newCoordinate(lat1,lon1,degree,d):
     return lat2,lon2
 
     
-print(newCoordinate(59.9139,10.7522,180,15))
+def coordinatesMatrix(distance,lat1,lon1):
+    coordinateList=[]
+    
 
-d = {}
+    for angels in range(360):
+        coordinateList.append([])
+        for distancePct in range(100):    
+            
+            newCor=newCoordinate(lat1,lon1,angels,(distance*distancePct)/100)
 
-for i in range(1,10):
-    d.ky = i|
-    for j in range(1,43243):
-        d.ky.append
+            coordinateList[angels].append(str(newCor))
+    
+    #print(coordinateList[1][50])
+    #[a][b] |a=angel b=pct of distance
+    #print(newCoordinate(59.9139,10.7522,1,500))
 
+coordinatesMatrix(1000,59.9139,10.7522)
 
-df = pd.DataFrame(d)
