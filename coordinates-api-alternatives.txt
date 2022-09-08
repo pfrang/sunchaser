@@ -1,0 +1,12 @@
+
+
+https://developers.google.com/maps/documentation/geocoding/overview
+
+KARTVERKET GRATIS NORGE
+https://ws.geonorge.no/stedsnavn/v1/#/default/get_sted
+
+https://www.erikbolstad.no/postnummer-koordinatar/?postnummer=0010
+
+https://www.latlong.net/
+
+https://nominatim.openstreetmap.org/ui/search.html?q=oslo
