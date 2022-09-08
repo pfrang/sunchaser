@@ -1,12 +1,17 @@
 
 
 https://developers.google.com/maps/documentation/geocoding/overview
+gidder ikke sette oss inn i driiit
 
 KARTVERKET GRATIS NORGE
 https://ws.geonorge.no/stedsnavn/v1/#/default/get_sted
+Kan være bra for å finne relevante steder i nærheten av ønsket reisemål siden den viser "områder" i nærheten av punkt. 
+Kan også brukes til å finne gps koordinat fra tekstsøk (i.e Oslo)
 
 https://www.erikbolstad.no/postnummer-koordinatar/?postnummer=0010
+geoshape av postnummer-område | ikke så aktuelt
 
 https://www.latlong.net/
+Lat og long fra stedsnavn
 
 https://nominatim.openstreetmap.org/ui/search.html?q=oslo

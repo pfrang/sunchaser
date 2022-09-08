@@ -1,60 +1,72 @@
 from math import radians, cos, sin, asin, sqrt, atan2,degrees
-
+from tracemalloc import start
+import numpy as np
 
 global radiusEarth # Radius of earth in kilometers.
 radiusEarth=6371
 
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance in kilometers between two points 
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians 
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-
-    # haversine formula 
-    dlon = lon2 - lon1 
-    dlat = lat2 - lat1 
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a)) 
-    return c * radiusEarth
-
-def newCoordinate(lat1,lon1,degree,d):
-
-    brng=radians(degree)
-    #brng = 1.57 (Bearing is 90 degrees converted to radians).
-    #d = Distance in km
-
-    lat1 = radians(lat1) #Current lat point converted to radians
-    lon1 = radians(lon1) #Current long point converted to radians
-
-    lat2 = asin( sin(lat1)*cos(d/radiusEarth) +
-     cos(lat1)*sin(d/radiusEarth)*cos(brng))
-
-    lon2 = lon1 + atan2(sin(brng)*sin(d/radiusEarth)*cos(lat1),
-             cos(d/radiusEarth)-sin(lat1)*sin(lat2))
-
-    lat2 = degrees(lat2)
-    lon2 = degrees(lon2)
-
-    return lat2,lon2
-
+class GetCoordinates:
+    def __init__(self, startingCoordinates):
+        self.startingCoordinates = startingCoordinates
     
-def coordinatesMatrix(distance,lat1,lon1):
-    coordinateList=[]
+    def retriveNewPointFromStartPoint(self,degree,distanceInKm):
+
+        startingLat = self.startingCoordinates[0]
+        startingLon = self.startingCoordinates[1]
+
+        brng=radians(degree)
+        #brng = 1.57 (Bearing is 90 degrees converted to radians).
+        #d = Distance in km
+
+        radiansLat = radians(startingLat) #Current lat point converted to radians
+        raidansLon = radians(startingLon) #Current long point converted to radians
+
+        lat2 = asin( sin(radiansLat)*cos(distanceInKm/radiusEarth) +
+        cos(radiansLat)*sin(distanceInKm/radiusEarth)*cos(brng))
+
+        lon2 = raidansLon + atan2(sin(brng)*sin(distanceInKm/radiusEarth)*cos(radiansLat),
+                cos(distanceInKm/radiusEarth)-sin(radiansLat)*sin(lat2))
+
+        degreesLat = degrees(lat2)
+        degreesLon = degrees(lon2)
+
+        return degreesLat,degreesLon
+
+    def retrieveEdgePoints(self):
+        northMid=self.retriveNewPointFromStartPoint(degree=0,distanceInKm =5)
+        eastMid=self.retriveNewPointFromStartPoint(degree=90,distanceInKm=5)
+        southMid=self.retriveNewPointFromStartPoint(degree=180,distanceInKm=5)
+        westMid=self.retriveNewPointFromStartPoint(degree=270,distanceInKm=5)
+
+        edgePoints = {
+            "northMid": northMid,
+            "eastMid": eastMid,
+            "southMid": southMid,
+            "westMid": westMid
+        }
+
+        return edgePoints
     
+    def retrieveLonLine(self,researchSquares=16):
+        edgePoints = self.retrieveEdgePoints()
+        lonEastMid = edgePoints["eastMid"][1]
+        lonWestMid = edgePoints["westMid"][1]
+        latNorthMid = edgePoints["northMid"][0]
+        latSouthMid = edgePoints["southMid"][0]
+        deltaLongitude = lonEastMid - lonWestMid
+        deltaLatitude = latNorthMid - latSouthMid
+        nrStepsInSquares = researchSquares / 2.0
+        # rangeOfLonCoordinates = (1.00 / nrStepsInSquares) * range(1,nrStepsInSquares)
+        # fractions = [x for x in np.arange(1 / nrStepsInSquares,1, 1 / nrStepsInSquares)]
+        lonCoords = [x for x in np.arange(lonWestMid,lonEastMid + (1 / nrStepsInSquares) * deltaLongitude, (1 / nrStepsInSquares) * deltaLongitude)]
+        print(lonCoords)
+        print(lonEastMid)
+        print(lonWestMid)
+        return "Hei"
 
-    for angels in range(360):
-        coordinateList.append([])
-        for distancePct in range(100):    
-            
-            newCor=newCoordinate(lat1,lon1,angels,(distance*distancePct)/100)
 
-            coordinateList[angels].append(str(newCor))
-    
-    #print(coordinateList[1][50])
-    #[a][b] |a=angel b=pct of distance
-    #print(newCoordinate(59.9139,10.7522,1,500))
 
-coordinatesMatrix(1000,59.9139,10.7522)
+startPoint=[59.9139,10.7522]
 
+instantiate = GetCoordinates(startPoint)
+print(instantiate.retrieveLonLine())
