@@ -34,15 +34,8 @@ export default function SearchCriterias() {
   const [minutes, setMinutes] = useState('');
 
   const travelItems = ["Walk", "Car", "Boat", "Public Transport"]
-  // const timeValues = ["Hours", "Minutes"]
 
   const router = useRouter()
-
-  // useEffect(() => {
-  //   setInvalidCalendarValue(false);
-  //   setUnfilledHighlightedTransport(false);
-
-  // },[invalidCalendarValue, unfilledHighlightedTransport])
 
   const checkIfTransportAndCalendarValuesAreFilled = () => {
 
@@ -53,9 +46,9 @@ export default function SearchCriterias() {
       check.transport = "";
     }
 
-    const today = new Intl.DateTimeFormat().format(new Date())
+    const today = new Date()
 
-    if (new Intl.DateTimeFormat().format(calendarValue) < today) {
+    if (calendarValue.getDate() < today.getDate()) {
       setInvalidCalendarValue(true);
       check.calendarValue = "";
     }

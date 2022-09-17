@@ -10,10 +10,12 @@ export default function Search() {
 
   const { data, isLoading, error } = useCoordinates(params);
 
-  console.log(isLoading);
-
-
   return (
-    <div>Search</div>
+    <>
+      {isLoading ? <div>Loading</div>
+        :
+        <div>Search</div>
+      }
+    </>
   )
 }
