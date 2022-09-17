@@ -6,13 +6,18 @@ import 'react-calendar/dist/Calendar.css';
 
 import { useRouter } from 'next/router';
 
-const Wrapper2 = styled.form`
+const Wrapper2 = styled.div`
+margin: 50px;
+margin-left: 100px;
+margin-right: 100px;
+`
+
+const FormStyle = styled.form`
 display: flex;
 flex-direction: column;
 gap: 50px;
 justify-content: center;
 align-items: center;
-margin: 200px;
 border: 2px solid green;
 background-color: #4a804a;
 box-shadow: 0px 2px 1px;
@@ -20,20 +25,48 @@ box-shadow: 0px 2px 1px;
 
 export default function SearchCriterias() {
 
-  const [townSearch, setTownSearch] = useState('')
-  const [highlightedTransport, setHighlightedTransport] = useState('')
-  const [calendarValue, setCalendarValue] = useState(undefined)
-  const [hours, setHours] = useState('')
-  const [minutes, setMinutes] = useState('')
+  const [townSearch, setTownSearch] = useState('');
+  const [highlightedTransport, setHighlightedTransport] = useState('');
+  const [unfilledHighlightedTransport, setUnfilledHighlightedTransport] = useState(false);
+  const [calendarValue, setCalendarValue] = useState(undefined);
+  const [invalidCalendarValue, setInvalidCalendarValue] = useState(false);
+  const [hours, setHours] = useState('');
+  const [minutes, setMinutes] = useState('');
 
   const travelItems = ["Walk", "Car", "Boat", "Public Transport"]
   // const timeValues = ["Hours", "Minutes"]
 
   const router = useRouter()
 
+  // useEffect(() => {
+  //   setInvalidCalendarValue(false);
+  //   setUnfilledHighlightedTransport(false);
+
+  // },[invalidCalendarValue, unfilledHighlightedTransport])
+
+  const checkIfTransportAndCalendarValuesAreFilled = () => {
+
+    const check = {transport: "check", calendarValue: "check"}
+
+    if(!highlightedTransport) {
+      setUnfilledHighlightedTransport(true);
+      check.transport = "";
+    }
+
+    const today = new Intl.DateTimeFormat().format(new Date())
+
+    if (new Intl.DateTimeFormat().format(calendarValue) < today) {
+      setInvalidCalendarValue(true);
+      check.calendarValue = "";
+    }
+
+    return check
+  }
 
   const onSubmit = (e) => {
-    e.preventDefault()
+    setInvalidCalendarValue(false);
+    setUnfilledHighlightedTransport(false);
+    e.preventDefault();
     const params = {
       town: townSearch,
       transport: highlightedTransport,
@@ -42,12 +75,14 @@ export default function SearchCriterias() {
       mins: minutes
     }
 
-    console.log(params);
+    const check = checkIfTransportAndCalendarValuesAreFilled();
+
+    if(check.calendarValue === "" || check.transport === "") return;
 
 
-    const urlPar = Object.keys(params).map(key => key + "=" + params[key]).join("&")
+    const urlPar = Object.keys(params).map(key => key + "=" + params[key]).join("&");
 
-    router.push(`search?${urlPar}`)
+    router.push(`search?${urlPar}`);
   }
 
   useEffect(() => {
@@ -55,36 +90,44 @@ export default function SearchCriterias() {
   }, []);
 
   return (
-    <Wrapper2 onSubmit={onSubmit}>
-      <div>
-        <h3>Where are you?</h3>
-        <input required className='border-2 h-10 text-xl' placeholder='Location' key={'inputBox'} onChange={(e) => setTownSearch(e.target.value)} type="text" name="" id="" value={townSearch} />
-      </div>
-      <div className=''>
-        <h3>How can you travel?</h3>
-        <div className='flex'>
-          {travelItems.map((item, i) => {
-            return <TransportChoice highlightedTransport={highlightedTransport} setHighlightedTransport={setHighlightedTransport} key={i} item={item} />
-          })}
+    <Wrapper2>
+
+      <FormStyle onSubmit={onSubmit}>
+        <div>
+          <h3>Where are you?</h3>
+          <input required className='border-2 h-10 text-xl' placeholder='Location' key={'inputBox'} onChange={(e) => setTownSearch(e.target.value)} type="text" name="" id="" value={townSearch} />
         </div>
-      </div>
-      <div>
-        <h3>For how far are you willing to travel with your desired way of transportation</h3>
-        <div className='flex justify-between'>
-          <div className='flex flex-col'>
-            <label htmlFor='hrs'>Hours</label>
-            <input onChange={(e) => setHours(e.target.value)} className='border-2' type="number" required name="hrs" id="" />
+        <div className=''>
+          <h3>How can you travel?</h3>
+          <div className='flex'>
+            {travelItems.map((item, i) => {
+              return <TransportChoice highlightedTransport={highlightedTransport} setHighlightedTransport={setHighlightedTransport} key={i} item={item} />
+            })}
           </div>
-          <div className='flex flex-col'>
-            <label htmlFor='mns'>Minutes</label>
-            <input onChange={(e) => setMinutes(e.target.value)} max="60" className='border-2' type="number" required name="mns" id="" />
+          {unfilledHighlightedTransport && <p className='text-md text-red-500 text-center'>Please choose a transportation method</p>}
+        </div>
+        <div>
+          <h3>For how far are you willing to travel with your desired way of transportation</h3>
+          <div className='flex justify-between'>
+            <div className='flex flex-col'>
+              <label htmlFor='hrs'>Hours</label>
+              <input onChange={(e) => setHours(e.target.value)} className='border-2' type="number" required name="hrs" id="" />
+            </div>
+            <div className='flex flex-col'>
+              <label htmlFor='mns'>Minutes</label>
+              <input onChange={(e) => setMinutes(e.target.value)} max="60" className='border-2' type="number" required name="mns" id="" />
+            </div>
           </div>
         </div>
-      </div>
-      {calendarValue && <Calendar onChange={setCalendarValue} value={calendarValue} />}
-      <div>
-        <button className='border-2 bg-[#70b67f] p-2 w-48'>Submit</button>
-      </div>
+        <div>
+
+          {invalidCalendarValue && <p className='text-md text-red-500 text-center'>Cannot pick a date earlier than today</p>}
+          {calendarValue && <Calendar onChange={setCalendarValue} value={calendarValue} />}
+        </div>
+        <div>
+          <button className='border-2 bg-[#70b67f] p-2 w-48'>Submit</button>
+        </div>
+      </FormStyle>
     </Wrapper2>
   )
 }

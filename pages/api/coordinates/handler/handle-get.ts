@@ -4,7 +4,13 @@ import { CoordinatesAPiClient } from "../coordinates-api-client/coordinates-api-
 export const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const instance = new CoordinatesAPiClient()
-  const response = await instance.getCoordinates()
+  const hei = setTimeout(() => {
+    console.log("heieiei");
+
+  }, 5000);
+
+  const response = {data: "hei"}
+  // const response = await instance.getCoordinates()
 
   return res.status(200).json({
     response: response.data

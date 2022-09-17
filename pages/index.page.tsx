@@ -9,7 +9,7 @@ import SearchCriterias from './components/SearchCriterias'
 const Wrapper = styled.div`
   display: grid;
   grid-template-rows: auto 1fr;
-  height: 100vh;
+  max-height: 100vh;
   `
 
 const Home: NextPage = () => {

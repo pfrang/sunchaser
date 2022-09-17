@@ -4,11 +4,14 @@ import { useCoordinates } from '../hooks/use-coordinates';
 
 export default function Search() {
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const params = router.query
+  const params = router.query;
 
-  // const { data, isLoading, error } = useCoordinates(params)
+  const { data, isLoading, error } = useCoordinates(params);
+
+  console.log(isLoading);
+
 
   return (
     <div>Search</div>
