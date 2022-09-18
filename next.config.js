@@ -14,29 +14,29 @@ const nextConfig = {
             value: "nosniff",
           },
           {
-            key: 'X-Frame-Options',
+            key: "X-Frame-Options",
             value: "SAMEORIGIN",
           },
           {
-            key: 'Strict-Transport-Security',
-            value: "max-age=31536000; includeSubDomains"
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains",
           },
           {
             key: "Referrer-policy",
             value: "strict-origin-when-cross-origin",
           },
           {
-            key: 'Content-Security-Policy',
+            key: "Content-Security-Policy",
             value: "frame-ancestors 'self'; style-src 'self' 'unsafe-inline'",
           },
           {
             key: "Permissions-Policy",
-            value: "microphone=()"
-          }
-        ]
-      }
-    ]
-  }
-}
+            value: "microphone=()",
+          },
+        ],
+      },
+    ];
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

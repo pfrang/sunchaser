@@ -2,9 +2,6 @@ import { NextApiClient } from "../../next-api.client";
 
 const yr = "https://api.met.no/weatherapi/locationforecast/2.0/compact";
 
-interface Hei {
-  hei: string;
-}
 export class CoordinatesAPiClient extends NextApiClient {
   constructor() {
     super()

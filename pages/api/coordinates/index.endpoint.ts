@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { handleGet } from "./handler/handle-get";
 
 
-export const handler = async(req: NextApiRequest, res: NextApiResponse ) => {
+export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "GET":
       return await handleGet(req, res);

@@ -39,9 +39,9 @@ export default function SearchCriterias() {
 
   const checkIfTransportAndCalendarValuesAreFilled = () => {
 
-    const check = {transport: "check", calendarValue: "check"}
+    const check = { transport: "check", calendarValue: "check" }
 
-    if(!highlightedTransport) {
+    if (!highlightedTransport) {
       setUnfilledHighlightedTransport(true);
       check.transport = "";
     }
@@ -70,7 +70,7 @@ export default function SearchCriterias() {
 
     const check = checkIfTransportAndCalendarValuesAreFilled();
 
-    if(check.calendarValue === "" || check.transport === "") return;
+    if (check.calendarValue === "" || check.transport === "") return;
 
 
     const urlPar = Object.keys(params).map(key => key + "=" + params[key]).join("&");
