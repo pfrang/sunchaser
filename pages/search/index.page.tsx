@@ -2,6 +2,12 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useCoordinates } from '../hooks/use-coordinates';
 import { SearchLoader } from '../../ui-kit/search-loader';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+min-height: 100vh;
+position: relative;
+`
 
 export default function Search() {
 
@@ -11,11 +17,19 @@ export default function Search() {
 
   const { data, isLoading, error } = useCoordinates(params);
 
+  useEffect(() => {
+    if (!data && !error) isLoading === false
+  }, [data, error])
+
+  console.log(isLoading);
+
+
+
   return (
     <>
       {isLoading ? <SearchLoader />
         :
-        <div>Search</div>
+        <Wrapper><div className='absolute top-[50%] left-[50%] text-lg text-pink-500 text-shadow'>Your epic search results!</div></Wrapper>
       }
     </>
   )
