@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useCoordinates } from '../hooks/use-coordinates';
+import { SearchLoader } from '../ui-kit/search-loader';
 
 export default function Search() {
 
@@ -12,7 +13,7 @@ export default function Search() {
 
   return (
     <>
-      {isLoading ? <div>Loading</div>
+      {isLoading ? <SearchLoader />
         :
         <div>Search</div>
       }
