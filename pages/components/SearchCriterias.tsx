@@ -7,20 +7,20 @@ import 'react-calendar/dist/Calendar.css';
 import { useRouter } from 'next/router';
 
 const Wrapper2 = styled.div`
-margin: 50px;
-margin-left: 100px;
-margin-right: 100px;
+  margin: 50px;
+  margin-left: 100px;
+  margin-right: 100px;
 `
 
 const FormStyle = styled.form`
-display: flex;
-flex-direction: column;
-gap: 50px;
-justify-content: center;
-align-items: center;
-border: 2px solid green;
-background-color: #4a804a;
-box-shadow: 0px 2px 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid green;
+  background-color: #4a804a;
+  box-shadow: 0px 2px 1px;
 `
 
 export default function SearchCriterias() {
@@ -63,7 +63,7 @@ export default function SearchCriterias() {
     const params = {
       town: townSearch,
       transport: highlightedTransport,
-      date: new Intl.DateTimeFormat().format(calendarValue),
+      date: new Date(calendarValue).toISOString().split("T")[0],
       hrs: hours,
       mins: minutes
     }

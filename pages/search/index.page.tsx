@@ -5,8 +5,8 @@ import { SearchLoader } from '../../ui-kit/search-loader';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-min-height: 100vh;
-position: relative;
+  min-height: 100vh;
+  position: relative;
 `
 
 export default function Search() {
@@ -20,10 +20,6 @@ export default function Search() {
   useEffect(() => {
     if (!data && !error) isLoading === false
   }, [data, error])
-
-  console.log(isLoading);
-
-
 
   return (
     <>
