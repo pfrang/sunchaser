@@ -53,15 +53,39 @@ class GetCoordinates:
         lonWestMid = edgePoints["westMid"][1]
         latNorthMid = edgePoints["northMid"][0]
         latSouthMid = edgePoints["southMid"][0]
-        deltaLongitude = lonEastMid - lonWestMid
-        deltaLatitude = latNorthMid - latSouthMid
-        nrStepsInSquares = researchSquares / 2.0
-        # rangeOfLonCoordinates = (1.00 / nrStepsInSquares) * range(1,nrStepsInSquares)
-        # fractions = [x for x in np.arange(1 / nrStepsInSquares,1, 1 / nrStepsInSquares)]
-        lonCoords = [x for x in np.arange(lonWestMid,lonEastMid + (1 / nrStepsInSquares) * deltaLongitude, (1 / nrStepsInSquares) * deltaLongitude)]
-        print(lonCoords)
         print(lonEastMid)
         print(lonWestMid)
+        print(latNorthMid)
+        print(latSouthMid)
+        deltaLongitude = lonEastMid - lonWestMid
+        deltaLatitude = latNorthMid - latSouthMid
+        nrStepsInSquares = int(researchSquares / 2)+1
+        # rangeOfLonCoordinates = (1.00 / nrStepsInSquares) * range(1,nrStepsInSquares)
+        # fractions = [x for x in np.arange(1 / nrStepsInSquares,1, 1 / nrStepsInSquares)]
+        pctStepFrameSize = 1/nrStepsInSquares #pct increase between two points to make frames in map
+        lonCoords = [x for x in np.arange(lonWestMid,lonEastMid + pctStepFrameSize * deltaLongitude, pctStepFrameSize * deltaLongitude)]
+        latCoords = [x for x in np.arange(latSouthMid,latNorthMid + pctStepFrameSize * deltaLatitude, pctStepFrameSize * deltaLatitude)]
+        lon2 = np.linspace(lonWestMid, lonEastMid, nrStepsInSquares)
+        lat2 = np.linspace(latSouthMid, latNorthMid, nrStepsInSquares)
+
+        # combinedMatrix = np.vstack((lon2, lat2))
+        # print(combinedMatrix.T) Add two arrays from same index to one big array with many small
+        
+        
+        lonlatMerge = np.meshgrid(lat2[1::2],lon2[1::2])
+        # print(lonlatMerge)
+
+        mat=np.array(lonlatMerge).transpose()
+        
+        arr = mat
+        # print(mat)
+        print(arr)
+        # print(mat)
+
+        # print(lat2)
+        # print(lonCoords)
+        # print(lonWestMid)
+        # print(lonEastMid)
         return "Hei"
 
 
