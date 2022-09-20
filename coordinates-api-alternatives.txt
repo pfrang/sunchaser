@@ -15,3 +15,7 @@ https://www.latlong.net/
 Lat og long fra stedsnavn
 
 https://nominatim.openstreetmap.org/ui/search.html?q=oslo
+
+
+Værsymboler fra YR
+https://hjelp.yr.no/hc/no/articles/203786121-V%C3%A6rsymbolene-p%C3%A5-Yr-
