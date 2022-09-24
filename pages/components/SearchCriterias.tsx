@@ -28,6 +28,8 @@ export default function SearchCriterias() {
   const [townSearch, setTownSearch] = useState('');
   const [highlightedTransport, setHighlightedTransport] = useState('');
   const [unfilledHighlightedTransport, setUnfilledHighlightedTransport] = useState(false);
+  const [allowedGeoLocation, setAllowedGeoLocation] = useState(false);
+  const [geoLocationSearchItems, setGeoLocationSearchItems] = useState([])
   const [calendarValue, setCalendarValue] = useState(undefined);
   const [invalidCalendarValue, setInvalidCalendarValue] = useState(false);
   const [hours, setHours] = useState('');
@@ -35,7 +37,34 @@ export default function SearchCriterias() {
 
   const travelItems = ["Walk", "Car", "Boat", "Public Transport"]
 
-  const router = useRouter()
+  const router = useRouter();
+
+  const getCurrentPos = () => {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    function success(pos) {
+      const crd = pos.coords;
+
+      console.log('Your current position is:');
+      console.log(`Latitude : ${crd.latitude}`);
+      console.log(`Longitude: ${crd.longitude}`);
+      console.log(`More or less ${crd.accuracy} meters.`);
+
+      setAllowedGeoLocation(true)
+
+      return crd
+    }
+
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  }
 
   const checkIfTransportAndCalendarValuesAreFilled = () => {
 
@@ -54,6 +83,12 @@ export default function SearchCriterias() {
     }
 
     return check
+  }
+
+  const onLocationClick = async () => {
+
+    const pos = getCurrentPos();
+
   }
 
   const onSubmit = (e) => {
@@ -89,6 +124,17 @@ export default function SearchCriterias() {
         <div>
           <h3>Where are you?</h3>
           <input required className='border-2 h-10 text-xl' placeholder='Location' key={'inputBox'} onChange={(e) => setTownSearch(e.target.value)} type="text" name="" id="" value={townSearch} />
+          <ul>
+            {!allowedGeoLocation &&
+              < li onClick={() => onLocationClick()} className='border-2 bg-slate-200 h-10 text-xl cursor-pointer border-2 rounded-sm border-slate-300'>Min posisjon</li>
+            }
+            {
+              geoLocationSearchItems.map((item) => {
+                return <li>{item.description}</li>
+              })
+            }
+
+          </ul>
         </div>
         <div className=''>
           <h3>How can you travel?</h3>
@@ -121,6 +167,6 @@ export default function SearchCriterias() {
           <button className='border-2 bg-[#70b67f] p-2 w-48'>Submit</button>
         </div>
       </FormStyle>
-    </Wrapper2>
+    </Wrapper2 >
   )
 }
