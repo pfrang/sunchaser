@@ -8,12 +8,6 @@ const Wrapper = styled.div`
   grid-template-rows: auto 1fr;
   max-height: 100vh;
   `
-const options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
-};
-
 const Home: NextPage = () => {
   return (
     <Wrapper>
