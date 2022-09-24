@@ -10,6 +10,13 @@ async function voidWait(timeToDelay: number): Promise<void> {
 
 export const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   const { input } = req.query
+  if (!input) {
+    return (
+      res.status(500).json({
+        response: "BAD REQUEST, Please give the input param"
+      })
+    )
+  }
   const instance = new GMAPSAutoSearchApiClient();
   const response = await instance.getCoordinates(input);
 
