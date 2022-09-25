@@ -5,7 +5,7 @@ gidder ikke sette oss inn i driiit
 
 KARTVERKET GRATIS NORGE
 https://ws.geonorge.no/stedsnavn/v1/#/default/get_sted
-Kan være bra for å finne relevante steder i nærheten av ønsket reisemål siden den viser "områder" i nærheten av punkt. 
+Kan være bra for å finne relevante steder i nærheten av ønsket reisemål siden den viser "områder" i nærheten av punkt.
 Kan også brukes til å finne gps koordinat fra tekstsøk (i.e Oslo)
 
 https://www.erikbolstad.no/postnummer-koordinatar/?postnummer=0010
@@ -19,3 +19,13 @@ https://nominatim.openstreetmap.org/ui/search.html?q=oslo
 
 Værsymboler fra YR
 https://hjelp.yr.no/hc/no/articles/203786121-V%C3%A6rsymbolene-p%C3%A5-Yr-
+
+
+Google maps API documentation
+
+place-autocomplete:
+https://developers.google.com/maps/documentation/places/web-service/autocomplete
+
+
+details:
+https://developers.google.com/maps/documentation/places/web-service/details

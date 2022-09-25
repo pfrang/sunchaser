@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleGet } from "./handler/handle-get";
 
+export const gmapsAutoSearchUrl = "/api/google-maps/auto-search"
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
