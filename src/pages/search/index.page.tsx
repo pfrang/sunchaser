@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useCoordinates } from '../hooks/use-coordinates';
-import { SearchLoader } from '../../ui-kit/search-loader';
+import { SearchLoader } from '../../ui-kit/search-loader/search-loader';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
