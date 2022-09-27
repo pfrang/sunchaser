@@ -1,6 +1,12 @@
+from asyncore import write
 from math import radians, cos, sin, asin, sqrt, atan2,degrees
+from tkinter import W
 from tracemalloc import start
+from typing import Any
 import numpy as np
+import pandas as pd
+import os
+import re
 
 global radiusEarth # Radius of earth in kilometers.
 radiusEarth=6371
@@ -33,10 +39,10 @@ class GetCoordinates:
         return degreesLat,degreesLon
 
     def retrieveEdgePoints(self):
-        northMid=self.retriveNewPointFromStartPoint(degree=0,distanceInKm =5)
-        eastMid=self.retriveNewPointFromStartPoint(degree=90,distanceInKm=5)
-        southMid=self.retriveNewPointFromStartPoint(degree=180,distanceInKm=5)
-        westMid=self.retriveNewPointFromStartPoint(degree=270,distanceInKm=5)
+        northMid=self.retriveNewPointFromStartPoint(degree=0,distanceInKm =50)
+        eastMid=self.retriveNewPointFromStartPoint(degree=90,distanceInKm=50)
+        southMid=self.retriveNewPointFromStartPoint(degree=180,distanceInKm=50)
+        westMid=self.retriveNewPointFromStartPoint(degree=270,distanceInKm=50)
 
         edgePoints = {
             "northMid": northMid,
@@ -47,45 +53,52 @@ class GetCoordinates:
 
         return edgePoints
     
-    def retrieveLonLine(self,researchSquares=16):
+    def retrieveMatrix(self,researchSquares=256):
+        if not (sqrt(researchSquares) / 4).is_integer():
+            raise ValueError("Number must be root, divided by 4 = whole number")
+
         edgePoints = self.retrieveEdgePoints()
         lonEastMid = edgePoints["eastMid"][1]
         lonWestMid = edgePoints["westMid"][1]
         latNorthMid = edgePoints["northMid"][0]
         latSouthMid = edgePoints["southMid"][0]
-        print(lonEastMid)
-        print(lonWestMid)
-        print(latNorthMid)
-        print(latSouthMid)
-        deltaLongitude = lonEastMid - lonWestMid
-        deltaLatitude = latNorthMid - latSouthMid
-        nrStepsInSquares = int(researchSquares / 2)+1
-        # rangeOfLonCoordinates = (1.00 / nrStepsInSquares) * range(1,nrStepsInSquares)
-        # fractions = [x for x in np.arange(1 / nrStepsInSquares,1, 1 / nrStepsInSquares)]
-        pctStepFrameSize = 1/nrStepsInSquares #pct increase between two points to make frames in map
-        lonCoords = [x for x in np.arange(lonWestMid,lonEastMid + pctStepFrameSize * deltaLongitude, pctStepFrameSize * deltaLongitude)]
-        latCoords = [x for x in np.arange(latSouthMid,latNorthMid + pctStepFrameSize * deltaLatitude, pctStepFrameSize * deltaLatitude)]
+        nrStepsInSquares = int(sqrt(researchSquares)*2)+1
         lon2 = np.linspace(lonWestMid, lonEastMid, nrStepsInSquares)
-        lat2 = np.linspace(latSouthMid, latNorthMid, nrStepsInSquares)
-
-        # combinedMatrix = np.vstack((lon2, lat2))
-        # print(combinedMatrix.T) Add two arrays from same index to one big array with many small
-        
-        
+        lat2 = np.linspace(latSouthMid, latNorthMid, nrStepsInSquares)        
         lonlatMerge = np.meshgrid(lat2[1::2],lon2[1::2])
-        # print(lonlatMerge)
 
-        mat=np.array(lonlatMerge).transpose()
+        transposedMatrix = np.array(lonlatMerge).transpose().flatten()
         
-        arr = mat
-        # print(mat)
-        print(arr)
-        # print(mat)
+        
+        
+        # print(transposedMatrix.flatten())
+        #a = []
 
-        # print(lat2)
-        # print(lonCoords)
-        # print(lonWestMid)
-        # print(lonEastMid)
+        # for index,i in enumerate(transposedMatrix):
+        #     tmp_arr = [i, transposedMatrix[index+1]]
+        #     a.append(tmp_arr)
+        #     index=index+2
+
+        # return a
+        
+    
+    def saveOutput(self):
+        inputArray=self.retrieveMatrix()  
+        # print(inputArray)
+        os.remove("test.csv")
+
+        f = open("test.csv", "a")
+        for x in inputArray:
+            x=str(x).replace("[[","")
+            x=str(x).replace(" [","")
+            x=str(x).replace("]]","")
+            x=str(x).replace("]","")
+            x=str(x).replace(" ",",")
+            x=str(x).replace(",,",",")
+            x=str(x).replace(",,",",")
+            f.write(str(x).strip()+'\n')
+        f.close()
+
         return "Hei"
 
 
@@ -93,4 +106,6 @@ class GetCoordinates:
 startPoint=[59.9139,10.7522]
 
 instantiate = GetCoordinates(startPoint)
-print(instantiate.retrieveLonLine())
+print(instantiate.retrieveMatrix())
+# instantiate.saveOutput()
+#print(instantiate.retrieveLonLine())
