@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { resolve } from "path";
-import { GMAPSAutoSearchApiClient } from "../gmaps-auto-seach-api-client/gmaps-auto-seach-api-client";
-import { GMAPSAutoSearchMapper } from "../mapper/gmaps-auto-search-mapper";
+import { GoogleMapsAutoSearchApiClient } from "../gmaps-auto-seach-api-client/gmaps-auto-seach-api-client";
+import { GoogleMapsAutoSearchMapper } from "../mapper/gmaps-auto-search-mapper";
 
 
 
@@ -15,9 +14,9 @@ export const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     throw Error('Please give a valid input to the query!')
   }
 
-  const placesAutoSearchResponse = await new GMAPSAutoSearchApiClient().get(input as string)
+  const placesAutoSearchResponse = await new GoogleMapsAutoSearchApiClient().get(input as string)
 
-  const placesAutoSearchMappedData = new GMAPSAutoSearchMapper(placesAutoSearchResponse).getProps()
+  const placesAutoSearchMappedData = new GoogleMapsAutoSearchMapper(placesAutoSearchResponse).getProps()
 
   return res.status(200).json({
     response: {

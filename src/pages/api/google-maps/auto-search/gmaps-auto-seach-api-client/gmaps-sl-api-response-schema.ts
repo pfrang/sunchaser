@@ -1,4 +1,4 @@
-export interface GoogleMapsData {
+export interface GoogleMapsAutoSearchResponse {
   predictions: Prediction[]
   status: string
 }
@@ -35,4 +35,4 @@ export interface Term {
 }
 
 
-export type GetGoogleMapsAutoSearchSLApiResponse = GoogleMapsData
+export type GetGoogleMapsAutoSearchSLApiResponse = GoogleMapsAutoSearchResponse

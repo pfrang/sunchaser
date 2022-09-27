@@ -3,7 +3,7 @@ import { GetGoogleMapsAutoSearchSLApiResponse } from "./gmaps-sl-api-response-sc
 
 const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${process.env.GOOGLE_API_KEY}`;
 
-export class GMAPSAutoSearchApiClient extends NextApiClient {
+export class GoogleMapsAutoSearchApiClient extends NextApiClient {
 
   readonly url = url
 
