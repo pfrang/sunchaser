@@ -6,6 +6,9 @@ import 'react-calendar/dist/Calendar.css';
 
 import { useRouter } from 'next/router';
 import WhereAreYou from './where-are-you/whereAreYou';
+import axios from 'axios';
+import { AppConfig } from '../../app-config';
+import { gmapsDetailsUrl } from '../api/google-maps/details/index.endpoint';
 
 const Wrapper2 = styled.div`
   margin: 50px;
@@ -27,10 +30,12 @@ const FormStyle = styled.form`
 export default function SearchCriterias() {
 
   const [townSearch, setTownSearch] = useState('');
+  const [townId, setTownId] = useState('');
   const [highlightedTransport, setHighlightedTransport] = useState('');
   const [unfilledHighlightedTransport, setUnfilledHighlightedTransport] = useState(false);
   const [isLocationChosen, setLocationChosen] = useState(false);
-  const [calendarValue, setCalendarValue] = useState(undefined);
+  const [userGeoLocation, setUserGeoLocation] = useState('')
+  const [calendarValue, setCalendarValue] = useState<Date | undefined>(undefined);
   const [invalidCalendarValue, setInvalidCalendarValue] = useState(false);
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
@@ -39,12 +44,9 @@ export default function SearchCriterias() {
 
   const router = useRouter();
 
-  // const { data, isLoading, error } = useGMapsAutoSearch(townSearch);
-
   useEffect(() => {
     setCalendarValue(new Date());
   }, []);
-
 
   const checkIfTransportAndCalendarValuesAreFilled = () => {
     const check = { transport: "check", calendarValue: "check" }
@@ -54,9 +56,9 @@ export default function SearchCriterias() {
       check.transport = "";
     }
 
-    const today = new Date()
+    const todayAtDayChange= new Date().setHours(0,0,0,0)
 
-    if (calendarValue.getDate() < today.getDate()) {
+    if (Number(calendarValue) < todayAtDayChange) {
       setInvalidCalendarValue(true);
       check.calendarValue = "";
     }
@@ -64,22 +66,45 @@ export default function SearchCriterias() {
     return check
   }
 
-  const onSubmit = (e) => {
+  const fetchTownDetails = async () => {
+    const town = await axios.get(`${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`, ).then(response => response.data).catch(e => console.error(e))
+    return {
+      latitude: town.response.latitude,
+      longitude: town.response.longitude
+    }
+
+  }
+
+  const destructureMyPosition = () => {
+    return ({
+      latitude: userGeoLocation.split("&")[0].split("=")[1],
+      longitude: userGeoLocation.split("&")[1].split("=")[1]
+    })
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
     setInvalidCalendarValue(false);
     setUnfilledHighlightedTransport(false);
-    e.preventDefault();
+
+    const check = checkIfTransportAndCalendarValuesAreFilled();
+
+    if (check.calendarValue === "" || check.transport === "") return;
+
+    if (!isLocationChosen) return
+
+    const {latitude, longitude } = userGeoLocation ? destructureMyPosition() : await fetchTownDetails()
+
     const params = {
-      town: townSearch,
+      lon: longitude,
+      lat: latitude,
       transport: highlightedTransport,
       date: new Date(calendarValue).toISOString().split("T")[0],
       hrs: hours,
       mins: minutes
     }
 
-    const check = checkIfTransportAndCalendarValuesAreFilled();
-
-    if (check.calendarValue === "" || check.transport === "") return;
-
+    console.log(params);
 
     const urlPar = Object.keys(params).map(key => key + "=" + params[key]).join("&");
 
@@ -90,7 +115,7 @@ export default function SearchCriterias() {
     <Wrapper2>
       <FormStyle onSubmit={onSubmit}>
         <section id="where_are_you_seciton">
-          <WhereAreYou isLocationChosen={isLocationChosen} setLocationChosen={setLocationChosen} townSearch={townSearch} setTownSearch={setTownSearch}/>
+          <WhereAreYou setTownId={setTownId} setUserGeoLocation={setUserGeoLocation} isLocationChosen={isLocationChosen} setLocationChosen={setLocationChosen} townSearch={townSearch} setTownSearch={setTownSearch}/>
         </section>
         <section id="how_can_you_travel">
           <div className=''>
@@ -113,7 +138,7 @@ export default function SearchCriterias() {
               </div>
               <div className='flex flex-col'>
                 <label htmlFor='mns'>Minutes</label>
-                <input onChange={(e) => setMinutes(e.target.value)} max="60" className='border-2' type="number" required name="mns" id="" />
+                <input onChange={(e) => setMinutes(e.target.value)} max="60" min="0" className='border-2' type="number" required name="mns" id="" />
               </div>
             </div>
           </div>
