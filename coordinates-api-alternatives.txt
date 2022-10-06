@@ -18,7 +18,7 @@ https://nominatim.openstreetmap.org/ui/search.html?q=oslo
 
 
 Værsymboler fra YR
-https://hjelp.yr.no/hc/no/articles/203786121-V%C3%A6rsymbolene-p%C3%A5-Yr-
+https://hjelp.yr.no/hc/en-us/articles/203786121-V%C3%A6rsymbolene-p%C3%A5-Yr-
 
 
 Google maps API documentation
@@ -29,3 +29,6 @@ https://developers.google.com/maps/documentation/places/web-service/autocomplete
 
 details:
 https://developers.google.com/maps/documentation/places/web-service/details
+
+
+arrayshape 3d to 2d (can be deleted later): https://stackoverflow.com/questions/18757742/how-to-flatten-only-some-dimensions-of-a-numpy-array

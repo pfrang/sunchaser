@@ -3,6 +3,7 @@ from math import radians, cos, sin, asin, sqrt, atan2,degrees
 from tkinter import W
 from tracemalloc import start
 from typing import Any
+from matplotlib.axes import Axes
 import numpy as np
 import pandas as pd
 import os
@@ -12,11 +13,12 @@ global radiusEarth # Radius of earth in kilometers.
 radiusEarth=6371
 
 class GetCoordinates:
-    def __init__(self, startingCoordinates):
+    def __init__(self, startingCoordinates,distanceInKm=50):
         self.startingCoordinates = startingCoordinates
+        self.distanceInKm=distanceInKm
     
-    def retriveNewPointFromStartPoint(self,degree,distanceInKm):
-
+    def retriveNewPointFromStartPoint(self,degree):
+        distanceInKm=self.distanceInKm
         startingLat = self.startingCoordinates[0]
         startingLon = self.startingCoordinates[1]
 
@@ -39,10 +41,11 @@ class GetCoordinates:
         return degreesLat,degreesLon
 
     def retrieveEdgePoints(self):
-        northMid=self.retriveNewPointFromStartPoint(degree=0,distanceInKm =50)
-        eastMid=self.retriveNewPointFromStartPoint(degree=90,distanceInKm=50)
-        southMid=self.retriveNewPointFromStartPoint(degree=180,distanceInKm=50)
-        westMid=self.retriveNewPointFromStartPoint(degree=270,distanceInKm=50)
+        
+        northMid=self.retriveNewPointFromStartPoint(degree=0)
+        eastMid=self.retriveNewPointFromStartPoint(degree=90)
+        southMid=self.retriveNewPointFromStartPoint(degree=180)
+        westMid=self.retriveNewPointFromStartPoint(degree=270)
 
         edgePoints = {
             "northMid": northMid,
@@ -53,7 +56,7 @@ class GetCoordinates:
 
         return edgePoints
     
-    def retrieveMatrix(self,researchSquares=256):
+    def retrieveMatrix(self,researchSquares=16):
         if not (sqrt(researchSquares) / 4).is_integer():
             raise ValueError("Number must be root, divided by 4 = whole number")
 
@@ -67,45 +70,18 @@ class GetCoordinates:
         lat2 = np.linspace(latSouthMid, latNorthMid, nrStepsInSquares)        
         lonlatMerge = np.meshgrid(lat2[1::2],lon2[1::2])
 
-        transposedMatrix = np.array(lonlatMerge).transpose().flatten()
+        transposedMatrix = np.array(lonlatMerge).transpose()
+        transposedMatrix=transposedMatrix.reshape(-1, *transposedMatrix.shape[-1:]) # flatten all but the last one dimension - last -1. the first is the shape(?):
+        df_transposedMatrix = pd.DataFrame(transposedMatrix, columns = ['lat','lon'])
         
-        
-        
-        # print(transposedMatrix.flatten())
-        #a = []
-
-        # for index,i in enumerate(transposedMatrix):
-        #     tmp_arr = [i, transposedMatrix[index+1]]
-        #     a.append(tmp_arr)
-        #     index=index+2
-
-        # return a
-        
-    
+        return df_transposedMatrix
+           
     def saveOutput(self):
-        inputArray=self.retrieveMatrix()  
-        # print(inputArray)
+        inputdataframe=self.retrieveMatrix()  
         os.remove("test.csv")
 
-        f = open("test.csv", "a")
-        for x in inputArray:
-            x=str(x).replace("[[","")
-            x=str(x).replace(" [","")
-            x=str(x).replace("]]","")
-            x=str(x).replace("]","")
-            x=str(x).replace(" ",",")
-            x=str(x).replace(",,",",")
-            x=str(x).replace(",,",",")
-            f.write(str(x).strip()+'\n')
-        f.close()
+        inputdataframe.to_csv("test.csv",sep=',')
 
-        return "Hei"
+        return
+ 
 
-
-
-startPoint=[59.9139,10.7522]
-
-instantiate = GetCoordinates(startPoint)
-print(instantiate.retrieveMatrix())
-# instantiate.saveOutput()
-#print(instantiate.retrieveLonLine())

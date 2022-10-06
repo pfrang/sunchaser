@@ -19,11 +19,6 @@ def getWeather(lat,lon,travelDate):
             times.append(i["time"])
             next1hourSymbol.append(i["data"]["next_6_hours"]["summary"]["symbol_code"])
             
-    return 
+    return next1hourSymbol
 
         
-getWeather(60,10,"2022-07-20")
-
-datetime_str="2022-07-20"
-datetime_object = datetime.strptime(datetime_str, '%Y-%m-%d').isoformat()
-print(datetime_object)
