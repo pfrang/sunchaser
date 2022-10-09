@@ -35,3 +35,139 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Byte-compiled / optimized / DLL files
+/azure-function/__pycache__/
+/azure-function/*.py[cod]
+/azure-function/*$py.class
+
+# C extensions
+/azure-function/*.so
+
+# Distribution / packaging
+/azure-function/.Python
+/azure-function/build/
+/azure-function/develop-eggs/
+/azure-function/dist/
+/azure-function/downloads/
+/azure-function/eggs/
+/azure-function/.eggs/
+/azure-function/lib/
+/azure-function/lib64/
+/azure-function/parts/
+/azure-function/sdist/
+/azure-function/var/
+/azure-function/wheels/
+/azure-function/pip-wheel-metadata/
+/azure-function/share/python-wheels/
+/azure-function/*.egg-info/
+/azure-function/.installed.cfg
+/azure-function/*.egg
+/azure-function/MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+/azure-function/*.manifest
+/azure-function/*.spec
+
+# Installer logs
+/azure-function/pip-log.txt
+/azure-function/pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+/azure-function/htmlcov/
+/azure-function/.tox/
+/azure-function/.nox/
+/azure-function/.coverage
+/azure-function/.coverage.*
+/azure-function/.cache
+/azure-function/nosetests.xml
+/azure-function/coverage.xml
+/azure-function/*.cover
+/azure-function/.hypothesis/
+/azure-function/.pytest_cache/
+
+# Translations
+/azure-function/*.mo
+/azure-function/*.pot
+
+# Django stuff:
+/azure-function/*.log
+/azure-function/local_settings.py
+/azure-function/db.sqlite3
+
+# Flask stuff:
+/azure-function/instance/
+/azure-function/.webassets-cache
+
+# Scrapy stuff:
+/azure-function/.scrapy
+
+# Sphinx documentation
+/azure-function/docs/_build/
+
+# PyBuilder
+/azure-function/target/
+
+# Jupyter Notebook
+/azure-function/.ipynb_checkpoints
+
+# IPython
+/azure-function/profile_default/
+/azure-function/ipython_config.py
+
+# pyenv
+/azure-function/.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don’t work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# celery beat schedule file
+/azure-function/celerybeat-schedule
+
+# SageMath parsed files
+/azure-function/*.sage.py
+
+# Environments
+/azure-function/.env
+/azure-function/.venv/
+/azure-function/env/
+/azure-function/venv/
+/azure-function/ENV/
+/azure-function/env.bak/
+/azure-function/venv.bak/
+
+# Spyder project settings
+/azure-function/.spyderproject
+/azure-function/.spyproject
+
+# Rope project settings
+/azure-function/.ropeproject
+
+# mkdocs documentation
+/azure-function//site
+
+# mypy
+/azure-function/.mypy_cache/
+/azure-function/.dmypy.json
+/azure-function/dmypy.json
+
+# Pyre type checker
+/azure-function/.pyre/
+
+# Azure Functions artifacts
+/azure-function/bin
+/azure-function/obj
+/azure-function/appsettings.json
+/azure-function/local.settings.json
+
+# Azurite artifacts
+/azure-function/__blobstorage__
+/azure-function/__queuestorage__
+/azure-function/__azurite_db*__.json
+/azure-function/.python_packages
