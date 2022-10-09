@@ -1,7 +1,7 @@
 from http.client import HTTPResponse
 import logging
 from urllib.error import HTTPError
-
+import json
 from src.python.handler import Handler
 
 import azure.functions as func
@@ -20,8 +20,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         params = req_body["params"]
         initializer = Handler(params)
         response = initializer.initializeCoordinatesFetcher()
-        # print(response)
-        return func.HttpResponse("Initializing GetCoordinates", status_code=200)
+        response_str = json.dumps(response)
+        return func.HttpResponse(f"Here are your epic coordinates {response_str}", status_code=200)
     except:
         return func.HttpResponse("Please provide a valid JSON",status_code=500)
 
