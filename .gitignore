@@ -135,7 +135,7 @@ next-env.d.ts
 
 # Environments
 /azure-function/.env
-/azure-function/.venv
+/azure-function/.venv/
 /azure-function/env/
 /azure-function/venv/
 /azure-function/ENV/
