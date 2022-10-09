@@ -32,3 +32,7 @@ https://developers.google.com/maps/documentation/places/web-service/details
 
 
 arrayshape 3d to 2d (can be deleted later): https://stackoverflow.com/questions/18757742/how-to-flatten-only-some-dimensions-of-a-numpy-array
+
+
+Draw shap of country etc (polygon) with output as gps coordinates
+https://www.keene.edu/campus/maps/tool/
