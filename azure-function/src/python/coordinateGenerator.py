@@ -1,9 +1,6 @@
 from asyncore import write
 from math import radians, cos, sin, asin, sqrt, atan2,degrees
-from tkinter import W
-from tracemalloc import start
-from typing import Any
-from matplotlib.axes import Axes
+
 import numpy as np
 import pandas as pd
 import os
@@ -16,7 +13,7 @@ class GetCoordinates:
     def __init__(self, startingCoordinates,distanceInKm=50):
         self.startingCoordinates = startingCoordinates
         self.distanceInKm=distanceInKm
-    
+
     def retriveNewPointFromStartPoint(self,degree):
         distanceInKm=self.distanceInKm
         startingLat = self.startingCoordinates[0]
@@ -41,7 +38,7 @@ class GetCoordinates:
         return degreesLat,degreesLon
 
     def retrieveEdgePoints(self):
-        
+
         northMid=self.retriveNewPointFromStartPoint(degree=0)
         eastMid=self.retriveNewPointFromStartPoint(degree=90)
         southMid=self.retriveNewPointFromStartPoint(degree=180)
@@ -55,7 +52,7 @@ class GetCoordinates:
         }
 
         return edgePoints
-    
+
     def retrieveMatrix(self,researchSquares=16):
         if not (sqrt(researchSquares) / 4).is_integer():
             raise ValueError("Number must be root, divided by 4 = whole number")
@@ -67,21 +64,19 @@ class GetCoordinates:
         latSouthMid = edgePoints["southMid"][0]
         nrStepsInSquares = int(sqrt(researchSquares)*2)+1
         lon2 = np.linspace(lonWestMid, lonEastMid, nrStepsInSquares)
-        lat2 = np.linspace(latSouthMid, latNorthMid, nrStepsInSquares)        
+        lat2 = np.linspace(latSouthMid, latNorthMid, nrStepsInSquares)
         lonlatMerge = np.meshgrid(lat2[1::2],lon2[1::2])
 
         transposedMatrix = np.array(lonlatMerge).transpose()
         transposedMatrix=transposedMatrix.reshape(-1, *transposedMatrix.shape[-1:]) # flatten all but the last one dimension - last -1. the first is the shape(?):
         df_transposedMatrix = pd.DataFrame(transposedMatrix, columns = ['lat','lon'])
-        
+
         return df_transposedMatrix
-           
+
     def saveOutput(self):
-        inputdataframe=self.retrieveMatrix()  
+        inputdataframe=self.retrieveMatrix()
         os.remove("test.csv")
 
         inputdataframe.to_csv("test.csv",sep=',')
 
         return
- 
-

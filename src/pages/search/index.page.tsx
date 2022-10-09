@@ -14,6 +14,8 @@ export default function Search() {
   const router = useRouter();
 
   const params = router.query;
+  console.log(params);
+
 
   const { data, isLoading, error } = useCoordinates(params);
 
