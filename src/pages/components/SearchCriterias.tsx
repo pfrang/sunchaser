@@ -104,8 +104,6 @@ export default function SearchCriterias() {
       mins: minutes
     }
 
-    console.log(params);
-
     const urlPar = Object.keys(params).map(key => key + "=" + params[key]).join("&");
 
     router.push(`search?${urlPar}`);
