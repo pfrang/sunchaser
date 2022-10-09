@@ -160,11 +160,12 @@ next-env.d.ts
 # Pyre type checker
 /azure-function/.pyre/
 
+
 # Azure Functions artifacts
 /azure-function/bin
 /azure-function/obj
 /azure-function/appsettings.json
-./azure-function/local.settings.json
+azure-function/**
 
 # Azurite artifacts
 /azure-function/__blobstorage__
