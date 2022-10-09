@@ -11,7 +11,7 @@ def getWeather(lat,lon,travelDate):
 
     response_json=json.loads(response.text)
     # print(json.dumps(response_json, indent=4))
-    
+
     response_json=response_json["properties"]["timeseries"]
     times = []
     weatherDate=[]
@@ -20,16 +20,16 @@ def getWeather(lat,lon,travelDate):
     weatherTemperature=[]
     weatherWind=[]
     for i in response_json:
-        
-            
+
+
         if("next_6_hours" in i["data"].keys()):
-            
+
             weatherDate.append(str(i["time"]).split('T')[0])
             weatherTime.append(str(i["time"]).split('T')[1][:-1])
             weatherTemperature.append(i["data"]["instant"]["details"]["air_temperature"])
             weatherWind.append(i["data"]["instant"]["details"]["wind_speed"])
             weatherSymbol.append(i["data"]["next_6_hours"]["summary"]["symbol_code"])
-            
+
     weatherDataDataFrame=pd.DataFrame({
         'Date':weatherDate,
         'Time':weatherTime,
@@ -39,6 +39,3 @@ def getWeather(lat,lon,travelDate):
     })
 
     return weatherDataDataFrame
-
-
-        
