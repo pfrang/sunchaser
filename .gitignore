@@ -167,7 +167,6 @@ azure-function/.pyre/
 azure-function/bin
 azure-function/obj
 azure-function/appsettings.json
-azure-function/local.settings.json
 
 # Azurite artifacts
 azure-function/__blobstorage__
