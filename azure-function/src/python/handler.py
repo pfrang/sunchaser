@@ -1,5 +1,6 @@
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
+from operator import attrgetter, itemgetter
 
 travelTime='6:30'
 datetime_str="2022-07-20"
@@ -20,11 +21,9 @@ def jsonChecker(json) -> bool:
 
     True if json == json_structure else False
 
-
-
 class Handler:
     def __init__(self, input) -> None:
-        date, hrs, lat, lon, mins, transport = input.values() #make it not index based of destructure
+        date, hrs, lat, lon, mins, transport = itemgetter('date', 'hrs', 'lat', 'lon', 'mins', 'transport')(input) #make it not index based of destructure
         self.date = date
         self.hrs = hrs
         self.startingCoordinates = [float(lat), float(lon)]

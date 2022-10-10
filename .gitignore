@@ -36,7 +36,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-**/__pycache__
+**/__pycache__/
 
 # Byte-compiled / optimized / DLL files
 azure-function/__pycache__/

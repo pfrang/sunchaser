@@ -1,21 +1,16 @@
 import axios from "axios";
 import useSWR from "swr";
+import { azureFuncGetCoordinatesEndPoint } from "../api/azure-function/coordinates/index.endpoint";
 
-export const useCoordinates = (userInput) => {
-
-  const params = {
-    input: userInput
-  }
+export const useCoordinates = (params) => {
 
   const fetcher = async (url) =>
     await axios
-      .get(url, {
-        params,
-      })
+      .post(url, params)
       .then((res) => res.data);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data, error } = useSWR("/api/coordinates", fetcher);
+  const { data, error } = useSWR(azureFuncGetCoordinatesEndPoint, fetcher);
 
   const isLoading = !data && !error;
 

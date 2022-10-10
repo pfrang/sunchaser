@@ -9,26 +9,35 @@ const Wrapper = styled.div`
   position: relative;
 `
 
-export default function Search() {
+export default function Search(props) {
 
-  const router = useRouter();
-
-  const params = router.query;
-  console.log(params);
-
-
-  const { data, isLoading, error } = useCoordinates(params);
+  const { data, isLoading, error } = useCoordinates(props);
 
   useEffect(() => {
     if (!data && !error) isLoading === false
+    if (data) {
+      console.log(data);
+
+    }
   }, [data, error])
+
 
   return (
     <>
-      {isLoading ? <SearchLoader />
+      {true ? <SearchLoader />
         :
         <Wrapper><div className='absolute top-[50%] left-[50%] text-lg text-pink-500 text-shadow'>Your epic search results!</div></Wrapper>
       }
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const body = context.query
+
+  return {
+    props: {
+      params: body
+    }
+  }
 }
