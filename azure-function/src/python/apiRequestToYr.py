@@ -39,3 +39,7 @@ def getWeather(lat,lon,travelDate):
     })
 
     return weatherDataDataFrame
+
+
+
+print(getWeather(60,10,"2022-10-09"))
