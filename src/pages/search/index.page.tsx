@@ -1,34 +1,56 @@
 import { useRouter } from 'next/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useCoordinates } from '../hooks/use-coordinates';
 import { SearchLoader } from '../../ui-kit/search-loader/search-loader';
 import styled from 'styled-components';
+import { CoordinatesMappedResponse } from '../api/azure-function/coordinates/mapper/coordinates-mapper';
+import { Card } from './components/card';
+import { AzureFunctionCoordinatesItem } from '../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema';
 
 const Wrapper = styled.div`
   min-height: 100vh;
   position: relative;
 `
 
+const GridWrapper = styled.div`
+
+`
+const Grid = styled.div`
+  padding: 20px;
+  display: grid;
+  text-align: center;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+`
+
 export default function Search(props) {
+  const [items, setItems] = useState<undefined | CoordinatesMappedResponse>(undefined)
 
   const { data, isLoading, error } = useCoordinates(props);
 
   useEffect(() => {
-    if (!data && !error) isLoading === false
     if (data) {
-      console.log(data);
-
+      setItems(data)
     }
   }, [data, error])
 
+  const top4Items = items && items.items.slice(0, 4)
+
+  console.log(top4Items);
 
   return (
-    <>
-      {isLoading ? <SearchLoader />
+    <Wrapper>
+      {!items ? <SearchLoader />
         :
-        <Wrapper><div className='absolute top-[50%] left-[50%] text-lg text-pink-500 text-shadow'>{`Your epic search results! ${data.response}`}</div></Wrapper>
+        <Grid>
+          {top4Items.map((item, idx) => {
+            return (
+              <Card key={idx} {...item}/>
+            )
+          })}
+        </Grid>
       }
-    </>
+    </Wrapper>
   )
 }
 

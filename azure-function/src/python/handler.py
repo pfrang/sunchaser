@@ -48,11 +48,11 @@ class Handler:
         travelDistance=GetDistance(travelTime=f'{self.hrs}:{self.mins}',transportationMethod=self.transport)
         locationDataFrame=GetCoordinates(self.startingCoordinates,travelDistance.calculateDistance())
 
-        weatherDataFrame=pd.DataFrame(columns=['Latitude', 'Longitude','Date', 'Time', 'Symbol', 'Temperature', 'Wind'])
+        weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
         for index, row in locationDataFrame.retrieveMatrix().iterrows():
             weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
 
-        filterOnProvidedDateDF = weatherDataFrame[weatherDataFrame['Date'] == self.date]
+        filterOnProvidedDateDF = weatherDataFrame[weatherDataFrame['date'] == self.date].astype(str)
         locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
         return locationDataFrameWithWeatherToJSON
 

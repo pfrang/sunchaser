@@ -32,13 +32,13 @@ def getWeather(lat,lon,travelDate):
             lonArr.append(lon)
 
     weatherDataDataFrame=pd.DataFrame({
-        'Latitude': latArr,
-        'Longitude': lonArr,
-        'Date':weatherDate,
-        'Time':weatherTime,
-        'Symbol':weatherSymbol,
-        'Temperature': weatherTemperature,
-        'Wind': weatherWind,
+        'latitude': latArr,
+        'longitude': lonArr,
+        'date':weatherDate,
+        'time':weatherTime,
+        'symbol':weatherSymbol,
+        'temperature': weatherTemperature,
+        'wind': weatherWind,
     })
 
     return weatherDataDataFrame

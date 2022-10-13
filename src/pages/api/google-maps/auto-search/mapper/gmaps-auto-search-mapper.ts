@@ -1,6 +1,6 @@
 import { CommonData } from "../../../common-proprties"
 import { GetGoogleMapsAutoSearchSLApiResponse, Prediction } from "../gmaps-auto-seach-api-client/gmaps-sl-api-response-schema";
-import { isArray } from 'lodash'
+import { isArray } from "lodash";
 
 export interface GoogleMapsAutoSearchMappedData {
   place: string;
