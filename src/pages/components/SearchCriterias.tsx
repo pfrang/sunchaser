@@ -40,7 +40,7 @@ export default function SearchCriterias() {
   const [hours, setHours] = useState('');
   const [minutes, setMinutes] = useState('');
 
-  const travelItems = ["Walk", "Car", "Boat", "Public Transport"]
+  const travelItems = ["Walk", "Car", "Bike", "Public Transport"]
 
   const router = useRouter();
 
@@ -56,7 +56,7 @@ export default function SearchCriterias() {
       check.transport = "";
     }
 
-    const todayAtDayChange= new Date().setHours(0,0,0,0)
+    const todayAtDayChange = new Date().setHours(0, 0, 0, 0)
 
     if (Number(calendarValue) < todayAtDayChange) {
       setInvalidCalendarValue(true);
@@ -67,7 +67,7 @@ export default function SearchCriterias() {
   }
 
   const fetchTownDetails = async () => {
-    const town = await axios.get(`${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`, ).then(response => response.data).catch(e => console.error(e))
+    const town = await axios.get(`${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`,).then(response => response.data).catch(e => console.error(e))
     return {
       latitude: town.response.latitude,
       longitude: town.response.longitude
@@ -93,7 +93,7 @@ export default function SearchCriterias() {
 
     if (!isLocationChosen) return
 
-    const {latitude, longitude } = userGeoLocation ? destructureMyPosition() : await fetchTownDetails()
+    const { latitude, longitude } = userGeoLocation ? destructureMyPosition() : await fetchTownDetails()
 
     const params = {
       lon: longitude,
@@ -113,7 +113,7 @@ export default function SearchCriterias() {
     <Wrapper2>
       <FormStyle onSubmit={onSubmit}>
         <section id="where_are_you_seciton">
-          <WhereAreYou setTownId={setTownId} setUserGeoLocation={setUserGeoLocation} isLocationChosen={isLocationChosen} setLocationChosen={setLocationChosen} townSearch={townSearch} setTownSearch={setTownSearch}/>
+          <WhereAreYou setTownId={setTownId} setUserGeoLocation={setUserGeoLocation} isLocationChosen={isLocationChosen} setLocationChosen={setLocationChosen} townSearch={townSearch} setTownSearch={setTownSearch} />
         </section>
         <section id="how_can_you_travel">
           <div className=''>
