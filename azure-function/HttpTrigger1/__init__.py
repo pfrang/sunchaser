@@ -19,8 +19,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         req_body = req.get_json() #TODO initialize json_checker function over to see if format matches required
         params = req_body["params"]
         initializer = Handler(params)
-        response = initializer.initializeCoordinatesFetcher()
-        response_str = json.dumps(response)
+        response = initializer.callYr()
+        response_str = json.dumps(response, indent=4)
         return func.HttpResponse(f"{response_str}", status_code=200)
     except:
         return func.HttpResponse("Please provide a valid JSON",status_code=500)
