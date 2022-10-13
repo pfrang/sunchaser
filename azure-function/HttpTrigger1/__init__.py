@@ -21,7 +21,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         initializer = Handler(params)
         response = initializer.initializeCoordinatesFetcher()
         response_str = json.dumps(response)
-        return func.HttpResponse(f"Here are your epic coordinates {response_str}", status_code=200)
+        return func.HttpResponse(f"{response_str}", status_code=200)
     except:
         return func.HttpResponse("Please provide a valid JSON",status_code=500)
 

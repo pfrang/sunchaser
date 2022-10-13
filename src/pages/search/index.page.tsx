@@ -24,9 +24,9 @@ export default function Search(props) {
 
   return (
     <>
-      {true ? <SearchLoader />
+      {isLoading ? <SearchLoader />
         :
-        <Wrapper><div className='absolute top-[50%] left-[50%] text-lg text-pink-500 text-shadow'>Your epic search results!</div></Wrapper>
+        <Wrapper><div className='absolute top-[50%] left-[50%] text-lg text-pink-500 text-shadow'>{`Your epic search results! ${data.response}`}</div></Wrapper>
       }
     </>
   )
