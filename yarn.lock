@@ -2149,6 +2149,11 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
+weather-underground-icons@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/weather-underground-icons/-/weather-underground-icons-1.0.0.tgz#15f2951a46d1dff648b800e7adfd80af1989a09b"
+  integrity sha512-jMmxddYVbEgkUc/oevjRdBa0K6jvbCLfkejWdR7xN0LdvjFy4ARtmVP9ceySpfjtI5EwCGXKPlKHifiSoB61VQ==
+
 which-boxed-primitive@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/which-boxed-primitive/-/which-boxed-primitive-1.0.2.tgz#13757bc89b209b049fe5d86430e21cf40a89a8e6"

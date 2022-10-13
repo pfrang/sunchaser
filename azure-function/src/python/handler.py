@@ -1,5 +1,11 @@
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
+from src.python.apiRequestToYr import getWeather
+from operator import attrgetter, itemgetter
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+import pandas as pd
+import json
 
 travelTime='6:30'
 datetime_str="2022-07-20"
@@ -20,11 +26,9 @@ def jsonChecker(json) -> bool:
 
     True if json == json_structure else False
 
-
-
 class Handler:
     def __init__(self, input) -> None:
-        date, hrs, lat, lon, mins, transport = input.values() #make it not index based of destructure
+        date, hrs, lat, lon, mins, transport = itemgetter('date', 'hrs', 'lat', 'lon', 'mins', 'transport')(input) #make it not index based of destructure
         self.date = date
         self.hrs = hrs
         self.startingCoordinates = [float(lat), float(lon)]
@@ -40,21 +44,17 @@ class Handler:
         response = response.retrieveEdgePoints()
         return response
 
-    # def callYr():
-    #     travelDistance=dis_gen.GetDistance(travelTime,transportationMethod)
-    #     locationDataFrame=cor_gen.GetCoordinates(startPoint,travelDistance.calculateDistance())
+    def callYr(self):
+        travelDistance=GetDistance(travelTime=f'{self.hrs}:{self.mins}',transportationMethod=self.transport)
+        locationDataFrame=GetCoordinates(self.startingCoordinates,travelDistance.calculateDistance())
 
-    #     locationWeatherList=[]
+        weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
+        for index, row in locationDataFrame.retrieveMatrix().iterrows():
+            weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
 
-    #     for index, row in locationDataFrame.retrieveMatrix().iterrows():
-    #         locationWeather=api_yr.getWeather(row['lat'],row['lon'],"2022-07-20")
-    #         locationWeatherList.append(locationWeather)
+        filterOnProvidedDateDF = weatherDataFrame[weatherDataFrame['date'] == self.date].astype(str)
+        locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
+        return locationDataFrameWithWeatherToJSON
 
-
-    #     locationWeatherDataFrame=pd.DataFrame(locationWeatherList)
-
-    #     locationDataFrameWithWeather=locationDataFrame.retrieveMatrix().join(locationWeatherDataFrame)
-
-    #     locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
-
-    #     locationDataFrame.saveOutput()
+        # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
+        # locationDataFrame.saveOutput()
