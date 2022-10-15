@@ -2,13 +2,12 @@ import axios from "axios";
 import useSWR from "swr";
 
 export const useGMapsAutoSearch = (townSearch) => {
+  const h = "hei";
 
-  if (!townSearch) return { data: null, isLoading: true, error: null }
-
+  if (!townSearch) return { data: null, isLoading: true, error: null };
   const params = {
-    input: townSearch
-  }
-
+    input: townSearch,
+  };
 
   const fetcher = async (url) =>
     await axios

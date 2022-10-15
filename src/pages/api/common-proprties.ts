@@ -1,5 +1,5 @@
 export interface CommonData {
-  data: any
+  data: any;
 }
 
 export interface CommonMetaData {
