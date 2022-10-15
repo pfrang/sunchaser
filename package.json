@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/react-calendar": "^3.5.2",
     "@types/styled-components": "^5.1.26",
+    "@typescript-eslint/parser": "^5.40.0",
     "axios": "^0.27.2",
     "dotenv": "^16.0.2",
     "lodash": "^4.17.21",
