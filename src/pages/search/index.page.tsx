@@ -1,65 +1,62 @@
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
-import { useCoordinates } from '../hooks/use-coordinates';
-import { SearchLoader } from '../../ui-kit/search-loader/search-loader';
-import styled from 'styled-components';
-import { CoordinatesMappedResponse } from '../api/azure-function/coordinates/mapper/coordinates-mapper';
-import { Card } from './components/card';
-import { AzureFunctionCoordinatesItem } from '../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+
+import { useCoordinates } from "../hooks/use-coordinates";
+import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
+import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/mapper/coordinates-mapper";
+
+import { Card } from "./components/card";
 
 const Wrapper = styled.div`
   min-height: 100vh;
   position: relative;
-`
+`;
 
-const GridWrapper = styled.div`
-
-`
+const GridWrapper = styled.div``;
 const Grid = styled.div`
   padding: 20px;
   display: grid;
   text-align: center;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 20px;
-`
+`;
 
 export default function Search(props) {
-  const [items, setItems] = useState<undefined | CoordinatesMappedResponse>(undefined)
+  const [items, setItems] = useState<undefined | CoordinatesMappedResponse>(
+    undefined
+  );
 
   const { data, isLoading, error } = useCoordinates(props);
 
   useEffect(() => {
     if (data) {
-      setItems(data)
+      setItems(data);
     }
-  }, [data, error])
+  }, [data, error]);
 
-  const top4Items = items && items.items.slice(0, 4)
-
-  console.log(top4Items);
+  const top4Items = items && items.items.slice(0, 4);
 
   return (
     <Wrapper>
-      {!items ? <SearchLoader />
-        :
+      {!items ? (
+        <SearchLoader />
+      ) : (
         <Grid>
           {top4Items.map((item, idx) => {
-            return (
-              <Card key={idx} {...item}/>
-            )
+            return <Card key={idx} {...item} />;
           })}
         </Grid>
-      }
+      )}
     </Wrapper>
-  )
+  );
 }
 
 export async function getServerSideProps(context) {
-  const body = context.query
+  const body = context.query;
 
   return {
     props: {
-      params: body
-    }
-  }
+      params: body,
+    },
+  };
 }

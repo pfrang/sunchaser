@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import styled from "styled-components";
 
-import HeaderComponent from "./components/Header";
-import SearchCriterias from "./components/SearchCriterias";
+import HeaderComponent from "./components/header";
+import SearchCriterias from "./components/search-criterias";
 
 const Wrapper = styled.div`
   display: grid;
