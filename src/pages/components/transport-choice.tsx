@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const DivItem = styled.div`
-  background-color: #b9b3b3;
+  background-color: #f0efef;
   padding: 10px;
   cursor: pointer;
   transition: 0.5s ease;
   &:hover {
-    background-color: #635f5f;
+    background-color: #dedddd;
   }
 `;
 
