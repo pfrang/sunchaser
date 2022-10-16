@@ -3,9 +3,11 @@ import { AppConfig } from "../../../app-config";
 
 export class AzureFunctionApiClient {
   baseUrl: string;
+  key: string;
   axiosInstance: AxiosInstance;
   constructor() {
-    this.baseUrl = `${new AppConfig().azureFunction.host}/api`
+    this.baseUrl = `${new AppConfig().azureFunction.host}`
+    this.key = `code=${new AppConfig().azureFunction.key}`
     this.axiosInstance = azureFunctionApiClient
   }
 }

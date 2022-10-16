@@ -4,6 +4,7 @@ export class AppConfig {
   }
 
   azureFunction = {
-    host: process.env.AZURE_FUNCTION_HOST as string
-  }
+    host: process.env.AZURE_FUNCTION_HOST as string,
+    key: process.env.AZURE_FUNCTION_CODE
+    }
 }
