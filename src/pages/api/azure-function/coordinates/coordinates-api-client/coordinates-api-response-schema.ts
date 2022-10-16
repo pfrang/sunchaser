@@ -8,6 +8,8 @@ export interface AzureFunctionCoordinatesItem {
   wind: string;
 }
 
-export type AzureFunctionCoordinatesResponseItems = Array<AzureFunctionCoordinatesItem>
+export type AzureFunctionCoordinatesResponseItems =
+  Array<AzureFunctionCoordinatesItem>;
 
-export type AzureFunctionGetCoordinatesResponse = AzureFunctionCoordinatesResponseItems
+export type AzureFunctionGetCoordinatesResponse =
+  AzureFunctionCoordinatesResponseItems;
