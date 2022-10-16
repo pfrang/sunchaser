@@ -3,9 +3,10 @@ import requests
 import json
 from datetime import datetime
 import pandas as pd
+from src.python.api_client import APISOURCE
 
 def getWeather(lat,lon,travelDate):
-    url=f'https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={lat}&lon={lon}'
+    url=f'{APISOURCE.getYR()}?lat={lat}&lon={lon}'
     headers={'User-Agent':'Hjemmeprosjekt'}
     response=requests.get(url,headers=headers)
 
@@ -44,5 +45,3 @@ def getWeather(lat,lon,travelDate):
     return weatherDataDataFrame
 
 
-
-print(getWeather(60,10,"2022-10-09"))

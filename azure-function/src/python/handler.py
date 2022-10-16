@@ -1,6 +1,8 @@
+from ast import Return
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
 from src.python.apiRequestToYr import getWeather
+from src.python.findNearLocation import GETLOCATIONINFO
 from operator import attrgetter, itemgetter
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -52,9 +54,54 @@ class Handler:
         for index, row in locationDataFrame.retrieveMatrix().iterrows():
             weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
 
-        filterOnProvidedDateDF = weatherDataFrame[weatherDataFrame['date'] == self.date].astype(str)
+        return weatherDataFrame
+
+
+    def findThebestlocation(self):
+        weatherDataFrame=self.callYr()
+
+        #filter out the correct date to be analyzed
+        weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
+        weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
+        #futre selection of best weather
+        weatherDataFrame=weatherDataFrame[0:4]
+
+        #Append locationname to array
+        locationNameDataFrame=pd.DataFrame(columns=['Location'])
+        
+        weatherDataFrame=weatherDataFrame.reset_index(drop=True)
+        for index, row in weatherDataFrame.iterrows():
+            lat=row['latitude']
+            lon=row['longitude']
+
+            locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
+        
+        locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
+
+        weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
+
+        print(weatherDataFrame)
+        
+        filterOnProvidedDateDF = weatherDataFrame.astype(str)
+
         locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
         return locationDataFrameWithWeatherToJSON
 
         # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
         # locationDataFrame.saveOutput()
+
+
+params = {
+
+        "date": "2022-10-20",
+        "hrs": "1",
+        "lat": "59.5748",
+        "lon": "10.748329",
+        "mins": "54",
+        "transport": "Bike"
+    }
+
+
+initializer = Handler(params)
+
+initializer.findThebestlocation()
