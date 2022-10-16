@@ -12,23 +12,24 @@ const Wrapper = styled.div`
 
 const Spacer = styled.div`
   display: block;
-  padding: 0px 0px;
+  margin-top: 100px;
 `;
 
-const Wrapper2 = styled.div`
-  margin-top: 100px;
-  margin-bottom: 200px;
-  margin-left: 200px;
-  margin-right: 200px;
+const SearchWrapper = styled.div`
+  margin-left: 100px;
+  margin-right: 500px;
+  overflow: auto;
 `;
 
 const Home: NextPage = () => {
   return (
     <Wrapper>
       <HeaderComponent />
-      <Wrapper2>
+      <Spacer />
+      <SearchWrapper>
         <SearchCriterias />
-      </Wrapper2>
+      </SearchWrapper>
+      <Spacer />
     </Wrapper>
   );
 };

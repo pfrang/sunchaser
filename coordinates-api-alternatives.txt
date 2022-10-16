@@ -40,3 +40,6 @@ https://www.keene.edu/campus/maps/tool/
 #Werather icons
 
 https://www.npmjs.com/package/weather-underground-icons
+
+#calendar styling
+https://react-day-picker.js.org/basics/styling

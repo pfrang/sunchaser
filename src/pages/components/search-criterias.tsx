@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Calendar } from "react-calendar";
 import axios from "axios";
-import "react-calendar/dist/Calendar.css";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
 import { AppConfig } from "../../app-config";
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
 
-import TransportChoice from "./transport-choice";
-import WhereAreYou from "./where-are-you/where-are-you";
+import WhereAreYou from "./where-are-you";
+import ChooseTransportationMethod from "./choose-transportation-method";
+import { ChooseTravelDistance } from "./choose-travel-distance";
+import { ChooseCalendarValue } from "./choose-calendar-value";
 
 const FormStyle = styled.form`
+  padding: 28px;
   display: flex;
   flex-direction: column;
   gap: 50px;
   justify-content: center;
-  align-items: center;
+
   border-radius: 20px;
   border: 2px solid #71ab71;
   background-color: #71ab71;
@@ -31,8 +32,8 @@ export default function SearchCriterias() {
     useState(false);
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [userGeoLocation, setUserGeoLocation] = useState("");
-  const [calendarValue, setCalendarValue] = useState<Date | undefined>(
-    undefined
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
   );
   const [invalidCalendarValue, setInvalidCalendarValue] = useState(false);
   const [hours, setHours] = useState("");
@@ -41,10 +42,6 @@ export default function SearchCriterias() {
   const travelItems = ["Walk", "Car", "Bike", "Public Transport"];
 
   const router = useRouter();
-
-  useEffect(() => {
-    setCalendarValue(new Date());
-  }, []);
 
   const checkIfTransportAndCalendarValuesAreFilled = () => {
     const check = { transport: "check", calendarValue: "check" };
@@ -56,7 +53,7 @@ export default function SearchCriterias() {
 
     const todayAtDayChange = new Date().setHours(0, 0, 0, 0);
 
-    if (Number(calendarValue) < todayAtDayChange) {
+    if (Number(selectedDate) < todayAtDayChange) {
       setInvalidCalendarValue(true);
       check.calendarValue = "";
     }
@@ -101,7 +98,7 @@ export default function SearchCriterias() {
       lon: longitude,
       lat: latitude,
       transport: highlightedTransport,
-      date: new Date(calendarValue).toISOString().split("T")[0],
+      date: new Date(selectedDate).toISOString().split("T")[0],
       hrs: hours,
       mins: minutes,
     };
@@ -115,84 +112,28 @@ export default function SearchCriterias() {
 
   return (
     <FormStyle onSubmit={onSubmit}>
-      <section id="where_are_you_seciton">
-        <WhereAreYou
-          setTownId={setTownId}
-          setUserGeoLocation={setUserGeoLocation}
-          isLocationChosen={isLocationChosen}
-          setLocationChosen={setLocationChosen}
-          townSearch={townSearch}
-          setTownSearch={setTownSearch}
-        />
-      </section>
-      <section id="how_can_you_travel">
-        <div className="">
-          <h3>How can you travel?</h3>
-          <div className="flex">
-            {travelItems.map((item, i) => {
-              return (
-                <TransportChoice
-                  highlightedTransport={highlightedTransport}
-                  setHighlightedTransport={setHighlightedTransport}
-                  key={i}
-                  item={item}
-                />
-              );
-            })}
-          </div>
-          {unfilledHighlightedTransport && (
-            <p className="text-md text-red-500 text-center">
-              Please choose a transportation method
-            </p>
-          )}
-        </div>
-      </section>
-      <section id="distance_traveling">
-        <div>
-          <h3>
-            For how far are you willing to travel with your desired way of
-            transportation
-          </h3>
-          <div className="flex justify-between">
-            <div className="flex flex-col">
-              <label htmlFor="hrs">Hours</label>
-              <input
-                onChange={(e) => setHours(e.target.value)}
-                className="border-2"
-                type="number"
-                required
-                name="hrs"
-                id=""
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="mns">Minutes</label>
-              <input
-                onChange={(e) => setMinutes(e.target.value)}
-                max="60"
-                min="0"
-                className="border-2"
-                type="number"
-                required
-                name="mns"
-                id=""
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-      <section id="calendar">
-        <div>
-          {invalidCalendarValue && (
-            <p className="text-md text-red-500 text-center">
-              Cannot pick a date earlier than today
-            </p>
-          )}
-          {calendarValue && (
-            <Calendar onChange={setCalendarValue} value={calendarValue} />
-          )}
-        </div>
-      </section>
+      <WhereAreYou
+        setTownId={setTownId}
+        setUserGeoLocation={setUserGeoLocation}
+        isLocationChosen={isLocationChosen}
+        setLocationChosen={setLocationChosen}
+        townSearch={townSearch}
+        setTownSearch={setTownSearch}
+      />
+      <ChooseCalendarValue
+        invalidCalendarValue={invalidCalendarValue}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
+      <ChooseTravelDistance setHours={setHours} setMinutes={setMinutes} />
+
+      <ChooseTransportationMethod
+        highlightedTransport={highlightedTransport}
+        setHighlightedTransport={setHighlightedTransport}
+        unfilledHighlightedTransport={unfilledHighlightedTransport}
+      >
+        {travelItems}
+      </ChooseTransportationMethod>
       <section className="submit">
         <div>
           <button className="border-2 bg-[#70b67f] p-2 w-48">Submit</button>
