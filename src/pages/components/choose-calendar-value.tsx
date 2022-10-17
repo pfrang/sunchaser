@@ -1,6 +1,7 @@
 import { format } from "date-fns";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, Row, RowProps } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { differenceInCalendarDays } from "date-fns";
 
 export const ChooseCalendarValue = ({
   selectedDate,
@@ -10,10 +11,18 @@ export const ChooseCalendarValue = ({
   const today = new Date();
   const inTwoWeeks = new Date(today.setDate(today.getDate() + 14));
 
+  const disabledDays = {
+    from: new Date(2022, 10, 18),
+    to: new Date(2022, 10, 29),
+  };
+
   const modifiers = {
     hideDays: {
       before: new Date(),
       after: inTwoWeeks,
+    },
+    root: {
+      display: "flex",
     },
   };
 
@@ -22,6 +31,23 @@ export const ChooseCalendarValue = ({
       display: "none",
     },
   };
+
+  function isPastDate(date: Date) {
+    return differenceInCalendarDays(date, new Date()) < 0;
+  }
+
+  function isFutureDate(date: Date) {
+    return differenceInCalendarDays(date, new Date()) >= 14;
+  }
+
+  function OnlyFutureRow(props: RowProps) {
+    const isPastRow = props.dates.every(isPastDate);
+    const isFutureRow = props.dates.every(isFutureDate);
+
+    if (isPastRow) return <></>;
+    if (isFutureRow) return <></>;
+    return <Row {...props} />;
+  }
 
   return (
     <section id="calendar">
@@ -33,11 +59,17 @@ export const ChooseCalendarValue = ({
         )}
         {selectedDate && (
           <DayPicker
-            modifiers={modifiers}
-            modifiersStyles={modifiersStyles}
+            style={{ padding: 0 }}
+            weekStartsOn={new Date().getDay() as number}
+            // disabled={disabledDays}
+            // fromDate={new Date()}
+            // hidden={{ before: new Date(), to: inTwoWeeks }}
+            components={{ Row: OnlyFutureRow }}
+            disableNavigation
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
+            showOutsideDays
           />
         )}
       </div>
