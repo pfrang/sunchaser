@@ -57,21 +57,20 @@ export const ChooseCalendarValue = ({
             Cannot pick a date earlier than today
           </p>
         )}
-        {selectedDate && (
-          <DayPicker
-            style={{ padding: 0 }}
-            weekStartsOn={new Date().getDay() as number}
-            // disabled={disabledDays}
-            // fromDate={new Date()}
-            // hidden={{ before: new Date(), to: inTwoWeeks }}
-            components={{ Row: OnlyFutureRow }}
-            disableNavigation
-            mode="single"
-            selected={selectedDate}
-            onSelect={setSelectedDate}
-            showOutsideDays
-          />
-        )}
+
+        <DayPicker
+          style={{ padding: 0 }}
+          weekStartsOn={new Date().getDay() as number}
+          // disabled={disabledDays}
+          // fromDate={new Date()}
+          // hidden={{ before: new Date(), to: inTwoWeeks }}
+          components={{ Row: OnlyFutureRow }}
+          disableNavigation
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
+          showOutsideDays
+        />
       </div>
     </section>
   );
