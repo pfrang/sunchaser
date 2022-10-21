@@ -49,29 +49,29 @@ export const ChooseCalendarValue = ({
     return <Row {...props} />;
   }
 
+  type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+
   return (
     <section id="calendar">
-      <div>
-        {invalidCalendarValue && (
-          <p className="text-md text-red-500 text-center">
-            Cannot pick a date earlier than today
-          </p>
-        )}
+      {invalidCalendarValue && (
+        <p className="text-md text-red-500 text-center">
+          Cannot pick a date earlier than today
+        </p>
+      )}
 
-        <DayPicker
-          style={{ padding: 0 }}
-          weekStartsOn={new Date().getDay() as number}
-          // disabled={disabledDays}
-          // fromDate={new Date()}
-          // hidden={{ before: new Date(), to: inTwoWeeks }}
-          components={{ Row: OnlyFutureRow }}
-          disableNavigation
-          mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
-          showOutsideDays
-        />
-      </div>
+      <DayPicker
+        weekStartsOn={new Date().getDay() as WeekDayNumb}
+        // disabled={disabledDays}
+        // fromDate={new Date()}
+        // hidden={{ before: new Date(), to: inTwoWeeks }}
+        components={{ Row: OnlyFutureRow }}
+        disableNavigation
+        mode="single"
+        selected={selectedDate}
+        onSelect={setSelectedDate}
+        showOutsideDays
+        style={{ margin: "0px" }}
+      />
     </section>
   );
 };

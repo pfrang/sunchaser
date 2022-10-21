@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import { AppConfig } from "../../app-config";
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
+import { Spacer } from "../../ui-kit/spacer";
 
 import WhereAreYou from "./where-are-you";
 import ChooseTransportationMethod from "./choose-transportation-method";
@@ -15,7 +16,7 @@ const FormStyle = styled.form`
   padding: 28px;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 20px;
   justify-content: center;
 
   border-radius: 20px;
@@ -126,7 +127,6 @@ export default function SearchCriterias() {
         setSelectedDate={setSelectedDate}
       />
       <ChooseTravelDistance setHours={setHours} setMinutes={setMinutes} />
-
       <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}
@@ -134,6 +134,7 @@ export default function SearchCriterias() {
       >
         {travelItems}
       </ChooseTransportationMethod>
+      <Spacer paddingY={2} />
       <section className="submit">
         <div>
           <button className="border-2 bg-[#70b67f] p-2 w-48">Submit</button>
