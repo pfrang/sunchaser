@@ -3,6 +3,7 @@ from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
 from src.python.apiRequestToYr import getWeather
 from src.python.findNearLocation import GETLOCATIONINFO
+from src.python.coordinatesfilter import ValidCoordinate
 from operator import attrgetter, itemgetter
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -52,7 +53,8 @@ class Handler:
 
         weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
         for index, row in locationDataFrame.retrieveMatrix().iterrows():
-            weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
+            if ValidCoordinate(row['lat'],row['lon']).validate(): #Validate if the coordinate is within the relevant area, such as a country. This is based on the polygon shape
+                weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
 
         return weatherDataFrame
 
@@ -103,5 +105,4 @@ params = {
 
 
 initializer = Handler(params)
-
 initializer.findThebestlocation()
