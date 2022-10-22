@@ -31,4 +31,3 @@ class APISOURCE:
         return'https://api.met.no/weatherapi/locationforecast/2.0/compact'
 
 
-print(APISOURCE.getKartverket())

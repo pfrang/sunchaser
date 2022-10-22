@@ -6,14 +6,12 @@ from src.python.findNearLocation import GETLOCATIONINFO
 from src.python.coordinatesfilter import ValidCoordinate
 from operator import attrgetter, itemgetter
 import warnings
+
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 import json
 
-travelTime='6:30'
-datetime_str="2022-07-20"
-transportationMethod="walk"
-startPoint=[59.9139,10.7522]
 
 # TODO check if json match structure
 def jsonChecker(json) -> bool:
@@ -53,9 +51,9 @@ class Handler:
 
         weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
         for index, row in locationDataFrame.retrieveMatrix().iterrows():
-            if ValidCoordinate(row['lat'],row['lon']).validate(): #Validate if the coordinate is within the relevant area, such as a country. This is based on the polygon shape
-                weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
 
+           if ValidCoordinate(row['lat'],row['lon']).validate(): #Validate if the coordinate is within the relevant area, such as a country. This is based on the polygon shape
+                weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
         return weatherDataFrame
 
 
@@ -67,7 +65,6 @@ class Handler:
         weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
         #futre selection of best weather
         weatherDataFrame=weatherDataFrame[0:4]
-
         #Append locationname to array
         locationNameDataFrame=pd.DataFrame(columns=['Location'])
 
@@ -79,13 +76,10 @@ class Handler:
             locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
 
         locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
-
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
 
-        print(weatherDataFrame)
-
+        weatherDataFrame.to_csv("locationWeather.csv",sep=",")
         filterOnProvidedDateDF = weatherDataFrame.astype(str)
-
         locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
         return locationDataFrameWithWeatherToJSON
 

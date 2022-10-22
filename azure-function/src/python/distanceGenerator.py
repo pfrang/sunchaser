@@ -1,8 +1,8 @@
 global speedList
 
 speedList= {
-    "Bike": 20,
-    "Car" : 80,
+    "Bike": 10,
+    "Car" : 40,
     "Walk": 5,
     "Public Transport": 15
     }

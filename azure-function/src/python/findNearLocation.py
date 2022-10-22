@@ -17,15 +17,15 @@ class GETLOCATIONINFO:
 
         ApiURL=APISOURCE.getKartverket()
         FullApiURL=f'{ApiURL}nord={lat}&ost={lon}'
-
+        print(FullApiURL)
         response=requests.get(FullApiURL,headers=headers)
         response_json=json.loads(response.text)
-        response_json=response_json['navn'][0]['stedsnavn'][0]['skrivemåte']
 
-        print(response_json)
+        if len(response_json['navn'])>0:
+            response_json=response_json['navn'][0]['stedsnavn'][0]['skrivemåte']
+        else:
+            response_json='location not found'
 
         df = pd.DataFrame({"Location":[response_json]})
-
-        if response_json=='':response_json='location not found'
 
         return df
