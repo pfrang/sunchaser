@@ -22,8 +22,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         response = initializer.findThebestlocation()
         response_str = json.dumps(response, indent=4)
         return func.HttpResponse(f"{response_str}", status_code=200)
-    except:
-        return func.HttpResponse("Please provide a valid JSON",status_code=500)
+    except Exception as e:
+        return func.HttpResponse(f'Error: {e}',status_code=500)
 
 
     # if name:

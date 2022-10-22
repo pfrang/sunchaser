@@ -78,10 +78,10 @@ class Handler:
         locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
 
-        weatherDataFrame.to_csv("locationWeather.csv",sep=",")
         filterOnProvidedDateDF = weatherDataFrame.astype(str)
         locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
         return locationDataFrameWithWeatherToJSON
 
+        # weatherDataFrame.to_csv("locationWeather.csv",sep=",")
         # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
         # locationDataFrame.saveOutput()
