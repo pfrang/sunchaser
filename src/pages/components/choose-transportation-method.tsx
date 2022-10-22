@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
 const DivItem = styled.div`
   background-color: #f0efef;
@@ -28,7 +29,12 @@ export default function ChooseTransportationMethod({
   return (
     <section id="how_can_you_travel">
       <div className="">
-        <h3>How can you travel?</h3>
+        <label>How can you travel?</label>
+        <Image
+          width={20}
+          height={20}
+          src={"/icons/transportation-methods/Bike.png"}
+        />
         <div className="flex">
           {children.map((item, i) => {
             return highlightedTransport === item ? (

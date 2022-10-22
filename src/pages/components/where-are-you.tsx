@@ -73,12 +73,12 @@ export default function WhereAreYou({
 
   return (
     <section id="where_are_you_seciton">
-      <div className="flex flex-col">
-        <h3>Where are you?</h3>
+      <div className="flex flex-col pr-2">
+        <label>Where are you?</label>
         <div className="flex justify-between relative w-full">
           <input
             required
-            className="pl-2 border-2 h-10 text-xl"
+            className="pl-2 w-full border-2 h-10 text-xl"
             placeholder="Location"
             key={"inputBox"}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -94,7 +94,7 @@ export default function WhereAreYou({
           )}
         </div>
         {!isLocationChosen && townSearch && (
-          <div className="relative w-full">
+          <div className="relative w-full z-10">
             <ul className="absolute left-0 w-full rounded-md border-1-black margin-0 padding-0">
               <li
                 onClick={() => onGetUserLocation()}

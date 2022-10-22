@@ -1,7 +1,7 @@
-import { format } from "date-fns";
 import { DayPicker, Row, RowProps } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { differenceInCalendarDays } from "date-fns";
+import nb from "date-fns/locale/nb";
 
 export const ChooseCalendarValue = ({
   selectedDate,
@@ -58,19 +58,23 @@ export const ChooseCalendarValue = ({
           Cannot pick a date earlier than today
         </p>
       )}
-
+      <label>When do you want to travel?</label>
       <DayPicker
         weekStartsOn={new Date().getDay() as WeekDayNumb}
         // disabled={disabledDays}
         // fromDate={new Date()}
         // hidden={{ before: new Date(), to: inTwoWeeks }}
         components={{ Row: OnlyFutureRow }}
+        locale={nb}
         disableNavigation
         mode="single"
         selected={selectedDate}
         onSelect={setSelectedDate}
         showOutsideDays
         style={{ margin: "0px" }}
+        styles={{
+          caption: { display: "none" },
+        }}
       />
     </section>
   );

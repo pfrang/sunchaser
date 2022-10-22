@@ -18,11 +18,6 @@ const FormStyle = styled.form`
   flex-direction: column;
   gap: 20px;
   justify-content: center;
-
-  border-radius: 20px;
-  border: 2px solid #71ab71;
-  background-color: #71ab71;
-  box-shadow: 0px 2px 1px;
 `;
 
 export default function SearchCriterias() {
@@ -37,8 +32,7 @@ export default function SearchCriterias() {
     new Date()
   );
   const [invalidCalendarValue, setInvalidCalendarValue] = useState(false);
-  const [hours, setHours] = useState("");
-  const [minutes, setMinutes] = useState("");
+  const [travelDistance, setTravelDistance] = useState("0:10");
 
   const travelItems = ["Walk", "Car", "Bike", "Public Transport"];
 
@@ -100,8 +94,7 @@ export default function SearchCriterias() {
       lat: latitude,
       transport: highlightedTransport,
       date: new Date(selectedDate).toISOString().split("T")[0],
-      hrs: hours,
-      mins: minutes,
+      travel_time: travelDistance,
     };
 
     const urlPar = Object.keys(params)
@@ -126,7 +119,10 @@ export default function SearchCriterias() {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      <ChooseTravelDistance setHours={setHours} setMinutes={setMinutes} />
+      <ChooseTravelDistance
+        setTravelDistance={setTravelDistance}
+        travelDistance={travelDistance}
+      />
       <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}

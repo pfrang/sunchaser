@@ -15,10 +15,18 @@ const Spacer = styled.div`
   margin-top: 100px;
 `;
 
-const SearchWrapper = styled.div`
+const Container = styled.div`
   margin-left: 100px;
+  background-color: #71ab71;
+  border-radius: 20px;
+  border: 2px solid #71ab71;
+  box-shadow: 0px 2px 10px;
   margin-right: 500px;
   overflow: auto;
+`;
+
+const FormWrapper = styled.div`
+  width: 400px;
 `;
 
 const Home: NextPage = () => {
@@ -26,9 +34,11 @@ const Home: NextPage = () => {
     <Wrapper>
       <HeaderComponent />
       <Spacer />
-      <SearchWrapper>
-        <SearchCriterias />
-      </SearchWrapper>
+      <Container>
+        <FormWrapper>
+          <SearchCriterias />
+        </FormWrapper>
+      </Container>
       <Spacer />
     </Wrapper>
   );
