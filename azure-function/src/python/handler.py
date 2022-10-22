@@ -15,6 +15,7 @@ datetime_str="2022-07-20"
 transportationMethod="walk"
 startPoint=[59.9139,10.7522]
 
+# TODO check if json match structure
 def jsonChecker(json) -> bool:
     json_structure = {
         "params": {
@@ -31,15 +32,14 @@ def jsonChecker(json) -> bool:
 
 class Handler:
     def __init__(self, input) -> None:
-        date, hrs, lat, lon, mins, transport = itemgetter('date', 'hrs', 'lat', 'lon', 'mins', 'transport')(input) #make it not index based of destructure
+        date, travel_time, lat, lon, transport = itemgetter('date', 'travel_time','lat', 'lon', 'transport')(input)
         self.date = date
-        self.hrs = hrs
+        self.travel_time = travel_time
         self.startingCoordinates = [float(lat), float(lon)]
-        self.mins = mins
         self.transport = transport
 
     def initializeCoordinatesFetcher(self):
-        distance = GetDistance(travelTime=f'{self.hrs}:{self.mins}',
+        distance = GetDistance(travelTime=f'{self.travel_time}',
         transportationMethod=self.transport).calculateDistance()
         response = GetCoordinates(
             startingCoordinates=self.startingCoordinates,
@@ -48,7 +48,7 @@ class Handler:
         return response
 
     def callYr(self):
-        travelDistance=GetDistance(travelTime=f'{self.hrs}:{self.mins}',transportationMethod=self.transport)
+        travelDistance=GetDistance(travelTime=f'{self.travel_time}',transportationMethod=self.transport)
         locationDataFrame=GetCoordinates(self.startingCoordinates,travelDistance.calculateDistance())
 
         weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
@@ -70,20 +70,20 @@ class Handler:
 
         #Append locationname to array
         locationNameDataFrame=pd.DataFrame(columns=['Location'])
-        
+
         weatherDataFrame=weatherDataFrame.reset_index(drop=True)
         for index, row in weatherDataFrame.iterrows():
             lat=row['latitude']
             lon=row['longitude']
 
             locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
-        
+
         locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
 
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
 
         print(weatherDataFrame)
-        
+
         filterOnProvidedDateDF = weatherDataFrame.astype(str)
 
         locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
@@ -91,18 +91,3 @@ class Handler:
 
         # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
         # locationDataFrame.saveOutput()
-
-
-params = {
-
-        "date": "2022-10-20",
-        "hrs": "1",
-        "lat": "59.5748",
-        "lon": "10.748329",
-        "mins": "54",
-        "transport": "Bike"
-    }
-
-
-initializer = Handler(params)
-initializer.findThebestlocation()

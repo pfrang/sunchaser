@@ -3,10 +3,12 @@ import "react-day-picker/dist/style.css";
 import { differenceInCalendarDays } from "date-fns";
 import nb from "date-fns/locale/nb";
 
+import { Spacer } from "../../ui-kit/spacer/spacer";
+
 export const ChooseCalendarValue = ({
+  unfilledCalendar,
   selectedDate,
   setSelectedDate,
-  invalidCalendarValue,
 }) => {
   const today = new Date();
   const inTwoWeeks = new Date(today.setDate(today.getDate() + 14));
@@ -53,12 +55,13 @@ export const ChooseCalendarValue = ({
 
   return (
     <section id="calendar">
-      {invalidCalendarValue && (
-        <p className="text-md text-red-500 text-center">
-          Cannot pick a date earlier than today
+      <label>When do you want to travel?</label>
+      {unfilledCalendar && (
+        <p className="text-md text-red-500 font-bold">
+          Please fill calendar value
         </p>
       )}
-      <label>When do you want to travel?</label>
+      <Spacer vertical={2} />
       <DayPicker
         weekStartsOn={new Date().getDay() as WeekDayNumb}
         // disabled={disabledDays}

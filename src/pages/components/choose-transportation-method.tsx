@@ -2,9 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
+import { Spacer } from "../../ui-kit/spacer/spacer";
+
 const DivItem = styled.div`
-  background-color: #f0efef;
-  padding: 10px;
+  position: relative;
+  /* background-color: #f0efef; */
+  padding: 30px;
   cursor: pointer;
   transition: 0.5s ease;
   &:hover {
@@ -13,8 +16,9 @@ const DivItem = styled.div`
 `;
 
 const HighlightedDivItem = styled.div`
-  background-color: #70b67f;
-  padding: 10px;
+  position: relative;
+  background-color: #dedddd;
+  padding: 30px;
   cursor: pointer;
 `;
 
@@ -28,31 +32,25 @@ export default function ChooseTransportationMethod({
 }) {
   return (
     <section id="how_can_you_travel">
-      <div className="">
-        <label>How can you travel?</label>
-        <Image
-          width={20}
-          height={20}
-          src={"/icons/transportation-methods/Bike.png"}
-        />
-        <div className="flex">
-          {children.map((item, i) => {
-            return highlightedTransport === item ? (
-              <HighlightedDivItem key={i}>
-                <h3>{item}</h3>
-              </HighlightedDivItem>
-            ) : (
-              <DivItem key={i} onClick={(e) => setHighlightedTransport(item)}>
-                <h3>{item}</h3>
-              </DivItem>
-            );
-          })}
-        </div>
-        {unfilledHighlightedTransport && (
-          <p className="text-md text-red-500 text-center">
-            Please choose a transportation method
-          </p>
-        )}
+      <label>How do you travel?</label>
+      {unfilledHighlightedTransport && (
+        <p className="text-md text-red-500 font-bold">
+          Please choose a transportation method
+        </p>
+      )}
+      <Spacer vertical={2} />
+      <div className="flex">
+        {children.map((item, i) => {
+          return highlightedTransport === item ? (
+            <HighlightedDivItem key={i}>
+              <Image src={`/transportation/${item}.png`} layout="fill" />
+            </HighlightedDivItem>
+          ) : (
+            <DivItem key={i} onClick={(e) => setHighlightedTransport(item)}>
+              <Image src={`/transportation/${item}.png`} layout="fill" />
+            </DivItem>
+          );
+        })}
       </div>
     </section>
   );

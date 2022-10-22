@@ -8,6 +8,10 @@ import {
 export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
   const [value, setValue] = useState(1);
 
+  useEffect(() => {
+    setTravelDistance(convertToTravelDistance(value));
+  }, [value]);
+
   return (
     <section id="distance_traveling">
       <div className="w-[300px]">
@@ -15,15 +19,12 @@ export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
         <input
           type="range"
           list="tickmarks"
-          onChange={(e) =>
-            setTravelDistance(
-              convertToTravelDistance(Number(e.currentTarget.value))
-            )
-          }
+          onChange={(e) => setValue(Number(e.currentTarget.value))}
           step="1"
           className="w-full cursor-pointer"
           min={1}
           max={9}
+          value={value}
         />
 
         <datalist

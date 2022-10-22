@@ -1,5 +1,4 @@
 from http.client import responses
-from msilib.schema import Class
 from src.python.api_client import APISOURCE
 import requests
 import json
@@ -24,11 +23,9 @@ class GETLOCATIONINFO:
         response_json=response_json['navn'][0]['stedsnavn'][0]['skrivemåte']
 
         print(response_json)
-    
+
         df = pd.DataFrame({"Location":[response_json]})
-        
+
         if response_json=='':response_json='location not found'
 
         return df
-        
-        

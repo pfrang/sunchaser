@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 
 import { AppConfig } from "../../app-config";
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
-import { Spacer } from "../../ui-kit/spacer";
+import { Spacer } from "../../ui-kit/spacer/spacer";
 
 import WhereAreYou from "./where-are-you";
 import ChooseTransportationMethod from "./choose-transportation-method";
@@ -20,21 +20,37 @@ const FormStyle = styled.form`
   justify-content: center;
 `;
 
+const Button = styled.button`
+  background-color: #1215fd;
+  padding: 0.5rem;
+  border: 1px solid white;
+  border-radius: 0.375rem;
+  width: 12rem;
+  cursor: pointer;
+  color: white;
+  transition: 0.5s ease;
+  &:hover {
+    background-color: #c7c744;
+  }
+`;
+
 export default function SearchCriterias() {
   const [townSearch, setTownSearch] = useState("");
   const [townId, setTownId] = useState("");
   const [highlightedTransport, setHighlightedTransport] = useState("");
   const [unfilledHighlightedTransport, setUnfilledHighlightedTransport] =
     useState(false);
+
+  const [unfilledCalendar, setUnfilledCalendar] = useState(false);
+
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [userGeoLocation, setUserGeoLocation] = useState("");
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
-  const [invalidCalendarValue, setInvalidCalendarValue] = useState(false);
   const [travelDistance, setTravelDistance] = useState("0:10");
 
-  const travelItems = ["Walk", "Car", "Bike", "Public Transport"];
+  const travelItems = ["Walk", "Car", "Bike", "Public Transportation"];
 
   const router = useRouter();
 
@@ -46,10 +62,8 @@ export default function SearchCriterias() {
       check.transport = "";
     }
 
-    const todayAtDayChange = new Date().setHours(0, 0, 0, 0);
-
-    if (Number(selectedDate) < todayAtDayChange) {
-      setInvalidCalendarValue(true);
+    if (!selectedDate) {
+      setUnfilledCalendar(true);
       check.calendarValue = "";
     }
 
@@ -76,7 +90,6 @@ export default function SearchCriterias() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setInvalidCalendarValue(false);
     setUnfilledHighlightedTransport(false);
 
     const check = checkIfTransportAndCalendarValuesAreFilled();
@@ -115,7 +128,7 @@ export default function SearchCriterias() {
         setTownSearch={setTownSearch}
       />
       <ChooseCalendarValue
-        invalidCalendarValue={invalidCalendarValue}
+        unfilledCalendar={unfilledCalendar}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
@@ -130,10 +143,10 @@ export default function SearchCriterias() {
       >
         {travelItems}
       </ChooseTransportationMethod>
-      <Spacer paddingY={2} />
+      <Spacer vertical={1} />
       <section className="submit">
-        <div>
-          <button className="border-2 bg-[#70b67f] p-2 w-48">Submit</button>
+        <div className="flex justify-center">
+          <Button>Find the sun</Button>
         </div>
       </section>
     </FormStyle>

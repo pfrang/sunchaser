@@ -16,10 +16,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if req.method not in allowed_methods: return func.HttpResponse("Method not allowed", status_code=404)
 
     try:
-        req_body = req.get_json() #TODO initialize json_checker function over to see if format matches required
+        req_body = req.get_json()
         params = req_body["params"]
         initializer = Handler(params)
-        response = initializer.callYr()
+        response = initializer.findThebestlocation()
         response_str = json.dumps(response, indent=4)
         return func.HttpResponse(f"{response_str}", status_code=200)
     except:

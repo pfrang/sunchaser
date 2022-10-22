@@ -1,21 +1,23 @@
 import type { NextPage } from "next";
+import Image from "next/image";
 import styled from "styled-components";
+
+import { Spacer } from "../ui-kit/spacer/spacer";
 
 import HeaderComponent from "./components/header";
 import SearchCriterias from "./components/search-criterias";
 
 const Wrapper = styled.div`
-  display: grid;
-  grid-template-rows: auto 1fr;
-  max-height: 100vh;
+  height: 100%;
 `;
 
-const Spacer = styled.div`
-  display: block;
-  margin-top: 100px;
+const ContentWrapper = styled.div`
+  height: calc(100% - 60px);
+  position: relative;
 `;
 
 const Container = styled.div`
+  opacity: 0.9;
   margin-left: 100px;
   background-color: #71ab71;
   border-radius: 20px;
@@ -33,13 +35,21 @@ const Home: NextPage = () => {
   return (
     <Wrapper>
       <HeaderComponent />
-      <Spacer />
-      <Container>
-        <FormWrapper>
-          <SearchCriterias />
-        </FormWrapper>
-      </Container>
-      <Spacer />
+      {/* <Wrapper> */}
+      <ContentWrapper>
+        <Image
+          className="z-[-1]"
+          src={"/background.jpg"}
+          layout="fill"
+          objectFit="cover"
+        />
+        <Spacer vertical={5} />
+        <Container>
+          <FormWrapper>
+            <SearchCriterias />
+          </FormWrapper>
+        </Container>
+      </ContentWrapper>
     </Wrapper>
   );
 };
