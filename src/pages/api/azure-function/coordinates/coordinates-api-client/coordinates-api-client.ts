@@ -7,9 +7,9 @@ export class CoordinatesAPiClient extends AzureFunctionApiClient {
       ? this.baseUrl + this.endpointUrl
       : this.baseUrl + this.endpointUrl + this.key;
 
-  post = async (input: any) => {
+  post = async (body: any) => {
     try {
-      const response = await this.axiosInstance.post(this.url, input);
+      const response = await this.axiosInstance.post(this.url, body);
 
       return { data: response.data };
     } catch (e) {

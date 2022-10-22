@@ -62,7 +62,7 @@ class Handler:
 
         #filter out the correct date to be analyzed
         weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
-        weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
+        # weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
         #futre selection of best weather
         weatherDataFrame=weatherDataFrame[0:4]
         #Append locationname to array
