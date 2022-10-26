@@ -28,4 +28,5 @@ class GETLOCATIONINFO:
 
         df = pd.DataFrame({"Location":[response_json]})
 
+        print(df)
         return df

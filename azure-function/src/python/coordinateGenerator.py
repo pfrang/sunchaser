@@ -8,6 +8,8 @@ import re
 global radiusEarth # Radius of earth in kilometers.
 radiusEarth=6371
 
+
+
 class GetCoordinates:
     def __init__(self, startingCoordinates,distanceInKm=50):
         self.startingCoordinates = startingCoordinates
@@ -52,7 +54,7 @@ class GetCoordinates:
 
         return edgePoints
 
-    def retrieveMatrix(self,researchSquares=16):
+    def retrieveMatrix(self,researchSquares=256):
         if not (sqrt(researchSquares) / 4).is_integer():
             raise ValueError("Number must be root, divided by 4 = whole number")
 
@@ -70,6 +72,7 @@ class GetCoordinates:
         transposedMatrix=transposedMatrix.reshape(-1, *transposedMatrix.shape[-1:]) # flatten all but the last one dimension - last -1. the first is the shape(?):
         df_transposedMatrix = pd.DataFrame(transposedMatrix, columns = ['lat','lon'])
 
+        print(f"{researchSquares} coordinates generated")
         return df_transposedMatrix
 
     def saveOutput(self):
@@ -77,5 +80,4 @@ class GetCoordinates:
         os.remove("test.csv")
 
         inputdataframe.to_csv("test.csv",sep=',')
-
         return

@@ -1,4 +1,5 @@
 from ast import Return
+from cgitb import handler
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
 from src.python.apiRequestToYr import getWeather
@@ -64,7 +65,8 @@ class Handler:
         weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
         # weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
         #futre selection of best weather
-        weatherDataFrame=weatherDataFrame[0:4]
+        #weatherDataFrame=weatherDataFrame[0:4] #########################################################
+        weatherDataFrame=weatherDataFrame
         #Append locationname to array
         locationNameDataFrame=pd.DataFrame(columns=['Location'])
 
@@ -73,15 +75,27 @@ class Handler:
             lat=row['latitude']
             lon=row['longitude']
 
-            locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
+            locationNameDataFrame = locationNameDataFrame.append(["Yolo"])#GETLOCATIONINFO(lat,lon).LocationNamefromAPI())############################################
 
         locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
 
         filterOnProvidedDateDF = weatherDataFrame.astype(str)
         locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
+        
+
+        weatherDataFrame.to_csv("locationWeather.csv",sep=",")
+        
         return locationDataFrameWithWeatherToJSON
 
-        # weatherDataFrame.to_csv("locationWeather.csv",sep=",")
-        # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
-        # locationDataFrame.saveOutput()
+
+
+params= {
+    "date": "2022-10-27",
+    "travel_time": "04:00",
+    "lat": "60.651090163045026",
+    "lon": "8.036618892015843",
+    "transport": "Car"
+}
+
+Handler(params).findThebestlocation()
