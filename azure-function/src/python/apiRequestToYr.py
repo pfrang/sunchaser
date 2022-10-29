@@ -41,7 +41,4 @@ def getWeather(lat,lon,travelDate):
         'temperature': weatherTemperature,
         'wind': weatherWind,
     })
-    print(weatherDataDataFrame)
     return weatherDataDataFrame
-
-

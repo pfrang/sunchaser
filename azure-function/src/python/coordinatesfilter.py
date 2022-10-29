@@ -190,9 +190,3 @@ class ValidCoordinate:
         point = Point(lon, lat)
 
         return polygon.contains(point)
-
-
-#lat=20.00822218452129
-#lon=10.523913403907384
-#print(ValidCoordinate(lat,lon).validate())
-

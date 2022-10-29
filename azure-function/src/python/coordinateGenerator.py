@@ -72,7 +72,7 @@ class GetCoordinates:
         transposedMatrix=transposedMatrix.reshape(-1, *transposedMatrix.shape[-1:]) # flatten all but the last one dimension - last -1. the first is the shape(?):
         df_transposedMatrix = pd.DataFrame(transposedMatrix, columns = ['lat','lon'])
 
-        print(f"{researchSquares} coordinates generated")
+        # print(f"{researchSquares} coordinates generated")
         return df_transposedMatrix
 
     def saveOutput(self):

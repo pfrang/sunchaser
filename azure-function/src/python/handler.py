@@ -58,6 +58,11 @@ class Handler:
         return weatherDataFrame
 
     def cleanDF(self,df):
+
+        main_json = {
+            'rank': {
+            }
+        }
         result = {
             "rank": {
                 "1": [{
@@ -79,6 +84,7 @@ class Handler:
                     }],
                 }],
                 "2": {
+                    "lat":"value"
 
                 }
             }
@@ -94,9 +100,6 @@ class Handler:
         #         dict[rank].append({ 'latitude':row['latitude'], 'longitude': row['longitude'] })
         #     else:
         #         dict[rank] = [{ 'latitude':row['latitude'], 'longitude': row['longitude'] }]
-
-
-        print(dict)
         return df
 
 
@@ -125,48 +128,8 @@ class Handler:
         rankDF = pd.DataFrame(rankDict)
         #futre selection of best weather
         mergeDF = pd.merge(weatherDataFrame,rankDF, left_index=True, right_index=True)
-        mergeDF = mergeDF.groupby('rank').apply(lambda x:x.to_dict()).to_dict()
-        print(mergeDF)
-        # mergeDF = mergeDF.groupby('rank').apply(lambda x:x.set_index('time').to_dict(orient='index')).to_dict()
-        # mergeDF = mergeDF.groupby('rank').apply(lambda x:x.groupby(['longitude']).apply(list).to_dict()).to_dict()
-        # print(mergeDF)
-        # mergeDF = mergeDF.groupby('rank').apply(lambda x:x[['longitude', 'latitude', 'time']].to_dict(orient='records')).to_dict()
-        # mergeDF = mergeDF.groupby('rank').groupby('latitude')
-        # print(mergeDF)
-        # print(json.dumps(mergeDF, indent=4))
-        # mergeDF = mergeDF.apply(lambda x:x)
-        # print(mergeDF)
-        # levels = len(mergeDF.index.levels)
-        # dicts = [{} for i in range(levels)]
-        # last_index = None
-
-        # for index,value in mergeDF.itertuples():
-
-        #     if not last_index:
-        #         last_index = index
-
-        #     for (ii,(i,j)) in enumerate(zip(index, last_index)):
-        #         if not i == j:
-        #             ii = levels - ii -1
-        #             dicts[:ii] =  [{} for _ in dicts[:ii]]
-        #             break
-
-        #     for i, key in enumerate(reversed(index)):
-        #         dicts[i][key] = value
-        #         value = dicts[i]
-
-        #     last_index = index
-
-
-        # result = json.dumps(dicts[-1])
-        # print(result)
-        # print(mergeDF)
-        # mergeDF = self.cleanDF(mergeDF)
-        # filterOnProvidedDateDF = mergeDF.astype(str)
-        # # print(filterOnProvidedDateDF)
-        # locationDataFrameWithWeatherToJSON = json.loads(filterOnProvidedDateDF.to_json(orient='records'))
-        # response_str = json.dumps(locationDataFrameWithWeatherToJSON, indent=4)
-        # # print(response_str)
+        mergeDF = mergeDF.groupby('rank').apply(lambda x:x.to_dict(orient='records')).to_dict()
+        print(json.dumps(mergeDF, indent=4))
         # return locationDataFrameWithWeatherToJSON
 
         # weatherDataFrame.to_csv("locationWeather.csv",sep=",")
@@ -174,7 +137,7 @@ class Handler:
         # locationDataFrame.saveOutput()
 
 params= {
-    "date": "2022-10-28",
+    "date": "2022-10-29",
 
     "travel_time": "04:00",
 

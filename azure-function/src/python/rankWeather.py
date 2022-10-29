@@ -290,20 +290,10 @@ class rankWeather:
         return rankValue
 
     def calculate(self):
-        
+
         symbol=self.symbolRank()
         temp=self.temperatureRank()
         wind=self.windRank()
 
         totalRank=symbol*0.6+wind*0.2+temp*0.2
         return totalRank
-
-
-lat=60
-lon=10
-symbol="Clear sky"
-temp=-3
-wind=0        
-
-print(rankWeather(lat,lon,symbol,temp,wind).calculate())
-
