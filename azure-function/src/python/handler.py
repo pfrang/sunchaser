@@ -1,5 +1,4 @@
 from ast import Return
-from heapq import merge
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
 from src.python.apiRequestToYr import getWeather
@@ -118,7 +117,7 @@ class Handler:
             lat=row['latitude']
             lon=row['longitude']
 
-            locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
+            locationNameDataFrame = locationNameDataFrame.append(["Yolo"])#GETLOCATIONINFO(lat,lon).LocationNamefromAPI())############################################
 
         locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
