@@ -17,7 +17,6 @@ class GETLOCATIONINFO:
 
         ApiURL=APISOURCE.getKartverket()
         FullApiURL=f'{ApiURL}nord={lat}&ost={lon}'
-        print(FullApiURL)
         response=requests.get(FullApiURL,headers=headers)
         response_json=json.loads(response.text)
 
