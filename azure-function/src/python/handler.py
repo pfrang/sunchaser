@@ -1,4 +1,5 @@
 from ast import Return
+from src.python.rankWeather import rankWeather
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
 from src.python.apiRequestToYr import getWeather
@@ -59,7 +60,7 @@ class Handler:
 
     def cleanDF(self, df):
         tmpDict = {'rank': []}
-        dfDict = df.groupby('rank').apply(lambda x:x[['weatherRank', 'longitutde','latitude','symbol','temperature','windb']].to_dict(orient='records')).to_dict()
+        dfDict = df.groupby('rank').apply(lambda x:x[['weatherRank', 'longitutde','latitude','symbol','temperature','maxRank', 'wind', 'time', 'date']].to_dict(orient='records')).to_dict()
         tmpDict = tmpDict['rank'].append(dfDict)
         return tmpDict
 
@@ -68,30 +69,35 @@ class Handler:
 
         #filter out the correct date to be analyzed
         weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
-        # weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
 
+        weatherDataFrame['weatherRank'] = weatherDataFrame.apply(lambda row: rankWeather(row).calculate(),axis=1)   #Calculating the rank per time per location
+        weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
+
+        weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
+              ascending = [False, False])
+
+        # weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
+        print(weatherDataFrame)
         weatherDataFrame=weatherDataFrame[0:16]
         # #Append locationname to array
         # locationNameDataFrame=pd.DataFrame(columns=['location'])
 
         # weatherDataFrame=weatherDataFrame.reset_index(drop=True)
-        # for index, row in weatherDataFrame.iterrows():
-        #     lat=row['latitude']
-        #     lon=row['longitude']
+        for index, row in weatherDataFrame.iterrows():
+            lat=row['latitude']
+            lon=row['longitude']
+            locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
 
-        #     locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
 
-        # locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
-        # weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
-        rankDict = { "rank": [1,1,3,4,2,3,1,3,2,4,3,2,1,2,3,4], "weatherRank": [10,13,34,42,22,34,11,35,21,49,76,34,87,98,23,10]}
-        rankDF = pd.DataFrame(rankDict)
+        locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
+        weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
         #futre selection of best weather
-        mergeDF = pd.merge(weatherDataFrame,rankDF, left_index=True, right_index=True)
-        outputJson = self.cleanDF(mergeDF)
+        outputJson = self.cleanDF(weatherDataFrame)
+        print(outputJson)
 
-        return mergeDF
+        return outputJson
 
-        # weatherDataFrame.to_csv("locationWeather.csv",sep=",")
+        #weatherDataFrame.to_csv("locationWeather.csv",sep=",")
         # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
         # locationDataFrame.saveOutput()
 
