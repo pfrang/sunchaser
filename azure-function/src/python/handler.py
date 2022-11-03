@@ -1,4 +1,5 @@
 from ast import Return
+from src.python.rankWeather import rankWeather
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
 from src.python.apiRequestToYr import getWeather
@@ -62,8 +63,15 @@ class Handler:
 
         #filter out the correct date to be analyzed
         weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
-        # weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
+     
+        weatherDataFrame['weatherRank'] = weatherDataFrame.apply(lambda row: rankWeather(row).calculate(),axis=1)   #Calculating the rank per time per location
+        weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
+        
+        weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
+              ascending = [False, False])
 
+        # weatherDataFrame=weatherDataFrame[weatherDataFrame['time'] == '12:00:00']
+        print(weatherDataFrame)
         weatherDataFrame=weatherDataFrame[0:16]
         #Append locationname to array
         locationNameDataFrame=pd.DataFrame(columns=['location'])
@@ -74,32 +82,32 @@ class Handler:
             lon=row['longitude']
 
             locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
+        
 
         locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
-        rankDict = { "rank": [1,1,3,4,2,3,1,3,2,4,3,2,1,2,3,4], "weatherRank": [10,13,34,42,22,34,11,35,21,49,76,34,87,98,23,10]}
+        rankDict = { "rank": [1,1,3,4,2,3,1,3,2,4,3,2,1,2,3,4], "weatherRank": [10,13,34,42,22,34,11,35,21,49,76,34,87,98,23,10]} #rank is the value for the location, weatherrank is per time
         rankDF = pd.DataFrame(rankDict)
         #futre selection of best weather
         mergeDF = pd.merge(weatherDataFrame,rankDF, left_index=True, right_index=True)
         mergeDF = mergeDF.groupby('rank').apply(lambda x:x.to_dict(orient='records')).to_dict()
         return mergeDF
 
-        # weatherDataFrame.to_csv("locationWeather.csv",sep=",")
+        #weatherDataFrame.to_csv("locationWeather.csv",sep=",")
         # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
         # locationDataFrame.saveOutput()
 
-# params= {
-#     "date": "2022-11-03",
+params= {
+    "date": "2022-11-05",
 
-#     "travel_time": "04:00",
+    "travel_time": "04:00",
 
-#     "lat": "60.651090163045026",
+    "lat": "60.651090163045026",
 
-#     "lon": "8.036618892015843",
+    "lon": "8.036618892015843",
 
-#     "transport": "Car"
-# }
+    "transport": "Car"
+}
 
 
-
-# Handler(params).findThebestlocation()
+Handler(params).findThebestlocation()
