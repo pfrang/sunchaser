@@ -57,53 +57,6 @@ class Handler:
                 weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
         return weatherDataFrame
 
-    def cleanDF(self,df):
-
-        main_json = {
-            'rank': {
-            }
-        }
-        result = {
-            "rank": {
-                "1": [{
-                    "lat": "value",
-                    "lon": "fwe",
-                    "times": [{
-                        "rank": "value",
-                        "time": "value",
-                        "data": {
-                            "wind": "value"
-                        }
-                    },
-                    {
-                        "time": "value",
-                        "rank": "value",
-                        "data": {
-                            "wind": "value"
-                        }
-                    }],
-                }],
-                "2": {
-                    "lat":"value"
-
-                }
-            }
-        }
-        dict = {}
-        # for idx,row in df.iterrows():
-        #     rank = row['rank']
-        #     latitude = row['latitude']
-        #     longitude = row['longitude']
-        #     # latitude = row['latitude']
-        #     # latitude = row['latitude']
-        #     if(rank in dict.keys()):
-        #         dict[rank].append({ 'latitude':row['latitude'], 'longitude': row['longitude'] })
-        #     else:
-        #         dict[rank] = [{ 'latitude':row['latitude'], 'longitude': row['longitude'] }]
-        return df
-
-
-
     def findThebestlocation(self):
         weatherDataFrame=self.callYr()
 
@@ -113,14 +66,14 @@ class Handler:
 
         weatherDataFrame=weatherDataFrame[0:16]
         #Append locationname to array
-        locationNameDataFrame=pd.DataFrame(columns=['Location'])
+        locationNameDataFrame=pd.DataFrame(columns=['location'])
 
         weatherDataFrame=weatherDataFrame.reset_index(drop=True)
         for index, row in weatherDataFrame.iterrows():
             lat=row['latitude']
             lon=row['longitude']
 
-            locationNameDataFrame = locationNameDataFrame.append(["Yolo"])#GETLOCATIONINFO(lat,lon).LocationNamefromAPI())############################################
+            locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
 
         locationNameDataFrame = locationNameDataFrame.reset_index(drop=True)
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
@@ -129,25 +82,24 @@ class Handler:
         #futre selection of best weather
         mergeDF = pd.merge(weatherDataFrame,rankDF, left_index=True, right_index=True)
         mergeDF = mergeDF.groupby('rank').apply(lambda x:x.to_dict(orient='records')).to_dict()
-        print(json.dumps(mergeDF, indent=4))
-        # return locationDataFrameWithWeatherToJSON
+        return mergeDF
 
         # weatherDataFrame.to_csv("locationWeather.csv",sep=",")
         # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
         # locationDataFrame.saveOutput()
 
-params= {
-    "date": "2022-10-29",
+# params= {
+#     "date": "2022-11-03",
 
-    "travel_time": "04:00",
+#     "travel_time": "04:00",
 
-    "lat": "60.651090163045026",
+#     "lat": "60.651090163045026",
 
-    "lon": "8.036618892015843",
+#     "lon": "8.036618892015843",
 
-    "transport": "Car"
-}
+#     "transport": "Car"
+# }
 
 
 
-Handler(params).findThebestlocation()
+# Handler(params).findThebestlocation()

@@ -25,7 +25,5 @@ class GETLOCATIONINFO:
         else:
             response_json='location not found'
 
-        df = pd.DataFrame({"Location":[response_json]})
-
-        print(df)
+        df = pd.DataFrame({"location":[response_json]})
         return df
