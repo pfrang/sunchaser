@@ -27,7 +27,7 @@ export class CoordinatesMapper {
 
   getProps(): CoordinatesMappedResponse {
     return {
-      metaData: { count: this.contentData.length },
+      metaData: { count: 2 },
       items: this.assembleItems(this.contentData),
     };
   }
