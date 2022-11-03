@@ -1,15 +1,27 @@
-export interface AzureFunctionCoordinatesItem {
+export interface AzureFunctionCoordinatesItems {
   latitude: string;
   longitude: string;
   date: string;
   time: string;
   symbol: string;
-  temperature: string;
-  wind: string;
+  temperature: number;
+  wind: number;
+  location: string;
+  rank: number;
+  weatherRank: number;
 }
 
-export type AzureFunctionCoordinatesResponseItems =
-  Array<AzureFunctionCoordinatesItem>;
+export type AzureFunctionCoordinateResponse = Record<
+  string,
+  AzureFunctionCoordinatesItems[]
+>;
 
-export type AzureFunctionGetCoordinatesResponse =
-  AzureFunctionCoordinatesResponseItems;
+export interface AzureFunctionCoordinateResponseMappedItems
+  extends Omit<AzureFunctionCoordinatesItems, "date"> {
+  date: Date;
+}
+
+export type AzureFunctionCoordinateMappedResponse = Record<
+  string,
+  AzureFunctionCoordinateResponseMappedItems[]
+>;

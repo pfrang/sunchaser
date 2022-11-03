@@ -1,25 +1,21 @@
 import { CommonData, CommonMetaData } from "../../../common-proprties";
 import {
-  AzureFunctionGetCoordinatesResponse,
-  AzureFunctionCoordinatesResponseItems,
-  AzureFunctionCoordinatesItem,
+  AzureFunctionCoordinateMappedResponse,
+  AzureFunctionCoordinateResponse,
+  AzureFunctionCoordinatesItems,
 } from "../coordinates-api-client/coordinates-api-response-schema";
 
-export interface CoordinatesMappedData
-  extends Omit<AzureFunctionCoordinatesItem, "date"> {
-  date: Date;
-}
 export interface CoordinatesMappedResponse {
   metaData: CommonMetaData;
-  items: CoordinatesMappedData[];
+  items: AzureFunctionCoordinateMappedResponse[];
 }
 export class CoordinatesMapper {
-  readonly contentData: AzureFunctionGetCoordinatesResponse;
+  readonly contentData: AzureFunctionCoordinateResponse;
   constructor(dataProps: CommonData) {
     this.contentData = dataProps.data;
   }
 
-  assembleItems = (items: AzureFunctionCoordinatesResponseItems) => {
+  assembleItems = (items: AzureFunctionCoordinatesItems[]) => {
     const mappedItems = items.map((item) => {
       return {
         ...item,
