@@ -54,7 +54,6 @@ class Handler:
 
         weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
         for index, row in locationDataFrame.retrieveMatrix().iterrows():
-
            if ValidCoordinate(row['lat'],row['lon']).validate(): #Validate if the coordinate is within the relevant area, such as a country. This is based on the polygon shape
                 weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
         return weatherDataFrame
@@ -67,9 +66,9 @@ class Handler:
 
     def findThebestlocation(self):
         weatherDataFrame=self.callYr()
-
         #filter out the correct date to be analyzed
         weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
+
         weatherDataFrame['weatherRank'] = weatherDataFrame[['symbol', 'temperature','wind']].apply(lambda row: rankWeather(row).calculate(),axis=1)   #Calculating the rank per time per location
         weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
         weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
@@ -84,7 +83,6 @@ class Handler:
         # weatherDataFrame = weatherDataFrame.reset_index(drop=True)
         # weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
         #futre selection of best weather
-        outputJson = self.cleanDF(weatherDataFrame)
 
         return outputJson
 
