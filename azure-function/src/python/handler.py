@@ -70,7 +70,6 @@ class Handler:
 
         #filter out the correct date to be analyzed
         weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
-
         weatherDataFrame['weatherRank'] = weatherDataFrame[['symbol', 'temperature','wind']].apply(lambda row: rankWeather(row).calculate(),axis=1)   #Calculating the rank per time per location
         weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
         weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
@@ -88,10 +87,6 @@ class Handler:
         outputJson = self.cleanDF(weatherDataFrame)
 
         return outputJson
-
-        #weatherDataFrame.to_csv("locationWeather.csv",sep=",")
-        # locationDataFrameWithWeather.to_csv("locationWeather.csv",sep=",")
-        # locationDataFrame.saveOutput()
 
 # params= {
 #     "date": "2022-11-04",
