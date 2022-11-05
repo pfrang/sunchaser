@@ -59,9 +59,8 @@ class Handler:
         return weatherDataFrame
 
     def cleanDF(self, df):
-        tmpDict = {'rank': []}
-        dfDict = df.groupby('maxRank').apply(lambda x:x[['weatherRank', 'longitude','latitude','symbol','temperature', 'wind', 'time', 'date']].to_dict(orient='records')).to_dict()
-        tmpDict['rank'].append(dfDict)
+        dfDict = df.groupby('maxRank').apply(lambda x:x[['weatherRank', 'longitude','latitude', 'location','symbol','temperature', 'wind', 'time', 'date']].to_dict(orient='records')).to_dict()
+        tmpDict = {'rank': dfDict}
         return tmpDict
 
     def findThebestlocation(self):
@@ -73,16 +72,16 @@ class Handler:
         weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
         weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
               ascending = [False, False])
-        # locationNameDataFrame=pd.DataFrame(columns=['location'])
-        # for index, row in weatherDataFrame.iterrows():
-        #     lat=row['latitude']
-        #     lon=row['longitude']
-        #     locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
+        locationNameDataFrame=pd.DataFrame(columns=['location'])
+        for index, row in weatherDataFrame.iterrows():
+            lat=row['latitude']
+            lon=row['longitude']
+            locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
 
-        # print(datetime.now())
-        # weatherDataFrame = weatherDataFrame.reset_index(drop=True)
-        # weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
-        #futre selection of best weather
+        weatherDataFrame = weatherDataFrame.reset_index()
+        weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
+        #futre selection of best weather'
+        outputJson = self.cleanDF(weatherDataFrame)
 
         return outputJson
 

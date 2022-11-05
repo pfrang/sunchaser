@@ -25,12 +25,13 @@ export default function Search(props) {
   const [items, setItems] = useState<undefined | CoordinatesMappedResponse>(
     undefined
   );
-
   const { data, isLoading, error } = useCoordinates(props);
 
   useEffect(() => {
     if (data) {
       setItems(data);
+      // eslint-disable-next-line no-console
+      console.dir(data, { depth: null });
     }
   }, [data, error]);
 

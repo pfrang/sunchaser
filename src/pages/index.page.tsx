@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 
+import { CoordinatesMapper } from "./api/azure-function/coordinates/mapper/coordinates-mapper";
 import HeaderComponent from "./components/header";
 import SearchCriterias from "./components/search-criterias";
 

@@ -10,7 +10,8 @@ export class CoordinatesAPiClient extends AzureFunctionApiClient {
   post = async (body: any) => {
     try {
       const response = await this.axiosInstance.post(this.url, body);
-
+      // eslint-disable-next-line no-console
+      console.dir(response, { depth: null });
       return { data: response.data };
     } catch (e) {
       return e;
