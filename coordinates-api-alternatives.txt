@@ -43,3 +43,7 @@ https://www.npmjs.com/package/weather-underground-icons
 
 #calendar styling
 https://react-day-picker.js.org/basics/styling
+
+
+#vercel limitations
+https://vercel.com/docs/concepts/limits/overview
