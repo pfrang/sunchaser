@@ -35,7 +35,6 @@ const FormWrapper = styled.div`
 const Home: NextPage = () => {
   return (
     <Wrapper>
-      <HeaderComponent />
       {/* <Wrapper> */}
       <ContentWrapper>
         <Image

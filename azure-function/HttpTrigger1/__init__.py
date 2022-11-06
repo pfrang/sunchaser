@@ -34,7 +34,7 @@ def dummyData():
                 "date": "2022-11-05",
                 }
             ],
-            "0.8419709871745773": [
+            "0.8419709871745753": [
                 {
                 "weatherRank": 0.8419709871745773,
                 "longitude": 10.485883103608645,
@@ -82,7 +82,7 @@ def dummyData():
                 "date": "2022-11-05",
                 }
             ],
-            "0.8419709871745773": [
+            "0.841970987174332773": [
                 {
                 "weatherRank": 0.8419709871745773,
                 "longitude": 10.485883103608645,
@@ -117,13 +117,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if req.method not in allowed_methods: return func.HttpResponse("Method not allowed", status_code=404)
 
     try:
-        req_body = req.get_json()
-        params = req_body["params"]
-        initializer = Handler(params)
-        logging.info(f'Proceeding with params {params}')
-        response = initializer.findThebestlocation()
-        response_str = json.dumps(response, indent=4)
-        # response_str = json.dumps(dummyData(), indent=4)
+        # req_body = req.get_json()
+        # params = req_body["params"]
+        # initializer = Handler(params)
+        # logging.info(f'Proceeding with params {params}')
+        # response = initializer.findThebestlocation()
+        # response_str = json.dumps(response, indent=4)
+        response_str = json.dumps(dummyData(), indent=4)
         logging.info(f'Python done!')
         return func.HttpResponse(f"{response_str}", status_code=200)
     except Exception as e:

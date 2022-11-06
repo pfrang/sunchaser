@@ -23,7 +23,7 @@ export class CoordinatesMapper {
         symbol,
         temperature,
         wind,
-        time,
+        time: time.split(":").slice(0, 2).join(":"),
       };
     });
     return mappedItems;

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
 import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/mapper/coordinates-mapper";
+import { Spacer } from "../../ui-kit/spacer/spacer";
 
 import { Card } from "./components/card";
 
@@ -17,7 +18,7 @@ const Grid = styled.div`
   padding: 20px;
   display: grid;
   text-align: center;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
 `;
 
@@ -42,11 +43,14 @@ export default function Search(props) {
       {!items ? (
         <SearchLoader />
       ) : (
-        <Grid>
-          {top4Places.map((item, idx) => {
-            return <Card key={idx} {...item} />;
-          })}
-        </Grid>
+        <>
+          <Spacer vertical={200} />
+          <Grid>
+            {top4Places.map((item, idx) => {
+              return <Card key={idx} {...item} />;
+            })}
+          </Grid>
+        </>
       )}
     </Wrapper>
   );
