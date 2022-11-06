@@ -382,9 +382,6 @@ WeatherSymbolTable={
 
 class rankWeather:
     def __init__(self,row):
-        
-        self.lat=row['latitude']
-        self.lon=row['longitude']
         self.symbol=row['symbol']
         self.temp=row['temperature']
         self.wind=row['wind']

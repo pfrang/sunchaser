@@ -25,16 +25,17 @@ export default function Search(props) {
   const [items, setItems] = useState<undefined | CoordinatesMappedResponse>(
     undefined
   );
-
   const { data, isLoading, error } = useCoordinates(props);
 
   useEffect(() => {
     if (data) {
       setItems(data);
+      // eslint-disable-next-line no-console
+      console.dir(data, { depth: null });
     }
   }, [data, error]);
 
-  const top4Items = items && items.items.slice(0, 4);
+  const top4Places = items && items.items.slice(0, 4);
 
   return (
     <Wrapper>
@@ -42,7 +43,7 @@ export default function Search(props) {
         <SearchLoader />
       ) : (
         <Grid>
-          {top4Items.map((item, idx) => {
+          {top4Places.map((item, idx) => {
             return <Card key={idx} {...item} />;
           })}
         </Grid>

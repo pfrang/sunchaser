@@ -1,13 +1,13 @@
 import { CommonData, CommonMetaData } from "../../../common-proprties";
 import {
-  AzureFunctionCoordinateMappedResponse,
   AzureFunctionCoordinateResponse,
   AzureFunctionCoordinatesItems,
+  AzureFunctionCoordinatesMappedItem,
 } from "../coordinates-api-client/coordinates-api-response-schema";
 
 export interface CoordinatesMappedResponse {
   metaData: CommonMetaData;
-  items: AzureFunctionCoordinateMappedResponse[];
+  items: AzureFunctionCoordinatesMappedItem[];
 }
 export class CoordinatesMapper {
   readonly contentData: AzureFunctionCoordinateResponse;
@@ -15,20 +15,39 @@ export class CoordinatesMapper {
     this.contentData = dataProps.data;
   }
 
-  assembleItems = (items: AzureFunctionCoordinatesItems[]) => {
+  assembleItem = (items: AzureFunctionCoordinatesItems[]) => {
     const mappedItems = items.map((item) => {
+      const { weatherRank, symbol, temperature, wind, time } = item;
       return {
-        ...item,
-        date: new Date(item.date),
+        weatherRank,
+        symbol,
+        temperature,
+        wind,
+        time,
       };
     });
     return mappedItems;
   };
 
+  assembleItems = (ranks: Record<string, AzureFunctionCoordinatesItems[]>) => {
+    const mappedItems = Object.keys(ranks).map((rank, idx) => {
+      return {
+        rank: rank,
+        date: new Date(ranks[rank][0].date),
+        latitude: ranks[rank][0].latitude,
+        longitude: ranks[rank][0].longitude,
+        location: ranks[rank][0].location,
+        times: this.assembleItem(ranks[rank]),
+      };
+    });
+
+    return mappedItems;
+  };
+
   getProps(): CoordinatesMappedResponse {
     return {
-      metaData: { count: this.contentData.length },
-      items: this.assembleItems(this.contentData),
+      metaData: {},
+      items: this.assembleItems(this.contentData.rank),
     };
   }
 }
