@@ -57,6 +57,54 @@ def dummyData():
                 "time": "15:00:00",
                 "date": "2022-11-05",
                 }
+            ],
+            "0.8419709871745773": [
+                {
+                "weatherRank": 0.8419709871745773,
+                "longitude": 10.485883103608645,
+                "latitude": 60.091467100832325,
+                "symbol": "fair_night",
+                "location": "Frysja",
+                "temperature": 4.1,
+                "wind": 2.1,
+                "time": "14:00:00",
+                "date": "2022-11-05",
+                },
+                {
+                "weatherRank": 0.8406957155203273,
+                "longitude": 10.485883103608645,
+                "latitude": 60.091467100832325,
+                "symbol": "partlycloudy_night",
+                "location": "Frysja",
+                "temperature": 5.3,
+                "wind": 2.0,
+                "time": "15:00:00",
+                "date": "2022-11-05",
+                }
+            ],
+            "0.8419709871745773": [
+                {
+                "weatherRank": 0.8419709871745773,
+                "longitude": 10.485883103608645,
+                "latitude": 60.091467100832325,
+                "symbol": "fair_night",
+                "location": "Majorstuen",
+                "temperature": 4.9,
+                "wind": 2.3,
+                "time": "16:00:00",
+                "date": "2022-11-05",
+                },
+                {
+                "weatherRank": 0.8406957155203273,
+                "longitude": 10.485883103608645,
+                "latitude": 60.091467100832325,
+                "symbol": "partlycloudy_night",
+                "location": "Majorstuen",
+                "temperature": 5.3,
+                "wind": 2.0,
+                "time": "15:00:00",
+                "date": "2022-11-05",
+                }
             ]
             }
         }

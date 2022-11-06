@@ -18,7 +18,7 @@ export const Card = ({ date, location, times }: CardProps) => {
     })}`;
   // const modifiedTime = date && `${date.slice(0, -3)}`;
 
-  const { temperature, wind } = times[0];
+  const { temperature, wind, time } = times[0];
 
   return (
     <div className="border-2 p-2">
@@ -34,7 +34,7 @@ export const Card = ({ date, location, times }: CardProps) => {
         <div className="text-xl flex flex-col gap-2">
           <div>{`${temperature}°`}</div>
           <div>{wind}</div>
-          {/* <div className="text-xl">{modifiedDate}</div> */}
+          <div className="text-xl">{time}</div>
         </div>
       </Grid3>
     </div>

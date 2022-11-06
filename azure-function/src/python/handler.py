@@ -78,15 +78,15 @@ class Handler:
             lon=row['longitude']
             locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
 
-        weatherDataFrame = weatherDataFrame.reset_index()
+        locationNameDataFrame= locationNameDataFrame.reset_index(drop=True)
+        weatherDataFrame = weatherDataFrame.reset_index(drop=True)
         weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
         #futre selection of best weather'
         outputJson = self.cleanDF(weatherDataFrame)
-
         return outputJson
 
 # params= {
-#     "date": "2022-11-04",
+#     "date": "2022-11-06",
 
 #     "travel_time": "04:00",
 
