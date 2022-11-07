@@ -3,7 +3,7 @@ import logging
 from urllib.error import HTTPError
 import json
 from src.python.handler import Handler
-
+from src.python.coordinatesfilter import ValidCoordinate
 import azure.functions as func
 
 
@@ -119,6 +119,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         req_body = req.get_json()
         params = req_body["params"]
+        validatelocation=ValidCoordinate(float(params['lat']),float(params['lon'])).validateInitialPoint()
         initializer = Handler(params)
         logging.info(f'Proceeding with params {params}')
         response = initializer.findThebestlocation()

@@ -1,10 +1,10 @@
 global speedList
 
 speedList= {
-    "Bike": 10,
-    "Car" : 40,
-    "Walk": 5,
-    "Public Transport": 15
+    "BIKE": 10,
+    "CAR" : 40,
+    "WALK": 5,
+    "PUBLIC TRANSPORT": 15
     }
 
 
@@ -19,16 +19,16 @@ class GetDistance:
         transportationMethod=self.transportationMethod
 
 
-        if transportationMethod in speedList.keys():
-            travelSpeed=speedList[transportationMethod]
+        if transportationMethod.upper() in speedList.keys():
+            travelSpeed=speedList[transportationMethod.upper()]
 
             if not any(char.isalpha() for char in travelTime):
                 totalDistance=int(travelSpeed*(int(travelTime.split(":")[0])+int(travelTime.split(":")[1])/60)) #todoo better to do/fetch check etc with googlemaps distance and time
             else:
-                totalDistance="time input not working"
+                raise Exception("time input not working")
 
         else:
-            totalDistance = "transportation method not found"
+            raise Exception ("transportation method not recognized")
 
 
         return totalDistance

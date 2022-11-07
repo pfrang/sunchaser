@@ -71,7 +71,8 @@ class GetCoordinates:
         transposedMatrix = np.array(lonlatMerge).transpose()
         transposedMatrix=transposedMatrix.reshape(-1, *transposedMatrix.shape[-1:]) # flatten all but the last one dimension - last -1. the first is the shape(?):
         df_transposedMatrix = pd.DataFrame(transposedMatrix, columns = ['lat','lon'])
-
+        
+        df_transposedMatrix.loc[len(df_transposedMatrix.index)] = [self.startingCoordinates[0],self.startingCoordinates[1]]
         # print(f"{researchSquares} coordinates generated")
         return df_transposedMatrix
 
