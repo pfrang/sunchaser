@@ -7,4 +7,8 @@ export class AppConfig {
     host: process.env.AZURE_FUNCTION_HOST as string,
     key: process.env.AZURE_FUNCTION_CODE as string,
   };
+
+  mapBox = {
+    key: process.env.MAPBOX_API_KEY as string,
+  };
 }

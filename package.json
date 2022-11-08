@@ -23,6 +23,7 @@
     "eslint-plugin-testing-library": "^5.7.2",
     "eslint-plugin-unicorn": "^44.0.2",
     "lodash": "^4.17.21",
+    "mapbox-gl": "^2.10.0",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-day-picker": "^8.3.5",
@@ -33,6 +34,7 @@
     "weather-underground-icons": "^1.0.0"
   },
   "devDependencies": {
+    "@types/mapbox-gl": "^2.7.7",
     "@types/node": "18.7.11",
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",

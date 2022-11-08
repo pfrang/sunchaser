@@ -27,7 +27,8 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "frame-ancestors 'self'; style-src 'self' 'unsafe-inline'",
+            value:
+              "frame-ancestors 'self'; style-src 'self' https://api.mapbox.com/ 'unsafe-inline'",
           },
           {
             key: "Permissions-Policy",

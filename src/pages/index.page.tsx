@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import styled from "styled-components";
 
+import { AppConfig } from "../app-config";
 import { Spacer } from "../ui-kit/spacer/spacer";
 
 import { CoordinatesMapper } from "./api/azure-function/coordinates/mapper/coordinates-mapper";

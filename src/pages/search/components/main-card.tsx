@@ -10,6 +10,9 @@ const Grid3 = styled.div`
   text-align: center;
   color: white;
   position: relative;
+  justify-items: center;
+  align-items: center;
+  height: 100%;
 `;
 
 const Wrapper = styled.div`
@@ -17,9 +20,12 @@ const Wrapper = styled.div`
   border: 2px solid black;
   padding: 10px;
   border-radius: 8px;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
 `;
 
-export const Card = ({ date, location, times }: CardProps) => {
+export const MainCard = ({ date, location, times, ...props }: CardProps) => {
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -32,7 +38,7 @@ export const Card = ({ date, location, times }: CardProps) => {
   return (
     <Wrapper>
       <Grid3>
-        <div className="text-md flex flex-col w-10">
+        <div className="text-md flex flex-col">
           <img src="/icons/black/svg/chanceflurries.svg" />
           <p>{modifiedDate}</p>
         </div>
