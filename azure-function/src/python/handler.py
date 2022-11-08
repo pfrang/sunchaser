@@ -10,6 +10,8 @@ import warnings
 from collections import defaultdict
 from datetime import datetime
 
+
+#Filter because of error in lambda to weatherrank calculation
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
@@ -49,6 +51,11 @@ class Handler:
         return response
 
     def callYr(self):
+        
+        #Validate if the date is today or later
+        if datetime.strptime(self.date+" 23:59:59", '%Y-%m-%d %H:%M:%S') < datetime.now():
+            raise Exception("The date selected is before today")
+
         travelDistance=GetDistance(travelTime=f'{self.travel_time}',transportationMethod=self.transport)
         locationDataFrame=GetCoordinates(self.startingCoordinates,travelDistance.calculateDistance())
 
@@ -59,15 +66,23 @@ class Handler:
         return weatherDataFrame
 
     def cleanDF(self, df):
-        dfDict = df.groupby('maxRank').apply(lambda x:x[['weatherRank', 'longitude','latitude', 'location','symbol','temperature', 'wind', 'time', 'date']].to_dict(orient='records')).to_dict()
-        tmpDict = {'rank': dfDict}
+        dfStartLocation=df.loc[(df['latitude'] == self.startingCoordinates[0]) & (df['longitude'] == self.startingCoordinates[1])].to_dict()
+        dfSeacrhLocations=df.loc[(df['latitude'] != self.startingCoordinates[0]) & (df['longitude'] != self.startingCoordinates[1])]
+        
+        dfDict = dfSeacrhLocations.groupby('maxRank').apply(lambda x:x[['weatherRank', 'longitude','latitude', 'location','symbol','temperature', 'wind', 'time', 'date']].to_dict(orient='records')).to_dict()
+        tmpDict = {'mylocation':dfStartLocation ,'ranks': dfDict}
         return tmpDict
 
     def findThebestlocation(self):
         weatherDataFrame=self.callYr()
         #filter out the correct date to be analyzed
+        
         weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
-
+        
+        #Exception if datafram is empty
+        if len(weatherDataFrame)==0:
+            raise Exception("No data is found for the given date")
+        
         weatherDataFrame['weatherRank'] = weatherDataFrame[['symbol', 'temperature','wind']].apply(lambda row: rankWeather(row).calculate(),axis=1)   #Calculating the rank per time per location
         weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
         weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
@@ -85,14 +100,15 @@ class Handler:
         outputJson = self.cleanDF(weatherDataFrame)
         return outputJson
 
+
 # params= {
-#     "date": "2022-11-06",
+#     "date": "2022-11-11",
 
 #     "travel_time": "04:00",
 
 #     "lat": "60.651090163045026",
 
-#     "lon": "8.036618892015843",
+#     "lon": "10.036618892015843",
 
 #     "transport": "Car"
 # }

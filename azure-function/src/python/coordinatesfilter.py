@@ -190,3 +190,14 @@ class ValidCoordinate:
         point = Point(lon, lat)
 
         return polygon.contains(point)
+
+    def validateInitialPoint(self):
+        lon=self.lon
+        lat=self.lat
+        country=self.country
+
+        polygon=Polygon(PolygonMap["Country"][country]["coordinates"][0])
+        point = Point(lon, lat)
+
+        if not polygon.contains(point):
+            raise Exception("Startpoint is outside map")
