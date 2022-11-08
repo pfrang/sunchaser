@@ -1,16 +1,16 @@
 import { CommonData, CommonMetaData } from "../../../common-proprties";
 import {
-  AzureFunctionCoordinateResponse,
+  AzureFunctionCoordinatesData,
   AzureFunctionCoordinatesItems,
-  AzureFunctionCoordinatesMappedItem,
+  AzureFunctionCoordinatesMappedData,
 } from "../coordinates-api-client/coordinates-api-response-schema";
 
 export interface CoordinatesMappedResponse {
   metaData: CommonMetaData;
-  items: AzureFunctionCoordinatesMappedItem[];
+  items: AzureFunctionCoordinatesMappedData;
 }
 export class CoordinatesMapper {
-  readonly contentData: AzureFunctionCoordinateResponse;
+  readonly contentData: AzureFunctionCoordinatesData;
   constructor(dataProps: CommonData) {
     this.contentData = dataProps.data;
   }
@@ -47,7 +47,10 @@ export class CoordinatesMapper {
   getProps(): CoordinatesMappedResponse {
     return {
       metaData: {},
-      items: this.assembleItems(this.contentData.rank),
+      items: {
+        userLocation: this.assembleItems(this.contentData.userLocation),
+        ranks: this.assembleItems(this.contentData.ranks),
+      },
     };
   }
 }

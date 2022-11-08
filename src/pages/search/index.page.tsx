@@ -8,6 +8,7 @@ import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
 import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/mapper/coordinates-mapper";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
+import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
 import { MainCard } from "./components/main-card";
 import { MapBoxHelper } from "./mapbox-settings";
@@ -45,24 +46,37 @@ const Grid = styled.div`
   justify-items: center;
 `;
 
+export interface HookProperties {
+  data: CoordinatesMappedResponse;
+  isLoading: any;
+  error: any;
+}
+
 export default function Search(props) {
+  const { data, isLoading, error }: HookProperties = useCoordinates(props);
   const [items, setItems] = useState<undefined | CoordinatesMappedResponse>(
     undefined
   );
-  const { data, isLoading, error } = useCoordinates(props);
+
+  const [highlightedItem, setHighlighteditem] = useState<
+    undefined | AzureFunctionCoordinatesMappedItems
+  >(undefined);
+
+  const [cardsToDisplay, setCardsToDisplay] = useState<
+    undefined | AzureFunctionCoordinatesMappedItems[]
+  >(undefined);
 
   useEffect(() => {
     if (data) {
       setItems(data);
+      setHighlighteditem(data.items.userLocation[0]);
+      setCardsToDisplay(data.items.ranks.slice(0, 4));
       // eslint-disable-next-line no-console
       // console.dir(data, { depth: null });
       const map = new MapBoxHelper([54, 45]).setMarker();
       map.on("load", () => map.resize());
     }
-  }, [data, error]);
-
-  const topPlaces = items && items.items;
-  const topPlace = items && items.items.slice(0, 1)[0];
+  }, [data]);
 
   return (
     <Wrapper>
@@ -79,13 +93,13 @@ export default function Search(props) {
           <section>
             <Grid>
               <Wrapper>
-                <MainCard key={"firstItem"} {...topPlace} />
+                <MainCard key={"firstItem"} {...highlightedItem} />
               </Wrapper>
               <div className="text-xl">
                 <p>Other awesome places</p>
               </div>
               <ScrollingWrapper>
-                {topPlaces.map((item, idx) => {
+                {cardsToDisplay.map((item, idx) => {
                   return <SmallCard key={idx} {...item} />;
                 })}
               </ScrollingWrapper>

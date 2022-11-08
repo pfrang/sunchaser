@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-import { AzureFunctionCoordinatesMappedItem } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
-interface CardProps extends AzureFunctionCoordinatesMappedItem {}
+interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 const Grid3 = styled.div`
   display: grid;

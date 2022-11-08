@@ -9,14 +9,18 @@ export interface AzureFunctionCoordinatesItems {
   symbol: string;
   location: string;
 }
-
-export interface AzureFunctionCoordinatesMappedItem {
+export interface AzureFunctionCoordinatesMappedItems {
   rank: string;
   date: Date;
   latitude: number;
   longitude: number;
   location: string;
   times: Times[];
+}
+
+export interface AzureFunctionCoordinatesMappedData {
+  userLocation: AzureFunctionCoordinatesMappedItems[];
+  ranks: AzureFunctionCoordinatesMappedItems[];
 }
 
 export interface Times {
@@ -32,14 +36,14 @@ export interface AzureFunctionMappedResponseItem
   date: Date;
 }
 
-export interface Rank {
-  rank: Record<string, AzureFunctionCoordinatesItems[]>;
+export interface AzureFunctionCoordinatesData {
+  userLocation: Record<string, AzureFunctionCoordinatesItems[]>;
+  ranks: Record<string, AzureFunctionCoordinatesItems[]>;
 }
 
-export type AzureFunctionCoordinateResponse = Rank;
 export type AzureFunctionCoordinateResponseMappedItems = Record<
   string,
-  AzureFunctionCoordinatesMappedItem[]
+  AzureFunctionCoordinatesMappedItems[]
 >;
 
 export type AzureFunctionCoordinateMappedResponse =

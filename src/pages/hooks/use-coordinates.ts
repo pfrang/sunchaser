@@ -2,6 +2,7 @@ import axios from "axios";
 import useSWR from "swr";
 
 import { azureFuncGetCoordinatesEndPoint } from "../api/azure-function/coordinates/index.endpoint";
+import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/mapper/coordinates-mapper";
 
 export const useCoordinates = (params) => {
   const fetcher = async (url) =>

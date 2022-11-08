@@ -47,3 +47,9 @@ https://react-day-picker.js.org/basics/styling
 
 #vercel limitations
 https://vercel.com/docs/concepts/limits/overview
+
+
+#calendar not updating
+
+#carusell cards docs
+https://codepen.io/frise/pen/mZvKpe
