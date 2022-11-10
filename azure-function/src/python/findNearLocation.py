@@ -27,3 +27,24 @@ class GETLOCATIONINFO:
 
         df = pd.DataFrame({"location":[response_json]})
         return df
+
+    def MunicipalityNamefromAPI(self):
+
+        lat=self.lat
+        lon=self.lon
+        print(str(lat)+"/"+str(lon))
+        headers={'User-Agent':'Hjemmeprosjekt'}
+
+        ApiURL=APISOURCE.getKommune()
+        FullApiURL=f'{ApiURL}nord={lat}&ost={lon}'
+        response=requests.get(FullApiURL,headers=headers)
+        
+        response_json=response.json()
+
+
+        if len(response_json['kommunenavn'])>0:
+            response_json=response_json['kommunenavn']
+        else:
+            response_json='location not found'
+
+        return response_json

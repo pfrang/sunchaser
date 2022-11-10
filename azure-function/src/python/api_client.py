@@ -1,8 +1,5 @@
 
 
-from re import A
-
-
 class APISOURCE:
     def getKartverket(params=True):
 
@@ -31,3 +28,20 @@ class APISOURCE:
         return'https://api.met.no/weatherapi/locationforecast/2.0/compact'
 
 
+    def getKommune(params=True):
+
+        baseUrl='https://ws.geonorge.no/kommuneinfo/v1/punkt'
+        
+        api_keys={
+
+        'koordsys':4258,
+        'filtrer':'kommunenavn'
+        
+        }
+        
+        if params is True: 
+            baseUrl += '?'
+            for i in api_keys.keys():
+                baseUrl+= f'{i}={api_keys[i]}&'
+        
+        return baseUrl

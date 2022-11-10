@@ -3,7 +3,7 @@ from math import radians, cos, sin, asin, sqrt, atan2,degrees
 import numpy as np
 import pandas as pd
 import os
-import re
+
 
 global radiusEarth # Radius of earth in kilometers.
 radiusEarth=6371
