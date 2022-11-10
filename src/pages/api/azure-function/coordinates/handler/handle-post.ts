@@ -22,7 +22,7 @@ export const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   } catch (e) {
     return res.status(500).json({
-      error: "Error" + e,
+      error: e,
     });
   }
 };
