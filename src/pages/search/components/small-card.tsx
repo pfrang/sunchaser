@@ -1,8 +1,15 @@
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
-interface CardProps extends AzureFunctionCoordinatesMappedItems {}
+interface CardProps {
+  item: AzureFunctionCoordinatesMappedItems;
+  key: number;
+  setHighlightedItem: Dispatch<
+    SetStateAction<AzureFunctionCoordinatesMappedItems>
+  >;
+}
 
 const Grid3 = styled.div`
   display: grid;
@@ -15,17 +22,8 @@ const Grid3 = styled.div`
   height: 100%;
 `;
 
-const Wrapper = styled.div`
-  background-color: #1c3b59;
-  border: 2px solid black;
-  padding: 10px;
-  border-radius: 8px;
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-`;
-
-export const SmallCard = ({ date, location, times, ...props }: CardProps) => {
+export const SmallCard = ({ item, setHighlightedItem }: CardProps) => {
+  const { date, location, times } = item;
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -36,7 +34,7 @@ export const SmallCard = ({ date, location, times, ...props }: CardProps) => {
   const { temperature, wind, time } = times[0];
 
   return (
-    <Wrapper>
+    <li onClick={() => setHighlightedItem(item)}>
       <Grid3>
         <div className="text-md flex flex-col">
           <img src="/icons/black/svg/chanceflurries.svg" />
@@ -54,6 +52,6 @@ export const SmallCard = ({ date, location, times, ...props }: CardProps) => {
           <div className="text-xl">{time}</div>
         </div>
       </Grid3>
-    </Wrapper>
+    </li>
   );
 };

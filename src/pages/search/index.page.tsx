@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 
@@ -21,19 +21,43 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const ScrollingWrapper = styled.div`
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
+const CarouselList = styled.ul`
   display: flex;
+  list-style: none;
+  position: relative;
+  width: 100%;
   justify-content: center;
-  &::-webkit-scrollbar {
-    width: 16px;
-    border: 5px solid white;
-  }
+  perspective: 300px;
+  background-color: #1c3b59;
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #914545;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px 0px rgba(50, 50, 50, 0.5);
+    transition: all 0.3s ease-in;
+    cursor: pointer;
 
-  width: 50%;
+    &:nth-child(1) {
+      background: linear-gradient(45deg, #2d35eb 0%, #904ed4 100%);
+      z-index: 3;
+    }
+    &:nth-child(2) {
+      background: linear-gradient(45deg, #2d35eb 0%, #fdbb2d 100%);
+      transform: translateX(-40%) scale(0.9);
+      z-index: 2;
+      opacity: 0.7;
+      margin-left: 100px;
+    }
+    &:nth-child(3) {
+      background: linear-gradient(45deg, #2d35eb 0%, #22c1c3 100%);
+      filter: blur(3px) grayscale(20%);
+      transform: translateX(70%) scale(0.8);
+      opacity: 0.7;
+      z-index: 1;
+    }
+  }
 `;
 
 const Grid = styled.div`
@@ -58,7 +82,7 @@ export default function Search(props) {
     undefined
   );
 
-  const [highlightedItem, setHighlighteditem] = useState<
+  const [highlightedItem, setHighlightedItem] = useState<
     undefined | AzureFunctionCoordinatesMappedItems
   >(undefined);
 
@@ -67,16 +91,34 @@ export default function Search(props) {
   >(undefined);
 
   useEffect(() => {
+    if (highlightedItem) {
+      const { lat, lon } = {
+        lat: highlightedItem.latitude,
+        lon: highlightedItem.longitude,
+      };
+      const map = new MapBoxHelper([lon, lat]).setMarker();
+      map.on("load", () => map.resize());
+      const itemIndex = cardsToDisplay.findIndex(
+        (item) => item.latitude === highlightedItem.latitude
+      );
+      setCardsToDisplay(cardsToDisplay.splice(itemIndex, 1));
+
+      return;
+    }
     if (data) {
       setItems(data);
-      setHighlighteditem(data.items.userLocation[0]);
-      setCardsToDisplay(data.items.ranks.slice(0, 4));
+      setHighlightedItem(data.items.userLocation[0]);
+      setCardsToDisplay(data.items.ranks.slice(0, 3));
       // eslint-disable-next-line no-console
       // console.dir(data, { depth: null });
-      const map = new MapBoxHelper([54, 45]).setMarker();
+      const { lat, lon } = {
+        lat: data.items.userLocation[0].latitude,
+        lon: data.items.userLocation[0].longitude,
+      };
+      const map = new MapBoxHelper([lon, lat]).setMarker();
       map.on("load", () => map.resize());
     }
-  }, [data]);
+  }, [data, highlightedItem]);
 
   return (
     <Wrapper>
@@ -98,11 +140,17 @@ export default function Search(props) {
               <div className="text-xl">
                 <p>Other awesome places</p>
               </div>
-              <ScrollingWrapper>
+              <CarouselList>
                 {cardsToDisplay.map((item, idx) => {
-                  return <SmallCard key={idx} {...item} />;
+                  return (
+                    <SmallCard
+                      setHighlightedItem={setHighlightedItem}
+                      key={idx}
+                      item={item}
+                    />
+                  );
                 })}
-              </ScrollingWrapper>
+              </CarouselList>
             </Grid>
           </section>
         )}
