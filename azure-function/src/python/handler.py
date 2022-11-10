@@ -1,4 +1,4 @@
-from ast import Return
+
 from src.python.rankWeather import rankWeather
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
@@ -88,18 +88,23 @@ class Handler:
         weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
         weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
               ascending = [False, False])
-        locationNameDataFrame=pd.DataFrame(columns=['location'])
-        for index, row in weatherDataFrame.iterrows():
+        
+        locationNameDataFrame=pd.DataFrame(columns=['location','latitude','longitude']) #Added lat lon for join with weather df
+        
+        for index, row in weatherDataFrame.drop_duplicates(subset=['latitude','longitude']).iterrows():
             lat=row['latitude']
             lon=row['longitude']
-            locationNameDataFrame = locationNameDataFrame.append(GETLOCATIONINFO(lat,lon).LocationNamefromAPI())
+            locationNameDataFrame.loc[len(locationNameDataFrame)]=[GETLOCATIONINFO(lat,lon).MunicipalityNamefromAPI(),lat,lon]
 
-        locationNameDataFrame= locationNameDataFrame.reset_index(drop=True)
-        weatherDataFrame = weatherDataFrame.reset_index(drop=True)
-        weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, left_index=True, right_index=True)
+
+        weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, on=['latitude','longitude'])
+
+        #weatherDataFrame.to_csv("test.csv",sep=',')
+
         #futre selection of best weather'
         outputJson = self.cleanDF(weatherDataFrame)
         return outputJson
+
 
 
 # params= {
