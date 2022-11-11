@@ -54,7 +54,7 @@ class GetCoordinates:
 
         return edgePoints
 
-    def retrieveMatrix(self,researchSquares=16):
+    def retrieveMatrix(self,researchSquares=256):
         if not (sqrt(researchSquares) / 4).is_integer():
             raise ValueError("Number must be root, divided by 4 = whole number")
 
