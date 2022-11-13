@@ -10,7 +10,7 @@ import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/map
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Arrow } from "../../ui-kit/arrow/arrow";
+import { Arrow, DirectionChoice } from "../../ui-kit/arrow/arrow";
 
 import { MainCard } from "./components/main-card";
 import { MapBoxHelper } from "./mapbox-settings";
@@ -84,19 +84,26 @@ export default function Search({ params, mapBoxkey }) {
 
   mapboxgl.accessToken = mapBoxkey;
 
-  const [items, setItems] = useState<undefined | CoordinatesMappedResponse>(
-    undefined
-  );
+  const [items, setItems] = useState<
+    undefined | AzureFunctionCoordinatesMappedItems[]
+  >(undefined);
 
   const [cardsToDisplay, setCardsToDisplay] = useState<
     undefined | AzureFunctionCoordinatesMappedItems[]
   >(undefined);
 
   useEffect(() => {
-    if (data) {
-      setItems(data);
-      const arr = [data.items.userLocation[0], ...data.items.ranks.slice(0, 3)];
+    if (isLoading) return;
+    const newArr = cardsToDisplay.slice();
+    const lastIndex = items.findIndex((item) => item === cardsToDisplay[4]);
+    const newTop3Items = items.slice(lastIndex - 2, lastIndex + 1);
+    setCardsToDisplay([cardsToDisplay[0], ...newTop3Items]);
+  }, [items]);
 
+  useEffect(() => {
+    if (data) {
+      const arr = [data.items.userLocation[0], ...data.items.ranks.slice(0, 3)];
+      setItems([data.items.userLocation[0], ...data.items.ranks]);
       setCardsToDisplay(arr);
       // eslint-disable-next-line no-console
       // console.dir(data, { depth: null });
@@ -109,13 +116,22 @@ export default function Search({ params, mapBoxkey }) {
     }
   }, [data]);
 
-  const swapItems = async (item: AzureFunctionCoordinatesMappedItems) => {
+  const swapItems = (item: AzureFunctionCoordinatesMappedItems) => {
     const currentIndexOfItem = cardsToDisplay.findIndex((i) => i === item);
     const cardsArr = cardsToDisplay.slice();
     const tmpHighlightedVar = cardsArr[0];
     cardsArr[0] = item;
     cardsArr[currentIndexOfItem] = tmpHighlightedVar;
     return setCardsToDisplay(cardsArr);
+  };
+
+  const nextCard = (direction: "next" | "back") => {
+    switch (direction) {
+      case "next":
+        setItems([...cardsToDisplay, ...items.slice(4, items.length)]);
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
@@ -159,8 +175,13 @@ export default function Search({ params, mapBoxkey }) {
                 <div className="text-xl">
                   <p>Other awesome places</p>
                 </div>
-                <div className="h-full">
-                  <Arrow />
+                <div className="h-full relative flex justify-center content-center">
+                  <div
+                    onClick={() => nextCard("back")}
+                    className="absolute top-1/2 -left-10"
+                  >
+                    <Arrow direction="left" />
+                  </div>
                   <CarouselList>
                     {cardsToDisplay.slice(1, 4).map((item, idx) => {
                       return (
@@ -172,6 +193,12 @@ export default function Search({ params, mapBoxkey }) {
                       );
                     })}
                   </CarouselList>
+                  <div
+                    onClick={() => nextCard("next")}
+                    className="top-1/2 -right-10 absolute"
+                  >
+                    <Arrow direction="right" />
+                  </div>
                 </div>
               </Grid>
             )}
