@@ -5,10 +5,7 @@ import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/co
 
 interface CardProps {
   item: AzureFunctionCoordinatesMappedItems;
-  key: number;
-  setHighlightedItem: Dispatch<
-    SetStateAction<AzureFunctionCoordinatesMappedItems>
-  >;
+  swapItems: any;
 }
 
 const Grid3 = styled.div`
@@ -22,7 +19,7 @@ const Grid3 = styled.div`
   height: 100%;
 `;
 
-export const SmallCard = ({ item, setHighlightedItem }: CardProps) => {
+export const SmallCard = ({ item, swapItems }: CardProps) => {
   const { date, location, times } = item;
   const modifiedDate =
     date &&
@@ -34,7 +31,7 @@ export const SmallCard = ({ item, setHighlightedItem }: CardProps) => {
   const { temperature, wind, time } = times[0];
 
   return (
-    <li onClick={() => setHighlightedItem(item)}>
+    <li onClick={() => swapItems(item)}>
       <Grid3>
         <div className="text-md flex flex-col">
           <img src="/icons/black/svg/chanceflurries.svg" />
@@ -44,7 +41,6 @@ export const SmallCard = ({ item, setHighlightedItem }: CardProps) => {
           <div className="m-auto">
             <h2 className="text-xl">{location}</h2>
           </div>
-          <p className="m-t-auto">Google maps</p>
         </div>
         <div className="text-xl flex flex-col gap-2">
           <div>{`${temperature}°`}</div>
