@@ -59,6 +59,9 @@ const CarouselList = styled.ul`
       opacity: 0.7;
       z-index: 1;
     }
+    &:nth-child(4):nth-child(16) {
+      display: none;
+    }
   }
 `;
 
@@ -92,13 +95,13 @@ export default function Search({ params, mapBoxkey }) {
     undefined | AzureFunctionCoordinatesMappedItems[]
   >(undefined);
 
-  useEffect(() => {
-    if (isLoading) return;
-    const newArr = cardsToDisplay.slice();
-    const lastIndex = items.findIndex((item) => item === cardsToDisplay[4]);
-    const newTop3Items = items.slice(lastIndex - 2, lastIndex + 1);
-    setCardsToDisplay([cardsToDisplay[0], ...newTop3Items]);
-  }, [items]);
+  // useEffect(() => {
+  //   if (isLoading) return;
+  //   const newArr = cardsToDisplay.slice();
+  //   const lastIndex = items.findIndex((item) => item === cardsToDisplay[4]);
+  //   const newTop3Items = items.slice(lastIndex - 2, lastIndex + 1);
+  //   setCardsToDisplay([cardsToDisplay[0], ...newTop3Items]);
+  // }, [items]);
 
   useEffect(() => {
     if (data) {
@@ -126,9 +129,15 @@ export default function Search({ params, mapBoxkey }) {
   };
 
   const nextCard = (direction: "next" | "back") => {
+    const newIndexItems = [...cardsToDisplay, ...items.slice(4, items.length)];
+    setItems(newIndexItems);
     switch (direction) {
       case "next":
-        setItems([...cardsToDisplay, ...items.slice(4, items.length)]);
+        const newArr = cardsToDisplay.slice();
+        const lastIndex = items.findIndex((item) => item === cardsToDisplay[3]);
+        const newTop3Items = items.slice(lastIndex - 1, lastIndex + 2);
+
+      // setCardsToDisplay([cardsToDisplay[0], ...newTop3Items]);
       default:
         break;
     }
@@ -167,10 +176,10 @@ export default function Search({ params, mapBoxkey }) {
           <SearchLoader />
         ) : (
           <section>
-            {cardsToDisplay && (
+            {items && (
               <Grid>
                 <Wrapper>
-                  <MainCard key={"firstItem"} {...cardsToDisplay[0]} />
+                  <MainCard key={"firstItem"} {...items[0]} />
                 </Wrapper>
                 <div className="text-xl">
                   <p>Other awesome places</p>
@@ -183,7 +192,7 @@ export default function Search({ params, mapBoxkey }) {
                     <Arrow direction="left" />
                   </div>
                   <CarouselList>
-                    {cardsToDisplay.slice(1, 4).map((item, idx) => {
+                    {items.map((item, idx) => {
                       return (
                         <SmallCard
                           swapItems={swapItems}

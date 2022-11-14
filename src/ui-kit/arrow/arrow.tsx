@@ -11,6 +11,7 @@ interface Direction extends SpacerProps {
 const ArrowStyle = styled.svg`
   height: 30px;
   width: 30px;
+  cursor: pointer;
 `;
 
 export const Arrow: FC<Direction> = ({ direction, ...props }: Direction) => {
