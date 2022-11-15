@@ -74,11 +74,12 @@ class GetCoordinates:
         
         df_transposedMatrix.loc[len(df_transposedMatrix.index)] = [self.startingCoordinates[0],self.startingCoordinates[1]]
         # print(f"{researchSquares} coordinates generated")
-        return df_transposedMatrix
-
+        return df_transposedMatrix.round(2).drop_duplicates(keep='last')
     def saveOutput(self):
         inputdataframe=self.retrieveMatrix()
         os.remove("test.csv")
 
         inputdataframe.to_csv("test.csv",sep=',')
         return
+
+
