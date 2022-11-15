@@ -12,15 +12,17 @@ const Grid3 = styled.div`
   display: grid;
   grid-template-columns: auto 1fr auto;
   text-align: center;
-  color: white;
   position: relative;
   justify-items: center;
   align-items: center;
   height: 100%;
 `;
 
-export const SmallCard = ({ item, swapItems }: CardProps) => {
-  const { date, location, times } = item;
+export const SmallCard = ({
+  date,
+  location,
+  times,
+}: AzureFunctionCoordinatesMappedItems) => {
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -31,23 +33,21 @@ export const SmallCard = ({ item, swapItems }: CardProps) => {
   const { temperature, wind, time } = times[0];
 
   return (
-    <li onClick={() => swapItems(item)}>
-      <Grid3>
-        <div className="text-md flex flex-col">
-          <img src="/icons/black/svg/chanceflurries.svg" />
-          <p>{modifiedDate}</p>
+    <Grid3>
+      <div className="text-md flex flex-col">
+        <img src="/icons/black/svg/chanceflurries.svg" />
+        <p>{modifiedDate}</p>
+      </div>
+      <div className="flex flex-col justify-between">
+        <div className="m-auto">
+          <h2 className="text-xl">{location}</h2>
         </div>
-        <div className="flex flex-col justify-between">
-          <div className="m-auto">
-            <h2 className="text-xl">{location}</h2>
-          </div>
-        </div>
-        <div className="text-xl flex flex-col gap-2">
-          <div>{`${temperature}°`}</div>
-          <div>{wind}</div>
-          <div className="text-xl">{time}</div>
-        </div>
-      </Grid3>
-    </li>
+      </div>
+      <div className="text-xl flex flex-col gap-2">
+        <div>{`${temperature}°`}</div>
+        <div>{wind}</div>
+        <div className="text-xl">{time}</div>
+      </div>
+    </Grid3>
   );
 };

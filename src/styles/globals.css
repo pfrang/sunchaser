@@ -33,3 +33,66 @@ h3 {
     background: black;
   }
 }
+
+
+.swiper {
+  width: 100%;
+  height: 50%;
+  /* border: 2px solid #bebfc2; */
+}
+
+/* @media screen and (min-width: 768px) {
+  .swiper {
+    width: 768px;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .swiper {
+    width: 480px;
+  }
+} */
+
+
+.swiper-pagination {
+  color: red;
+}
+
+.swiper-button-next {
+  color: black !important;
+}
+
+.swiper-button-prev {
+  color: black !important;
+}
+
+.swiper-slide {
+  padding: 2px;
+  text-align: center;
+  border-top: 2px solid green;
+  border-bottom: 2px solid green;
+  font-size: 18px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-radius: 8px;
+  cursor: pointer;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+/* .swiper-slide img {
+  display: block;
+  width: 10%;
+  height: 100%;
+  object-fit: cover;
+} */

@@ -15,65 +15,21 @@ import { Arrow, DirectionChoice } from "../../ui-kit/arrow/arrow";
 import { MainCard } from "./components/main-card";
 import { MapBoxHelper } from "./mapbox-settings";
 import { SmallCard } from "./components/small-card";
+import { Carousell } from "./components/carousell";
+
+// import required modules
 
 const Wrapper = styled.div`
-  position: relative;
-`;
-
-const CarouselList = styled.ul`
-  display: flex;
-  list-style: none;
-  position: relative;
-  width: 500px;
-  perspective: 300px;
-  /* background-color: #1c3b59; */
-  transition: all 1s;
-  gap: 20px;
-  overflow: auto;
-  overflow-x: hidden;
-  li {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #914545;
-    border-radius: 12px;
-    box-shadow: 0px 2px 8px 0px rgba(50, 50, 50, 0.5);
-    transition: all 0.3s ease-in;
-    cursor: pointer;
-
-    &:nth-child(1) {
-      background: linear-gradient(45deg, #2d35eb 0%, #904ed4 100%);
-
-      z-index: 3;
-    }
-    &:nth-child(2) {
-      background: linear-gradient(45deg, #2d35eb 0%, #fdbb2d 100%);
-      /* transform: translateX(-40%) scale(0.9); */
-      z-index: 2;
-      opacity: 0.7;
-    }
-    &:nth-child(3) {
-      background: linear-gradient(45deg, #2d35eb 0%, #22c1c3 100%);
-      filter: blur(1px) grayscale(20%);
-      transform: translateX(5%) scale(0.9);
-      opacity: 0.7;
-      z-index: 1;
-    }
-    &:nth-child(4):nth-child(16) {
-      display: none;
-    }
+  padding-left: 200px;
+  padding-right: 200px;
+  @media (max-width: 900px) {
+    padding-left: 100px;
+    padding-right: 100px;
   }
-`;
-
-const Grid = styled.div`
-  padding: 20px;
-  display: grid;
-  text-align: center;
-  grid-template-rows: 1fr auto 1fr;
-  grid-gap: 20px;
-  height: 100%;
-  justify-items: center;
-  position: relative;
+  @media (max-width: 480px) {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
 `;
 
 export interface HookProperties {
@@ -95,21 +51,11 @@ export default function Search({ params, mapBoxkey }) {
     undefined | AzureFunctionCoordinatesMappedItems[]
   >(undefined);
 
-  // useEffect(() => {
-  //   if (isLoading) return;
-  //   const newArr = cardsToDisplay.slice();
-  //   const lastIndex = items.findIndex((item) => item === cardsToDisplay[4]);
-  //   const newTop3Items = items.slice(lastIndex - 2, lastIndex + 1);
-  //   setCardsToDisplay([cardsToDisplay[0], ...newTop3Items]);
-  // }, [items]);
-
   useEffect(() => {
     if (data) {
       const arr = [data.items.userLocation[0], ...data.items.ranks.slice(0, 3)];
       setItems([data.items.userLocation[0], ...data.items.ranks]);
       setCardsToDisplay(arr);
-      // eslint-disable-next-line no-console
-      // console.dir(data, { depth: null });
       const { lat, lon } = {
         lat: data.items.userLocation[0].latitude,
         lon: data.items.userLocation[0].longitude,
@@ -126,21 +72,6 @@ export default function Search({ params, mapBoxkey }) {
     cardsArr[0] = item;
     cardsArr[currentIndexOfItem] = tmpHighlightedVar;
     return setCardsToDisplay(cardsArr);
-  };
-
-  const nextCard = (direction: "next" | "back") => {
-    const newIndexItems = [...cardsToDisplay, ...items.slice(4, items.length)];
-    setItems(newIndexItems);
-    switch (direction) {
-      case "next":
-        const newArr = cardsToDisplay.slice();
-        const lastIndex = items.findIndex((item) => item === cardsToDisplay[3]);
-        const newTop3Items = items.slice(lastIndex - 1, lastIndex + 2);
-
-      // setCardsToDisplay([cardsToDisplay[0], ...newTop3Items]);
-      default:
-        break;
-    }
   };
 
   useEffect(() => {
@@ -169,48 +100,34 @@ export default function Search({ params, mapBoxkey }) {
         <Spacer vertical={64} />
         <section id="section-map">
           <div className="flex items-center justify-center">
-            <div id="map" className="h-[400px] w-1/2 m-auto mt-4"></div>
+            <div
+              id="map"
+              className="h-[250px] tablet:h-[400px] phone:h-[250px] w-full m-auto mt-4"
+            ></div>
           </div>
         </section>
         {!items ? (
           <SearchLoader />
         ) : (
           <section>
-            {items && (
-              <Grid>
-                <Wrapper>
-                  <MainCard key={"firstItem"} {...items[0]} />
-                </Wrapper>
-                <div className="text-xl">
-                  <p>Other awesome places</p>
-                </div>
-                <div className="h-full relative flex justify-center content-center">
-                  <div
-                    onClick={() => nextCard("back")}
-                    className="absolute top-1/2 -left-10"
-                  >
-                    <Arrow direction="left" />
-                  </div>
-                  <CarouselList>
-                    {items.map((item, idx) => {
-                      return (
-                        <SmallCard
-                          swapItems={swapItems}
-                          key={idx}
-                          item={item}
-                        />
-                      );
-                    })}
-                  </CarouselList>
-                  <div
-                    onClick={() => nextCard("next")}
-                    className="top-1/2 -right-10 absolute"
-                  >
-                    <Arrow direction="right" />
-                  </div>
-                </div>
-              </Grid>
-            )}
+            <Spacer vertical={4} />
+            <Wrapper>
+              <MainCard key={"firstItem"} {...cardsToDisplay[0]} />
+            </Wrapper>
+            <Spacer vertical={5} />
+            <div className="text-xl text-center">
+              <p>Other awesome places</p>
+            </div>
+            <Spacer vertical={5} />
+
+            {/* <CarouselList>
+                  {cardsToDisplay.slice(1, 4).map((item, idx) => {
+                    return (
+                      <SmallCard swapItems={swapItems} key={idx} item={item} />
+                    );
+                  })}
+                </CarouselList> */}
+            <Carousell items={data.items.ranks} swapItems={swapItems} />
           </section>
         )}
       </div>
