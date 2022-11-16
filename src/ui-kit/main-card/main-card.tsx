@@ -27,9 +27,7 @@ const AnimationMove = keyframes`
 `;
 
 const Wrapper = styled.div`
-  position: absolute;
   padding: 10px;
-  height: 100vh;
   border-radius: 8px;
   width: 100%;
   height: 300px;

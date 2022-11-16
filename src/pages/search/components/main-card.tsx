@@ -16,11 +16,11 @@ const Grid3 = styled.div`
 `;
 
 const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
   padding: 10px;
   border-radius: 8px;
   border: 2px transparent green;
-  width: 100%;
-  height: 300px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -37,8 +37,8 @@ export const MainCard = ({ date, location, times, ...props }: CardProps) => {
   const { temperature, wind, time } = times[0];
 
   return (
-    <div className="relative h-[150px] tablet:h-[300px] phone:h-[150px]">
-      <MainCardAnimation>
+    <Wrapper>
+      <div className="relative w-4/5 tablet: w-2/3 h-[150px] tablet:h-[150px] phone:h-[150px]">
         <Grid3>
           <div className="text-md flex flex-col">
             <img src="/icons/black/svg/chanceflurries.svg" />
@@ -56,7 +56,7 @@ export const MainCard = ({ date, location, times, ...props }: CardProps) => {
             <div className="text-xl">{time}</div>
           </div>
         </Grid3>
-      </MainCardAnimation>
-    </div>
+      </div>
+    </Wrapper>
   );
 };

@@ -33,21 +33,26 @@ export const SmallCard = ({
   const { temperature, wind, time } = times[0];
 
   return (
-    <Grid3>
-      <div className="text-md flex flex-col">
-        <img src="/icons/black/svg/chanceflurries.svg" />
+    <div className="">
+      <div className="text-md flex h-[50px] flex-col w-1/5">
+        <img
+          className="object-fit h-[50px]"
+          src="/icons/black/svg/chanceflurries.svg"
+        />
+      </div>
+      <div className="w-1/5">
         <p>{modifiedDate}</p>
       </div>
-      <div className="flex flex-col justify-between">
-        <div className="m-auto">
-          <h2 className="text-xl">{location}</h2>
+      <div className="inline-block text-right w-full ml-auto break-words">
+        <div className="">
+          <h2 className="text-md">{location}</h2>
+        </div>
+        <div className="text-xl flex flex-col gap-2">
+          <div>{`${temperature}°`}</div>
+          <div>{wind}</div>
+          <div className="text-xl">{time}</div>
         </div>
       </div>
-      <div className="text-xl flex flex-col gap-2">
-        <div>{`${temperature}°`}</div>
-        <div>{wind}</div>
-        <div className="text-xl">{time}</div>
-      </div>
-    </Grid3>
+    </div>
   );
 };

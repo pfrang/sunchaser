@@ -102,7 +102,7 @@ export default function Search({ params, mapBoxkey }) {
           <div className="flex items-center justify-center">
             <div
               id="map"
-              className="h-[250px] tablet:h-[400px] phone:h-[250px] w-full m-auto mt-4"
+              className="h-[250px] tablet:h-[350px] phone:h-[250px] w-4/5 tablet: w-2/3 w-full m-auto mt-4"
             ></div>
           </div>
         </section>
@@ -111,9 +111,7 @@ export default function Search({ params, mapBoxkey }) {
         ) : (
           <section>
             <Spacer vertical={4} />
-            <Wrapper>
-              <MainCard key={"firstItem"} {...cardsToDisplay[0]} />
-            </Wrapper>
+            <MainCard key={"firstItem"} {...cardsToDisplay[0]} />
             <Spacer vertical={5} />
             <div className="text-xl text-center">
               <p>Other awesome places</p>

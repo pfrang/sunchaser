@@ -37,7 +37,7 @@ h3 {
 
 .swiper {
   width: 100%;
-  height: 50%;
+  height: 100%;
   /* border: 2px solid #bebfc2; */
 }
 
@@ -54,8 +54,10 @@ h3 {
 } */
 
 
-.swiper-pagination {
-  color: red;
+
+
+.swiper-container {
+  overflow: visible;
 }
 
 .swiper-button-next {
@@ -67,16 +69,15 @@ h3 {
 }
 
 .swiper-slide {
-  padding: 2px;
+  padding: 8px;
   text-align: center;
   border-top: 2px solid green;
   border-bottom: 2px solid green;
-  font-size: 18px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   border-radius: 8px;
   cursor: pointer;
   /* Center slide text vertically */
-  display: -webkit-box;
+  /* display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
@@ -87,7 +88,7 @@ h3 {
   -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-align-items: center;
-  align-items: center;
+  align-items: center; */
 }
 
 /* .swiper-slide img {
