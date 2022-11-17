@@ -18,12 +18,18 @@ const Grid3 = styled.div`
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  padding: 10px;
+  margin: auto;
+  padding: 4px;
   border-radius: 8px;
   border: 2px transparent green;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    rgba(0, 0, 0, 0.12) 0px -1px 25px, rgba(0, 0, 0, 0.12) 0px 4px 3px,
+    rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(38, 37, 37, 0.09) 0px -3px 3px;
+  width: 150px;
+  @media screen and (min-width: 800px) {
+    width: 400px;
+    padding: 10px;
+  }
 `;
 
 export const MainCard = ({ date, location, times, ...props }: CardProps) => {
@@ -38,22 +44,22 @@ export const MainCard = ({ date, location, times, ...props }: CardProps) => {
 
   return (
     <Wrapper>
-      <div className="relative w-4/5 tablet: w-2/3 h-[150px] tablet:h-[150px] phone:h-[150px]">
+      <div className="relative text-sm h-[150px] tablet:h-[150px] phone:h-[150px]">
         <Grid3>
-          <div className="text-md flex flex-col">
+          <div className="text-md tablet:text-xl flex flex-col">
             <img src="/icons/black/svg/chanceflurries.svg" />
             <p>{modifiedDate}</p>
           </div>
           <div className="flex flex-col justify-between">
             <div className="m-auto">
-              <h2 className="text-xl">{location}</h2>
+              <h2 className="text-md tablet:text-xl">{location}</h2>
             </div>
             <p className="m-t-auto">Google maps</p>
           </div>
-          <div className="text-xl flex flex-col gap-2">
+          <div className="text-md tablet:text-xl flex flex-col gap-2">
             <div>{`${temperature}°`}</div>
             <div>{wind}</div>
-            <div className="text-xl">{time}</div>
+            <div className="text-md tablet:text-xl">{time}</div>
           </div>
         </Grid3>
       </div>

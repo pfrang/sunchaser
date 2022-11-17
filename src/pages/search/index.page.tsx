@@ -20,13 +20,13 @@ import { Carousell } from "./components/carousell";
 // import required modules
 
 const Wrapper = styled.div`
-  padding-left: 200px;
-  padding-right: 200px;
-  @media (max-width: 900px) {
+  padding-left: 30px;
+  padding-right: 30px;
+  @media (min-width: 800px) {
     padding-left: 100px;
     padding-right: 100px;
   }
-  @media (max-width: 480px) {
+  @media (min-width: 480px) {
     padding-left: 40px;
     padding-right: 40px;
   }

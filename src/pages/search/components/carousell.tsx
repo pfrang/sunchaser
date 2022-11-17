@@ -12,17 +12,17 @@ export const Carousell = ({ items, swapItems }) => {
   return (
     <div className="h-[120px] tablet:h-[170px] phone:h-[120px]">
       <Swiper
-        // breakpoints={{
-        //   480: {
-        //     width: 480,
-        //     slidesPerView: 1,
-        //   },
-        //   768: {
-        //     width: 768,
-        //     slidesPerView: 2,
-        //   },
-        // }}
-        slidesPerView={3}
+        breakpoints={{
+          480: {
+            width: 480,
+            slidesPerView: 2,
+          },
+          800: {
+            width: 800,
+            slidesPerView: 3,
+          },
+        }}
+        slidesPerView={1}
         spaceBetween={30}
         slidesPerGroup={3}
         loop={true}

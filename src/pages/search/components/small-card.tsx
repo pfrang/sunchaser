@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
+import { Card } from "./card";
+
 interface CardProps {
   item: AzureFunctionCoordinatesMappedItems;
   swapItems: any;
@@ -31,28 +33,13 @@ export const SmallCard = ({
   // const modifiedTime = date && `${date.slice(0, -3)}`;
 
   const { temperature, wind, time } = times[0];
+  const props = {
+    modifiedDate,
+    location,
+    temperature,
+    wind,
+    time,
+  };
 
-  return (
-    <div className="">
-      <div className="text-md flex h-[50px] flex-col w-1/5">
-        <img
-          className="object-fit h-[50px]"
-          src="/icons/black/svg/chanceflurries.svg"
-        />
-      </div>
-      <div className="w-1/5">
-        <p>{modifiedDate}</p>
-      </div>
-      <div className="inline-block text-right w-full ml-auto break-words">
-        <div className="">
-          <h2 className="text-md">{location}</h2>
-        </div>
-        <div className="text-xl flex flex-col gap-2">
-          <div>{`${temperature}°`}</div>
-          <div>{wind}</div>
-          <div className="text-xl">{time}</div>
-        </div>
-      </div>
-    </div>
-  );
+  return <Card {...props} />;
 };
