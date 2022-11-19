@@ -8,23 +8,25 @@ import "swiper/css/bundle";
 
 import { SmallCard } from "./small-card";
 
-export const Carousell = ({ items, swapItems }) => {
+export const Carousell = ({ items, setHighlightedCard, highlightedCard }) => {
   return (
-    <div className="h-[120px] tablet:h-[170px] phone:h-[120px]">
+    <div className="relative  h-[120px] tablet:h-[170px] phone:h-[120px]">
       <Swiper
         breakpoints={{
           480: {
             width: 480,
             slidesPerView: 2,
+            slidesPerGroup: 2,
           },
           800: {
             width: 800,
             slidesPerView: 3,
+            slidesPerGroup: 3,
           },
         }}
         slidesPerView={1}
         spaceBetween={30}
-        slidesPerGroup={3}
+        slidesPerGroup={1}
         loop={true}
         loopFillGroupWithBlank={false}
         pagination={{
@@ -34,15 +36,16 @@ export const Carousell = ({ items, swapItems }) => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        <>
-          {items.map((item, idx) => {
-            return (
-              <SwiperSlide onClick={() => swapItems(item)}>
-                {<SmallCard key={`card ${idx}`} {...item} />}
-              </SwiperSlide>
-            );
-          })}
-        </>
+        {items.map((item, idx) => {
+          return (
+            <SwiperSlide
+              key={`card ${idx}`}
+              onClick={() => setHighlightedCard(item)}
+            >
+              {<SmallCard highlightedCard={highlightedCard} item={item} />}
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );

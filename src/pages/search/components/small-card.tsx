@@ -1,6 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
-import styled from "styled-components";
-
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
 import { Card } from "./card";
@@ -10,21 +7,11 @@ interface CardProps {
   swapItems: any;
 }
 
-const Grid3 = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  text-align: center;
-  position: relative;
-  justify-items: center;
-  align-items: center;
-  height: 100%;
-`;
+export const SmallCard = ({ highlightedCard, item }) => {
+  const { date, location, times } = item;
 
-export const SmallCard = ({
-  date,
-  location,
-  times,
-}: AzureFunctionCoordinatesMappedItems) => {
+  const highlighted = item === highlightedCard;
+
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -41,5 +28,33 @@ export const SmallCard = ({
     time,
   };
 
-  return <Card {...props} />;
+  return (
+    <div
+      className={`p-2 grid grid-cols-3 h-full bg-red rounded-md border-2 ${
+        highlighted &&
+        "transition delay-150 duration-200 ease-in-out bg-slate-700 text-white"
+      }`}
+    >
+      <div className="text-md flex flex-col flex h-[50px] ">
+        <img
+          className="object-fit h-[50px]"
+          src="/icons/black/svg/chanceflurries.svg"
+        />
+      </div>
+      <div className="flex flex-col items-center">
+        <div className="w-1/5">
+          <p>{modifiedDate}</p>
+        </div>
+        <div>Google Maps?</div>
+      </div>
+
+      <div className="flex flex-col justify-between text-right h-full w-full break-words">
+        <h2 className="text-md">{location}</h2>
+
+        <div>{`${temperature}°`}</div>
+        <div>{wind}</div>
+        <div className="text-md tablet:text-xl">{time}</div>
+      </div>
+    </div>
+  );
 };

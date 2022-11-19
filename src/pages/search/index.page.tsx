@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
@@ -10,7 +9,7 @@ import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/map
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Arrow, DirectionChoice } from "../../ui-kit/arrow/arrow";
+import { Arrow } from "../../ui-kit/arrow/arrow";
 
 import { MainCard } from "./components/main-card";
 import { MapBoxHelper } from "./mapbox-settings";
@@ -22,13 +21,14 @@ import { Carousell } from "./components/carousell";
 const Wrapper = styled.div`
   padding-left: 30px;
   padding-right: 30px;
-  @media (min-width: 800px) {
-    padding-left: 100px;
-    padding-right: 100px;
-  }
-  @media (min-width: 480px) {
+  @media screen and (min-width: 480px) {
     padding-left: 40px;
     padding-right: 40px;
+  }
+
+  @media screen and (min-width: 800px) {
+    padding-left: 100px;
+    padding-right: 100px;
   }
 `;
 
@@ -47,38 +47,35 @@ export default function Search({ params, mapBoxkey }) {
     undefined | AzureFunctionCoordinatesMappedItems[]
   >(undefined);
 
-  const [cardsToDisplay, setCardsToDisplay] = useState<
-    undefined | AzureFunctionCoordinatesMappedItems[]
+  const [userLocation, setUserLocation] = useState<
+    undefined | AzureFunctionCoordinatesMappedItems
+  >(undefined);
+
+  const [highlightedCard, setHighlightedCard] = useState<
+    undefined | AzureFunctionCoordinatesMappedItems
   >(undefined);
 
   useEffect(() => {
     if (data) {
-      const arr = [data.items.userLocation[0], ...data.items.ranks.slice(0, 3)];
-      setItems([data.items.userLocation[0], ...data.items.ranks]);
-      setCardsToDisplay(arr);
+      const topRankCard = data.items.ranks[0];
+      const userLocation = data.items.userLocation[0];
+      setItems([...data.items.ranks, userLocation]);
+      setHighlightedCard(topRankCard);
+      setUserLocation(userLocation);
       const { lat, lon } = {
-        lat: data.items.userLocation[0].latitude,
-        lon: data.items.userLocation[0].longitude,
+        lat: topRankCard.latitude,
+        lon: topRankCard.longitude,
       };
       const map = new MapBoxHelper([lon, lat]).setMarker();
       map.on("load", () => map.resize());
     }
   }, [data]);
 
-  const swapItems = (item: AzureFunctionCoordinatesMappedItems) => {
-    const currentIndexOfItem = cardsToDisplay.findIndex((i) => i === item);
-    const cardsArr = cardsToDisplay.slice();
-    const tmpHighlightedVar = cardsArr[0];
-    cardsArr[0] = item;
-    cardsArr[currentIndexOfItem] = tmpHighlightedVar;
-    return setCardsToDisplay(cardsArr);
-  };
-
   useEffect(() => {
-    if (cardsToDisplay) {
+    if (highlightedCard) {
       const { lat, lon } = {
-        lat: cardsToDisplay[0].latitude,
-        lon: cardsToDisplay[0].longitude,
+        lat: highlightedCard.latitude,
+        lon: highlightedCard.longitude,
       };
       const map = new MapBoxHelper([lon, lat]).setMarker();
       map.on("load", () => map.resize());
@@ -92,7 +89,7 @@ export default function Search({ params, mapBoxkey }) {
 
       return;
     }
-  }, [cardsToDisplay]);
+  }, [highlightedCard]);
 
   return (
     <Wrapper>
@@ -111,21 +108,17 @@ export default function Search({ params, mapBoxkey }) {
         ) : (
           <section>
             <Spacer vertical={4} />
-            <MainCard key={"firstItem"} {...cardsToDisplay[0]} />
+            <MainCard key={"firstItem"} {...highlightedCard} />
             <Spacer vertical={5} />
             <div className="text-xl text-center">
               <p>Other awesome places</p>
             </div>
             <Spacer vertical={5} />
-
-            {/* <CarouselList>
-                  {cardsToDisplay.slice(1, 4).map((item, idx) => {
-                    return (
-                      <SmallCard swapItems={swapItems} key={idx} item={item} />
-                    );
-                  })}
-                </CarouselList> */}
-            <Carousell items={data.items.ranks} swapItems={swapItems} />
+            <Carousell
+              items={items}
+              setHighlightedCard={setHighlightedCard}
+              highlightedCard={highlightedCard}
+            />
           </section>
         )}
       </div>
