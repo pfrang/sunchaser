@@ -45,6 +45,14 @@ h3 {
   .swiper {
     width: 480px;
   }
+  /* .swiper-button-next {
+    color: black !important;
+    left: 200px !important;
+  }
+  .swiper-button-prev {
+    color: black !important;
+    right: 200px !important;
+  } */
 }
 
 @media screen and (min-width: 800px) {
@@ -54,27 +62,26 @@ h3 {
 }
 
 
-
-
-.swiper-container {
-  overflow: visible;
+.mySwiper{
+  position: static !important;
+  display: flex;
+  justify-content:space-between;
+  justify-items: center;
 }
 
-.swiper-button-next {
+.swiper-button-next, .swiper-button-prev{
   color: black !important;
 }
 
-.swiper-button-prev {
-  color: black !important;
+
+
+.swiper-pagination {
+  bottom: -25px !important;
 }
 
 .swiper-slide {
-  padding: 2px;
   text-align: center;
-  border-top: 2px solid green;
-  border-bottom: 2px solid green;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-  border-radius: 8px;
   cursor: pointer;
   /* Center slide text vertically */
   /* display: -webkit-box;
