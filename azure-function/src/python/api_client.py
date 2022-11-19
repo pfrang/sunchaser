@@ -45,3 +45,5 @@ class APISOURCE:
                 baseUrl+= f'{i}={api_keys[i]}&'
         
         return baseUrl
+
+    def getTravel
