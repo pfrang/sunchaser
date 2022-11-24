@@ -1,6 +1,5 @@
+import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-
-import { Card } from "./card";
 
 interface CardProps {
   item: AzureFunctionCoordinatesMappedItems;
@@ -10,7 +9,7 @@ interface CardProps {
 export const SmallCard = ({ highlightedCard, item }) => {
   const { date, location, times } = item;
 
-  const highlighted = item === highlightedCard;
+  const isHighlighted = item === highlightedCard;
 
   const modifiedDate =
     date &&
@@ -19,7 +18,7 @@ export const SmallCard = ({ highlightedCard, item }) => {
     })}`;
   // const modifiedTime = date && `${date.slice(0, -3)}`;
 
-  const { temperature, wind, time } = times[0];
+  const { temperature, wind, time, symbol } = times[0];
   const props = {
     modifiedDate,
     location,
@@ -28,17 +27,20 @@ export const SmallCard = ({ highlightedCard, item }) => {
     time,
   };
 
+  const icon =
+    WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
+
   return (
     <div
       className={`p-2 grid grid-cols-3 h-full bg-red rounded-md border-2 ${
-        highlighted &&
+        isHighlighted &&
         "transition delay-150 duration-200 ease-in-out bg-slate-700 text-white"
       }`}
     >
       <div className="text-md flex flex-col flex h-[50px] ">
         <img
           className="object-fit h-[50px]"
-          src="/icons/black/svg/chanceflurries.svg"
+          src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
         />
       </div>
       <div className="flex flex-col items-center">
