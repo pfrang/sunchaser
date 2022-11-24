@@ -23,6 +23,8 @@ const Wrapper = styled.div`
   padding: 4px;
   border-radius: 8px;
   border: 2px transparent green;
+  background-color: white;
+  color: black;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -1px 25px, rgba(0, 0, 0, 0.12) 0px 4px 3px,
     rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(38, 37, 37, 0.09) 0px -3px 3px;
@@ -51,7 +53,6 @@ export const MainCard = ({ date, location, times, ...props }: CardProps) => {
       <div className="relative text-sm h-[150px] tablet:h-[150px] phone:h-[150px]">
         <Grid3>
           <div className="text-md tablet:text-xl flex flex-col">
-            {/* <img src="/icons/black/svg/chanceflurries.svg" /> */}
             <img src={`/icons/black/svg/${icon}`} />
             <p>{modifiedDate}</p>
           </div>

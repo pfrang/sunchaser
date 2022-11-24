@@ -25,8 +25,8 @@ const Wrapper = styled.div`
   }
 
   @media screen and (min-width: 800px) {
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
   }
 `;
 
@@ -97,7 +97,7 @@ export default function Search({ params, mapBoxkey }) {
           <div className="flex items-center justify-center">
             <div
               id="map"
-              className="h-[250px] tablet:h-[350px] phone:h-[250px] w-4/5 tablet: w-2/3 w-full m-auto mt-4"
+              className="w-full h-[250px] tablet:h-[350px] phone:h-[250px] tablet:w-2/3  m-auto mt-4"
             ></div>
           </div>
         </section>

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
@@ -8,6 +10,7 @@ interface CardProps {
 
 export const SmallCard = ({ highlightedCard, item }) => {
   const { date, location, times } = item;
+  const [isHovering, setIsHovering] = useState(false);
 
   const isHighlighted = item === highlightedCard;
 
@@ -29,18 +32,22 @@ export const SmallCard = ({ highlightedCard, item }) => {
 
   const icon =
     WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
+  const shouldChangeColor = isHighlighted || isHovering;
 
   return (
     <div
-      className={`p-2 grid grid-cols-3 h-full bg-red rounded-md border-2 ${
-        isHighlighted &&
-        "transition delay-150 duration-200 ease-in-out bg-slate-700 text-white"
-      }`}
+      onMouseOver={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      className={`${
+        shouldChangeColor
+          ? "transition delay-150 duration-200 ease-in-out bg-slate-700 text-white"
+          : "bg-white text-black"
+      }  p-2 grid grid-cols-3 h-full bg-red rounded-md border-2 hover:bg-slate-700 text-white transition delay-150 duration-150 ease-in-out`}
     >
-      <div className="text-md flex flex-col flex h-[50px] ">
+      <div className="text-md flex flex-col flex h-[50px]">
         <img
-          className="object-fit h-[50px]"
-          src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
+          className="object-fit h-[50px] hover:transition delay-150 duration-200 ease-in-out"
+          src={`/icons/${shouldChangeColor ? "white" : "black"}/svg/${icon}`}
         />
       </div>
       <div className="flex flex-col items-center">

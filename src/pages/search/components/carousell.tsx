@@ -10,7 +10,7 @@ import { SmallCard } from "./small-card";
 
 export const Carousell = ({ items, setHighlightedCard, highlightedCard }) => {
   return (
-    <div className="relative  h-[120px] tablet:h-[170px] phone:h-[120px]">
+    <div className="relative h-[120px] tablet:h-[170px] phone:h-[120px]">
       <Swiper
         breakpoints={{
           480: {
@@ -18,8 +18,8 @@ export const Carousell = ({ items, setHighlightedCard, highlightedCard }) => {
             slidesPerView: 2,
             slidesPerGroup: 2,
           },
-          800: {
-            width: 800,
+          1100: {
+            width: 1100,
             slidesPerView: 3,
             slidesPerGroup: 3,
           },

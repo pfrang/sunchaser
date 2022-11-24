@@ -47,9 +47,7 @@ const Container = styled.div`
   }
 `;
 
-const FormWrapper = styled.div`
-  width: 400px;
-`;
+const FormWrapper = styled.div``;
 
 const Home: NextPage = () => {
   return (
