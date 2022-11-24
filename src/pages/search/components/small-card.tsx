@@ -1,6 +1,5 @@
+import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-
-import { Card } from "./card";
 
 interface CardProps {
   item: AzureFunctionCoordinatesMappedItems;
@@ -28,6 +27,9 @@ export const SmallCard = ({ highlightedCard, item }) => {
     time,
   };
 
+  const icon =
+    WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
+
   return (
     <div
       className={`p-2 grid grid-cols-3 h-full bg-red rounded-md border-2 ${
@@ -38,7 +40,7 @@ export const SmallCard = ({ highlightedCard, item }) => {
       <div className="text-md flex flex-col flex h-[50px] ">
         <img
           className="object-fit h-[50px]"
-          src={`/icons/${isHighlighted ? "white" : "black"}/svg/${symbol}.svg`}
+          src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
         />
       </div>
       <div className="flex flex-col items-center">
