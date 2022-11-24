@@ -10,7 +10,7 @@ interface CardProps {
 export const SmallCard = ({ highlightedCard, item }) => {
   const { date, location, times } = item;
 
-  const highlighted = item === highlightedCard;
+  const isHighlighted = item === highlightedCard;
 
   const modifiedDate =
     date &&
@@ -19,7 +19,7 @@ export const SmallCard = ({ highlightedCard, item }) => {
     })}`;
   // const modifiedTime = date && `${date.slice(0, -3)}`;
 
-  const { temperature, wind, time } = times[0];
+  const { temperature, wind, time, symbol } = times[0];
   const props = {
     modifiedDate,
     location,
@@ -31,14 +31,14 @@ export const SmallCard = ({ highlightedCard, item }) => {
   return (
     <div
       className={`p-2 grid grid-cols-3 h-full bg-red rounded-md border-2 ${
-        highlighted &&
+        isHighlighted &&
         "transition delay-150 duration-200 ease-in-out bg-slate-700 text-white"
       }`}
     >
       <div className="text-md flex flex-col flex h-[50px] ">
         <img
           className="object-fit h-[50px]"
-          src="/icons/black/svg/chanceflurries.svg"
+          src={`/icons/${isHighlighted ? "white" : "black"}/svg/${symbol}.svg`}
         />
       </div>
       <div className="flex flex-col items-center">

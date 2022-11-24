@@ -40,14 +40,15 @@ export const MainCard = ({ date, location, times, ...props }: CardProps) => {
     })}`;
   // const modifiedTime = date && `${date.slice(0, -3)}`;
 
-  const { temperature, wind, time } = times[0];
+  const { temperature, wind, time, symbol } = times[0];
 
   return (
     <Wrapper>
       <div className="relative text-sm h-[150px] tablet:h-[150px] phone:h-[150px]">
         <Grid3>
           <div className="text-md tablet:text-xl flex flex-col">
-            <img src="/icons/black/svg/chanceflurries.svg" />
+            {/* <img src="/icons/black/svg/chanceflurries.svg" /> */}
+            <img src={`/icons/black/svg/${symbol}.svg`} />
             <p>{modifiedDate}</p>
           </div>
           <div className="flex flex-col justify-between">

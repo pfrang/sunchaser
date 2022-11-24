@@ -9,11 +9,9 @@ import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/map
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Arrow } from "../../ui-kit/arrow/arrow";
 
 import { MainCard } from "./components/main-card";
 import { MapBoxHelper } from "./mapbox-settings";
-import { SmallCard } from "./components/small-card";
 import { Carousell } from "./components/carousell";
 
 // import required modules
@@ -109,7 +107,7 @@ export default function Search({ params, mapBoxkey }) {
           <section>
             <Spacer vertical={4} />
             <MainCard key={"firstItem"} {...highlightedCard} />
-            <Spacer vertical={5} />
+            <Spacer vertical={4} />
             <div className="text-xl text-center">
               <p>Other awesome places</p>
             </div>
