@@ -4,7 +4,7 @@ class APISOURCE:
     def getKartverket(params=True):
 
         baseUrl='https://ws.geonorge.no/stedsnavn/v1/punkt'
-        
+
         api_keys={
 
         'koordsys':4258,
@@ -13,14 +13,14 @@ class APISOURCE:
         'treffPerSide':1,
         'side':1,
         'filtrer':'navn.stedsnavn.skrivemåte'
-        
+
         }
 
-        if params is True: 
+        if params is True:
             baseUrl += '?'
             for i in api_keys.keys():
                 baseUrl+= f'{i}={api_keys[i]}&'
-        
+
         return baseUrl
 
 
@@ -31,19 +31,17 @@ class APISOURCE:
     def getKommune(params=True):
 
         baseUrl='https://ws.geonorge.no/kommuneinfo/v1/punkt'
-        
+
         api_keys={
 
         'koordsys':4258,
         'filtrer':'kommunenavn'
-        
+
         }
-        
-        if params is True: 
+
+        if params is True:
             baseUrl += '?'
             for i in api_keys.keys():
                 baseUrl+= f'{i}={api_keys[i]}&'
-        
-        return baseUrl
 
-    def getTravel
+        return baseUrl
