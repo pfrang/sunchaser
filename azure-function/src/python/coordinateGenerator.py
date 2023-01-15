@@ -3,8 +3,6 @@ from math import radians, cos, sin, asin, sqrt, atan2,degrees
 import numpy as np
 import pandas as pd
 import os
-
-
 global radiusEarth # Radius of earth in kilometers.
 radiusEarth=6371
 
@@ -54,7 +52,7 @@ class GetCoordinates:
 
         return edgePoints
 
-    def retrieveMatrix(self,researchSquares=256):
+    def retrieveMatrix(self,researchSquares=16):
         if not (sqrt(researchSquares) / 4).is_integer():
             raise ValueError("Number must be root, divided by 4 = whole number")
 
@@ -71,7 +69,7 @@ class GetCoordinates:
         transposedMatrix = np.array(lonlatMerge).transpose()
         transposedMatrix=transposedMatrix.reshape(-1, *transposedMatrix.shape[-1:]) # flatten all but the last one dimension - last -1. the first is the shape(?):
         df_transposedMatrix = pd.DataFrame(transposedMatrix, columns = ['lat','lon'])
-        
+
         df_transposedMatrix.loc[len(df_transposedMatrix.index)] = [self.startingCoordinates[0],self.startingCoordinates[1]]
         # print(f"{researchSquares} coordinates generated")
         return df_transposedMatrix.round(2).drop_duplicates(keep='last')
@@ -81,5 +79,3 @@ class GetCoordinates:
 
         inputdataframe.to_csv("test.csv",sep=',')
         return
-
-

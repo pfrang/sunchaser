@@ -126,12 +126,15 @@ export default function Search({ params, mapBoxkey }) {
 
 export async function getServerSideProps(context) {
   const body = context.query;
+  const params = {
+    params: body,
+  };
 
   const mapBoxkey = new AppConfig().mapBox.key;
 
   return {
     props: {
-      params: body,
+      params,
       mapBoxkey,
     },
   };

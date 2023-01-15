@@ -45,12 +45,16 @@ export class CoordinatesMapper {
   };
 
   getProps(): CoordinatesMappedResponse {
-    return {
-      metaData: {},
-      items: {
-        userLocation: this.assembleItems(this.contentData.userLocation),
-        ranks: this.assembleItems(this.contentData.ranks),
-      },
-    };
+    try {
+      return {
+        metaData: {},
+        items: {
+          userLocation: this.assembleItems(this.contentData.userLocation),
+          ranks: this.assembleItems(this.contentData.ranks),
+        },
+      };
+    } catch (e) {
+      throw e;
+    }
   }
 }

@@ -9,14 +9,12 @@ from operator import attrgetter, itemgetter
 import warnings
 from collections import defaultdict
 from datetime import datetime
-
-
+import time
+import logging
 #Filter because of error in lambda to weatherrank calculation
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 pd.options.mode.chained_assignment = None  # default='warn'
-import json
-
 
 # TODO check if json match structure
 def jsonChecker(json) -> bool:
@@ -38,7 +36,7 @@ class Handler:
         date, travel_time, lat, lon, transport = itemgetter('date', 'travel_time','lat', 'lon', 'transport')(input)
         self.date = date
         self.travel_time = travel_time
-        self.startingCoordinates = [float(lat), float(lon)]
+        self.startingCoordinates = [round(float(lat),2), round(float(lon),2)]
         self.transport = transport
 
     def initializeCoordinatesFetcher(self):
@@ -51,19 +49,22 @@ class Handler:
         return response
 
     def callYr(self):
+        try:
 
-        #Validate if the date is today or later
-        if datetime.strptime(self.date+" 23:59:59", '%Y-%m-%d %H:%M:%S') < datetime.now():
-            raise Exception("The date selected is before today")
-
-        travelDistance=GetDistance(travelTime=f'{self.travel_time}',transportationMethod=self.transport)
-        locationDataFrame=GetCoordinates(self.startingCoordinates,travelDistance.calculateDistance())
-
-        weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
-        for index, row in locationDataFrame.retrieveMatrix().iterrows():
-           if ValidCoordinate(row['lat'],row['lon']).validate(): #Validate if the coordinate is within the relevant area, such as a country. This is based on the polygon shape
-                weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
-        return weatherDataFrame
+            logging.info(time.asctime())
+            #Validate if the date is today or later
+            if datetime.strptime(self.date + " 23:59:59", '%Y-%m-%d %H:%M:%S') < datetime.now():
+                raise Exception("The date selected is before today")
+            travelDistance=GetDistance(travelTime=f'{self.travel_time}',transportationMethod=self.transport)
+            locationDataFrame=GetCoordinates(self.startingCoordinates,travelDistance.calculateDistance())
+            logging.info(f"fetching yr {time.asctime()}")
+            weatherDataFrame=pd.DataFrame(columns=['latitude', 'longitude','date', 'time', 'symbol', 'temperature', 'wind'])
+            for index, row in locationDataFrame.retrieveMatrix().iterrows():
+                if ValidCoordinate(row['lat'],row['lon']).validate(): #Validate if the coordinate is within the relevant area, such as a country. This is based on the polygon shape
+                        weatherDataFrame = weatherDataFrame.append(getWeather(row['lat'],row['lon'],self.date))
+            return weatherDataFrame
+        except Exception as e:
+            raise e
 
     def cleanDF(self, df):
         dfStartLocation=df.loc[(df['latitude'] == self.startingCoordinates[0]) & (df['longitude'] == self.startingCoordinates[1])]
@@ -75,35 +76,35 @@ class Handler:
         return tmpDict
 
     def findThebestlocation(self):
-        weatherDataFrame=self.callYr()
-        #filter out the correct date to be analyzed
+        try:
+            weatherDataFrame=self.callYr()
+            logging.info(f"done with yr {time.asctime()}")
+            #filter out the correct date to be analyzed
 
-        weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
+            weatherDataFrame=weatherDataFrame[weatherDataFrame['date'] == self.date]
 
-        #Exception if datafram is empty
-        if len(weatherDataFrame)==0:
-            raise Exception("No data is found for the given date")
-
-        weatherDataFrame['weatherRank'] = weatherDataFrame[['symbol', 'temperature','wind']].apply(lambda row: rankWeather(row).calculate(),axis=1)   #Calculating the rank per time per location
-        weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
-        weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
-              ascending = [False, False])
-        
-        locationNameDataFrame=pd.DataFrame(columns=['location','latitude','longitude']) #Added lat lon for join with weather df
-        
-        for index, row in weatherDataFrame.drop_duplicates(subset=['latitude','longitude']).iterrows():
-            lat=row['latitude']
-            lon=row['longitude']
-            locationNameDataFrame.loc[len(locationNameDataFrame)]=[GETLOCATIONINFO(lat,lon).MunicipalityNamefromAPI(),lat,lon]
-
-
-        weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, on=['latitude','longitude'])
-
-        #weatherDataFrame.to_csv("test.csv",sep=',')
-
-        #futre selection of best weather'
-        outputJson = self.cleanDF(weatherDataFrame)
-        return outputJson
+            #Exception if datafram is empty
+            if len(weatherDataFrame)==0:
+                raise Exception("No data is found for the given date")
+            logging.info(f"starting groupby and sort {time.asctime()}")
+            weatherDataFrame['weatherRank'] = weatherDataFrame[['symbol', 'temperature','wind']].apply(lambda row: rankWeather(row).calculate(),axis=1)   #Calculating the rank per time per location
+            weatherDataFrame['maxRank'] = weatherDataFrame.groupby(['latitude', 'longitude'])['weatherRank'].transform(max)
+            weatherDataFrame = weatherDataFrame.sort_values(['maxRank', 'weatherRank'],
+                ascending = [False, False])
+            logging.info(f"groupby and sort {time.asctime()}")
+            locationNameDataFrame=pd.DataFrame(columns=['location','latitude','longitude']) #Added lat lon for join with weather df
+            logging.info(f"starting getting place name {time.asctime()}")
+            for index, row in weatherDataFrame.drop_duplicates(subset=['latitude','longitude']).iterrows():
+                lat=row['latitude']
+                lon=row['longitude']
+                locationNameDataFrame.loc[len(locationNameDataFrame)]=[GETLOCATIONINFO(lat,lon).MunicipalityNamefromAPI(),lat,lon]
+            logging.info(f"done with getting place name {time.asctime()}")
+            weatherDataFrame=pd.merge(weatherDataFrame, locationNameDataFrame, on=['latitude','longitude'])
+            #futre selection of best weather'
+            outputJson = self.cleanDF(weatherDataFrame)
+            return outputJson
+        except Exception as e:
+            raise e
 
 
 
