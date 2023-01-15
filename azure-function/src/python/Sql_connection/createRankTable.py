@@ -1,9 +1,9 @@
-import pyodbc 
+import pyodbc
 
 server = 'sunchaser.database.windows.net'
 database = 'sunchaser'
 username = 'sunchaser_admin'
-password = 'Sommerogsol2023'   
+password = 'Sommerogsol2023'
 driver= '{ODBC Driver 17 for SQL Server}'
 
 #Table with all weathertypes, rank etc.
@@ -410,7 +410,7 @@ for i in WeatherSymbolTable:
 
     # Insert data into Weather_data table
     cursor.execute('''
-        INSERT INTO Rank_data (weather_symbol_id,desc_en,desc_nb, raw_name) 
+        INSERT INTO Rank_data (weather_symbol_id,desc_en,desc_nb, raw_name)
         VALUES (?,?,?,?)
     ''', (int(WeatherSymbolTable[i]["RANK"]),WeatherSymbolTable[i]["desc_en"],WeatherSymbolTable[i]["desc_nb"], i))
 
