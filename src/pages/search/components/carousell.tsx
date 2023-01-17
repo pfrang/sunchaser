@@ -6,9 +6,24 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 
+import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+
 import { SmallCard } from "./small-card";
 
-export const Carousell = ({ items, setHighlightedCard, highlightedCard }) => {
+interface CarousellProps {
+  items: AzureFunctionCoordinatesMappedItems[];
+  setZoomAndHighlightCard: (
+    item: AzureFunctionCoordinatesMappedItems,
+    bool: boolean
+  ) => void;
+  highlightedCard: AzureFunctionCoordinatesMappedItems;
+}
+
+export const Carousell = ({
+  items,
+  setZoomAndHighlightCard,
+  highlightedCard,
+}: CarousellProps) => {
   return (
     <div className="relative h-[120px] tablet:h-[170px] phone:h-[120px]">
       <Swiper
@@ -40,7 +55,7 @@ export const Carousell = ({ items, setHighlightedCard, highlightedCard }) => {
           return (
             <SwiperSlide
               key={`card ${idx}`}
-              onClick={() => setHighlightedCard(item)}
+              onClick={() => setZoomAndHighlightCard(item, true)}
             >
               {<SmallCard highlightedCard={highlightedCard} item={item} />}
             </SwiperSlide>

@@ -47,8 +47,6 @@ const Container = styled.div`
   }
 `;
 
-const FormWrapper = styled.div``;
-
 const Home: NextPage = () => {
   return (
     <Wrapper>
@@ -62,9 +60,9 @@ const Home: NextPage = () => {
       <ContentWrapper>
         <Spacer vertical={5} />
         <Container>
-          <FormWrapper>
+          <div>
             <SearchCriterias />
-          </FormWrapper>
+          </div>
         </Container>
       </ContentWrapper>
     </Wrapper>

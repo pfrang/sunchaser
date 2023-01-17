@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { AppConfig } from "../../app-config";
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
 import { Spacer } from "../../ui-kit/spacer/spacer";
+import { formatDate } from "../utils/convert-date";
 
 import WhereAreYou from "./where-are-you";
 import ChooseTransportationMethod from "./choose-transportation-method";
@@ -106,7 +107,7 @@ export default function SearchCriterias() {
       lon: longitude,
       lat: latitude,
       transport: highlightedTransport,
-      date: new Date(selectedDate).toISOString().split("T")[0],
+      date: formatDate(selectedDate),
       travel_time: travelDistance,
     };
 

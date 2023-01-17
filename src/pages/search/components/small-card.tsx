@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
-interface CardProps {
+interface SmallCardProps {
+  highlightedCard: AzureFunctionCoordinatesMappedItems;
   item: AzureFunctionCoordinatesMappedItems;
-  swapItems: any;
 }
 
-export const SmallCard = ({ highlightedCard, item }) => {
+export const SmallCard = ({ highlightedCard, item }: SmallCardProps) => {
   const { date, location, times } = item;
   const [isHovering, setIsHovering] = useState(false);
 
@@ -51,7 +51,7 @@ export const SmallCard = ({ highlightedCard, item }) => {
         />
       </div>
       <div className="flex flex-col items-center">
-        <div className="w-1/5">
+        <div className="">
           <p>{modifiedDate}</p>
         </div>
         <div>Google Maps?</div>

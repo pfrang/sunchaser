@@ -53,6 +53,10 @@ export default function Search({ params, mapBoxkey }) {
     undefined | AzureFunctionCoordinatesMappedItems
   >(undefined);
 
+  const [zoom, setZoom] = useState(false);
+
+  const [mapObject, setMap] = useState<undefined | mapboxgl.Map>(undefined);
+
   useEffect(() => {
     if (data) {
       const topRankCard = data.items.ranks[0];
@@ -60,34 +64,43 @@ export default function Search({ params, mapBoxkey }) {
       setItems([...data.items.ranks, userLocation]);
       setHighlightedCard(topRankCard);
       setUserLocation(userLocation);
-      const { lat, lon } = {
-        lat: topRankCard.latitude,
-        lon: topRankCard.longitude,
-      };
-      const map = new MapBoxHelper([lon, lat]).setMarker();
+
+      const longitudes = data.items.ranks.map((item) => item.longitude);
+      const latitudes = data.items.ranks.map((item) => item.latitude);
+
+      let map = new MapBoxHelper(longitudes, latitudes).setMarkers();
       map.on("load", () => map.resize());
+      setMap(map);
     }
   }, [data]);
 
   useEffect(() => {
-    if (highlightedCard) {
+    if (highlightedCard && zoom) {
       const { lat, lon } = {
         lat: highlightedCard.latitude,
         lon: highlightedCard.longitude,
       };
-      const map = new MapBoxHelper([lon, lat]).setMarker();
-      map.on("load", () => map.resize());
 
-      // const itemIndex = cardsToDisplay.findIndex(
-      //   (item) => item.latitude === highlightedItem.latitude
-      // );
-      // console.log(highlightedItem);
-
-      // setCardsToDisplay(cardsToDisplay.splice(itemIndex, 1));
-
-      return;
+      mapObject.flyTo({
+        center: [lon, lat],
+        zoom: 15,
+        speed: 1,
+        curve: 1,
+        duration: 2000,
+        easing(t) {
+          return t;
+        },
+      });
     }
   }, [highlightedCard]);
+
+  const setZoomAndHighlightCard = (
+    item: AzureFunctionCoordinatesMappedItems,
+    zoom?: boolean
+  ) => {
+    setHighlightedCard(item);
+    setZoom(zoom);
+  };
 
   return (
     <Wrapper>
@@ -105,7 +118,7 @@ export default function Search({ params, mapBoxkey }) {
           <SearchLoader />
         ) : (
           <section>
-            <Spacer vertical={4} />
+            <Spacer vertical={6} />
             <MainCard key={"firstItem"} {...highlightedCard} />
             <Spacer vertical={4} />
             <div className="text-xl text-center">
@@ -114,7 +127,7 @@ export default function Search({ params, mapBoxkey }) {
             <Spacer vertical={5} />
             <Carousell
               items={items}
-              setHighlightedCard={setHighlightedCard}
+              setZoomAndHighlightCard={setZoomAndHighlightCard}
               highlightedCard={highlightedCard}
             />
           </section>
