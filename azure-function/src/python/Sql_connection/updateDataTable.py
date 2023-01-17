@@ -28,3 +28,4 @@ cursor.execute('''
 ''', (lat, lon, date, time, weather_symbol_id_fk, temperature, wind, score, src))
 
 conn.commit()
+
