@@ -25,31 +25,42 @@ export const Carousell = ({
   highlightedCard,
 }: CarousellProps) => {
   return (
-    <div className="relative h-[120px] tablet:h-[170px] phone:h-[120px]">
+    <div className="w-full h-full mb-18">
       <Swiper
-        breakpoints={{
-          480: {
-            width: 480,
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-          },
-          1100: {
-            width: 1100,
-            slidesPerView: 3,
-            slidesPerGroup: 3,
-          },
+        // breakpoints={{
+        //   480: {
+        //     width: 480,
+        //     slidesPerView: 2,
+        //     slidesPerGroup: 2,
+        //   },
+        //   1100: {
+        //     width: 1100,
+        //     slidesPerView: 3,
+        //     slidesPerGroup: 3,
+        //   },
+        // }}
+        autoHeight
+        freeMode={true}
+        mousewheel={true}
+        direction="vertical"
+        slidesPerView={4}
+        observer={true}
+        observeParents={true}
+        // spaceBetween={30}
+        style={{
+          overflowY: "scroll",
+          height: "100%",
+          width: "100%",
+          position: "relative",
         }}
-        slidesPerView={1}
-        spaceBetween={30}
-        slidesPerGroup={1}
-        loop={true}
-        loopFillGroupWithBlank={false}
-        pagination={{
-          clickable: true,
-        }}
-        navigation={true}
-        modules={[Pagination, Navigation]}
-        className="mySwiper"
+        slidesPerGroup={3}
+        // loop={true}
+        // loopFillGroupWithBlank={false}
+        // pagination={{
+        //   clickable: true,
+        // }}
+        // navigation={true}
+        // modules={[Pagination, Navigation]}
       >
         {items.map((item, idx) => {
           return (

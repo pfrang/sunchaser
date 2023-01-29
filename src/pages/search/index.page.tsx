@@ -30,6 +30,20 @@ const Wrapper = styled.div`
   }
 `;
 
+const TwoGridColumn = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+`;
+
+const TwoGridRow = styled.div`
+  display: grid;
+  grid-template-rows: 2fr 3fr;
+  height: calc(100% + 64px);
+  width: 100%;
+  margin-top: -64px;
+`;
+
 export interface HookProperties {
   data: CoordinatesMappedResponse;
   isLoading: any;
@@ -104,35 +118,31 @@ export default function Search({ params, mapBoxkey }) {
 
   return (
     <Wrapper>
-      <div className="flex flex-col h-screen -mt-[64px]">
-        <Spacer vertical={64} />
+      <TwoGridRow>
         <section id="section-map">
-          <div className="flex items-center justify-center">
-            <div
-              id="map"
-              className="w-full h-[250px] tablet:h-[350px] phone:h-[250px] tablet:w-2/3  m-auto mt-4"
-            ></div>
+          <Spacer vertical={64} />
+          <div className="flex items-center h-full justify-center">
+            <div id="map" className="w-full h-full m-auto mt-4"></div>
           </div>
         </section>
         {!items ? (
           <SearchLoader />
         ) : (
-          <section>
+          <section className="h-full">
             <Spacer vertical={6} />
-            <MainCard key={"firstItem"} {...highlightedCard} />
-            <Spacer vertical={4} />
-            <div className="text-xl text-center">
-              <p>Other awesome places</p>
-            </div>
-            <Spacer vertical={5} />
-            <Carousell
-              items={items}
-              setZoomAndHighlightCard={setZoomAndHighlightCard}
-              highlightedCard={highlightedCard}
-            />
+            <TwoGridColumn>
+              <div>
+                <MainCard key={"firstItem"} {...highlightedCard} />
+              </div>
+              <Carousell
+                items={items}
+                setZoomAndHighlightCard={setZoomAndHighlightCard}
+                highlightedCard={highlightedCard}
+              />
+            </TwoGridColumn>
           </section>
         )}
-      </div>
+      </TwoGridRow>
     </Wrapper>
   );
 }
