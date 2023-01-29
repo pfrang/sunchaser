@@ -1,4 +1,4 @@
-import Document from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 import Script from "next/script";
 import { ServerStyleSheet } from "styled-components";
 
@@ -27,5 +27,22 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal();
     }
+  }
+
+  render() {
+    return (
+      <Html>
+        <Head>
+          <link
+            href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css"
+            rel="stylesheet"
+          />
+          <body>
+            <Main />
+            <NextScript />
+          </body>
+        </Head>
+      </Html>
+    );
   }
 }
