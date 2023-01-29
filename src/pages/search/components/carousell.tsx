@@ -25,7 +25,7 @@ export const Carousell = ({
   highlightedCard,
 }: CarousellProps) => {
   return (
-    <div className="w-full h-full mb-18">
+    <div>
       <Swiper
         // breakpoints={{
         //   480: {
