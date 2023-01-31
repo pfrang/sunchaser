@@ -1,10 +1,12 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
+import { Pagination, Navigation, Scrollbar } from "swiper";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
+
+import { useEffect, useState } from "react";
 
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
@@ -24,6 +26,27 @@ export const Carousell = ({
   setZoomAndHighlightCard,
   highlightedCard,
 }: CarousellProps) => {
+  const [showScrollbar, setShowScrollbar] = useState(false);
+
+  useEffect(() => {
+    const handleMouseEnter = () => {
+      setShowScrollbar(true);
+    };
+
+    const handleMouseLeave = () => {
+      setShowScrollbar(false);
+    };
+
+    const swiperEl = document.querySelector("swiper-container");
+    swiperEl.addEventListener("mouseenter", handleMouseEnter);
+    swiperEl.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      swiperEl.removeEventListener("mouseenter", handleMouseEnter);
+      swiperEl.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
   return (
     <div>
       <Swiper
@@ -39,28 +62,30 @@ export const Carousell = ({
         //     slidesPerGroup: 3,
         //   },
         // }}
+        id="swiper-container"
         autoHeight
         freeMode={true}
         mousewheel={true}
         direction="vertical"
-        slidesPerView={4}
-        observer={true}
-        observeParents={true}
+        slidesPerView="auto"
         // spaceBetween={30}
+        // pagination={{ clickable: true }}
+        scrollbar={{
+          draggable: true,
+          dragSize: 48,
+          hide: !showScrollbar,
+        }}
         style={{
-          overflowY: "scroll",
           height: "100%",
           width: "100%",
-          position: "relative",
         }}
-        slidesPerGroup={3}
-        // loop={true}
+        loop={true}
         // loopFillGroupWithBlank={false}
         // pagination={{
         //   clickable: true,
         // }}
         // navigation={true}
-        // modules={[Pagination, Navigation]}
+        modules={[Navigation, Scrollbar]}
       >
         {items.map((item, idx) => {
           return (

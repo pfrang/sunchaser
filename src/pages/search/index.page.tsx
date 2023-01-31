@@ -39,9 +39,10 @@ const TwoGridColumn = styled.div`
 const TwoGridRow = styled.div`
   display: grid;
   grid-template-rows: 2fr 3fr;
-  height: calc(100% + 64px);
+  height: 100%;
   width: 100%;
-  margin-top: -64px;
+  grid-gap: 32px;
+  /* margin-bottom: 200px; */
 `;
 
 export interface HookProperties {
@@ -120,16 +121,15 @@ export default function Search({ params, mapBoxkey }) {
     <Wrapper>
       <TwoGridRow>
         <section id="section-map">
-          <Spacer vertical={64} />
+          <Spacer vertical={16} />
           <div className="flex items-center h-full justify-center">
-            <div id="map" className="w-full h-full m-auto mt-4"></div>
+            <div id="map" className="w-full h-full m-auto "></div>
           </div>
         </section>
         {!items ? (
           <SearchLoader />
         ) : (
-          <section className="h-full">
-            <Spacer vertical={6} />
+          <section id="section-carousell" className="h-full">
             <TwoGridColumn>
               <div>
                 <MainCard key={"firstItem"} {...highlightedCard} />
