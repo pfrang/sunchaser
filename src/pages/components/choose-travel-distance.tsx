@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 
-import {
-  convertToTravelDistance,
-  valueRange,
-} from "./travel-distance-settings";
+import { setUIOnNumber, valueRange } from "./travel-distance-settings";
 
 export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
   const [value, setValue] = useState(1);
 
   useEffect(() => {
-    setTravelDistance(convertToTravelDistance(value));
+    setTravelDistance(valueRange[value].value);
   }, [value]);
 
   return (
     <section id="distance_traveling">
       <div className="w-[300px]">
-        <label>How far are you willing to travel?</label>
+        <div className="flex justify-between">
+          <label>Distance?</label>
+          <span>{`${setUIOnNumber(value)} km`}</span>
+        </div>
         <input
           type="range"
           list="tickmarks"
@@ -27,18 +27,18 @@ export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
           value={value}
         />
 
-        <datalist
+        {/* <datalist
           id="tickmarks"
-          className="flex w-full mr-auto justify-between"
+          className="flex w-full mr-auto justify-between hidden "
         >
           {Object.keys(valueRange).map((item, idx) => {
             return (
-              <option key={idx} value={`${item}`}>
+              <option key={idx} value={`${item} hidden`}>
                 {`${valueRange[item].label}`}
               </option>
             );
           })}
-        </datalist>
+        </datalist> */}
       </div>
     </section>
   );

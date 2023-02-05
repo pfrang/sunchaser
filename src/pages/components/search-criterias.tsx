@@ -120,14 +120,14 @@ export default function SearchCriterias() {
 
   return (
     <FormStyle onSubmit={onSubmit}>
-      <WhereAreYou
+      {/* <WhereAreYou
         setTownId={setTownId}
         setUserGeoLocation={setUserGeoLocation}
         isLocationChosen={isLocationChosen}
         setLocationChosen={setLocationChosen}
         townSearch={townSearch}
         setTownSearch={setTownSearch}
-      />
+      /> */}
       <ChooseCalendarValue
         unfilledCalendar={unfilledCalendar}
         selectedDate={selectedDate}
@@ -137,13 +137,13 @@ export default function SearchCriterias() {
         setTravelDistance={setTravelDistance}
         travelDistance={travelDistance}
       />
-      <ChooseTransportationMethod
+      {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}
         unfilledHighlightedTransport={unfilledHighlightedTransport}
       >
         {travelItems}
-      </ChooseTransportationMethod>
+      </ChooseTransportationMethod> */}
       <Spacer vertical={1} />
       <section className="submit">
         <div className="flex justify-center">

@@ -3,11 +3,13 @@ import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 
+import { theme } from "../ui-kit/theme/theme";
+
 const Header = styled.header`
   display: flex;
   width: 100%;
   height: 64px;
-  border-bottom: 2px solid green;
+  border-bottom: 2px solid ${theme.darkBlue};
   justify-content: center;
   padding: 6px;
 `;

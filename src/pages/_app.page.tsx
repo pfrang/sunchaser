@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Wrapper>
         <HeaderComponent />
         <Component {...pageProps} />
-        <Spacer line vertical={64} />
+        {/* <Spacer line vertical={64} /> */}
       </Wrapper>
     </>
   );

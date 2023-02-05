@@ -1,42 +1,42 @@
 export const valueRange = {
   1: {
-    value: "0:10",
-    label: "10",
+    value: "1",
+    label: "< 1",
   },
   2: {
-    value: "0:20",
-    label: "20",
+    value: "2",
+    label: "2",
   },
   3: {
-    value: "0:30",
-    label: "30",
+    value: "3",
+    label: "3",
   },
   4: {
-    value: "0:45",
-    label: "45",
+    value: "5",
+    label: "5",
   },
   5: {
-    value: "1:00",
-    label: "60",
+    value: "7",
+    label: "7",
   },
   6: {
-    value: "1:30",
-    label: "90",
+    value: "10",
+    label: "10",
   },
   7: {
-    value: "2:00",
-    label: "2t",
+    value: "15",
+    label: "15",
   },
   8: {
-    value: "3:00",
-    label: "3t",
+    value: "20",
+    label: "20",
   },
   9: {
-    value: "24:00",
-    label: "24t",
+    value: "100",
+    label: "> 100",
   },
 };
 
-export const convertToTravelDistance = (value: number) => {
-  return valueRange[value].value;
+export const setUIOnNumber = (value: number) => {
+  return valueRange[value].label;
 };
