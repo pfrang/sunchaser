@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { Spacer } from "../ui-kit/spacer/spacer";
 
 import HeaderComponent from "./header";
+import { Footer } from "./footer";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -23,6 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Wrapper>
         <HeaderComponent />
         <Component {...pageProps} />
+        <Footer />
       </Wrapper>
     </>
   );

@@ -83,6 +83,7 @@ export default function Search({ params, mapBoxkey }) {
       const latitudes = data.items.ranks.map((item) => item.latitude);
 
       let map = new MapBoxHelper(longitudes, latitudes).setMarkers();
+      map.addControl(new mapboxgl.NavigationControl());
       map.on("load", () => map.resize());
       setMap(map);
     }

@@ -40,10 +40,10 @@ export const Carousell = ({
         //   },
         // }}
         autoHeight
-        freeMode={true}
+        // freeMode={true}
         mousewheel={true}
         direction="vertical"
-        slidesPerView={4}
+        slidesPerView="auto"
         observer={true}
         observeParents={true}
         // spaceBetween={30}
@@ -53,7 +53,10 @@ export const Carousell = ({
           width: "100%",
           position: "relative",
         }}
-        slidesPerGroup={3}
+        // onClick={(e) => {
+        //   console.log(e.el);
+        // }}
+        // slidesPerGroup={3}
         // loop={true}
         // loopFillGroupWithBlank={false}
         // pagination={{
