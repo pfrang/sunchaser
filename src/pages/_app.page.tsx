@@ -1,8 +1,18 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import styled from "styled-components";
 
-import HeaderComponent from "./components/header";
+import { Spacer } from "../ui-kit/spacer/spacer";
+
+import HeaderComponent from "./header";
+
+const Wrapper = styled.div`
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+`;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -10,10 +20,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Sunchaser</title>
       </Head>
-      <div className="h-screen">
+      <Wrapper>
         <HeaderComponent />
         <Component {...pageProps} />
-      </div>
+        <Spacer line vertical={64} />
+      </Wrapper>
     </>
   );
 }

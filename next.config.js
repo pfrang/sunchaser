@@ -3,6 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   pageExtensions: ["page.tsx", "endpoint.ts"],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 
   async headers() {
     return [

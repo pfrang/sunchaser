@@ -30,6 +30,21 @@ const Wrapper = styled.div`
   }
 `;
 
+const TwoGridColumn = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+`;
+
+const TwoGridRow = styled.div`
+  display: grid;
+  grid-template-rows: 2fr 3fr;
+  height: 100%;
+  width: 100%;
+  grid-gap: 32px;
+  /* margin-bottom: 200px; */
+`;
+
 export interface HookProperties {
   data: CoordinatesMappedResponse;
   isLoading: any;
@@ -69,6 +84,7 @@ export default function Search({ params, mapBoxkey }) {
       const latitudes = data.items.ranks.map((item) => item.latitude);
 
       let map = new MapBoxHelper(longitudes, latitudes).setMarkers();
+      map.addControl(new mapboxgl.NavigationControl());
       map.on("load", () => map.resize());
       setMap(map);
     }
@@ -104,35 +120,30 @@ export default function Search({ params, mapBoxkey }) {
 
   return (
     <Wrapper>
-      <div className="flex flex-col h-screen -mt-[64px]">
-        <Spacer vertical={64} />
+      <TwoGridRow>
         <section id="section-map">
-          <div className="flex items-center justify-center">
-            <div
-              id="map"
-              className="w-full h-[250px] tablet:h-[350px] phone:h-[250px] tablet:w-2/3  m-auto mt-4"
-            ></div>
+          <Spacer vertical={16} />
+          <div className="flex items-center h-full justify-center">
+            <div id="map" className="w-full h-full m-auto "></div>
           </div>
         </section>
         {!items ? (
           <SearchLoader />
         ) : (
-          <section>
-            <Spacer vertical={6} />
-            <MainCard key={"firstItem"} {...highlightedCard} />
-            <Spacer vertical={4} />
-            <div className="text-xl text-center">
-              <p>Other awesome places</p>
-            </div>
-            <Spacer vertical={5} />
-            <Carousell
-              items={items}
-              setZoomAndHighlightCard={setZoomAndHighlightCard}
-              highlightedCard={highlightedCard}
-            />
+          <section id="section-carousell" className="h-full">
+            <TwoGridColumn>
+              <div>
+                <MainCard key={"firstItem"} {...highlightedCard} />
+              </div>
+              <Carousell
+                items={items}
+                setZoomAndHighlightCard={setZoomAndHighlightCard}
+                highlightedCard={highlightedCard}
+              />
+            </TwoGridColumn>
           </section>
         )}
-      </div>
+      </TwoGridRow>
     </Wrapper>
   );
 }
