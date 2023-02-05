@@ -1,14 +1,25 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import {
+  Pagination,
+  Navigation,
+  Scrollbar,
+  Mousewheel,
+  Keyboard,
+} from "swiper";
+// import SwiperCore, { Keyboard, Mousewheel } from "swiper/core";
+
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
+import { useEffect, useState } from "react";
 
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
 import { SmallCard } from "./small-card";
+
+// SwiperCore.use([Keyboard, Mousewheel]);
 
 interface CarousellProps {
   items: AzureFunctionCoordinatesMappedItems[];
@@ -24,8 +35,10 @@ export const Carousell = ({
   setZoomAndHighlightCard,
   highlightedCard,
 }: CarousellProps) => {
+  const [showScrollbar, setShowScrollbar] = useState(false);
+
   return (
-    <div className="w-full h-full mb-18">
+    <div>
       <Swiper
         // breakpoints={{
         //   480: {
@@ -39,19 +52,30 @@ export const Carousell = ({
         //     slidesPerGroup: 3,
         //   },
         // }}
+        id="swiper-container"
         autoHeight
-        // freeMode={true}
-        mousewheel={true}
+        freeMode={true}
+        // mousewheel={{
+        //   sensitivity: 10,
+
+        // }}
+        keyboard={{
+          enabled: true,
+          onlyInViewport: false,
+        }}
         direction="vertical"
         slidesPerView="auto"
-        observer={true}
-        observeParents={true}
         // spaceBetween={30}
+        // pagination={{ clickable: true }}
+        scrollbar={{
+          enabled: true,
+          draggable: true,
+          dragSize: 98,
+          hide: !showScrollbar,
+        }}
         style={{
-          overflowY: "scroll",
           height: "100%",
           width: "100%",
-          position: "relative",
         }}
         // onClick={(e) => {
         //   console.log(e.el);
@@ -63,7 +87,7 @@ export const Carousell = ({
         //   clickable: true,
         // }}
         // navigation={true}
-        // modules={[Pagination, Navigation]}
+        modules={[Navigation, Scrollbar, Mousewheel, Keyboard]}
       >
         {items.map((item, idx) => {
           return (
