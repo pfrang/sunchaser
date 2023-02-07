@@ -18,7 +18,7 @@ export default function HeaderComponent() {
   return (
     <Header>
       <Link href="/" passHref>
-        <a className="h-20">
+        <a className="h-20 mr-auto">
           <Image
             className="cursor-pointer"
             width={200}

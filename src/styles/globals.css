@@ -57,9 +57,10 @@ h3 {
 
 
 
-.swiper-pagination {
+/* .swiper-pagination {
   bottom: -25px !important;
-}
+  position: absolute;
+} */
 
 
 @media (prefers-color-scheme: dark) {

@@ -13,14 +13,6 @@ import ChooseTransportationMethod from "./choose-transportation-method";
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { ChooseCalendarValue } from "./choose-calendar-value";
 
-const FormStyle = styled.form`
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: center;
-`;
-
 const Button = styled.button`
   background-color: #1215fd;
   padding: 0.5rem;
@@ -33,6 +25,14 @@ const Button = styled.button`
   &:hover {
     background-color: #c7c744;
   }
+`;
+
+const FormStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 `;
 
 export default function SearchCriterias() {
@@ -119,6 +119,7 @@ export default function SearchCriterias() {
   };
 
   return (
+    //TODO submit is not triggering
     <FormStyle onSubmit={onSubmit}>
       {/* <WhereAreYou
         setTownId={setTownId}

@@ -6,9 +6,6 @@ import {
   Mousewheel,
   Keyboard,
 } from "swiper";
-// import SwiperCore, { Keyboard, Mousewheel } from "swiper/core";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
