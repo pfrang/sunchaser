@@ -43,15 +43,17 @@ const Home: NextPage = () => {
         {/* <div className="m-auto">
           <h3 className="text-white text-xl">Choose weather</h3>
         </div> */}
-        <div className="overflow-hidden bg-inherit h-full">
-          <h3 className="absolute left-1/2 z-10">Choose weather</h3>
+        <div className="overflow-hidden bg-inherit h-full relative">
+          <div className="absolute flex justify-center z-10 w-full">
+            <h3>Choose weather</h3>
+          </div>
           <WeatherCarousell setWeather={setWeather} />
         </div>
       </div>
       <div className="h-full p-10">
         <section id="form" className="h-full">
           <div
-            className="z-10 border-2 rounded-xl h-full shadow-xl"
+            className="z-10 border-2 rounded-xl h-full shadow-2xl"
             style={{
               backgroundColor: theme.lightGrey,
               borderColor: theme.white,

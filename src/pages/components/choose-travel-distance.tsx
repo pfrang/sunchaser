@@ -10,8 +10,8 @@ export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
   }, [value]);
 
   return (
-    <section id="distance_traveling">
-      <div className="w-[300px]">
+    <section id="distance_traveling" className="w-full">
+      <div className="w-full">
         <div className="flex justify-between">
           <label>Distance?</label>
           <span>{`${setUIOnNumber(value)} km`}</span>
