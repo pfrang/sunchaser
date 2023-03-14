@@ -16,8 +16,8 @@ CountryBoundary={
 }
 }
 
-#Same routine as coordinate generator. We use endpoints and tell how many steps should be between the endpoints. 
-#The split will be the same for lat and lon. This inaccurate, as a country can be longer or wider. Higher accuracy should reflect this.
+#Same routine as coordinate generator. We use endpoints and tell how many steps should be between two endpoints. 
+#The split will be the same for lat and lon. This is inaccurate, as a country can be longer or wider. Higher accuracy improvements must reflect this.
 def MeshGrid(squares,country="Norway"):
     High_lat=CountryBoundary[country]["High_lat"]
     Low_lat=CountryBoundary[country]["Low_lat"]
@@ -53,6 +53,7 @@ def TestMeshGrid(inputVar):
             e
     return result                
 
+#search method for narrowing down "goal seak". Start by two end-values and use the average value. Thereafter reduce the space between the two - until wanted result is obtained.
 def BinaryApproximation(LowStart,HighStart,Target):
     inputvar=int(math.sqrt((HighStart+LowStart)*0.5))
     
@@ -60,7 +61,7 @@ def BinaryApproximation(LowStart,HighStart,Target):
     TestValue=len(ResultMesh)
     
     i=0
-    while abs(TestValue-Target)>(Target*0.01) and i<50: #running until we hit target by less than 1% from wanted goal, or until no valid result was found (i=50)
+    while abs(TestValue-Target)>(Target*0.01) and i<50: #running until we hit target by less than 1% from wanted goal, or until no valid result is found (i=50)
     
         if TestValue>Target:
             HighStart=inputvar #if the return was to high, we lover the high value.
@@ -80,3 +81,5 @@ def BinaryApproximation(LowStart,HighStart,Target):
 TargetPoints=5000 
 d = BinaryApproximation(TargetPoints,TargetPoints*10,TargetPoints)
 d.to_csv('mesh.csv')
+
+#Remember to update polygon with more points. 

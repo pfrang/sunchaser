@@ -45,3 +45,6 @@ class APISOURCE:
                 baseUrl+= f'{i}={api_keys[i]}&'
 
         return baseUrl
+
+    def getSunRise():
+        return 'https://api.met.no/weatherapi/sunrise/2.0/.json'
