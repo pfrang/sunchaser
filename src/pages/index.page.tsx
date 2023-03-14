@@ -13,8 +13,8 @@ const ThreeGridHorizontalContainer = styled.div`
   display: grid;
   grid-template-rows: 2fr 3fr;
   height: 100%;
+  width: 100%;
   /* border-radius: 100px; */
-  position: relative;
   overflow: hidden;
   background-color: ${theme.grey};
   /* z-index: -1; */

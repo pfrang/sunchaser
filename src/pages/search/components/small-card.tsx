@@ -36,8 +36,8 @@ export const SmallCard = ({ highlightedCard, item }: SmallCardProps) => {
 
   return (
     <div
-      onMouseOver={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      // onMouseOver={() => setIsHovering(true)}
+      // onMouseLeave={() => setIsHovering(false)}
       className={`${
         shouldChangeColor
           ? "transition delay-150 duration-200 ease-in-out bg-slate-700 text-white"

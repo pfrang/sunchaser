@@ -60,6 +60,7 @@ export const Carousell = ({
           enabled: true,
           onlyInViewport: false,
         }}
+        mousewheel
         direction="vertical"
         slidesPerView="auto"
         // spaceBetween={30}
@@ -71,9 +72,10 @@ export const Carousell = ({
           hide: !showScrollbar,
         }}
         style={{
-          height: "100%",
+          height: "500px",
           width: "100%",
         }}
+        allowTouchMove
         // onClick={(e) => {
         //   console.log(e.el);
         // }}

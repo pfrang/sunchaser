@@ -1,3 +1,13 @@
-Add multiple flags in result map. Makes the user be more aware of distnace between locations. 
+Add multiple flags in result map. Makes the user be more aware of distnace between locations.
 
 Clean python scripts with subfolders
+
+Adjust BE/Python to only accept distance + date on initial request.
+
+Design
+
+DataBase scheduled yr data fetching
+
+Additional weather data (sun rise, sunset etc)
+
+Stedsnavn (hente fra Google en gang og legge i master tabell i SQL)

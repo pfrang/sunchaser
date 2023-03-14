@@ -17,6 +17,7 @@ import { Carousell } from "./components/carousell";
 // import required modules
 
 const Wrapper = styled.div`
+  height: 100%;
   padding-left: 30px;
   padding-right: 30px;
   @media screen and (min-width: 480px) {
@@ -28,6 +29,7 @@ const Wrapper = styled.div`
     padding-left: 50px;
     padding-right: 50px;
   }
+  margin-bottom: 50px;
 `;
 
 const TwoGridColumn = styled.div`
