@@ -10,7 +10,6 @@ import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
-import { MainCard } from "./components/main-card";
 import { MapBoxHelper } from "./mapbox-settings";
 import { Carousell } from "./components/carousell";
 
@@ -30,12 +29,6 @@ const Wrapper = styled.div`
     padding-right: 50px;
   }
   margin-bottom: 50px;
-`;
-
-const TwoGridColumn = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  height: 100%;
 `;
 
 const TwoGridRow = styled.div`
@@ -133,16 +126,11 @@ export default function Search({ params, mapBoxkey }) {
           <SearchLoader />
         ) : (
           <section id="section-carousell" className="h-full">
-            <TwoGridColumn>
-              <div>
-                <MainCard key={"firstItem"} {...highlightedCard} />
-              </div>
-              <Carousell
-                items={items}
-                setZoomAndHighlightCard={setZoomAndHighlightCard}
-                highlightedCard={highlightedCard}
-              />
-            </TwoGridColumn>
+            <Carousell
+              items={items}
+              setZoomAndHighlightCard={setZoomAndHighlightCard}
+              highlightedCard={highlightedCard}
+            />
           </section>
         )}
       </TwoGridRow>

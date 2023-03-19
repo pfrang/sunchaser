@@ -5,6 +5,7 @@ import {
   Scrollbar,
   Mousewheel,
   Keyboard,
+  FreeMode,
 } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -13,8 +14,10 @@ import "swiper/css/bundle";
 import { useEffect, useState } from "react";
 
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 
-import { SmallCard } from "./small-card";
+import { Card } from "./card";
+import { HighlightedCard } from "./highlighted-card";
 
 // SwiperCore.use([Keyboard, Mousewheel]);
 
@@ -32,10 +35,9 @@ export const Carousell = ({
   setZoomAndHighlightCard,
   highlightedCard,
 }: CarousellProps) => {
-  const [showScrollbar, setShowScrollbar] = useState(false);
-
+  const [isHighlighted, setIsHighlighted] = useState();
   return (
-    <div>
+    <div style={{ height: "100%", width: "100%" }}>
       <Swiper
         // breakpoints={{
         //   480: {
@@ -51,7 +53,7 @@ export const Carousell = ({
         // }}
         id="swiper-container"
         autoHeight
-        freeMode={true}
+        freeMode={{ enabled: true, momentum: false }}
         // mousewheel={{
         //   sensitivity: 10,
 
@@ -65,15 +67,12 @@ export const Carousell = ({
         slidesPerView="auto"
         // spaceBetween={30}
         // pagination={{ clickable: true }}
+        style={{ height: "100%" }}
         scrollbar={{
           enabled: true,
           draggable: true,
           dragSize: 98,
-          hide: !showScrollbar,
-        }}
-        style={{
-          height: "500px",
-          width: "100%",
+          hide: false,
         }}
         allowTouchMove
         // onClick={(e) => {
@@ -86,15 +85,21 @@ export const Carousell = ({
         //   clickable: true,
         // }}
         // navigation={true}
-        modules={[Navigation, Scrollbar, Mousewheel, Keyboard]}
+        modules={[Navigation, Scrollbar, Mousewheel, Keyboard, FreeMode]}
       >
         {items.map((item, idx) => {
+          const isHighlighted = item === highlightedCard;
+          const icon =
+            WeatherIconList[
+              item.times[0].symbol.charAt(0).toUpperCase() +
+                item.times[0].symbol.slice(1)
+            ];
           return (
             <SwiperSlide
-              key={`card ${idx}`}
+              key={`card-${idx}`}
               onClick={() => setZoomAndHighlightCard(item, true)}
             >
-              {<SmallCard highlightedCard={highlightedCard} item={item} />}
+              {<Card isHighlighted={isHighlighted} index={idx} item={item} />}
             </SwiperSlide>
           );
         })}

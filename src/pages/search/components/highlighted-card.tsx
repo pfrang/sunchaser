@@ -35,7 +35,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export const MainCard = ({ date, location, times, ...props }: CardProps) => {
+export const HighlightedCard = ({ date, times, location }: CardProps) => {
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -49,26 +49,10 @@ export const MainCard = ({ date, location, times, ...props }: CardProps) => {
     WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
 
   return (
-    <Wrapper>
-      <div className="relative text-sm h-[150px] tablet:h-[150px] phone:h-[150px]">
-        <Grid3>
-          <div className="text-md tablet:text-xl flex flex-col">
-            <img src={`/icons/black/svg/${icon}`} />
-            <p>{modifiedDate}</p>
-          </div>
-          <div className="flex flex-col justify-between">
-            <div className="m-auto">
-              <h2 className="text-md tablet:text-xl">{location}</h2>
-            </div>
-            <p className="m-t-auto">Google maps</p>
-          </div>
-          <div className="text-md tablet:text-xl flex flex-col gap-2">
-            <div>{`${temperature}°`}</div>
-            <div>{wind}</div>
-            <div className="text-md tablet:text-xl">{time}</div>
-          </div>
-        </Grid3>
-      </div>
-    </Wrapper>
+    <div
+      className={`flex w-full h-full justify-center items-center  h-[500px]`}
+    >
+      <h1 className="text-5xl">{location}</h1>
+    </div>
   );
 };

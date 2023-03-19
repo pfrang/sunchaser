@@ -4,6 +4,8 @@ import Head from "next/head";
 import styled from "styled-components";
 import { useEffect } from "react";
 
+import { Spacer } from "../ui-kit/spacer/spacer";
+
 const Wrapper = styled.div`
   height: 100vh;
   height: calc(var(--vh, 1vh) * 100);
@@ -26,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         {/* <HeaderComponent /> */}
         <Component {...pageProps} />
         {/* <Spacer line vertical={64} /> */}
+        <Spacer vertical={64} />
       </Wrapper>
     </>
   );
