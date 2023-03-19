@@ -11,3 +11,5 @@ DataBase scheduled yr data fetching
 Additional weather data (sun rise, sunset etc)
 
 Stedsnavn (hente fra Google en gang og legge i master tabell i SQL)
+
+Update polygon - OK

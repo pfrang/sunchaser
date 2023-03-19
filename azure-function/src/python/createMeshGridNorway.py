@@ -43,6 +43,7 @@ def TestMeshGrid(inputVar):
     
     #Testing if points generated are within Norway
     result=[]
+    
     for index, row in meshTest.iterrows():
         try:
 
@@ -56,30 +57,31 @@ def TestMeshGrid(inputVar):
 #search method for narrowing down "goal seak". Start by two end-values and use the average value. Thereafter reduce the space between the two - until wanted result is obtained.
 def BinaryApproximation(LowStart,HighStart,Target):
     inputvar=int(math.sqrt((HighStart+LowStart)*0.5))
-    
     ResultMesh=TestMeshGrid(inputvar)
     TestValue=len(ResultMesh)
     
+    
+
     i=0
     while abs(TestValue-Target)>(Target*0.01) and i<50: #running until we hit target by less than 1% from wanted goal, or until no valid result is found (i=50)
-    
+        
         if TestValue>Target:
-            HighStart=inputvar #if the return was to high, we lover the high value.
+            HighStart=inputvar**2 #if the return was to high, we lover the high value.
         
         elif TestValue<Target:
-            LowStart=inputvar #if the return was to low, we increase the lower value.
+            LowStart=inputvar**2 #if the return was to low, we increase the lower value.
         
         inputvar=int(math.sqrt((HighStart+LowStart)*0.5)) #inputvar reflects the number of squares to test for. But when creating the mesh-grid, the input will return the power of 2 results, therefor we need to take sqrt.
 
         ResultMesh=TestMeshGrid(inputvar)
         TestValue=len(ResultMesh) #Testing the number of points from the mesh-grid that was inside the polygon.
-
+        print("Low: "+str(LowStart) +", High: "+str(HighStart) + ", Target: " + str(TestValue))
         i=i+1
     df=pd.DataFrame(ResultMesh,columns=['lat','lon'])
+    
     return df
 
-TargetPoints=5000 
+TargetPoints=20000
 d = BinaryApproximation(TargetPoints,TargetPoints*10,TargetPoints)
 d.to_csv('mesh.csv')
 
-#Remember to update polygon with more points. 
