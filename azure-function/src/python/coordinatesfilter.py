@@ -4383,5 +4383,8 @@ class ValidCoordinate:
 
         if not polygon.contains(point):
             raise Exception("Startpoint is outside map")
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 97f95473efa57d84971fbd1fd95e644079bd322d
