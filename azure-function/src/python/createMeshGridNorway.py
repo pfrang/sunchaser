@@ -32,7 +32,7 @@ def MeshGrid(squares,country="Norway"):
     transposedMatrix = np.array(lonlatMerge).transpose()
     transposedMatrix=transposedMatrix.reshape(-1, *transposedMatrix.shape[-1:]) # flatten all but the last one dimension - last -1. the first is the shape(?):
     df_transposedMatrix = pd.DataFrame(transposedMatrix, columns = ['lat','lon'])
-
+    
     return df_transposedMatrix.round(2).drop_duplicates(keep='last') #reducing the decimals to two, and removing duplicates. when dropping the 3.dec each point can not be closer than 1000m. 
 
 def TestMeshGrid(inputVar):
@@ -79,9 +79,11 @@ def BinaryApproximation(LowStart,HighStart,Target):
         i=i+1
     df=pd.DataFrame(ResultMesh,columns=['lat','lon'])
     
+    
     return df
 
 TargetPoints=20000
 d = BinaryApproximation(TargetPoints,TargetPoints*10,TargetPoints)
-d.to_csv('mesh.csv')
+d['country']="Norway"
+d.to_csv('mesh.csv',index=False)
 
