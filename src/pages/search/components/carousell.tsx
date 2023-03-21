@@ -1,4 +1,4 @@
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import {
   Pagination,
   Navigation,
@@ -11,10 +11,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
-import { useEffect, useState } from "react";
 
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
+import { theme } from "../../../ui-kit/theme/theme";
 
 import { Card } from "./card";
 import { HighlightedCard } from "./highlighted-card";
@@ -35,10 +35,12 @@ export const Carousell = ({
   setZoomAndHighlightCard,
   highlightedCard,
 }: CarousellProps) => {
-  const [isHighlighted, setIsHighlighted] = useState();
   return (
-    <div style={{ height: "100%", width: "100%" }}>
+    <div
+      style={{ height: "100%", width: "100%", backgroundColor: theme.white }}
+    >
       <Swiper
+        // onSwiper={(swiper) => (swiperRef.current = swiper)}
         // breakpoints={{
         //   480: {
         //     width: 480,
@@ -89,17 +91,16 @@ export const Carousell = ({
       >
         {items.map((item, idx) => {
           const isHighlighted = item === highlightedCard;
-          const icon =
-            WeatherIconList[
-              item.times[0].symbol.charAt(0).toUpperCase() +
-                item.times[0].symbol.slice(1)
-            ];
           return (
-            <SwiperSlide
-              key={`card-${idx}`}
-              onClick={() => setZoomAndHighlightCard(item, true)}
-            >
-              {<Card isHighlighted={isHighlighted} index={idx} item={item} />}
+            <SwiperSlide key={`card-${idx}`}>
+              {
+                <Card
+                  isHighlighted={isHighlighted}
+                  setZoomAndHighlightCard={setZoomAndHighlightCard}
+                  index={idx}
+                  item={item}
+                />
+              }
             </SwiperSlide>
           );
         })}

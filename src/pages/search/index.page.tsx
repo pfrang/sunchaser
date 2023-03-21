@@ -72,7 +72,7 @@ export default function Search({ params, mapBoxkey }) {
       const topRankCard = data.items.ranks[0];
       const userLocation = data.items.userLocation[0];
       setItems([...data.items.ranks, userLocation]);
-      setHighlightedCard(topRankCard);
+      // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
       setUserLocation(userLocation);
 
       const longitudes = data.items.ranks.map((item) => item.longitude);
@@ -109,6 +109,10 @@ export default function Search({ params, mapBoxkey }) {
     item: AzureFunctionCoordinatesMappedItems,
     zoom?: boolean
   ) => {
+    if (item === highlightedCard) {
+      setHighlightedCard(undefined);
+      return;
+    }
     setHighlightedCard(item);
     setZoom(zoom);
   };

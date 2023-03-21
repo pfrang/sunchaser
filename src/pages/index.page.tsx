@@ -1,22 +1,19 @@
 import type { NextPage } from "next";
-import Image from "next/image";
-import { createContext, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
-import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme/theme";
 
 import SearchCriterias from "./components/search-criterias";
 import { WeatherCarousell } from "./components/weather-carousell";
 
-const ThreeGridHorizontalContainer = styled.div`
+const TwoGridHorizontalContainer = styled.div`
   display: grid;
   grid-template-rows: 2fr 3fr;
   height: 100%;
   width: 100%;
   /* border-radius: 100px; */
-  overflow: hidden;
-  background-color: ${theme.grey};
+  /* overflow: hidden; */
   /* z-index: -1; */
 `;
 
@@ -35,7 +32,7 @@ const Home: NextPage = () => {
   };
 
   return (
-    <ThreeGridHorizontalContainer>
+    <TwoGridHorizontalContainer>
       <div
         className="grid"
         // style={{ backgroundColor: getColor(weather) }}
@@ -50,7 +47,7 @@ const Home: NextPage = () => {
           <WeatherCarousell setWeather={setWeather} />
         </div>
       </div>
-      <div className="h-full p-10">
+      <div className="p-10">
         <section id="form" className="h-full">
           <div
             className="z-10 border-2 rounded-xl h-full shadow-2xl"
@@ -63,7 +60,7 @@ const Home: NextPage = () => {
           </div>
         </section>
       </div>
-    </ThreeGridHorizontalContainer>
+    </TwoGridHorizontalContainer>
   );
 };
 

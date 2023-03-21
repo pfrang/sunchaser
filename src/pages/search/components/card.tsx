@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { useSwiper } from "swiper/react";
 
+import { Angel } from "../../../ui-kit/angel/angel";
+import { Arrow } from "../../../ui-kit/arrow/arrow";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
@@ -9,10 +12,28 @@ interface SmallCardProps {
   isHighlighted: boolean;
   item: AzureFunctionCoordinatesMappedItems;
   index: number;
+  setZoomAndHighlightCard: (
+    item: AzureFunctionCoordinatesMappedItems,
+    bool: boolean
+  ) => void;
 }
 
-export const Card = ({ isHighlighted, index, item }: SmallCardProps) => {
+export const Card = ({
+  isHighlighted,
+  index,
+  item,
+  setZoomAndHighlightCard,
+}: SmallCardProps) => {
   const { date, location, times } = item;
+
+  const swiper = useSwiper();
+
+  //TODO handle de-highlighting on same item does not slide to the card
+
+  const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
+    swiper.slideTo(index, 500);
+    setZoomAndHighlightCard(item, true);
+  };
 
   const modifiedDate =
     date &&
@@ -29,24 +50,30 @@ export const Card = ({ isHighlighted, index, item }: SmallCardProps) => {
   return (
     <div>
       <div
-        className={`p-2 rounded-md border-2 text-white transition-all duration-500 ease relative h-[200px]
+        onClick={() => onClick(item)}
+        className={`p-2 rounded-md border-2 text-white transition-all duration-500 ease relative h-[130px]
               ${
                 isHighlighted
                   ? "bg-slate-700 text-white"
                   : "bg-white text-black"
               } `}
       >
+        <div className="absolute right-[10px]">
+          {isHighlighted ? (
+            <Angel direction="down" />
+          ) : (
+            <Angel direction="left" />
+          )}
+        </div>
         <div className="absolute">
           <div className="">
             <h2 className="absolute left-2/5">{index + 1}</h2>
             <img
-              className="object-fit h-[50px] hover:transition delay-150 duration-200 ease-in-out"
               src={`/icons/${isHighlighted ? "white" : "black"}/svg/trophy.svg`}
             />
           </div>
           <div>
             <img
-              className="object-fit h-[50px] hover:transition delay-150 duration-200 ease-in-out"
               src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
             />
           </div>
@@ -57,7 +84,7 @@ export const Card = ({ isHighlighted, index, item }: SmallCardProps) => {
       </div>
       <div
         className={`flex w-full h-full justify-center items-center transition-all duration-500 ease ${
-          isHighlighted ? "h-[500px]" : "h-[0px]"
+          isHighlighted ? "h-[350px]" : "h-[0px]"
         }`}
       >
         {isHighlighted && <HighlightedCard {...item} />}
