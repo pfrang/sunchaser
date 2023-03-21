@@ -12,9 +12,6 @@ Additional weather data (sun rise, sunset etc)
 
 Stedsnavn (hente fra Google en gang og legge i master tabell i SQL)
 
-<<<<<<< HEAD
 Update polygon - OK
-=======
 
 carousell: Redajust mouse item (scrollTo y coordinate) on click
->>>>>>> 97f95473efa57d84971fbd1fd95e644079bd322d
