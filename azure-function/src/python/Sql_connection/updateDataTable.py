@@ -23,9 +23,8 @@ src = "API YR"
 
 # Insert data into Weather_data table
 cursor.execute('''
-    INSERT INTO Weather_data (lat, lon, date, time, weather_symbol_id_fk, temperature, wind, score, src) 
+    INSERT INTO coordinates_locationdata (lat, lon, date, time, weather_symbol_id_fk, temperature, wind, score, src) 
     VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)
 ''', (lat, lon, date, time, weather_symbol_id_fk, temperature, wind, score, src))
 
 conn.commit()
-

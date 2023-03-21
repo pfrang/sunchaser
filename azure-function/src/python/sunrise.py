@@ -2,7 +2,7 @@ from src.python.api_client import APISOURCE
 import requests
 import json
 import pandas as pd
-
+from datetime import datetime
 lat='59.93'
 lon='10.72'
 date='2023-03-14'
@@ -18,11 +18,12 @@ def getSunrise(lat,lon,date,offset='+01:00',days=9):
     sunriseDate=[]
     sunsetDate=[]
 
+    date_format="%Y-%m-%dT%H:%M:%S"
 
     for i in response_json:
         if "sunset" in i:
-            sunriseDate.append(str(i["sunrise"]["time"]).split("+")[0])
-            sunsetDate.append(str(i["sunset"]["time"]).split("+")[0])
+            sunriseDate.append(datetime.strptime(str(i["sunrise"]["time"]).split("+")[0],date_format))
+            sunsetDate.append(datetime.strptime(str(i["sunset"]["time"]).split("+")[0],date_format))
 
 
 
