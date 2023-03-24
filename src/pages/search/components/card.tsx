@@ -3,6 +3,8 @@ import { useSwiper } from "swiper/react";
 
 import { Angel } from "../../../ui-kit/angel/angel";
 import { Arrow } from "../../../ui-kit/arrow/arrow";
+import { Flex } from "../../../ui-kit/components/flex";
+import { theme } from "../../../ui-kit/theme/theme";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
@@ -30,9 +32,12 @@ export const Card = ({
 
   //TODO handle de-highlighting on same item does not slide to the card
 
-  const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
-    swiper.slideTo(index, 500);
+  const onClick = async (item: AzureFunctionCoordinatesMappedItems) => {
     setZoomAndHighlightCard(item, true);
+    setTimeout(() => {
+      swiper.update();
+      swiper.slideTo(index);
+    }, 500);
   };
 
   const modifiedDate =
@@ -49,7 +54,7 @@ export const Card = ({
 
   return (
     <div>
-      <div
+      {/* <div
         onClick={() => onClick(item)}
         className={`p-2 rounded-md border-2 text-white transition-all duration-500 ease relative h-[130px]
               ${
@@ -57,6 +62,19 @@ export const Card = ({
                   ? "bg-slate-700 text-white"
                   : "bg-white text-black"
               } `}
+      > */}
+      <Flex
+        onClick={() => onClick(item)}
+        flexDirection={"column"}
+        padding={[4, 5]}
+        // border={"2px solid black"}
+        height={["110px", "150px"]}
+        borderBottomWidth={"2px"}
+        borderWidth={2}
+        color={`${isHighlighted ? "white" : "black"}`}
+        backgroundColor={`${
+          isHighlighted ? `${theme.colors.black[3]}` : `${theme.color.white}`
+        }`}
       >
         <div className="absolute right-[10px]">
           {isHighlighted ? (
@@ -81,14 +99,19 @@ export const Card = ({
         <div className="flex justify-center items-center h-full">
           <h1 className="text-2xl">{item.location}</h1>
         </div>
-      </div>
-      <div
+      </Flex>
+      {/* </div> */}
+      {/* <div
         className={`flex w-full h-full justify-center items-center transition-all duration-500 ease ${
           isHighlighted ? "h-[350px]" : "h-[0px]"
         }`}
-      >
+      > */}
+      {/* <Flex height={`${isHighlighted ? ["400px", "100px"] : "0px"}`}> */}
+      <Flex height={isHighlighted ? ["150px", "300px"] : "0px"}>
+        {/* <Flex height={["200px", "100px"]}> */}
         {isHighlighted && <HighlightedCard {...item} />}
-      </div>
+      </Flex>
+      {/* </div> */}
     </div>
   );
 };

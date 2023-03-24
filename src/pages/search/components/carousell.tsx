@@ -1,4 +1,4 @@
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import {
   Pagination,
   Navigation,
@@ -15,6 +15,7 @@ import "swiper/css/bundle";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { theme } from "../../../ui-kit/theme/theme";
+import { Flex } from "../../../ui-kit/components/flex";
 
 import { Card } from "./card";
 import { HighlightedCard } from "./highlighted-card";
@@ -36,9 +37,7 @@ export const Carousell = ({
   highlightedCard,
 }: CarousellProps) => {
   return (
-    <div
-      style={{ height: "100%", width: "100%", backgroundColor: theme.white }}
-    >
+    <Flex height={"100%"}>
       <Swiper
         // onSwiper={(swiper) => (swiperRef.current = swiper)}
         // breakpoints={{
@@ -69,7 +68,7 @@ export const Carousell = ({
         slidesPerView="auto"
         // spaceBetween={30}
         // pagination={{ clickable: true }}
-        style={{ height: "100%" }}
+        style={{ width: "100%" }}
         scrollbar={{
           enabled: true,
           draggable: true,
@@ -105,6 +104,6 @@ export const Carousell = ({
           );
         })}
       </Swiper>
-    </div>
+    </Flex>
   );
 };

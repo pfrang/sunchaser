@@ -11,8 +11,9 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 const ThreeHorizontalGrid = styled.div`
   display: grid;
   grid-template-rows: auto 1fr auto;
-  height: 100%;
+
   width: 100%;
+  background-color: white;
 `;
 
 export const HighlightedCard = ({

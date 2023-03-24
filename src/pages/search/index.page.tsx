@@ -9,27 +9,10 @@ import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/map
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Flex } from "../../ui-kit/components/flex/flex";
 
 import { MapBoxHelper } from "./mapbox-settings";
 import { Carousell } from "./components/carousell";
-
-// import required modules
-
-const Wrapper = styled.div`
-  height: 100%;
-  padding-left: 30px;
-  padding-right: 30px;
-  @media screen and (min-width: 480px) {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-
-  @media screen and (min-width: 800px) {
-    padding-left: 50px;
-    padding-right: 50px;
-  }
-  margin-bottom: 50px;
-`;
 
 const TwoGridRow = styled.div`
   display: grid;
@@ -118,7 +101,7 @@ export default function Search({ params, mapBoxkey }) {
   };
 
   return (
-    <Wrapper>
+    <Flex height={"100%"} paddingX={["40px", "50px"]}>
       <TwoGridRow>
         <section id="section-map">
           <Spacer vertical={16} />
@@ -138,7 +121,7 @@ export default function Search({ params, mapBoxkey }) {
           </section>
         )}
       </TwoGridRow>
-    </Wrapper>
+    </Flex>
   );
 }
 

@@ -9,8 +9,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@styled-system/css": "^5.1.5",
     "@types/react-calendar": "^3.5.2",
     "@types/styled-components": "^5.1.26",
+    "@types/styled-system": "^5.1.16",
+    "@types/styled-system__css": "^5.0.17",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "axios": "^0.27.2",

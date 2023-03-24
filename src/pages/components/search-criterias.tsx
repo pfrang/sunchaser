@@ -8,8 +8,6 @@ import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { formatDate } from "../utils/convert-date";
 
-import WhereAreYou from "./where-are-you";
-import ChooseTransportationMethod from "./choose-transportation-method";
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { ChooseCalendarValue } from "./choose-calendar-value";
 

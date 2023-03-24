@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
 
+import { Flex } from "../ui-kit/components/flex";
 import { theme } from "../ui-kit/theme/theme";
 
 import SearchCriterias from "./components/search-criterias";
@@ -23,11 +24,11 @@ const Home: NextPage = () => {
   const getColor = (weather: string) => {
     switch (weather) {
       case "sun":
-        return theme.yellow;
+        return theme.color.yellow;
       case "snow":
-        return theme.lightGrey;
+        return theme.color.grey[1];
       default:
-        return theme.darkBlue;
+        return theme.colors.black;
     }
   };
 
@@ -52,8 +53,8 @@ const Home: NextPage = () => {
           <div
             className="z-10 border-2 rounded-xl h-full shadow-2xl"
             style={{
-              backgroundColor: theme.lightGrey,
-              borderColor: theme.white,
+              backgroundColor: theme.colors.whiteSmoke,
+              borderColor: theme.color.white,
             }}
           >
             <SearchCriterias />

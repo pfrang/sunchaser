@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { useEffect } from "react";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   display: flex;
   flex-direction: column;
-  background-color: ${theme.grey};
+  background-color: ${theme.color.grey[3]};
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   //     document.documentElement.style.setProperty("--vh", `${vh}px`);
   //   });
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Head>
         <title>Sunchaser</title>
       </Head>
@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         {/* <Spacer line vertical={64} /> */}
         <Spacer vertical={64} />
       </Wrapper>
-    </>
+    </ThemeProvider>
   );
 }
 
