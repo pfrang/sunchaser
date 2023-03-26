@@ -40,5 +40,7 @@ def getWeather(lat,lon,travelDate):
         'symbol':weatherSymbol,
         'temperature': weatherTemperature,
         'wind': weatherWind,
+        'src': "yr api",
     })
     return weatherDataDataFrame
+
