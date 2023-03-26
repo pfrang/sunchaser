@@ -26,7 +26,8 @@ export interface FlexProps
 }
 
 export const Flex = ({ gap = 0, children, as, ...props }: FlexProps) => {
-  const wrapperProps: Record<string, unknown> = props;
+  //SHOULD BE Record<string, uknown> = props
+  const wrapperProps: Record<any, any> = props;
   return (
     <s.Wrapper as={as} gap={gap} {...wrapperProps}>
       {children}
