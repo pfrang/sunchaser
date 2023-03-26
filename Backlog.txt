@@ -15,3 +15,6 @@ Stedsnavn (hente fra Google en gang og legge i master tabell i SQL)
 Update polygon - OK
 
 carousell: Redajust mouse item (scrollTo y coordinate) on click
+
+
+add rank variables to sql (temp, wind, symbol)

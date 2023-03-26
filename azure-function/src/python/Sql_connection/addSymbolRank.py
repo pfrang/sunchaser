@@ -3,8 +3,11 @@ import pyodbc
 server = 'sunchaser.database.windows.net'
 database = 'sunchaser'
 username = 'sunchaser_admin'
-password = 'Sommerogsol2023'
+password = 'Sommerogsol2023'   
 driver= '{ODBC Driver 17 for SQL Server}'
+
+conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
+cursor = conn.cursor()
 
 #Table with all weathertypes, rank etc.
 WeatherSymbolTable={
@@ -381,28 +384,9 @@ WeatherSymbolTable={
 }
 }
 
-conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
-cursor = conn.cursor()
-
-# Check if table exists
-cursor.execute(f"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'Rank_data'")
-
-if cursor.fetchone()[0]:
-    cursor.execute('''
-		DROP TABLE Rank_data
-		''')
-    conn.commit()
-
-#Create table in sql
 cursor.execute('''
-		CREATE TABLE Rank_data (
-            weather_symbol_id int Primary Key,
-            desc_en VARCHAR(100),
-            desc_nb VARCHAR(100),
-            raw_name VARCHAR(200),
-            created_at DATETIME2 DEFAULT SYSDATETIME(),
-			)
-		''')
+        Delete from symbol_rank
+    ''')
 conn.commit()
 
 #Populate table with data
@@ -410,10 +394,9 @@ for i in WeatherSymbolTable:
 
     # Insert data into Weather_data table
     cursor.execute('''
-        INSERT INTO Rank_data (weather_symbol_id,desc_en,desc_nb, raw_name)
+        INSERT INTO symbol_rank (symbol,desc_en,desc_no, rank_value)
         VALUES (?,?,?,?)
-    ''', (int(WeatherSymbolTable[i]["RANK"]),WeatherSymbolTable[i]["desc_en"],WeatherSymbolTable[i]["desc_nb"], i))
-
+    ''', (i,WeatherSymbolTable[i]["desc_en"],WeatherSymbolTable[i]["desc_nb"],float(WeatherSymbolTable[i]["RANK"])))
     conn.commit()
 
 # Close cursor and connection
