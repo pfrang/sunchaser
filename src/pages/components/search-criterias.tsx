@@ -10,6 +10,7 @@ import { formatDate } from "../utils/convert-date";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { ChooseCalendarValue } from "./choose-calendar-value";
+import { destructureMyPosition } from "./get-user-location";
 
 const Button = styled.button`
   background-color: #1215fd;
@@ -25,7 +26,7 @@ const Button = styled.button`
   }
 `;
 
-const FormStyle = styled.div`
+const FormStyle = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -35,16 +36,12 @@ const FormStyle = styled.div`
 `;
 
 export default function SearchCriterias() {
-  const [townSearch, setTownSearch] = useState("");
-  const [townId, setTownId] = useState("");
   const [highlightedTransport, setHighlightedTransport] = useState("");
   const [unfilledHighlightedTransport, setUnfilledHighlightedTransport] =
     useState(false);
 
   const [unfilledCalendar, setUnfilledCalendar] = useState(false);
-
-  const [isLocationChosen, setLocationChosen] = useState(false);
-  const [userGeoLocation, setUserGeoLocation] = useState("");
+  // const [userGeoLocation, setUserGeoLocation] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
@@ -54,53 +51,69 @@ export default function SearchCriterias() {
 
   const router = useRouter();
 
-  const checkIfTransportAndCalendarValuesAreFilled = () => {
-    const check = { transport: "check", calendarValue: "check" };
+  // const checkIfTransportAndCalendarValuesAreFilled = () => {
+  //   const check = { transport: "check", calendarValue: "check" };
 
-    if (!highlightedTransport) {
-      setUnfilledHighlightedTransport(true);
-      check.transport = "";
+  //   if (!highlightedTransport) {
+  //     setUnfilledHighlightedTransport(true);
+  //     check.transport = "";
+  //   }
+
+  //   if (!selectedDate) {
+  //     setUnfilledCalendar(true);
+  //     check.calendarValue = "";
+  //   }
+
+  //   return check;
+  // };
+
+  // const fetchTownDetails = async () => {
+  //   const town = await axios
+  //     .get(`${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`)
+  //     .then((response) => response.data)
+  //     .catch((e) => console.error(e));
+  //   return {
+  //     latitude: town.response.latitude,
+  //     longitude: town.response.longitude,
+  //   };
+  // };
+
+  const getCurrentPos = () => {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    function success(pos) {
+      const crd = pos.coords;
+      const str = `lat=${crd.latitude}&lon=${crd.longitude}`;
+      sendData(str);
     }
 
-    if (!selectedDate) {
-      setUnfilledCalendar(true);
-      check.calendarValue = "";
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+      alert("Error in fetching your user location");
     }
 
-    return check;
-  };
-
-  const fetchTownDetails = async () => {
-    const town = await axios
-      .get(`${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`)
-      .then((response) => response.data)
-      .catch((e) => console.error(e));
-    return {
-      latitude: town.response.latitude,
-      longitude: town.response.longitude,
-    };
-  };
-
-  const destructureMyPosition = () => {
-    return {
-      latitude: userGeoLocation.split("&")[0].split("=")[1],
-      longitude: userGeoLocation.split("&")[1].split("=")[1],
-    };
+    navigator.geolocation.getCurrentPosition(success, error, options);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setUnfilledHighlightedTransport(false);
 
-    const check = checkIfTransportAndCalendarValuesAreFilled();
+    // setUnfilledHighlightedTransport(false);
+    // const check = checkIfTransportAndCalendarValuesAreFilled();
 
-    if (check.calendarValue === "" || check.transport === "") return;
+    // if (check.calendarValue === "" || check.transport === "") return;
 
-    if (!isLocationChosen) return;
+    // if (!isLocationChosen) return;
 
-    const { latitude, longitude } = userGeoLocation
-      ? destructureMyPosition()
-      : await fetchTownDetails();
+    const posi = getCurrentPos();
+  };
+
+  const sendData = (str: string) => {
+    const { longitude, latitude } = destructureMyPosition(str);
 
     const params = {
       lon: longitude,
@@ -145,11 +158,9 @@ export default function SearchCriterias() {
         {travelItems}
       </ChooseTransportationMethod> */}
       <Spacer vertical={1} />
-      <section className="submit">
-        <div className="flex justify-center">
-          <Button>Find the sun</Button>
-        </div>
-      </section>
+      <div className="flex justify-center">
+        <Button>Find the sun</Button>
+      </div>
     </FormStyle>
   );
 }

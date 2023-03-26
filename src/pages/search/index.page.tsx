@@ -61,9 +61,18 @@ export default function Search({ params, mapBoxkey }) {
       const longitudes = data.items.ranks.map((item) => item.longitude);
       const latitudes = data.items.ranks.map((item) => item.latitude);
 
-      let map = new MapBoxHelper(longitudes, latitudes).setMarkers();
+      let map = new MapBoxHelper(
+        longitudes,
+        latitudes,
+        userLocation.longitude,
+        userLocation.latitude
+      ).setMarkers();
+
       map.addControl(new mapboxgl.NavigationControl());
-      map.on("load", () => map.resize());
+
+      map.on("load", () => {
+        map.resize();
+      });
       setMap(map);
     }
   }, [data]);
@@ -75,14 +84,66 @@ export default function Search({ params, mapBoxkey }) {
         lon: highlightedCard.longitude,
       };
 
-      mapObject.flyTo({
-        center: [lon, lat],
-        zoom: 15,
-        speed: 1,
-        curve: 1,
-        duration: 2000,
-        easing(t) {
-          return t;
+      // mapObject.flyTo({
+      //   center: [lon, lat],
+      //   zoom: 10,
+      //   speed: 1,
+      //   curve: 1,
+      //   duration: 2000,
+      //   easing(t) {
+      //     return t;
+      //   },
+      // });
+
+      const bounds = mapObject.fitBounds(
+        [
+          [userLocation.longitude, userLocation.latitude],
+          [lon, lat],
+        ],
+        { padding: 100, duration: 1000 }
+      );
+
+      if (mapObject.getLayer("route")) {
+        mapObject.removeLayer("route");
+      }
+
+      if (mapObject.getSource("route")) {
+        mapObject.removeSource("route");
+      }
+
+      mapObject.addLayer({
+        id: "route",
+        type: "line",
+        source: {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                geometry: {
+                  type: "LineString",
+                  coordinates: [
+                    [userLocation.longitude, userLocation.latitude],
+                    [lon, lat],
+                  ],
+                },
+                properties: {
+                  title: "Somethign",
+                },
+              },
+            ],
+          },
+        },
+        layout: {
+          "line-cap": "round",
+          "line-join": "round",
+        },
+        paint: {
+          "line-color": "#000",
+          "line-opacity": 0.8,
+          "line-width": 4,
+          "line-dasharray": [4, 2],
         },
       });
     }

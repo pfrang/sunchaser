@@ -11,7 +11,6 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 const ThreeHorizontalGrid = styled.div`
   display: grid;
   grid-template-rows: auto 1fr auto;
-
   width: 100%;
   background-color: white;
 `;
@@ -42,9 +41,8 @@ export const HighlightedCard = ({
           Google maps?
         </a>
       </div>
-      <div className="flex flex-col justify-center">
-        <h1 className="text-5xl">{location}</h1>
-      </div>
+      {/* <div className="flex flex-col justify-center">hei</div> */}
+      <div className="flex flex-col justify-center text-black">{location}</div>
       <Spacer line />
       <div className="flex justify-between px-4">
         <>

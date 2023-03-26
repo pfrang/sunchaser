@@ -14,7 +14,7 @@ export const TimeSeries = ({
     WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
 
   return (
-    <div className="">
+    <div className="text-black">
       <div>{time}</div>
       <img src={`/icons/black/svg/${icon}`} />
       <div>{temperature}</div>

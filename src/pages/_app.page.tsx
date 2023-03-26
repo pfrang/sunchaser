@@ -9,6 +9,10 @@ import { theme } from "../ui-kit/theme/theme";
 
 const Wrapper = styled.div`
   height: calc(var(--vh, 1vh) * 100);
+  /* min-height: 100vh; */
+  min-height: -moz-available;
+  min-height: -webkit-fill-available;
+  min-height: fill-available;
   display: flex;
   flex-direction: column;
   background-color: ${theme.color.grey[3]};
@@ -21,12 +25,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   }, []);
 
-  // typeof window !== "undefined" &&
-  //   window.addEventListener("resize", () => {
-  //     // We execute the same script as before
-  //     let vh = window.innerHeight * 0.01;
-  //     document.documentElement.style.setProperty("--vh", `${vh}px`);
-  //   });
   return (
     <ThemeProvider theme={theme}>
       <Head>
@@ -35,7 +33,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Wrapper>
         {/* <HeaderComponent /> */}
         <Component {...pageProps} />
-        {/* <Spacer line vertical={64} /> */}
         <Spacer vertical={64} />
       </Wrapper>
     </ThemeProvider>

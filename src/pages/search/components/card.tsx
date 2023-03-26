@@ -36,7 +36,8 @@ export const Card = ({
     setZoomAndHighlightCard(item, true);
     setTimeout(() => {
       swiper.update();
-      swiper.slideTo(index);
+      swiper.slideTo(index, 500);
+      window.scrollTo(0, 0);
     }, 500);
   };
 
@@ -54,15 +55,6 @@ export const Card = ({
 
   return (
     <div>
-      {/* <div
-        onClick={() => onClick(item)}
-        className={`p-2 rounded-md border-2 text-white transition-all duration-500 ease relative h-[130px]
-              ${
-                isHighlighted
-                  ? "bg-slate-700 text-white"
-                  : "bg-white text-black"
-              } `}
-      > */}
       <Flex
         onClick={() => onClick(item)}
         flexDirection={"column"}
@@ -100,18 +92,10 @@ export const Card = ({
           <h1 className="text-2xl">{item.location}</h1>
         </div>
       </Flex>
-      {/* </div> */}
-      {/* <div
-        className={`flex w-full h-full justify-center items-center transition-all duration-500 ease ${
-          isHighlighted ? "h-[350px]" : "h-[0px]"
-        }`}
-      > */}
-      {/* <Flex height={`${isHighlighted ? ["400px", "100px"] : "0px"}`}> */}
-      <Flex height={isHighlighted ? ["150px", "300px"] : "0px"}>
+      <Flex height={isHighlighted ? ["250px", "400px"] : "0px"}>
         {/* <Flex height={["200px", "100px"]}> */}
         {isHighlighted && <HighlightedCard {...item} />}
       </Flex>
-      {/* </div> */}
     </div>
   );
 };
