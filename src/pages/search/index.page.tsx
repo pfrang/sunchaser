@@ -11,7 +11,7 @@ import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Flex } from "../../ui-kit/components/flex/flex";
 
-import { MapBoxHelper } from "./mapbox-settings";
+import { MapBoxHelper, StartAndEndCoordinates } from "./mapbox-settings";
 import { Carousell } from "./components/carousell";
 
 const TwoGridRow = styled.div`
@@ -52,7 +52,6 @@ export default function Search({ params, mapBoxkey }) {
 
   useEffect(() => {
     if (data) {
-      const topRankCard = data.items.ranks[0];
       const userLocation = data.items.userLocation[0];
       setItems([...data.items.ranks, userLocation]);
       // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
@@ -68,11 +67,13 @@ export default function Search({ params, mapBoxkey }) {
         userLocation.latitude
       ).setMarkers();
 
+      //TODO maybe add below code to class
       map.addControl(new mapboxgl.NavigationControl());
 
       map.on("load", () => {
         map.resize();
       });
+
       setMap(map);
     }
   }, [data]);
@@ -95,57 +96,27 @@ export default function Search({ params, mapBoxkey }) {
       //   },
       // });
 
-      const bounds = mapObject.fitBounds(
-        [
-          [userLocation.longitude, userLocation.latitude],
-          [lon, lat],
-        ],
-        { padding: 100, duration: 1000 }
-      );
-
-      if (mapObject.getLayer("route")) {
-        mapObject.removeLayer("route");
-      }
-
-      if (mapObject.getSource("route")) {
-        mapObject.removeSource("route");
-      }
-
-      mapObject.addLayer({
-        id: "route",
-        type: "line",
-        source: {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [
-              {
-                type: "Feature",
-                geometry: {
-                  type: "LineString",
-                  coordinates: [
-                    [userLocation.longitude, userLocation.latitude],
-                    [lon, lat],
-                  ],
-                },
-                properties: {
-                  title: "Somethign",
-                },
-              },
-            ],
-          },
+      const coordinates: StartAndEndCoordinates = {
+        start: {
+          longitude: lon,
+          latitude: lat,
         },
-        layout: {
-          "line-cap": "round",
-          "line-join": "round",
+        end: {
+          longitude: userLocation.longitude,
+          latitude: userLocation.latitude,
         },
-        paint: {
-          "line-color": "#000",
-          "line-opacity": 0.8,
-          "line-width": 4,
-          "line-dasharray": [4, 2],
-        },
-      });
+      };
+
+      const config = {
+        map: mapObject,
+        coordinates,
+        padding: 100,
+        duration: 1000,
+      };
+
+      MapBoxHelper.fitBounds(mapObject, coordinates, 50, 1000);
+
+      MapBoxHelper.addLayer(mapObject, coordinates);
     }
   }, [highlightedCard]);
 
@@ -158,7 +129,7 @@ export default function Search({ params, mapBoxkey }) {
       return;
     }
     setHighlightedCard(item);
-    setZoom(zoom);
+    zoom && setZoom(zoom);
   };
 
   return (

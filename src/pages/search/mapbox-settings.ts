@@ -1,5 +1,15 @@
 import mapboxgl from "mapbox-gl";
 
+interface Coordinates {
+  longitude: number;
+  latitude: number;
+}
+
+export interface StartAndEndCoordinates {
+  start: Coordinates;
+  end: Coordinates;
+}
+
 export class MapBoxHelper {
   map: mapboxgl.Map;
   lat: number[];
@@ -38,5 +48,66 @@ export class MapBoxHelper {
       .addTo(this.map);
 
     return this.map;
+  }
+
+  static fitBounds(
+    map: mapboxgl.Map,
+    coordinates: StartAndEndCoordinates,
+    padding?: number,
+    duration?: number
+  ) {
+    map.fitBounds(
+      [
+        [coordinates.start.longitude, coordinates.start.latitude],
+        [coordinates.end.longitude, coordinates.end.latitude],
+      ],
+      { padding, duration }
+    );
+  }
+
+  static addLayer(map: mapboxgl.Map, coordinates: StartAndEndCoordinates) {
+    if (map.getLayer("route")) {
+      map.removeLayer("route");
+    }
+
+    if (map.getSource("route")) {
+      map.removeSource("route");
+    }
+
+    map.addLayer({
+      id: "route",
+      type: "line",
+      source: {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: "LineString",
+                coordinates: [
+                  [coordinates.start.longitude, coordinates.start.latitude],
+                  [coordinates.end.longitude, coordinates.end.latitude],
+                ],
+              },
+              properties: {
+                title: "Somethign",
+              },
+            },
+          ],
+        },
+      },
+      layout: {
+        "line-cap": "round",
+        "line-join": "round",
+      },
+      paint: {
+        "line-color": "#000",
+        "line-opacity": 0.8,
+        "line-width": 4,
+        "line-dasharray": [4, 2],
+      },
+    });
   }
 }
