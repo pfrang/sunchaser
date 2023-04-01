@@ -35,9 +35,8 @@ export const Card = ({
   const onClick = async (item: AzureFunctionCoordinatesMappedItems) => {
     setZoomAndHighlightCard(item, true);
     setTimeout(() => {
-      swiper.update();
+      swiper.updateAutoHeight();
       swiper.slideTo(index, 500);
-      window.scrollTo(0, 0);
     }, 500);
   };
 
