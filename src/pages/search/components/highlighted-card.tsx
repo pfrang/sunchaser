@@ -11,7 +11,7 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 const ThreeHorizontalGrid = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 2fr;
   width: 100%;
   background-color: white;
 `;
@@ -50,11 +50,10 @@ export const HighlightedCard = ({
         <div className="flex flex-col justify-center text-black">
           {location}
         </div>
-        <div>
-          <Spacer line />
-        </div>
+        <div></div>
       </Flex>
-      <Flex overflowX={"scroll"} justifyContent={"space-between"}>
+      <Spacer line />
+      <Flex overflowX={"scroll"} gap={150}>
         <>
           {times.map((time, idx) => {
             return <TimeSeries key={`time-${idx}`} {...time} />;
