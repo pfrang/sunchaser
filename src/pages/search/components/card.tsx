@@ -30,12 +30,23 @@ export const Card = ({
 
   const swiper = useSwiper();
 
+  const [height, setHeight] = useState(0);
+
   //TODO handle de-highlighting on same item does not slide to the card
 
   const onClick = async (item: AzureFunctionCoordinatesMappedItems) => {
     setZoomAndHighlightCard(item, true);
+
+    const clientHeight = swiper.wrapperEl.parentElement.clientHeight;
+    const clientWidth = window.innerWidth;
+    if (clientWidth <= 480) {
+      setHeight(clientHeight - 130); //TODO find out this mobile toolbar browser at the bottom
+    } else {
+      setHeight(clientHeight - 150);
+    }
+
     setTimeout(() => {
-      swiper.updateAutoHeight();
+      swiper.update();
       swiper.slideTo(index, 500);
     }, 500);
   };
@@ -58,8 +69,9 @@ export const Card = ({
         onClick={() => onClick(item)}
         flexDirection={"column"}
         padding={[4, 5]}
+        justifyContent={"center"}
         // border={"2px solid black"}
-        height={["110px", "150px"]}
+        height={["90px", "150px"]}
         borderBottomWidth={"2px"}
         borderWidth={2}
         color={`${isHighlighted ? "white" : "black"}`}
@@ -67,32 +79,40 @@ export const Card = ({
           isHighlighted ? `${theme.colors.black[3]}` : `${theme.color.white}`
         }`}
       >
-        <div className="absolute right-[10px]">
+        <div className="absolute top-[10px] right-[10px]">
           {isHighlighted ? (
             <Angel direction="down" />
           ) : (
             <Angel direction="left" />
           )}
         </div>
-        <div className="absolute">
-          <div className="">
-            <h2 className="absolute left-2/5">{index + 1}</h2>
+        <Flex justifyContent={"space-between"}>
+          <Flex
+            position={"relative"}
+            flexDirection={"column"}
+            height={[64, 96]}
+            width={[64, 96]}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
+            <div className="absolute mb-1">
+              <p>{index + 1}</p>
+            </div>
             <img
               src={`/icons/${isHighlighted ? "white" : "black"}/svg/trophy.svg`}
             />
+          </Flex>
+          <div className="flex justify-center items-center h-full">
+            <h1 className="text-2xl">{item.location}</h1>
           </div>
-          <div>
+          <Flex height={[64, 96]} width={[64, 96]}>
             <img
               src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
             />
-          </div>
-        </div>
-        <div className="flex justify-center items-center h-full">
-          <h1 className="text-2xl">{item.location}</h1>
-        </div>
+          </Flex>
+        </Flex>
       </Flex>
-      <Flex height={isHighlighted ? ["250px", "400px"] : "0px"}>
-        {/* <Flex height={["200px", "100px"]}> */}
+      <Flex height={isHighlighted ? `${height}px` : "0px"}>
         {isHighlighted && <HighlightedCard {...item} />}
       </Flex>
     </div>

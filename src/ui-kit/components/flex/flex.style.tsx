@@ -13,7 +13,7 @@ const Wrapper = styled.div<{ gap: number | number[] }>`
   ${border}
   ${position}
 
-  transition: all 500ms ease;
+  /* transition: all 500ms ease; */
 
   ${(props) =>
     sscss({
@@ -23,6 +23,10 @@ const Wrapper = styled.div<{ gap: number | number[] }>`
     })}
 
   ${layout}
+
+  transition: ${({}) => {
+    return "height";
+  }} 500ms ease
 `;
 
 export const FlexStyle = {

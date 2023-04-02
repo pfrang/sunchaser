@@ -68,7 +68,7 @@ export const Carousell = ({
         slidesPerView="auto"
         // spaceBetween={30}
         // pagination={{ clickable: true }}
-        style={{ width: "100%", overflow: "hidden" }}
+        style={{ width: "100%" }}
         scrollbar={{
           enabled: true,
           draggable: true,

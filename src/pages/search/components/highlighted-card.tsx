@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Spacer } from "../../../ui-kit/spacer/spacer";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Flex } from "../../../ui-kit/components/flex";
 
 import { TimeSeries } from "./time-series";
 
@@ -10,7 +11,7 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 const ThreeHorizontalGrid = styled.div`
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr 1fr 1fr;
   width: 100%;
   background-color: white;
 `;
@@ -40,17 +41,26 @@ export const HighlightedCard = ({
         >
           Google maps?
         </a>
+        <Spacer line />
       </div>
-      {/* <div className="flex flex-col justify-center">hei</div> */}
-      <div className="flex flex-col justify-center text-black">{location}</div>
-      <Spacer line />
-      <div className="flex justify-between px-4">
+      <Flex justifyContent={"center"} alignItems={"center"}>
+        <div className="h-24 w-24">
+          <img src="/icons/black/svg/wind_pennant.svg" />
+        </div>
+        <div className="flex flex-col justify-center text-black">
+          {location}
+        </div>
+        <div>
+          <Spacer line />
+        </div>
+      </Flex>
+      <Flex overflowX={"scroll"} justifyContent={"space-between"}>
         <>
           {times.map((time, idx) => {
             return <TimeSeries key={`time-${idx}`} {...time} />;
           })}
         </>
-      </div>
+      </Flex>
     </ThreeHorizontalGrid>
   );
 };
