@@ -2,9 +2,6 @@ import styled from "styled-components";
 import { space } from "styled-system";
 
 export const Wrapper = styled.span<{
-  paddingTop: number;
-  paddingRight: number;
-  debug: boolean;
   line;
 }>`
   ${space};

@@ -1,8 +1,13 @@
 import React, { FC, HTMLAttributes } from "react";
+import { SpaceProps } from "styled-system";
+import { WidthProps } from "styled-system";
 
 import { Wrapper } from "./spacer.style";
 
-export interface SpacerProps extends HTMLAttributes<HTMLDivElement> {
+export interface SpacerProps
+  extends HTMLAttributes<HTMLDivElement>,
+    SpaceProps,
+    WidthProps {
   vertical?: number;
   horizontal?: number;
   debug?: boolean;
@@ -14,13 +19,7 @@ export const Spacer: FC<SpacerProps> = ({
   horizontal = 0,
   debug = false,
   line,
+  ...props
 }) => {
-  return (
-    <Wrapper
-      line={line}
-      debug={debug}
-      paddingTop={vertical}
-      paddingRight={horizontal}
-    />
-  );
+  return <Wrapper line={line} {...props} />;
 };

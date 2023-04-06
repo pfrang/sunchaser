@@ -43,14 +43,17 @@ export const HighlightedCard = ({
         </a>
         <Spacer line />
       </div>
-      <Flex justifyContent={"center"} alignItems={"center"}>
-        <div className="h-24 w-24">
+      <Flex justifyContent={"space-around"} gap={4} alignItems={"center"}>
+        <div>
           <img src="/icons/black/svg/wind_pennant.svg" />
+          <p>{`${times[0].wind} m/s`}</p>
         </div>
         <div className="flex flex-col justify-center text-black">
           {location}
         </div>
-        <div></div>
+        <div>
+          <p>{`${times[0].temperature} ℃`}</p>
+        </div>
       </Flex>
       <Spacer line />
       <Flex overflowX={"scroll"} gap={150}>
