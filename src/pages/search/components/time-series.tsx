@@ -6,15 +6,9 @@ import { Spacer } from "../../../ui-kit/spacer/spacer";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Times } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
-interface TimeSeriesProps extends Times {}
+import { GridItem } from "./highlighted-card";
 
-const FourHorizontalGrid = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
-  align-items: center;
-  width: 100%;
-  background-color: white;
-`;
+interface TimeSeriesProps extends Times {}
 
 export const TimeSeries = ({
   time,
@@ -26,28 +20,28 @@ export const TimeSeries = ({
   const icon =
     WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
 
-  const width = 250;
+  const width = 0;
   return (
-    <FourHorizontalGrid>
-      <div className="text-2xl relative">
+    <>
+      <GridItem className="text-2xl relative">
         {time}
-        <div className="absolute overflow-hidden">
+        {/* <div className="absolute overflow-hidden">
           <Divider width={`${width}px`} />
-        </div>
-      </div>
-      <div className="relative">
-        <img src={`/icons/black/svg/${icon}`} />
-        <div className="absolute">
+        </div> */}
+      </GridItem>
+      <GridItem className="relative">
+        <img className="h-12 w-12" src={`/icons/black/svg/${icon}`} />
+        {/* <div className="absolute">
           <Divider width={`${width}px`} />
-        </div>
-      </div>
-      <div className="relative">
+        </div> */}
+      </GridItem>
+      <GridItem className="relative">
         <div>{`${temperature} c`}</div>
-        <div className="absolute">
+        {/* <div className="absolute">
           <Divider width={`${width}px`} />
-        </div>
-      </div>
-      <div>{`${wind} ms`}</div>
-    </FourHorizontalGrid>
+        </div> */}
+      </GridItem>
+      <GridItem>{`${wind} ms`}</GridItem>
+    </>
   );
 };

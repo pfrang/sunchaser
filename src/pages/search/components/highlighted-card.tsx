@@ -11,9 +11,33 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 const ThreeHorizontalGrid = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr 2fr;
+  grid-template-rows: repeat(3, 1fr);
   width: 100%;
   background-color: white;
+`;
+
+const FourHorizontalGrid = styled.div`
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  width: 500px;
+  /* grid-row-gap: 30px; */
+  /* align-items: center; */
+  /* width: 100%; */
+  /* background-color: #f2f2f2; */
+`;
+
+export const GridItem = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px solid black;
+  }
 `;
 
 export const HighlightedCard = ({
@@ -56,12 +80,14 @@ export const HighlightedCard = ({
         </div>
       </Flex>
       <Spacer line />
-      <Flex overflowX={"scroll"} gap={150}>
-        <>
-          {times.map((time, idx) => {
-            return <TimeSeries key={`time-${idx}`} {...time} />;
-          })}
-        </>
+      <Flex overflowX={"scroll"}>
+        {times.map((time, idx) => {
+          return (
+            <FourHorizontalGrid key={idx}>
+              <TimeSeries key={`time-${idx}`} {...time} />{" "}
+            </FourHorizontalGrid>
+          );
+        })}
       </Flex>
     </ThreeHorizontalGrid>
   );
