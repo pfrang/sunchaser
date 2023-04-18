@@ -4,6 +4,7 @@ import { Spacer } from "../../../ui-kit/spacer/spacer";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Flex } from "../../../ui-kit/components/flex";
+import { Text } from "../../../ui-kit/components/text";
 
 import { TimeSeries } from "./time-series";
 
@@ -11,7 +12,7 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 const ThreeHorizontalGrid = styled.div`
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: auto 1fr auto;
   width: 100%;
   background-color: white;
 `;
@@ -20,6 +21,7 @@ const FourHorizontalGrid = styled.div`
   display: grid;
   grid-template-rows: repeat(4, 1fr);
   width: 500px;
+  color: black;
   /* grid-row-gap: 30px; */
   /* align-items: center; */
   /* width: 100%; */
@@ -27,9 +29,11 @@ const FourHorizontalGrid = styled.div`
 `;
 
 export const GridItem = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 10px;
+  /* display: flex; */
+  display: inline-block;
+  text-align: center;
+  padding: 4px;
+  white-space: nowrap;
   &::after {
     content: "";
     position: absolute;
@@ -68,16 +72,40 @@ export const HighlightedCard = ({
         <Spacer line />
       </div>
       <Flex justifyContent={"space-around"} gap={4} alignItems={"center"}>
-        <div>
+        <Flex width={"auto"} height={[28, 54]}>
           <img src="/icons/black/svg/wind_pennant.svg" />
-          <p>{`${times[0].wind} m/s`}</p>
-        </div>
-        <div className="flex flex-col justify-center text-black">
-          {location}
-        </div>
-        <div>
-          <p>{`${times[0].temperature} ℃`}</p>
-        </div>
+          <Text
+            fontSize={["14px", "16px", "18px"]}
+            color="black"
+          >{`${times[0].wind} m/s`}</Text>
+        </Flex>
+        <Flex
+          width={"auto"}
+          gap={[2, 12]}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Flex height={[28, 54]}>
+            <Text
+              fontSize={["14px", "16px", "18px"]}
+              color="black"
+            >{`sunrise ${times[0].time}`}</Text>
+            <img src="/icons/black/svg/partlysunny.svg" />
+          </Flex>
+          <Flex height={[28, 54]}>
+            <Text
+              fontSize={["14px", "16px", "18px"]}
+              color="black"
+            >{`sunset ${times[0].time}`}</Text>
+            <img src="/icons/black/svg/partlysunny.svg" />
+          </Flex>
+        </Flex>
+        <Flex width={"auto"} height={[28, 54]}>
+          <Text
+            fontSize={["14px", "16px", "18px"]}
+            color="black"
+          >{`${times[0].temperature} ℃`}</Text>
+        </Flex>
       </Flex>
       <Spacer line />
       <Flex overflowX={"scroll"}>

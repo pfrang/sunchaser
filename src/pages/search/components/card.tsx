@@ -40,7 +40,7 @@ export const Card = ({
     const clientHeight = swiper.wrapperEl.parentElement.clientHeight;
     const clientWidth = window.innerWidth;
     if (clientWidth <= 480) {
-      setHeight(clientHeight - 130); //TODO find out this mobile toolbar browser at the bottom
+      setHeight(clientHeight - 200); //TODO find out this mobile toolbar browser at the bottom
     } else {
       setHeight(clientHeight - 150);
     }

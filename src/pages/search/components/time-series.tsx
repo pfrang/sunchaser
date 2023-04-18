@@ -5,6 +5,7 @@ import { Flex } from "../../../ui-kit/components/flex";
 import { Spacer } from "../../../ui-kit/spacer/spacer";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Times } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Text } from "../../../ui-kit/components/text";
 
 import { GridItem } from "./highlighted-card";
 
@@ -23,25 +24,36 @@ export const TimeSeries = ({
   const width = 0;
   return (
     <>
-      <GridItem className="text-2xl relative">
-        {time}
+      <GridItem className="relative">
+        <Flex height={"100%"} alignItems={"center"} justifyContent={"center"}>
+          <Text fontSize={["12px", "16px", "18px"]}>{time}</Text>
+        </Flex>
         {/* <div className="absolute overflow-hidden">
           <Divider width={`${width}px`} />
         </div> */}
       </GridItem>
+
       <GridItem className="relative">
-        <img className="h-12 w-12" src={`/icons/black/svg/${icon}`} />
-        {/* <div className="absolute">
+        <Flex justifyContent={"center"} height={[28, 54]}>
+          <img className="inline" src={`/icons/black/svg/${icon}`} />
+          {/* <div className="absolute">
           <Divider width={`${width}px`} />
         </div> */}
+        </Flex>
       </GridItem>
       <GridItem className="relative">
-        <div>{`${temperature} c`}</div>
-        {/* <div className="absolute">
+        <Flex height={"100%"} justifyContent={"center"} alignItems={"center"}>
+          <Text fontSize={["12px", "16px", "18px"]}>{`${temperature} c`}</Text>
+          {/* <div className="absolute">
           <Divider width={`${width}px`} />
         </div> */}
+        </Flex>
       </GridItem>
-      <GridItem>{`${wind} ms`}</GridItem>
+      <GridItem>
+        <Flex height={"100%"} justifyContent={"center"} alignItems={"center"}>
+          <Text fontSize={["12px", "16px", "18px"]}>{`${wind} ms`}</Text>
+        </Flex>
+      </GridItem>
     </>
   );
 };
