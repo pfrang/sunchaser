@@ -379,7 +379,7 @@ WeatherSymbolTable={
 }
 
 
-
+#THIS SCRIPT SHOULD NOT BE USED ANYMORE!
 
 class rankWeather:
     def __init__(self,row):
