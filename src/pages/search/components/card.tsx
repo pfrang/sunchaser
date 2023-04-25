@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSwiper } from "swiper/react";
 
 import { Angel } from "../../../ui-kit/angel/angel";
-import { Arrow } from "../../../ui-kit/arrow/arrow";
 import { Flex } from "../../../ui-kit/components/flex";
 import { theme } from "../../../ui-kit/theme/theme";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Text } from "../../../ui-kit/components/text";
+import { Temperature } from "../../utils/temperature";
 
 import { HighlightedCard } from "./highlighted-card";
 
@@ -40,14 +41,14 @@ export const Card = ({
     const clientHeight = swiper.wrapperEl.parentElement.clientHeight;
     const clientWidth = window.innerWidth;
     if (clientWidth <= 480) {
-      setHeight(clientHeight - 200); //TODO find out this mobile toolbar browser at the bottom
+      setHeight(clientHeight - 140); //TODO find out this mobile toolbar browser at the bottom
     } else {
       setHeight(clientHeight - 150);
     }
 
     setTimeout(() => {
       swiper.update();
-      swiper.slideTo(index, 500);
+      swiper.slideTo(index, 1000);
     }, 500);
   };
 
@@ -63,14 +64,16 @@ export const Card = ({
   const icon =
     WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
 
+  const modifiedTemperature = new Temperature(temperature);
+
   return (
     <div>
       <Flex
         onClick={() => onClick(item)}
         flexDirection={"column"}
-        padding={[4, 5]}
         justifyContent={"center"}
         // border={"2px solid black"}
+        padding={[4, 6]}
         height={["90px", "150px"]}
         borderBottomWidth={"2px"}
         borderWidth={2}
@@ -88,6 +91,27 @@ export const Card = ({
         </div>
         <Flex justifyContent={"space-between"}>
           <Flex
+            flexDirection={["column", "row"]}
+            alignItems={"center"}
+            justifyContent={"center"}
+            height={[64, 96]}
+            width={[64, 96]}
+          >
+            <img
+              src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
+            />
+            <Text
+              variant="body-large-bold"
+              fontSize={["14px", "16px", "18px"]}
+              color="red"
+            >
+              {modifiedTemperature.toString()}
+            </Text>
+          </Flex>
+          <div className="flex justify-center items-center h-full">
+            <Text>{item.location}</Text>
+          </div>
+          <Flex
             position={"relative"}
             flexDirection={"column"}
             height={[64, 96]}
@@ -100,14 +124,6 @@ export const Card = ({
             </div>
             <img
               src={`/icons/${isHighlighted ? "white" : "black"}/svg/trophy.svg`}
-            />
-          </Flex>
-          <div className="flex justify-center items-center h-full">
-            <h1 className="text-2xl">{item.location}</h1>
-          </div>
-          <Flex height={[64, 96]} width={[64, 96]}>
-            <img
-              src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
             />
           </Flex>
         </Flex>

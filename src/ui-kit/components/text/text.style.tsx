@@ -8,13 +8,15 @@ import { TextVariant } from "./text.type";
 export const TextWrapper = styled.p<{
   color?: Color;
   variant: TextVariant;
+  noWrap: boolean;
 }>`
   text-decoration: inherit;
   ${color}
   margin: 0;
   overflow-wrap: break-word;
+  white-space: ${(props) => (props.noWrap ? "nowrap" : "normal")};
 
-  ${space}
+  ${space};
 
   ${variant({
     variants: {
@@ -101,7 +103,6 @@ export const TextWrapper = styled.p<{
       },
     },
   })}
-
-  ${typography}
-  ${layout}
+  ${typography};
+  ${layout};
 `;

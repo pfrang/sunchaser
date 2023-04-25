@@ -8,7 +8,7 @@ const Calendar = styled.svg`
 export const CalendarIcon = () => {
   return (
     <Calendar viewBox="0 0 96 96">
-      <g clip-path="url(#clip0)" transform="translate(-75 -551)">
+      <g clipPath="url(#clip0)" transform="translate(-75 -551)">
         <path
           fill={"black"}
           d="M104 577C105.7 577 107 575.7 107 574L107 568C107 566.3 105.7 565 104 565 102.3 565 101 566.3 101 568L101 574C101 575.7 102.3 577 104 577Z"

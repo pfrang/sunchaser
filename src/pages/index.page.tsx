@@ -48,7 +48,7 @@ const Home: NextPage = () => {
           <WeatherCarousell setWeather={setWeather} />
         </div>
       </div>
-      <div className="p-10">
+      <div className="px-10 pt-10">
         <section id="form" className="h-full">
           <div
             className="z-10 border-2 rounded-xl h-full shadow-2xl"

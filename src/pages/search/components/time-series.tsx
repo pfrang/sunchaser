@@ -22,10 +22,20 @@ export const TimeSeries = ({
     WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
 
   const width = 0;
+
+  const gridWidth = {
+    mobile: "75px",
+    pc: "250px",
+  };
   return (
     <>
       <GridItem className="relative">
-        <Flex height={"100%"} alignItems={"center"} justifyContent={"center"}>
+        <Flex
+          width={[gridWidth.mobile, gridWidth.pc]}
+          height={"100%"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
           <Text fontSize={["12px", "16px", "18px"]}>{time}</Text>
         </Flex>
         {/* <div className="absolute overflow-hidden">
@@ -34,7 +44,11 @@ export const TimeSeries = ({
       </GridItem>
 
       <GridItem className="relative">
-        <Flex justifyContent={"center"} height={[28, 54]}>
+        <Flex
+          width={[gridWidth.mobile, gridWidth.pc]}
+          justifyContent={"center"}
+          height={[28, 54]}
+        >
           <img className="inline" src={`/icons/black/svg/${icon}`} />
           {/* <div className="absolute">
           <Divider width={`${width}px`} />
@@ -42,18 +56,27 @@ export const TimeSeries = ({
         </Flex>
       </GridItem>
       <GridItem className="relative">
-        <Flex height={"100%"} justifyContent={"center"} alignItems={"center"}>
-          <Text fontSize={["12px", "16px", "18px"]}>{`${temperature} c`}</Text>
+        <Flex
+          width={[gridWidth.mobile, gridWidth.pc]}
+          height={"100%"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Text fontSize={["12px", "16px", "18px"]}>{`${temperature}`}</Text>
           {/* <div className="absolute">
           <Divider width={`${width}px`} />
         </div> */}
         </Flex>
       </GridItem>
-      <GridItem>
-        <Flex height={"100%"} justifyContent={"center"} alignItems={"center"}>
-          <Text fontSize={["12px", "16px", "18px"]}>{`${wind} ms`}</Text>
-        </Flex>
-      </GridItem>
+
+      <Flex
+        width={[gridWidth.mobile, gridWidth.pc]}
+        height={"100%"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Text fontSize={["12px", "16px", "18px"]}>{`${wind}`}</Text>
+      </Flex>
     </>
   );
 };

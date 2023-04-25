@@ -12,7 +12,7 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 const ThreeHorizontalGrid = styled.div`
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto 1fr;
   width: 100%;
   background-color: white;
 `;
@@ -20,8 +20,8 @@ const ThreeHorizontalGrid = styled.div`
 const FourHorizontalGrid = styled.div`
   display: grid;
   grid-template-rows: repeat(4, 1fr);
-  width: 500px;
   color: black;
+  height: 100%;
   /* grid-row-gap: 30px; */
   /* align-items: center; */
   /* width: 100%; */
@@ -32,15 +32,15 @@ export const GridItem = styled.div`
   /* display: flex; */
   display: inline-block;
   text-align: center;
-  padding: 4px;
   white-space: nowrap;
+  height: 100%;
   &::after {
     content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    border-bottom: 1px solid black;
+    border-top: 1px solid black;
   }
 `;
 
@@ -59,26 +59,21 @@ export const HighlightedCard = ({
     })}`;
   // const modifiedTime = date && `${date.slice(0, -3)}`;
 
+  const gridWidth = {
+    mobile: "75px",
+    pc: "250px",
+  };
+
   return (
     <ThreeHorizontalGrid>
-      <div>
-        <a
-          className="text-blue-600 underline"
-          href="https://www.google.com"
-          target="_blank"
-        >
-          Google maps?
-        </a>
-        <Spacer line />
-      </div>
       <Flex justifyContent={"space-around"} gap={4} alignItems={"center"}>
-        <Flex width={"auto"} height={[28, 54]}>
+        {/* <Flex width={"auto"} height={[28, 54]}>
           <img src="/icons/black/svg/wind_pennant.svg" />
           <Text
             fontSize={["14px", "16px", "18px"]}
             color="black"
           >{`${times[0].wind} m/s`}</Text>
-        </Flex>
+        </Flex> */}
         <Flex
           width={"auto"}
           gap={[2, 12]}
@@ -100,15 +95,55 @@ export const HighlightedCard = ({
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
         </Flex>
-        <Flex width={"auto"} height={[28, 54]}>
+        {/* <Flex width={"auto"} height={[28, 54]}>
           <Text
             fontSize={["14px", "16px", "18px"]}
             color="black"
           >{`${times[0].temperature} ℃`}</Text>
-        </Flex>
+        </Flex> */}
       </Flex>
       <Spacer line />
       <Flex overflowX={"scroll"}>
+        <FourHorizontalGrid className="sticky z-10 bg-white -mb-1 left-0 top-0 border-r-2 border-slate-600">
+          <GridItem className="relative">
+            <Flex
+              height={"100%"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              width={[gridWidth.mobile, gridWidth.pc]}
+            >
+              <Text fontSize={["12px", "16px", "18px"]}>Time</Text>
+            </Flex>
+          </GridItem>
+          <GridItem className="relative">
+            <Flex
+              height={"100%"}
+              alignItems={"center"}
+              justifyContent={"center"}
+              width={[gridWidth.mobile, gridWidth.pc]}
+            >
+              <Text fontSize={["12px", "16px", "18px"]}>Weather</Text>
+            </Flex>
+          </GridItem>
+          <GridItem className="relative">
+            <Flex
+              height={"100%"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              width={[gridWidth.mobile, gridWidth.pc]}
+            >
+              <Text fontSize={["12px", "16px", "18px"]}>Temperature</Text>
+            </Flex>
+          </GridItem>
+          <Flex
+            height={"100%"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            width={[gridWidth.mobile, gridWidth.pc]}
+          >
+            <Text fontSize={["12px", "16px", "18px"]}>Wind m/s</Text>
+          </Flex>
+        </FourHorizontalGrid>
         {times.map((time, idx) => {
           return (
             <FourHorizontalGrid key={idx}>

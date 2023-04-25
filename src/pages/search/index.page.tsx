@@ -133,24 +133,25 @@ export default function Search({ params, mapBoxkey }) {
   };
 
   return (
-    <Flex height={"100%"} paddingX={["40px", "50px"]}>
+    <Flex height={"100%"}>
       <TwoGridRow>
         <section id="section-map">
-          <Spacer vertical={16} />
-          <div className="flex items-center h-full justify-center">
+          <div className="flex items-center h-full justify-center sticky top-0">
             <div id="map" className="w-full h-full m-auto "></div>
           </div>
         </section>
         {!items ? (
           <SearchLoader />
         ) : (
-          <section id="section-carousell" className="h-full">
-            <Carousell
-              items={items}
-              setZoomAndHighlightCard={setZoomAndHighlightCard}
-              highlightedCard={highlightedCard}
-            />
-          </section>
+          <Flex flexDirection={"column"} paddingX={[40, 50]}>
+            <section id="section-carousell" className="h-full">
+              <Carousell
+                items={items}
+                setZoomAndHighlightCard={setZoomAndHighlightCard}
+                highlightedCard={highlightedCard}
+              />
+            </section>
+          </Flex>
         )}
       </TwoGridRow>
     </Flex>

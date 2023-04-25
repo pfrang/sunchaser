@@ -24,6 +24,7 @@ export interface TextProps
   content?: ReactNode;
   color?: Color;
   css?: CSSProperties;
+  noWrap?: boolean;
 }
 
 export const Text: FC<TextProps> = ({
@@ -33,6 +34,7 @@ export const Text: FC<TextProps> = ({
   content,
   color = "inherit",
   children,
+  noWrap,
   ...props
 }) => {
   return (
@@ -42,6 +44,7 @@ export const Text: FC<TextProps> = ({
       className={className}
       as={tag}
       variant={variant}
+      noWrap={noWrap}
     >
       {content}
       {children}
