@@ -93,7 +93,7 @@ export default function SearchCriterias() {
 
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
-      alert("Error in fetching your user location");
+      return;
     }
 
     navigator.geolocation.getCurrentPosition(success, error, options);
