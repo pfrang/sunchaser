@@ -1,6 +1,6 @@
 import pyodbc
 import pandas as pd
-from src.python.apiRequestToYr import getWeather
+from src.python.Sql_connection.YR_Daily_Update.apiRequestToYr import getWeather
 import datetime
 
 server = 'sunchaser.database.windows.net'

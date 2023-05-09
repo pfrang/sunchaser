@@ -5,10 +5,12 @@ import pandas as pd
 from datetime import datetime
 
 
-def getSunrise(lat,lon,date,offset='+01:00',days=9):
+def getSunrise(lat,lon,date,offset='+01:00',days=11):
     url=f'{APISOURCE.getSunRise()}?lat={lat}&lon={lon}&date={date}&offset={offset}&days={days}'
     headers={'User-Agent':'Hjemmeprosjekt'}
     response=requests.get(url,headers=headers)
+
+    print(f'lat:{lat},lon{lon}={response.status_code}')
 
     response_json=json.loads(response.text)    
     response_json=response_json["location"]["time"]

@@ -46,7 +46,7 @@ for index,row in df.iterrows():
     lon=float(str(row[0]).split(",")[1][:-1])
     
     if lat==first_lat:
-        print("lat: {lat}, lon: {lon} is deleted")
+        print(f"lat: {lat}, lon: {lon} is deleted")
         #delete previous records for the specific location and add new data
         cursor.execute('''
                      DELETE FROM coordinates_locationdata_google 
@@ -64,4 +64,4 @@ for index,row in df.iterrows():
         VALUES (?, ?, ?, ?, ?, ?)
         ''', (location[0],location[1],location[2],location[3],location[4],location[5]))
         conn.commit()
-    print(count)
+    
