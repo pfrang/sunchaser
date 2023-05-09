@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme/theme";
 
+import HeaderComponent from "./header";
+
 const Wrapper = styled.div`
   height: calc(var(--vh, 1vh) * 100);
   /* min-height: 100vh; */
@@ -32,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>Sunchaser</title>
       </Head>
       <Wrapper>
-        {/* <HeaderComponent /> */}
+        <HeaderComponent />
         <Component {...pageProps} />
         <Spacer height={64} />
       </Wrapper>

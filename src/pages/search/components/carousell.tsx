@@ -54,7 +54,7 @@ export const Carousell = ({
         // }}
         id="swiper-container"
         autoHeight
-        freeMode={{ enabled: true, momentum: false }}
+        freeMode={{ enabled: true, momentum: true }}
         // mousewheel={{
         //   sensitivity: 10,
 

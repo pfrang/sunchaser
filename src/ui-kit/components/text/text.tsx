@@ -35,6 +35,7 @@ export const Text: FC<TextProps> = ({
   color = "inherit",
   children,
   noWrap,
+  fontSize = ["12px", "16px", "18px"],
   ...props
 }) => {
   return (

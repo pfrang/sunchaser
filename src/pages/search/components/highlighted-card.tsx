@@ -12,9 +12,15 @@ interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 const ThreeHorizontalGrid = styled.div`
   display: grid;
-  grid-template-rows: 1fr auto 1fr;
+  grid-template-rows: 2fr auto 3fr;
   width: 100%;
   background-color: white;
+  cursor: auto;
+`;
+
+const HorizontalDivOverflow = styled.div`
+  display: flex;
+  overflow-x: auto;
 `;
 
 const FourHorizontalGrid = styled.div`
@@ -22,6 +28,7 @@ const FourHorizontalGrid = styled.div`
   grid-template-rows: repeat(4, 1fr);
   color: black;
   height: 100%;
+  flex-grow: 1;
   /* grid-row-gap: 30px; */
   /* align-items: center; */
   /* width: 100%; */
@@ -66,14 +73,15 @@ export const HighlightedCard = ({
 
   return (
     <ThreeHorizontalGrid>
-      <Flex justifyContent={"space-around"} gap={4} alignItems={"center"}>
-        {/* <Flex width={"auto"} height={[28, 54]}>
-          <img src="/icons/black/svg/wind_pennant.svg" />
-          <Text
-            fontSize={["14px", "16px", "18px"]}
-            color="black"
-          >{`${times[0].wind} m/s`}</Text>
-        </Flex> */}
+      <Flex
+        justifyContent={"space-around"}
+        gap={4}
+        alignItems={"center"}
+        position={"relative"}
+      >
+        <Flex position={"absolute"} left={0} top={0}>
+          <Text>{`Date ${modifiedDate}`}</Text>
+        </Flex>
         <Flex
           width={"auto"}
           gap={[2, 12]}
@@ -81,29 +89,17 @@ export const HighlightedCard = ({
           alignItems={"center"}
         >
           <Flex height={[28, 54]}>
-            <Text
-              fontSize={["14px", "16px", "18px"]}
-              color="black"
-            >{`sunrise ${times[0].time}`}</Text>
+            <Text color="black">{`sunrise ${times[0].time}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
           <Flex height={[28, 54]}>
-            <Text
-              fontSize={["14px", "16px", "18px"]}
-              color="black"
-            >{`sunset ${times[0].time}`}</Text>
+            <Text color="black">{`sunset ${times[0].time}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
         </Flex>
-        {/* <Flex width={"auto"} height={[28, 54]}>
-          <Text
-            fontSize={["14px", "16px", "18px"]}
-            color="black"
-          >{`${times[0].temperature} ℃`}</Text>
-        </Flex> */}
       </Flex>
       <Spacer line />
-      <Flex overflowX={"scroll"}>
+      <HorizontalDivOverflow>
         <FourHorizontalGrid className="sticky z-10 bg-white -mb-1 left-0 top-0 border-r-2 border-slate-600">
           <GridItem className="relative">
             <Flex
@@ -112,7 +108,7 @@ export const HighlightedCard = ({
               justifyContent={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
             >
-              <Text fontSize={["12px", "16px", "18px"]}>Time</Text>
+              <Text>Time</Text>
             </Flex>
           </GridItem>
           <GridItem className="relative">
@@ -122,7 +118,7 @@ export const HighlightedCard = ({
               justifyContent={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
             >
-              <Text fontSize={["12px", "16px", "18px"]}>Weather</Text>
+              <Text>Weather</Text>
             </Flex>
           </GridItem>
           <GridItem className="relative">
@@ -132,7 +128,7 @@ export const HighlightedCard = ({
               alignItems={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
             >
-              <Text fontSize={["12px", "16px", "18px"]}>Temperature</Text>
+              <Text>Temperature</Text>
             </Flex>
           </GridItem>
           <Flex
@@ -141,7 +137,7 @@ export const HighlightedCard = ({
             alignItems={"center"}
             width={[gridWidth.mobile, gridWidth.pc]}
           >
-            <Text fontSize={["12px", "16px", "18px"]}>Wind m/s</Text>
+            <Text>Wind m/s</Text>
           </Flex>
         </FourHorizontalGrid>
         {times.map((time, idx) => {
@@ -151,7 +147,7 @@ export const HighlightedCard = ({
             </FourHorizontalGrid>
           );
         })}
-      </Flex>
+      </HorizontalDivOverflow>
     </ThreeHorizontalGrid>
   );
 };

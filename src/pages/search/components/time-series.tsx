@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useState, useRef, useEffect } from "react";
 
 import { Divider } from "../../../ui-kit/components/divider";
 import { Flex } from "../../../ui-kit/components/flex";
@@ -21,12 +22,13 @@ export const TimeSeries = ({
   const icon =
     WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
 
-  const width = 0;
-
   const gridWidth = {
     mobile: "75px",
     pc: "250px",
   };
+
+  //TODO give a fixed width to GridItems
+
   return (
     <>
       <GridItem className="relative">
@@ -36,11 +38,8 @@ export const TimeSeries = ({
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <Text fontSize={["12px", "16px", "18px"]}>{time}</Text>
+          <Text noWrap>{time}</Text>
         </Flex>
-        {/* <div className="absolute overflow-hidden">
-          <Divider width={`${width}px`} />
-        </div> */}
       </GridItem>
 
       <GridItem className="relative">
@@ -49,10 +48,7 @@ export const TimeSeries = ({
           justifyContent={"center"}
           height={[28, 54]}
         >
-          <img className="inline" src={`/icons/black/svg/${icon}`} />
-          {/* <div className="absolute">
-          <Divider width={`${width}px`} />
-        </div> */}
+          <img className="inline object-fit" src={`/icons/black/svg/${icon}`} />
         </Flex>
       </GridItem>
       <GridItem className="relative">
@@ -62,10 +58,7 @@ export const TimeSeries = ({
           justifyContent={"center"}
           alignItems={"center"}
         >
-          <Text fontSize={["12px", "16px", "18px"]}>{`${temperature}`}</Text>
-          {/* <div className="absolute">
-          <Divider width={`${width}px`} />
-        </div> */}
+          <Text noWrap>{`${temperature}`}</Text>
         </Flex>
       </GridItem>
 
@@ -75,7 +68,7 @@ export const TimeSeries = ({
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <Text fontSize={["12px", "16px", "18px"]}>{`${wind}`}</Text>
+        <Text noWrap>{`${wind}`}</Text>
       </Flex>
     </>
   );
