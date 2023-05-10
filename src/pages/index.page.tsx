@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import { Flex } from "../ui-kit/components/flex";
 import { theme } from "../ui-kit/theme/theme";
@@ -64,5 +65,13 @@ const Home: NextPage = () => {
     </TwoGridHorizontalContainer>
   );
 };
+
+export async function getServerSideProps({ req, query, resolvedUrl }) {
+  return {
+    props: {
+      currentUrl: resolvedUrl,
+    }, // will be passed to the page component as props
+  };
+}
 
 export default Home;

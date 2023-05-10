@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
 import { theme } from "../ui-kit/theme/theme";
 import { Flex } from "../ui-kit/components/flex";
@@ -16,11 +17,12 @@ const Header = styled.header`
 `;
 
 //NOT USED CURRENTLY
-export default function HeaderComponent() {
+export default function HeaderComponent({ isHomePage }) {
   const onClick = () => {
     alert("Header nav item coming soon!");
     return;
   };
+
   return (
     <Flex
       bg={theme.colors.pink}
@@ -44,13 +46,15 @@ export default function HeaderComponent() {
           />
         </Link>
       </Flex>
-      <Flex paddingY={2} justifyContent={"flex-end"}>
-        <img
-          onClick={onClick}
-          className="cursor-pointer"
-          src="/icons/black/svg/menu.svg"
-        />
-      </Flex>
+      {!isHomePage && (
+        <Flex paddingY={2} justifyContent={"flex-end"}>
+          <img
+            onClick={onClick}
+            className="cursor-pointer"
+            src="/icons/black/svg/menu.svg"
+          />
+        </Flex>
+      )}
     </Flex>
   );
 }

@@ -28,13 +28,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     document.documentElement.style.setProperty("--vh", `${vh}px`);
   }, []);
 
+  const isHomePage = pageProps.currentUrl === "/";
+
   return (
     <ThemeProvider theme={theme}>
       <Head>
         <title>Sunchaser</title>
       </Head>
       <Wrapper>
-        <HeaderComponent />
+        <HeaderComponent isHomePage={isHomePage} />
         <Component {...pageProps} />
         <Spacer height={64} />
       </Wrapper>
