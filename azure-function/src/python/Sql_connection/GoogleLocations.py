@@ -43,7 +43,7 @@ first_lat =float(str(df.iloc[0][0]).split(",")[0][1:])
 for index,row in df.iterrows():
     count+=1
     lat=float(str(row[0]).split(",")[0][1:])
-    lon=float(str(row[0]).split(",")[1][:-1])
+    lon=float(str(row[0]).split(",")[1])
     
     if lat==first_lat:
         print(f"lat: {lat}, lon: {lon} is deleted")
