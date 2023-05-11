@@ -46,7 +46,7 @@ export const TimeSeries = ({
         <Flex
           width={[gridWidth.mobile, gridWidth.pc]}
           justifyContent={"center"}
-          height={[28, 54]}
+          height={[28, 40]}
         >
           <img className="inline object-fit" src={`/icons/black/svg/${icon}`} />
         </Flex>
