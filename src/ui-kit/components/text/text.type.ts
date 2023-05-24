@@ -11,4 +11,5 @@ export type TextVariant =
   | "search"
   | "caption"
   | "caption-large"
-  | "overline";
+  | "overline"
+  | "regular";

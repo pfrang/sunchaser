@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
+import { Text } from "../../ui-kit/components/text";
 
 export const ChooseCalendarValue = ({
   unfilledCalendar,
@@ -74,7 +75,9 @@ export const ChooseCalendarValue = ({
   return (
     <section id="calendar">
       <div className="flex flex-col items-center">
-        <label>When do you want to travel?</label>
+        <Text variant="subtitle-large" color="black">
+          When do you want to travel?
+        </Text>
         {unfilledCalendar && (
           <p className="text-md text-red-500 font-bold">
             Please fill calendar value
@@ -88,7 +91,7 @@ export const ChooseCalendarValue = ({
         >
           <input
             readOnly
-            className="border-2"
+            className="border-2 justify-center text-center align-center rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             type={"text"}
             value={selectedDate.toLocaleDateString(locale)}
           />
@@ -111,6 +114,21 @@ export const ChooseCalendarValue = ({
             style={{ margin: "0px" }}
             styles={{
               caption: { display: "none" },
+              head: {
+                fontSize: "1rem",
+                fontWeight: "bold",
+                padding: "0.5rem 0.5rem",
+                color: "black",
+              },
+              day: {
+                width: "2rem",
+                height: "2rem",
+                fontSize: "1rem",
+                margin: "0px",
+                padding: "0px",
+                borderRadius: "0px",
+                color: "black",
+              },
             }}
           />
         )}

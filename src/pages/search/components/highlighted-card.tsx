@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useRef } from "react";
 
 import { Spacer } from "../../../ui-kit/spacer/spacer";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
@@ -18,18 +19,12 @@ const ThreeHorizontalGrid = styled.div`
   cursor: auto;
 `;
 
-const HorizontalDivOverflow = styled.div`
-  display: flex;
-  overflow-x: auto;
-`;
-
 const FourHorizontalGrid = styled.div`
   display: grid;
   grid-template-rows: repeat(4, 1fr);
   color: black;
   height: 100%;
   flex-grow: 1;
-  /* grid-row-gap: 30px; */
   /* align-items: center; */
   /* width: 100%; */
   /* background-color: #f2f2f2; */
@@ -59,6 +54,15 @@ export const HighlightedCard = ({
   location,
   times,
 }: CardProps) => {
+  const scrollRef = useRef(null);
+
+  const handleScroll = (event) => {
+    if (event.deltaY !== 0) {
+      event.preventDefault();
+      scrollRef.current.scrollLeft += event.deltaY;
+    }
+  };
+
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -79,27 +83,30 @@ export const HighlightedCard = ({
         alignItems={"center"}
         position={"relative"}
       >
-        <Flex position={"absolute"} left={0} top={0}>
-          <Text>{`Date ${modifiedDate}`}</Text>
+        <Flex position={"absolute"} left={2} top={0}>
+          <Text color="black">{`${modifiedDate}`}</Text>
         </Flex>
         <Flex
-          width={"auto"}
-          gap={[2, 12]}
-          justifyContent={"center"}
+          width={"100%"}
+          justifyContent={"space-around"}
           alignItems={"center"}
         >
-          <Flex height={[28, 54]}>
-            <Text color="black">{`sunrise ${times[0].time}`}</Text>
+          <Flex justifyContent={"flex-end"} height={[28, 54]}>
+            <Text noWrap color="black">{`sunrise ${times[0].time}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
           <Flex height={[28, 54]}>
-            <Text color="black">{`sunset ${times[0].time}`}</Text>
+            <Text noWrap color="black">{`sunset ${times[0].time}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
         </Flex>
       </Flex>
       <Spacer line />
-      <HorizontalDivOverflow>
+      <div
+        ref={scrollRef}
+        onWheel={handleScroll}
+        className="flex overflow-x-auto"
+      >
         <FourHorizontalGrid className="sticky z-10 bg-white -mb-1 left-0 top-0 border-r-2 border-slate-600">
           <GridItem className="relative">
             <Flex
@@ -147,7 +154,7 @@ export const HighlightedCard = ({
             </FourHorizontalGrid>
           );
         })}
-      </HorizontalDivOverflow>
+      </div>
     </ThreeHorizontalGrid>
   );
 };

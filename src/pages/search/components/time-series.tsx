@@ -43,17 +43,18 @@ export const TimeSeries = ({
       </GridItem>
 
       <GridItem className="relative">
-        <Flex
-          width={[gridWidth.mobile, gridWidth.pc]}
-          justifyContent={"center"}
-          height={[28, 40]}
-        >
-          <img className="inline object-fit" src={`/icons/black/svg/${icon}`} />
+        <Flex justifyContent={"center"} alignItems={"center"} height={"100%"}>
+          <Flex width={["25px", "50px"]}>
+            <img
+              className="w-[50px] object-contain"
+              src={`/icons/black/svg/${icon}`}
+            />
+          </Flex>
         </Flex>
       </GridItem>
       <GridItem className="relative">
         <Flex
-          width={[gridWidth.mobile, gridWidth.pc]}
+          // width={[gridWidth.mobile, gridWidth.pc]}
           height={"100%"}
           justifyContent={"center"}
           alignItems={"center"}
@@ -63,7 +64,7 @@ export const TimeSeries = ({
       </GridItem>
 
       <Flex
-        width={[gridWidth.mobile, gridWidth.pc]}
+        // width={[gridWidth.mobile, gridWidth.pc]}
         height={"100%"}
         justifyContent={"center"}
         alignItems={"center"}

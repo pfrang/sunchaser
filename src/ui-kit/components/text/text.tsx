@@ -29,13 +29,13 @@ export interface TextProps
 
 export const Text: FC<TextProps> = ({
   tag = "p",
-  variant = "body-large",
+  variant = "regular",
   className,
   content,
   color = "inherit",
   children,
   noWrap,
-  fontSize = ["12px", "16px", "18px"],
+  fontSize,
   ...props
 }) => {
   return (

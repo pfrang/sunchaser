@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import { Flex } from "../ui-kit/components/flex";
 import { theme } from "../ui-kit/theme/theme";
+import { Text } from "../ui-kit/components/text";
 
 import SearchCriterias from "./components/search-criterias";
 import { WeatherCarousell } from "./components/weather-carousell";
@@ -44,7 +45,7 @@ const Home: NextPage = () => {
         </div> */}
         <div className="overflow-hidden bg-inherit h-full relative">
           <div className="absolute flex justify-center z-10 w-full">
-            <h3>Choose weather</h3>
+            <Text color="black">Choose weather</Text>
           </div>
           <WeatherCarousell setWeather={setWeather} />
         </div>

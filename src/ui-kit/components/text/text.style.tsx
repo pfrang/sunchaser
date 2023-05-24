@@ -20,6 +20,12 @@ export const TextWrapper = styled.p<{
 
   ${variant({
     variants: {
+      regular: {
+        fontFamily: "SpaceMono",
+        fontWeight: "400",
+        fontSize: ["12px", "16px", "20px"],
+        lineHeight: ["28px", "40px"],
+      },
       intro: {
         fontFamily: "SpaceMono",
         fontWeight: "400",

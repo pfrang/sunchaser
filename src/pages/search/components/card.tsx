@@ -8,6 +8,7 @@ import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-li
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Text } from "../../../ui-kit/components/text";
 import { Temperature } from "../../utils/temperature";
+import { Spacer } from "../../../ui-kit/spacer/spacer";
 
 import { HighlightedCard } from "./highlighted-card";
 
@@ -74,7 +75,7 @@ export const Card = ({
         justifyContent={"center"}
         // border={"2px solid black"}
         padding={[4, 6]}
-        height={["90px", "150px"]}
+        height={["80px", "150px"]}
         borderBottomWidth={"2px"}
         borderWidth={2}
         color={`${isHighlighted ? "white" : "black"}`}
@@ -91,26 +92,29 @@ export const Card = ({
         </div>
         <Flex justifyContent={"space-between"}>
           <Flex
-            flexDirection={["column", "row"]}
+            // flexDirection={["column", "row"]}
             alignItems={"center"}
             justifyContent={"center"}
-            height={[64, 96]}
-            width={[64, 96]}
+            height={[48, 96]}
+            width={[48, 96]}
           >
             <img
+              className="object-contain"
               src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
             />
-            <Text
-              variant="body-large-bold"
-              fontSize={["14px", "16px", "18px"]}
-              color="red"
-            >
-              {modifiedTemperature.toString()}
-            </Text>
           </Flex>
-          <div className="flex justify-center items-center h-full">
-            <Text>{item.location}</Text>
-          </div>
+          <Flex
+            flexDirection={"column"}
+            justifyContent={"center"}
+            height={"100%"}
+            alignItems={"center"}
+          >
+            <Text variant="body-large">{item.location}</Text>
+            {/* <Spacer vertical={4} />
+            <Text variant="subtitle-small-bold" color="red">
+              {modifiedTemperature.toString()}
+            </Text> */}
+          </Flex>
           <Flex
             position={"relative"}
             flexDirection={"column"}

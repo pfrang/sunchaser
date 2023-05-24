@@ -5,8 +5,6 @@ import { space, flexbox, color, layout, border, position } from "styled-system";
 import { theme } from "../../theme/theme";
 
 const Wrapper = styled.div<{ gap: number | number[] }>`
-  /* max-width: ${theme.maxContentWidth}px; */
-
   ${flexbox}
   ${space}
   ${color}

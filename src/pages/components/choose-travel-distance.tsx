@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { Text } from "../../ui-kit/components/text";
+
 import { setUIOnNumber, valueRange } from "./travel-distance-settings";
 
 export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
@@ -13,15 +15,21 @@ export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
     <section id="distance_traveling" className="w-full">
       <div className="w-full">
         <div className="flex justify-between">
-          <label>Distance?</label>
-          <span>{`${setUIOnNumber(value)} km`}</span>
+          <Text variant="body-large" color="black">
+            Distance?
+          </Text>
+          <Text variant="body-large" color="black">{`${setUIOnNumber(
+            value
+          )} km`}</Text>
         </div>
         <input
           type="range"
           list="tickmarks"
           onChange={(e) => setValue(Number(e.currentTarget.value))}
           step="1"
-          className="w-full cursor-pointer"
+          className="w-full cursor-pointer
+          appearance-none rounded-full overflow-hidden outline-none
+          "
           min={1}
           max={9}
           value={value}
