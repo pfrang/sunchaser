@@ -67,7 +67,7 @@ export const ChooseCalendarValue = ({
 
   const Submit = (e: Date) => {
     setIsPopperOpen(false);
-    setSelectedDate(e);
+    e && setSelectedDate(e);
   };
 
   type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -84,18 +84,20 @@ export const ChooseCalendarValue = ({
           </p>
         )}
         <Spacer vertical={2} />
-        <div
-          ref={popperRef}
-          className="flex items-center justify-center align-center"
-          onClick={() => setIsPopperOpen(true)}
-        >
+        <div className="flex items-center justify-center align-center">
           <input
             readOnly
             className="border-2 justify-center text-center align-center rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             type={"text"}
             value={selectedDate.toLocaleDateString(locale)}
           />
-          <CalendarIcon />
+          <div
+            className="cursor-pointer hover:bg-gray-300 rounded-lg"
+            ref={popperRef}
+            onClick={() => setIsPopperOpen(!isPopperOpen)}
+          >
+            <CalendarIcon />
+          </div>
         </div>
         {isPopperOpen && (
           <DayPicker

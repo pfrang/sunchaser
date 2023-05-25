@@ -27,9 +27,7 @@ export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
           list="tickmarks"
           onChange={(e) => setValue(Number(e.currentTarget.value))}
           step="1"
-          className="w-full cursor-pointer
-          appearance-none rounded-full overflow-hidden outline-none
-          "
+          className="h-14"
           min={1}
           max={9}
           value={value}
