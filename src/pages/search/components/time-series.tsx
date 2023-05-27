@@ -44,7 +44,7 @@ export const TimeSeries = ({
 
       <GridItem className="relative">
         <Flex justifyContent={"center"} alignItems={"center"} height={"100%"}>
-          <Flex width={["25px", "50px"]}>
+          <Flex width={["25px", "40px"]}>
             <img
               className="w-[50px] object-contain"
               src={`/icons/black/svg/${icon}`}

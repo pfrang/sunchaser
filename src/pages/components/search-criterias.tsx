@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -7,10 +7,16 @@ import { AppConfig } from "../../app-config";
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { formatDate } from "../utils/convert-date";
+import {
+  GoogleMapsDetailsData,
+  GoogleMapsDetailsResponse,
+} from "../api/google-maps/details/mapper/gmaps-details-mapper";
+import { ResponseDTO } from "../api/next-api.client";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { ChooseCalendarValue } from "./choose-calendar-value";
 import { destructureMyPosition } from "./get-user-location";
+import WhereAreYou from "./where-are-you";
 
 const Button = styled.button`
   background-color: #1215fd;
@@ -26,7 +32,7 @@ const Button = styled.button`
   }
 `;
 
-const FormStyle = styled.form`
+export const FormStyle = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -35,16 +41,22 @@ const FormStyle = styled.form`
   padding: 16px;
 `;
 
-export default function SearchCriterias() {
-  const [highlightedTransport, setHighlightedTransport] = useState("");
-  const [unfilledHighlightedTransport, setUnfilledHighlightedTransport] =
-    useState(false);
+interface UserFormProps {
+  header?: React.MutableRefObject<HTMLDialogElement>;
+}
 
-  const [unfilledCalendar, setUnfilledCalendar] = useState(false);
+export default function UserForm({ header }: UserFormProps) {
+  const [highlightedTransport, setHighlightedTransport] = useState("");
   // const [userGeoLocation, setUserGeoLocation] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
+  const [townId, setTownId] = useState("");
+  const locationRef = useRef<HTMLInputElement>(null);
+  const [longitudeLatitude, setLongitudeLatitude] = useState({
+    longitude: 0,
+    latitude: 0,
+  });
   const [travelDistance, setTravelDistance] = useState("0:10");
 
   const travelItems = ["Walk", "Car", "Bike", "Public Transportation"];
@@ -67,16 +79,21 @@ export default function SearchCriterias() {
   //   return check;
   // };
 
-  // const fetchTownDetails = async () => {
-  //   const town = await axios
-  //     .get(`${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`)
-  //     .then((response) => response.data)
-  //     .catch((e) => console.error(e));
-  //   return {
-  //     latitude: town.response.latitude,
-  //     longitude: town.response.longitude,
-  //   };
-  // };
+  const fetchTownDetails = async () => {
+    const town = await axios
+      .get<ResponseDTO<GoogleMapsDetailsResponse>>(
+        `${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`
+      )
+      .then((response) => response.data)
+      .catch((e) => console.error(e));
+
+    if (!town) return;
+
+    return {
+      latitude: town.data.latitude,
+      longitude: town.data.longitude,
+    };
+  };
 
   const getCurrentPos = () => {
     const options = {
@@ -101,6 +118,9 @@ export default function SearchCriterias() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const { longitude, latitude } = await fetchTownDetails();
+    // const { longitude, latitude } = await fetchTownDetails();
+    // // console.log(",,", longitude, latitude);
 
     // setUnfilledHighlightedTransport(false);
     // const check = checkIfTransportAndCalendarValuesAreFilled();
@@ -109,7 +129,22 @@ export default function SearchCriterias() {
 
     // if (!isLocationChosen) return;
 
-    const posi = getCurrentPos();
+    // const posi = getCurrentPos();
+
+    const params = {
+      lon: longitude,
+      lat: latitude,
+      transport: highlightedTransport,
+      date: formatDate(selectedDate),
+      travel_time: travelDistance,
+    };
+
+    const urlPar = Object.keys(params)
+      .map((key) => key + "=" + params[key])
+      .join("&");
+
+    router.push(`search?${urlPar}`);
+    header && header.current.close();
   };
 
   const sendData = (str: string) => {
@@ -133,16 +168,10 @@ export default function SearchCriterias() {
   return (
     //TODO submit is not triggering
     <FormStyle onSubmit={onSubmit}>
-      {/* <WhereAreYou
-        setTownId={setTownId}
-        setUserGeoLocation={setUserGeoLocation}
-        isLocationChosen={isLocationChosen}
-        setLocationChosen={setLocationChosen}
-        townSearch={townSearch}
-        setTownSearch={setTownSearch}
-      /> */}
+      {header && (
+        <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
+      )}
       <ChooseCalendarValue
-        unfilledCalendar={unfilledCalendar}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />

@@ -16,11 +16,7 @@ import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
 import { Text } from "../../ui-kit/components/text";
 import { Flex } from "../../ui-kit/components/flex";
 
-export const ChooseCalendarValue = ({
-  unfilledCalendar,
-  selectedDate,
-  setSelectedDate,
-}) => {
+export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
   const popperRef = useRef<HTMLDivElement>(null);
   const [isPopperOpen, setIsPopperOpen] = useState(false);
   const [locale, setLocale] = useState("en-US");
@@ -75,13 +71,10 @@ export const ChooseCalendarValue = ({
 
   return (
     <section id="calendar w-full">
-      <div className="flex flex-col items-center">
-        <Text color="black">When do you want to travel?</Text>
-        {unfilledCalendar && (
-          <p className="text-md text-red-500 font-bold">
-            Please fill calendar value
-          </p>
-        )}
+      <div className="flex flex-col items-center gap-1">
+        <Text variant="subtitle-small" color="black">
+          When do you want to travel?
+        </Text>
         <Spacer vertical={2} />
         <Flex
           border={2}
@@ -92,12 +85,13 @@ export const ChooseCalendarValue = ({
           justifyContent={"center"}
           alignItems={"center"}
           position={"relative"}
-          width={["150px", "200px"]}
+          width={["200px"]}
         >
-          <Text variant="body-small">
+          <Text color="black" variant="body-large">
             {selectedDate.toLocaleDateString(locale)}
           </Text>
           <div
+            tabIndex={0}
             className={`cursor-pointer absolute right-1 ${
               isPopperOpen && "bg-gray-300"
             } hover:bg-gray-300 rounded-lg`}

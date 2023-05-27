@@ -34,6 +34,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <Head>
         <title>Sunchaser</title>
+        <meta name="description" content="Sunchaser" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Wrapper>
         <HeaderComponent isHomePage={isHomePage} />

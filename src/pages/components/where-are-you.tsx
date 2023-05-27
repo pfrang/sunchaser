@@ -5,15 +5,19 @@ import { Spinner } from "../../ui-kit/spinner/spinner";
 import { fetcher } from "../api/common-swr-fetcher-with-params";
 import { gmapsAutoSearchUrl } from "../api/google-maps/auto-search/index.endpoint";
 import { GoogleMapsAutoSearchMappedData } from "../api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
+import { Text } from "../../ui-kit/components/text";
+
+interface WhereAreYouProps {
+  locationRef: React.MutableRefObject<HTMLInputElement>;
+  setTownId: (id: string) => void;
+}
 
 export default function WhereAreYou({
-  isLocationChosen,
+  locationRef,
   setTownId,
-  setLocationChosen,
-  townSearch,
-  setTownSearch,
-  setUserGeoLocation,
-}) {
+}: WhereAreYouProps) {
+  const [townSearch, setTownSearch] = useState("");
+  const [isLocationChosen, setLocationChosen] = useState(false);
   const [geoLocationSearchItems, setGeoLocationSearchItems] = useState([]);
   const [isGeoLocationLoading, setIsGeoLocationLoading] = useState(false);
 
@@ -32,37 +36,10 @@ export default function WhereAreYou({
     setGeoLocationSearchItems(data.items);
   }, [data, error, townSearch]);
 
-  const getCurrentPos = () => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    function success(pos) {
-      const crd = pos.coords;
-      setTownSearch(`Min posisjon`);
-      setUserGeoLocation(`lat=${crd.latitude}&lon=${crd.longitude}`);
-      return crd;
-    }
-
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  };
-
-  const onGetUserLocation = async () => {
-    const pos = getCurrentPos();
-    setLocationChosen(true);
-  };
-
   const setLocationAndClearList = ({ value, id }) => {
     setTownSearch(value);
     setTownId(id);
     setLocationChosen(true);
-    setUserGeoLocation(``);
     setGeoLocationSearchItems([]);
   };
 
@@ -73,10 +50,13 @@ export default function WhereAreYou({
 
   return (
     <section id="where_are_you_seciton">
-      <div className="flex flex-col pr-2">
-        <label>Where are you?</label>
+      <div className="flex flex-col pr-2 text-center">
+        <Text color="black" variant="subtitle-small">
+          Where do you want to travel from?
+        </Text>
         <div className="flex justify-between relative w-full">
           <input
+            ref={locationRef}
             required
             className="pl-2 w-full border-2 h-10 text-xl"
             placeholder="Location"
@@ -96,12 +76,6 @@ export default function WhereAreYou({
         {!isLocationChosen && townSearch && (
           <div className="relative w-full z-10">
             <ul className="absolute left-0 w-full rounded-md border-1-black margin-0 padding-0">
-              <li
-                onClick={() => onGetUserLocation()}
-                className="border-2 bg-slate-200 h-10 text-xl cursor-pointer border-2 rounded-sm border-slate-300"
-              >
-                Min posisjon
-              </li>
               {geoLocationSearchItems &&
                 geoLocationSearchItems.map(
                   (item: GoogleMapsAutoSearchMappedData, index) => {

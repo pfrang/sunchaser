@@ -6,9 +6,11 @@ import { useRouter } from "next/router";
 import { Flex } from "../ui-kit/components/flex";
 import { theme } from "../ui-kit/theme/theme";
 import { Text } from "../ui-kit/components/text";
+import { Spacer } from "../ui-kit/spacer/spacer";
 
 import SearchCriterias from "./components/search-criterias";
 import { WeatherCarousell } from "./components/weather-carousell";
+import UserForm from "./components/search-criterias";
 
 const TwoGridHorizontalContainer = styled.div`
   display: grid;
@@ -35,37 +37,40 @@ const Home: NextPage = () => {
   };
 
   return (
-    <TwoGridHorizontalContainer>
-      <div
-        className="grid"
-        // style={{ backgroundColor: getColor(weather) }}
-      >
-        {/* <div className="m-auto">
+    <>
+      <TwoGridHorizontalContainer>
+        <div
+          className="grid"
+          // style={{ backgroundColor: getColor(weather) }}
+        >
+          {/* <div className="m-auto">
           <h3 className="text-white text-xl">Choose weather</h3>
         </div> */}
-        <div className="overflow-hidden bg-inherit h-full relative">
-          <div className="absolute flex justify-center z-10 w-full">
-            <Text variant="subtitle-large" color="black">
-              Choose weather
-            </Text>
+          <div className="overflow-hidden bg-inherit h-full relative">
+            <div className="absolute flex justify-center z-10 w-full">
+              <Text variant="subtitle-large" color="black">
+                Choose weather
+              </Text>
+            </div>
+            <WeatherCarousell setWeather={setWeather} />
           </div>
-          <WeatherCarousell setWeather={setWeather} />
         </div>
-      </div>
-      <div className="px-10 pt-10">
-        <section id="form" className="h-full">
-          <div
-            className="z-10 border-2 rounded-xl h-full shadow-2xl"
-            style={{
-              backgroundColor: theme.colors.whiteSmoke,
-              borderColor: theme.color.white,
-            }}
-          >
-            <SearchCriterias />
-          </div>
-        </section>
-      </div>
-    </TwoGridHorizontalContainer>
+        <div className="px-10 pt-10">
+          <section id="form" className="h-full">
+            <div
+              className="z-10 border-2 rounded-xl h-full shadow-2xl"
+              style={{
+                backgroundColor: theme.colors.whiteSmoke,
+                borderColor: theme.color.white,
+              }}
+            >
+              <UserForm />
+            </div>
+          </section>
+        </div>
+      </TwoGridHorizontalContainer>
+      <Spacer height={64} />
+    </>
   );
 };
 
