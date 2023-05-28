@@ -51,9 +51,7 @@ export default function WhereAreYou({
   return (
     <section id="where_are_you_seciton">
       <div className="flex flex-col pr-2 text-center">
-        <Text color="black" variant="subtitle-small">
-          Where do you want to travel from?
-        </Text>
+        <Text variant="subtitle-small">Where do you want to travel from?</Text>
         <div className="flex justify-between relative w-full">
           <input
             ref={locationRef}

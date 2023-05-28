@@ -15,10 +15,10 @@ export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
     <section id="distance_traveling" className="w-full">
       <div className="w-full flex flex-col">
         <div className="flex justify-between">
-          <Text noWrap variant="subtitle-small" color="black">
+          <Text noWrap variant="subtitle-small">
             How far are you willing to travel?
           </Text>
-          <Text noWrap variant="subtitle-small" color="black">{`${setUIOnNumber(
+          <Text noWrap variant="subtitle-small">{`${setUIOnNumber(
             value
           )}km`}</Text>
         </div>

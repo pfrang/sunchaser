@@ -48,9 +48,7 @@ const Home: NextPage = () => {
         </div> */}
           <div className="overflow-hidden bg-inherit h-full relative">
             <div className="absolute flex justify-center z-10 w-full">
-              <Text variant="subtitle-large" color="black">
-                Choose weather
-              </Text>
+              <Text variant="subtitle-large">Choose weather</Text>
             </div>
             <WeatherCarousell setWeather={setWeather} />
           </div>

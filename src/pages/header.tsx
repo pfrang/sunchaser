@@ -67,9 +67,7 @@ export default function HeaderComponent({ isHomePage }) {
             onClick={() => modal.current.close()}
             className="absolute right-0 top-0 cursor-pointer border-l-2 border-b-2 border-black w-6 text-center hover:bg-gray-600 hover:border-none  transition-all duration-300 ease-in-out "
           >
-            <Text variant="subtitle-small" color="black">
-              X
-            </Text>
+            <Text variant="subtitle-small">X</Text>
           </span>
         </div>
       </dialog>

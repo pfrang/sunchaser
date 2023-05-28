@@ -72,9 +72,7 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
   return (
     <section id="calendar w-full">
       <div className="flex flex-col items-center gap-1">
-        <Text variant="subtitle-small" color="black">
-          When do you want to travel?
-        </Text>
+        <Text variant="subtitle-small">When do you want to travel?</Text>
         <Spacer vertical={2} />
         <Flex
           border={2}
@@ -87,7 +85,7 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
           position={"relative"}
           width={["200px"]}
         >
-          <Text color="black" variant="body-large">
+          <Text variant="body-large">
             {selectedDate.toLocaleDateString(locale)}
           </Text>
           <div

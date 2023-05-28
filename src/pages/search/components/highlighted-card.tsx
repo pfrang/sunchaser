@@ -84,7 +84,7 @@ export const HighlightedCard = ({
         position={"relative"}
       >
         <Flex position={"absolute"} left={2} top={0}>
-          <Text color="black">{`${modifiedDate}`}</Text>
+          <Text>{`${modifiedDate}`}</Text>
         </Flex>
         <Flex
           width={"100%"}
@@ -92,11 +92,11 @@ export const HighlightedCard = ({
           alignItems={"center"}
         >
           <Flex justifyContent={"flex-end"} height={[28, 54]}>
-            <Text noWrap color="black">{`sunrise ${times[0].time}`}</Text>
+            <Text noWrap>{`sunrise ${times[0].time}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
           <Flex height={[28, 54]}>
-            <Text noWrap color="black">{`sunset ${times[0].time}`}</Text>
+            <Text noWrap>{`sunset ${times[0].time}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
         </Flex>

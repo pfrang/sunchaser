@@ -32,7 +32,7 @@ export const Text: FC<TextProps> = ({
   variant = "regular",
   className,
   content,
-  color = "inherit",
+  color = "black",
   children,
   noWrap,
   fontSize,
