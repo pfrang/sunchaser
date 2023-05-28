@@ -118,6 +118,10 @@ export default function UserForm({ header }: UserFormProps) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (!header) {
+      getCurrentPos();
+      return;
+    }
     const { longitude, latitude } = await fetchTownDetails();
     // const { longitude, latitude } = await fetchTownDetails();
     // // console.log(",,", longitude, latitude);
@@ -126,10 +130,6 @@ export default function UserForm({ header }: UserFormProps) {
     // const check = checkIfTransportAndCalendarValuesAreFilled();
 
     // if (check.calendarValue === "" || check.transport === "") return;
-
-    // if (!isLocationChosen) return;
-
-    // const posi = getCurrentPos();
 
     const params = {
       lon: longitude,
@@ -144,7 +144,7 @@ export default function UserForm({ header }: UserFormProps) {
       .join("&");
 
     router.push(`search?${urlPar}`);
-    header && header.current.close();
+    header.current.close();
   };
 
   const sendData = (str: string) => {
