@@ -8,7 +8,6 @@ import { theme } from "../ui-kit/theme/theme";
 import { Flex } from "../ui-kit/components/flex";
 import { Text } from "../ui-kit/components/text";
 
-import SearchCriterias, { FormStyle } from "./components/search-criterias";
 import UserForm from "./components/search-criterias";
 
 const Header = styled.header`
@@ -26,6 +25,8 @@ export default function HeaderComponent({ isHomePage }) {
 
   const onClick = () => {
     modal.current.showModal();
+    modal.current.style.transform = "translateY(-50%)";
+    modal.current.style.top = "50%";
     return;
   };
 
@@ -43,20 +44,22 @@ export default function HeaderComponent({ isHomePage }) {
               style={{ cursor: "pointer" }}
               layout="fixed"
               objectFit="contain"
-              width={150}
-              height={"100%"}
+              width={250}
+              height={"60px"}
               // sizes="(max-width: 800px) 100px, 50px"
               alt="Logo"
-              src={
-                "/logo/sunchaser-high-resolution-logo-color-on-transparent-background.png"
-              }
+              src={"/logo.svg"}
             />
           </a>
         </Link>
+        {/* <Text variant="body-large-bold">Sunchaser</Text> */}
       </Flex>
-      <dialog className="p-0 relative" ref={modal}>
+      <dialog
+        className="p-0 relative border-2 rounded-md w-[300px]"
+        ref={modal}
+      >
         <div
-          className="h-96"
+          className="h-[500px] animate-spin"
           style={{
             backgroundColor: theme.colors.whiteSmoke,
             borderColor: theme.color.white,

@@ -25,6 +25,10 @@ const FourHorizontalGrid = styled.div`
   color: black;
   height: 100%;
   flex-grow: 1;
+  &:nth-last-child() {
+    height: 20px;
+    background-color: red;
+  }
   /* align-items: center; */
   /* width: 100%; */
   /* background-color: #f2f2f2; */
@@ -35,7 +39,6 @@ export const GridItem = styled.div`
   display: inline-block;
   text-align: center;
   white-space: nowrap;
-  height: 100%;
   &::after {
     content: "";
     position: absolute;
@@ -110,7 +113,6 @@ export const HighlightedCard = ({
         <FourHorizontalGrid className="sticky z-10 bg-white -mb-1 left-0 top-0 border-r-2 border-slate-600">
           <GridItem className="relative">
             <Flex
-              height={"100%"}
               alignItems={"center"}
               justifyContent={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
@@ -120,7 +122,6 @@ export const HighlightedCard = ({
           </GridItem>
           <GridItem className="relative">
             <Flex
-              height={"100%"}
               alignItems={"center"}
               justifyContent={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
@@ -130,7 +131,6 @@ export const HighlightedCard = ({
           </GridItem>
           <GridItem className="relative">
             <Flex
-              height={"100%"}
               justifyContent={"center"}
               alignItems={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
@@ -139,7 +139,6 @@ export const HighlightedCard = ({
             </Flex>
           </GridItem>
           <Flex
-            height={"100%"}
             justifyContent={"center"}
             alignItems={"center"}
             width={[gridWidth.mobile, gridWidth.pc]}
