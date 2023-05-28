@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
@@ -22,12 +22,17 @@ const Header = styled.header`
 //NOT USED CURRENTLY
 export default function HeaderComponent({ isHomePage }) {
   const modal = useRef<HTMLDialogElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
     modal.current.showModal();
-    modal.current.style.transform = "translateY(-50%)";
-    modal.current.style.top = "50%";
+    setIsOpen(true);
     return;
+  };
+
+  const onClose = () => {
+    modal.current.close();
+    setIsOpen(false);
   };
 
   return (
@@ -54,12 +59,9 @@ export default function HeaderComponent({ isHomePage }) {
         </Link>
         {/* <Text variant="body-large-bold">Sunchaser</Text> */}
       </Flex>
-      <dialog
-        className="p-0 relative border-2 rounded-md w-[300px]"
-        ref={modal}
-      >
+      <dialog className="p-0 rounded-md" ref={modal}>
         <div
-          className="h-[500px] animate-spin"
+          className={`h-[500px] w-[300px]`}
           style={{
             backgroundColor: theme.colors.whiteSmoke,
             borderColor: theme.color.white,
@@ -67,14 +69,13 @@ export default function HeaderComponent({ isHomePage }) {
         >
           <UserForm header={modal} />
           <span
-            onClick={() => modal.current.close()}
+            onClick={() => onClose()}
             className="absolute right-0 top-0 cursor-pointer border-l-2 border-b-2 border-black w-6 text-center hover:bg-gray-600 hover:border-none  transition-all duration-300 ease-in-out "
           >
             <Text variant="subtitle-small">X</Text>
           </span>
         </div>
       </dialog>
-
       {!isHomePage && (
         <Flex paddingY={2} justifyContent={"flex-end"}>
           <img

@@ -108,6 +108,8 @@ export const HighlightedCard = ({
       <div
         ref={scrollRef}
         onWheel={handleScroll}
+        // tailwind-scrollbar functionalities
+        // "scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent hover:scrollbar-thumb-pointer"
         className="flex overflow-x-auto"
       >
         <FourHorizontalGrid className="sticky z-10 bg-white -mb-1 left-0 top-0 border-r-2 border-slate-600">

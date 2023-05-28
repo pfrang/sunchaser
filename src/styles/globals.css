@@ -14,6 +14,8 @@ body {
 }
 
 
+
+
 a {
   color: inherit;
   text-decoration: none;
@@ -38,6 +40,24 @@ h3 {
 }
 
 
+dialog {
+  pointer-events: none;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+dialog[open] {
+  opacity: 1;
+  pointer-events: inherit;
+  transform: translateY(-50%, 0);
+}
+
+/* dialog::backdrop {
+  background-color: rgba(0, 0, 255, 0.2);
+} */
 
 .mySwiper{
   position: static !important;
