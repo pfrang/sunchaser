@@ -13,7 +13,16 @@ conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
 cursor = conn.cursor()
 
 #Connecting to master sql table to collect all lat, lon
-sql="SELECT lat,lon FROM coordinates_all where country=?"
+#sql="SELECT lat,lon FROM coordinates_all where country=?"
+
+sql='''
+Select res.lat,res.lon,res.country from (Select filter.wind,co.lat,co.lon,co.country from (Select * from weather_forecast
+where date>DATEADD(day, 9, GETUTCDATE())) as filter
+Right JOIN coordinates_all as co ON co.lat=filter.lat and co.lon=filter.lon
+where filter.wind is NULL) as res
+where res.country=?
+
+'''
 
 # Get data from table
 cursor.execute(sql,"Norway")
