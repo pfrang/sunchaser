@@ -35,7 +35,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Sunchaser</title>
         <meta name="description" content="Sunchaser" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
       </Head>
       <Wrapper>
         <HeaderComponent isHomePage={isHomePage} />

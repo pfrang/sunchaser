@@ -1,8 +1,23 @@
 import { useEffect, useState } from "react";
+import Slider from "@mui/material/Slider";
+import { styled } from "@mui/material/styles";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 import { Text } from "../../ui-kit/components/text";
 
 import { setUIOnNumber, valueRange } from "./travel-distance-settings";
+
+const CustomizedSlider = styled(Slider)`
+  color: #20b2aa;
+
+  :hover {
+    color: #2e8b57;
+  }
+
+  & .MuiSlider-thumb {
+    border-radius: 1px;
+  }
+`;
 
 export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
   const [value, setValue] = useState(5);
@@ -13,6 +28,7 @@ export const ChooseTravelDistance = ({ setTravelDistance, travelDistance }) => {
 
   return (
     <section id="distance_traveling" className="w-full">
+      <Slider defaultValue={30} />
       <div className="w-full flex flex-col">
         <div className="flex justify-between">
           <Text noWrap variant="subtitle-small">

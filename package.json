@@ -9,6 +9,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.2",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.3",
     "@styled-system/css": "^5.1.5",
     "@types/react-calendar": "^3.5.2",
     "@types/styled-components": "^5.1.26",
