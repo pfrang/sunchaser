@@ -9,6 +9,13 @@ module.exports = {
         tablet: "800px",
         tabletbig: "1100px",
       },
+      keyframes: {
+        jumpInfinite: {
+          "0%": { marginRight: "0" },
+          "50%": { marginRight: "20px" },
+          "100%": { marginRight: "0" },
+        },
+      },
     },
   },
   plugins: [require("daisyui"), require("tailwind-scrollbar")],

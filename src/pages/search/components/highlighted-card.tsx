@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { Spacer } from "../../../ui-kit/spacer/spacer";
-import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
-import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Flex } from "../../../ui-kit/components/flex";
 import { Text } from "../../../ui-kit/components/text";
+import { Flex } from "../../../ui-kit/components/flex";
+import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Spacer } from "../../../ui-kit/spacer/spacer";
+import { Arrow } from "../../../ui-kit/arrow/arrow";
 
 import { TimeSeries } from "./time-series";
 
@@ -57,15 +57,8 @@ export const HighlightedCard = ({
   location,
   times,
 }: CardProps) => {
-  const scrollRef = useRef(null);
-
-  const handleScroll = (event) => {
-    if (event.deltaY !== 0) {
-      event.preventDefault();
-      scrollRef.current.scrollLeft += event.deltaY;
-    }
-  };
-
+  const scrollContainerDiv = useRef<null>(null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -105,13 +98,17 @@ export const HighlightedCard = ({
         </Flex>
       </Flex>
       <Spacer line />
+
       <div
-        ref={scrollRef}
-        onWheel={handleScroll}
         // tailwind-scrollbar functionalities
         // "scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent hover:scrollbar-thumb-pointer"
-        className="flex overflow-x-auto"
+        ref={scrollContainerDiv}
+        className="flex overflow-x-auto relative z-99 color-black-600"
       >
+        <svg viewBox="0 0 24 24" id="bouncingArrow">
+          <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
+        </svg>
+
         <FourHorizontalGrid className="sticky z-10 bg-white -mb-1 left-0 top-0 border-r-2 border-slate-600">
           <GridItem className="relative">
             <Flex

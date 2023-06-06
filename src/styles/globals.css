@@ -20,7 +20,6 @@ body {
 
 
 
-
 a {
   color: inherit;
   text-decoration: none;
@@ -251,4 +250,28 @@ input[type=range]:focus::-ms-fill-upper {
   /* Hide the default thumb */
   position: relative;
   z-index: 1;
+}
+
+
+@keyframes bounce {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(20px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+#bouncingArrow {
+  position: absolute;
+  bottom: 50%;
+  right: 20px;
+  height: 24px;
+  width: 24px;
+  animation: bounce 2s infinite;
 }
