@@ -35,8 +35,8 @@ conn.commit()
 #loop each lat lon pair to run YR.api for sunset and sunrise
 for index,row in df.iterrows():
     lat=float(str(row[0]).split(",")[0][1:])
-    lon=float(str(row[0]).split(",")[1][:-1])
-
+    lon=float(str(row[0]).split(",")[1])
+    
     forecast_schedule=getWeather(lat,lon,str(datetime.datetime.now().date()))
 
     #delete previous records for the specific location and add new data
