@@ -1,34 +1,29 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 
 import { Text } from "../../../ui-kit/components/text";
 import { Flex } from "../../../ui-kit/components/flex";
 import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Spacer } from "../../../ui-kit/spacer/spacer";
-import { Arrow } from "../../../ui-kit/arrow/arrow";
 
 import { TimeSeries } from "./time-series";
 
-interface CardProps extends AzureFunctionCoordinatesMappedItems {}
-
-const ThreeHorizontalGrid = styled.div`
+const TwoHorizontalGrid = styled.div`
   display: grid;
-  grid-template-rows: 2fr auto 3fr;
+  grid-template-rows: 2fr 3fr;
   width: 100%;
   background-color: white;
   cursor: auto;
 `;
 
-const FourHorizontalGrid = styled.div`
+const FourHorizontalGrid = styled.div<{ borderRight?: boolean }>`
   display: grid;
   grid-template-rows: repeat(4, 1fr);
   color: black;
   height: 100%;
   flex-grow: 1;
-  &:nth-last-child() {
-    height: 20px;
-    background-color: red;
-  }
+  border-right: ${(props) =>
+    props.borderRight ? "1px solid rgba(0, 0, 0, 0.2)" : null};
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
   /* align-items: center; */
   /* width: 100%; */
   /* background-color: #f2f2f2; */
@@ -45,9 +40,11 @@ export const GridItem = styled.div`
     bottom: 0;
     left: 0;
     width: 100%;
-    border-top: 1px solid black;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
   }
 `;
+
+interface CardProps extends AzureFunctionCoordinatesMappedItems {}
 
 export const HighlightedCard = ({
   rank,
@@ -57,8 +54,8 @@ export const HighlightedCard = ({
   location,
   times,
 }: CardProps) => {
-  const scrollContainerDiv = useRef<null>(null);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const svgElementRef = useRef(null);
+  const svgContainerRef = useRef(null);
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -71,8 +68,31 @@ export const HighlightedCard = ({
     pc: "250px",
   };
 
+  useEffect(() => {
+    const svgContainer = svgContainerRef.current;
+    const svgElement = svgElementRef.current;
+
+    function updateSvgPosition() {
+      const rect = svgContainer.getBoundingClientRect();
+      const scrollLeft = svgContainer.scrollLeft;
+
+      svgElement.style.top = `${rect.top + rect.height / 2}px`;
+      svgElement.style.left = `${30 + scrollLeft}px`; // Adjust the value as needed
+    }
+
+    svgContainer.addEventListener("scroll", updateSvgPosition);
+    window.addEventListener("resize", updateSvgPosition);
+
+    updateSvgPosition();
+
+    return () => {
+      svgContainer.removeEventListener("scroll", updateSvgPosition);
+      window.removeEventListener("resize", updateSvgPosition);
+    };
+  }, []);
+
   return (
-    <ThreeHorizontalGrid>
+    <TwoHorizontalGrid>
       <Flex
         justifyContent={"space-around"}
         gap={4}
@@ -97,23 +117,24 @@ export const HighlightedCard = ({
           </Flex>
         </Flex>
       </Flex>
-      <Spacer line />
+      {/* <Spacer line /> */}
 
       <div
-        // tailwind-scrollbar functionalities
-        // "scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent hover:scrollbar-thumb-pointer"
-        ref={scrollContainerDiv}
-        className="flex overflow-x-auto relative z-99 color-black-600"
+        ref={svgContainerRef}
+        className="relative flex overflow-x-auto color-black-600 z-10"
       >
-        <svg viewBox="0 0 24 24" id="bouncingArrow">
+        <svg ref={svgElementRef} viewBox="0 0 24 24" id="bouncingArrow">
           <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
         </svg>
-
-        <FourHorizontalGrid className="sticky z-10 bg-white -mb-1 left-0 top-0 border-r-2 border-slate-600">
+        <FourHorizontalGrid
+          borderRight
+          className="sticky bg-white -mb-1 left-0 z-10"
+        >
           <GridItem className="relative">
             <Flex
               alignItems={"center"}
               justifyContent={"center"}
+              height={"100%"}
               width={[gridWidth.mobile, gridWidth.pc]}
             >
               <Text>Time</Text>
@@ -121,6 +142,7 @@ export const HighlightedCard = ({
           </GridItem>
           <GridItem className="relative">
             <Flex
+              height={"100%"}
               alignItems={"center"}
               justifyContent={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
@@ -130,6 +152,7 @@ export const HighlightedCard = ({
           </GridItem>
           <GridItem className="relative">
             <Flex
+              height={"100%"}
               justifyContent={"center"}
               alignItems={"center"}
               width={[gridWidth.mobile, gridWidth.pc]}
@@ -153,6 +176,6 @@ export const HighlightedCard = ({
           );
         })}
       </div>
-    </ThreeHorizontalGrid>
+    </TwoHorizontalGrid>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { InferGetServerSidePropsType } from "next";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
@@ -10,6 +11,7 @@ import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Flex } from "../../ui-kit/components/flex/flex";
+import { PayLoadParams } from "../components/search-criterias";
 
 import { MapBoxHelper, StartAndEndCoordinates } from "./mapbox-settings";
 import { Carousell } from "./components/carousell";
@@ -29,8 +31,11 @@ export interface HookProperties {
   error: any;
 }
 
-export default function Search({ params, mapBoxkey }) {
-  const { data, isLoading, error }: HookProperties = useCoordinates(params);
+export default function Search({
+  query,
+  mapBoxkey,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { data, isLoading, error }: HookProperties = useCoordinates(query);
 
   mapboxgl.accessToken = mapBoxkey;
 
@@ -158,17 +163,23 @@ export default function Search({ params, mapBoxkey }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const body = context.query;
-  const params = {
-    params: body,
+interface GetServerSidePropsSearch {
+  props: {
+    query: PayLoadParams;
+    mapBoxkey: string;
   };
+}
+
+export async function getServerSideProps(
+  context
+): Promise<GetServerSidePropsSearch> {
+  const query: PayLoadParams = context.query;
 
   const mapBoxkey = new AppConfig().mapBox.key;
 
   return {
     props: {
-      params,
+      query,
       mapBoxkey,
     },
   };

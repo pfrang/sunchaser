@@ -18,7 +18,9 @@ body {
   background-color: "#F1F3FF";
 }
 
-
+* {
+  box-sizing: border-box;
+}
 
 a {
   color: inherit;
@@ -268,10 +270,8 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 #bouncingArrow {
-  position: absolute;
-  bottom: 50%;
-  right: 20px;
-  height: 24px;
+  height: 20px;
   width: 24px;
+  z-index: 100;
   animation: bounce 2s infinite;
 }

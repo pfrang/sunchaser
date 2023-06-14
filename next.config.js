@@ -39,7 +39,7 @@ const nextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "frame-ancestors 'self'; style-src 'self' https://api.mapbox.com/ 'unsafe-inline'",
+              "frame-ancestors 'self'; style-src 'self' https://api.mapbox.com/ https://fonts.googleapis.com/ 'unsafe-inline'",
           },
           {
             key: "Permissions-Policy",

@@ -9,7 +9,10 @@ import { Text } from "../ui-kit/components/text";
 import { Spacer } from "../ui-kit/spacer/spacer";
 
 import SearchCriterias from "./components/search-criterias";
-import { WeatherCarousell } from "./components/weather-carousell";
+import {
+  WeatherCarousell,
+  WeatherOptions,
+} from "./components/weather-carousell";
 import UserForm from "./components/search-criterias";
 
 const TwoGridHorizontalContainer = styled.div`
@@ -23,7 +26,7 @@ const TwoGridHorizontalContainer = styled.div`
 `;
 
 const Home: NextPage = () => {
-  const [weather, setWeather] = useState("sun");
+  const [weather, setWeather] = useState<WeatherOptions>("Sun");
 
   const getColor = (weather: string) => {
     switch (weather) {
@@ -50,10 +53,11 @@ const Home: NextPage = () => {
             <div className="absolute flex justify-center z-10 w-full">
               <Text variant="subtitle-large">Choose weather</Text>
             </div>
-            <WeatherCarousell setWeather={setWeather} />
+
+            <WeatherCarousell weather={weather} setWeather={setWeather} />
           </div>
         </div>
-        <div className="px-10 pt-10">
+        <div className="px-10 pt-5">
           <section id="form" className="h-full">
             <div
               className="z-10 border-2 rounded-xl h-full shadow-2xl"
@@ -62,12 +66,12 @@ const Home: NextPage = () => {
                 borderColor: theme.color.white,
               }}
             >
-              <UserForm />
+              <UserForm weatherSelected={weather} />
             </div>
           </section>
         </div>
       </TwoGridHorizontalContainer>
-      <Spacer height={64} />
+      {/* <Spacer height={64} /> */}
     </>
   );
 };

@@ -72,7 +72,7 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
   return (
     <section id="calendar w-full">
       <div className="flex flex-col items-center gap-1">
-        <Text variant="subtitle-small">When do you want to travel?</Text>
+        <Text variant="caption-large">When do you want to travel?</Text>
         <Spacer vertical={2} />
         <Flex
           border={2}

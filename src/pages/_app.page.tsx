@@ -10,7 +10,7 @@ import { theme } from "../ui-kit/theme/theme";
 import HeaderComponent from "./header";
 
 const Wrapper = styled.div`
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100svh;
   /* min-height: 100vh; */
   min-height: -moz-available;
   min-height: -webkit-fill-available;
@@ -21,12 +21,12 @@ const Wrapper = styled.div`
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    let vh = window.innerHeight * 0.01;
+  // useEffect(() => {
+  //   let vh = window.innerHeight * 0.01;
 
-    // Then we set the value in the --vh custom property to the root of the document
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }, []);
+  //   // Then we set the value in the --vh custom property to the root of the document
+  //   document.documentElement.style.setProperty("--vh", `${vh}px`);
+  // }, []);
 
   const isHomePage = pageProps.currentUrl === "/";
 

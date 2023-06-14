@@ -7,17 +7,27 @@ import {
   Mousewheel,
   Keyboard,
 } from "swiper";
+
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
+import { Text } from "../../ui-kit/components/text";
+
+export type WeatherOptions = "Sun" | "Rain" | "Snow";
 
 interface WeatherCarousellProps {
-  setWeather: (weather: string) => void;
+  setWeather: (weather: WeatherOptions) => void;
+  weather: WeatherOptions;
 }
 
-export const WeatherCarousell = ({ setWeather }: WeatherCarousellProps) => {
-  const items = ["sun", "rain", "snow"];
+export const WeatherCarousell = ({
+  setWeather,
+  weather,
+}: WeatherCarousellProps) => {
+  const items = ["Sun", "Rain", "Snow"];
+  const isDisabled = weather !== "Sun";
+
   return (
     <Swiper
       // breakpoints={{
@@ -54,7 +64,7 @@ export const WeatherCarousell = ({ setWeather }: WeatherCarousellProps) => {
       pagination
       navigation
       onSlideChange={(el) => {
-        setWeather(items[el.realIndex]);
+        setWeather(items[el.realIndex] as WeatherOptions);
       }}
       modules={[Navigation, Scrollbar, Keyboard, Pagination]}
     >
@@ -65,12 +75,22 @@ export const WeatherCarousell = ({ setWeather }: WeatherCarousellProps) => {
             id={item}
             style={{ width: "100%", height: "100%" }}
           >
+            {weather !== "Sun" && (
+              <div className="absolute flex w-full h-full justify-center items-center z-10">
+                <Text
+                  tag="h2"
+                  variant="body-large-bold"
+                >{`${weather} is not supported yet!`}</Text>
+              </div>
+            )}
             <Image
-              className="rounded-b-[50px] w-full h-full"
+              className={`rounded-b-[50px] w-full h-full ${
+                isDisabled && "opacity-[50%]"
+              }`}
               // style={{
               //   boxShadow: "rgba(0,0,0,0.4) 0px 0px 10px",
               // }}
-              src={`/photo-and-layout/${item}.png`}
+              src={`/photo-and-layout/${item.toLowerCase()}.png`}
               layout="fill"
               objectFit="cover"
             />

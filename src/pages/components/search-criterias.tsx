@@ -7,19 +7,17 @@ import { AppConfig } from "../../app-config";
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { formatDate } from "../utils/convert-date";
-import {
-  GoogleMapsDetailsData,
-  GoogleMapsDetailsResponse,
-} from "../api/google-maps/details/mapper/gmaps-details-mapper";
+import { GoogleMapsDetailsResponse } from "../api/google-maps/details/mapper/gmaps-details-mapper";
 import { ResponseDTO } from "../api/next-api.client";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { ChooseCalendarValue } from "./choose-calendar-value";
 import { destructureMyPosition } from "./get-user-location";
 import WhereAreYou from "./where-are-you";
+import { WeatherOptions } from "./weather-carousell";
 
-const Button = styled.button`
-  background-color: #1215fd;
+const Button = styled.button<{ disabled?: boolean }>`
+  background-color: ${(props) => (props.disabled ? "gray" : "#1215fd")};
   padding: 0.5rem;
   border: 1px solid white;
   border-radius: 0.375rem;
@@ -28,7 +26,7 @@ const Button = styled.button`
   color: white;
   transition: 0.5s ease;
   &:hover {
-    background-color: #c7c744;
+    background-color: ${(props) => (props.disabled ? null : "#c7c744")};
   }
 `;
 
@@ -41,11 +39,20 @@ export const FormStyle = styled.form`
   padding: 16px;
 `;
 
-interface UserFormProps {
-  header?: React.MutableRefObject<HTMLDialogElement>;
+export interface PayLoadParams {
+  lon: string;
+  lat: string;
+  transport: string;
+  date: string;
+  travel_distance: string;
 }
 
-export default function UserForm({ header }: UserFormProps) {
+interface UserFormProps {
+  header?: React.MutableRefObject<HTMLDialogElement>;
+  weatherSelected?: WeatherOptions;
+}
+
+export default function UserForm({ header, weatherSelected }: UserFormProps) {
   const [highlightedTransport, setHighlightedTransport] = useState("");
   // const [userGeoLocation, setUserGeoLocation] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -57,11 +64,13 @@ export default function UserForm({ header }: UserFormProps) {
     longitude: 0,
     latitude: 0,
   });
-  const [travelDistance, setTravelDistance] = useState("0:10");
+  const [travelDistance, setTravelDistance] = useState("");
 
   const travelItems = ["Walk", "Car", "Bike", "Public Transportation"];
 
   const router = useRouter();
+
+  const sunSelected = weatherSelected === "Sun";
 
   // const checkIfTransportAndCalendarValuesAreFilled = () => {
   //   const check = { transport: "check", calendarValue: "check" };
@@ -131,12 +140,12 @@ export default function UserForm({ header }: UserFormProps) {
 
     // if (check.calendarValue === "" || check.transport === "") return;
 
-    const params = {
+    const params: PayLoadParams = {
       lon: longitude,
       lat: latitude,
       transport: highlightedTransport,
       date: formatDate(selectedDate),
-      travel_time: travelDistance,
+      travel_distance: travelDistance,
     };
 
     const urlPar = Object.keys(params)
@@ -150,12 +159,12 @@ export default function UserForm({ header }: UserFormProps) {
   const sendData = (str: string) => {
     const { longitude, latitude } = destructureMyPosition(str);
 
-    const params = {
+    const params: PayLoadParams = {
       lon: longitude,
       lat: latitude,
       transport: highlightedTransport,
       date: formatDate(selectedDate),
-      travel_time: travelDistance,
+      travel_distance: travelDistance,
     };
 
     const urlPar = Object.keys(params)
@@ -175,10 +184,7 @@ export default function UserForm({ header }: UserFormProps) {
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
       />
-      <ChooseTravelDistance
-        setTravelDistance={setTravelDistance}
-        travelDistance={travelDistance}
-      />
+      <ChooseTravelDistance setTravelDistance={setTravelDistance} />
       {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}
@@ -188,7 +194,7 @@ export default function UserForm({ header }: UserFormProps) {
       </ChooseTransportationMethod> */}
       <Spacer vertical={1} />
       <div className="flex justify-center">
-        <Button>Find the sun</Button>
+        <Button disabled={!sunSelected}>Find the sun</Button>
       </div>
     </FormStyle>
   );
