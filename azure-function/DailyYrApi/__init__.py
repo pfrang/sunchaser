@@ -13,6 +13,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if req.method not in allowed_methods: return func.HttpResponse("Method not allowed", status_code=404)
 
     try:
+        req_body = req.get_json()
+        params = req_body["params"]
+
         server = os.getenv('SQL_Server')
         db = os.getenv('SQL_Database')
         username = os.getenv('SQL_Username')
@@ -26,11 +29,16 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "driver": driver
         }
 
-        print("hello")
-        initializer = Handler(config).updateSunsetSunrise()
         
+        for i in params['update']:
+            if "suntime" in i:
+                initializer = Handler(config).updateSunsetSunrise()
+            elif "weather" in i:
+                initializer = Handler(config).updateWeatherForecast()
+            else: return func.HttpResponse("update type not allowed", status_code=405)
+            
 
-
+        
         return func.HttpResponse(f'{initializer}',status_code=200)
     except Exception as e:
         return func.HttpResponse(f'Error from Python: {e}',status_code=500)

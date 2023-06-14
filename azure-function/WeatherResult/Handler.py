@@ -61,11 +61,33 @@ class Handler:
        # Get data from table
        cursor.execute(sql,10,date,lat_high,lat_low,lon_high,lon_low,date)
        data = cursor.fetchall()
-
+      
+       
        #add data from sql to pandas 
-       df = pd.DataFrame(data)#,columns=['latitude','longitude','group_rank','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','total_rank','sunrise_date','sunset_date'])
+       df = pd.DataFrame(data)
        conn.commit()
-       return df
+
+       df2=pd.DataFrame(columns=['latitude','longitude','group_rank','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','total_rank','sunrise_date','sunset_date'])
+            
+
+       for index, row in df.iterrows():
+          df2.loc[index,'latitude']=row[0][0]
+          df2.loc[index,'longitude']=row[0][1]
+          df2.loc[index,'group_rank']=row[0][2]
+          df2.loc[index,'primary_name']=row[0][3]
+          df2.loc[index,'secondary_name']=row[0][4]
+          df2.loc[index,'tertiary_name']=row[0][5]
+          df2.loc[index,'quaternary_name']=row[0][6]
+          df2.loc[index,'date']=row[0][7]
+          df2.loc[index,'symbol']=row[0][8]
+          df2.loc[index,'temperature']=row[0][9]
+          df2.loc[index,'time']=row[0][10]
+          df2.loc[index,'wind']=row[0][11]
+          df2.loc[index,'total_rank']=row[0][12]
+          df2.loc[index,'sunrise_date']=row[0][13]
+          df2.loc[index,'sunset_date']=row[0][14]
+
+       return df2
     
 
    

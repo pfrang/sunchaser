@@ -2,7 +2,7 @@
 from src.python.rankWeather import rankWeather
 from src.python.distanceGenerator import GetDistance
 from src.python.coordinateGenerator import GetCoordinates
-from src.python.apiRequestToYr import getWeather
+from src.python.Sql_connection.YR_Daily_Update.apiRequestToYr import getWeather
 from src.python.findNearLocation import GETLOCATIONINFO
 from src.python.coordinatesfilter import ValidCoordinate
 from operator import attrgetter, itemgetter
