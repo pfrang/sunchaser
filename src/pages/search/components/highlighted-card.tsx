@@ -44,7 +44,7 @@ export const GridItem = styled.div`
   }
 `;
 
-interface CardProps extends AzureFunctionCoordinatesMappedItems {}
+interface CardProps extends AzureFunctionCoordinatesMappedItems { }
 
 export const HighlightedCard = ({
   rank,
@@ -54,8 +54,6 @@ export const HighlightedCard = ({
   location,
   times,
 }: CardProps) => {
-  const svgElementRef = useRef(null);
-  const svgContainerRef = useRef(null);
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -67,29 +65,6 @@ export const HighlightedCard = ({
     mobile: "75px",
     pc: "250px",
   };
-
-  useEffect(() => {
-    const svgContainer = svgContainerRef.current;
-    const svgElement = svgElementRef.current;
-
-    function updateSvgPosition() {
-      const rect = svgContainer.getBoundingClientRect();
-      const scrollLeft = svgContainer.scrollLeft;
-
-      svgElement.style.top = `${rect.top + rect.height / 2}px`;
-      svgElement.style.left = `${30 + scrollLeft}px`; // Adjust the value as needed
-    }
-
-    svgContainer.addEventListener("scroll", updateSvgPosition);
-    window.addEventListener("resize", updateSvgPosition);
-
-    updateSvgPosition();
-
-    return () => {
-      svgContainer.removeEventListener("scroll", updateSvgPosition);
-      window.removeEventListener("resize", updateSvgPosition);
-    };
-  }, []);
 
   return (
     <TwoHorizontalGrid>
@@ -119,11 +94,8 @@ export const HighlightedCard = ({
       </Flex>
       {/* <Spacer line /> */}
 
-      <div
-        ref={svgContainerRef}
-        className="relative flex overflow-x-auto color-black-600 z-10"
-      >
-        <svg ref={svgElementRef} viewBox="0 0 24 24" id="bouncingArrow">
+      <div className="relative flex overflow-x-auto color-black-600 z-10">
+        <svg viewBox="0 0 24 24" id="bouncingArrow">
           <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
         </svg>
         <FourHorizontalGrid

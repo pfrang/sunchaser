@@ -10,7 +10,7 @@ import { Text } from "../../../ui-kit/components/text";
 
 import { GridItem } from "./highlighted-card";
 
-interface TimeSeriesProps extends Times {}
+interface TimeSeriesProps extends Times { }
 
 export const TimeSeries = ({
   time,

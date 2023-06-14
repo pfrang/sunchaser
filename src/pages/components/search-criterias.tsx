@@ -194,7 +194,7 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
       </ChooseTransportationMethod> */}
       <Spacer vertical={1} />
       <div className="flex justify-center">
-        <Button disabled={!sunSelected}>Find the sun</Button>
+        <Button disabled={!sunSelected && !header}>Find the sun</Button>
       </div>
     </FormStyle>
   );
