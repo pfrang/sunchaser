@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import { Text } from "../../../ui-kit/components/text";
 import { Flex } from "../../../ui-kit/components/flex";
@@ -54,6 +54,36 @@ export const HighlightedCard = ({
   location,
   times,
 }: CardProps) => {
+  const scrollDiv = useRef<HTMLDivElement>(null);
+
+  const arrowRef = useRef(null);
+  const [isStuck, setIsStuck] = useState(false);
+
+  const [shouldDisplay, setShouldDisplay] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const parentElement = scrollDiv.current;
+      const arrowSvg = arrowRef.current;
+      const containerRect = parentElement.getBoundingClientRect();
+      if (parentElement) {
+        const hasScroll = parentElement.scrollWidth > parentElement.clientWidth;
+        setShouldDisplay(hasScroll);
+      }
+
+      if (containerRect.right - arrowSvg.offsetWidth <= 0) {
+        setIsStuck(true);
+      } else {
+        setIsStuck(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
@@ -94,10 +124,25 @@ export const HighlightedCard = ({
       </Flex>
       {/* <Spacer line /> */}
 
-      <div className="relative flex overflow-x-auto color-black-600 z-10">
-        <svg viewBox="0 0 24 24" id="bouncingArrow">
-          <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
-        </svg>
+      <div
+        ref={scrollDiv}
+        className="relative flex display-inline overflow-x-auto color-black-600 z-10"
+      >
+        {shouldDisplay && (
+          <div
+            className={`${isStuck ? "absolute right-10 top-1/2 border-2-black" : "block"
+              }`}
+          >
+            <svg
+              ref={arrowRef}
+              className="sticky top-1/2 right-10"
+              viewBox="0 0 24 24"
+              id="bouncingArrow"
+            >
+              <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
+            </svg>
+          </div>
+        )}
         <FourHorizontalGrid
           borderRight
           className="sticky bg-white -mb-1 left-0 z-10"
