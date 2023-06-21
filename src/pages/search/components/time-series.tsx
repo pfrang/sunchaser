@@ -1,9 +1,4 @@
-import styled from "styled-components";
-import { useState, useRef, useEffect } from "react";
-
-import { Divider } from "../../../ui-kit/components/divider";
 import { Flex } from "../../../ui-kit/components/flex";
-import { Spacer } from "../../../ui-kit/spacer/spacer";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Times } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Text } from "../../../ui-kit/components/text";
