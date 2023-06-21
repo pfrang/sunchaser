@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { CoordinatesAPiClient } from "../coordinates-api-client/coordinates-api-client";
 import { CoordinatesMapper } from "../mapper/coordinates-mapper";
+import { PayLoadParams } from "../../../../components/search-criterias";
 
 async function voidWait(timeToDelay: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, timeToDelay));
@@ -11,7 +12,13 @@ async function voidWait(timeToDelay: number): Promise<void> {
 
 export const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const body = req.body;
+    const body = checkSchema(req.body?.params);
+
+    if (!body) {
+      return res.status(401).json({
+        error: "Body didnt have the necessary parameters",
+      });
+    }
 
     const response = await new CoordinatesAPiClient().post(body);
 
@@ -25,6 +32,10 @@ export const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
       error: e,
     });
   }
+};
+
+const checkSchema = (body: any | PayLoadParams): body is PayLoadParams => {
+  return (body as PayLoadParams).distance !== undefined;
 };
 
 const dummyData = {
