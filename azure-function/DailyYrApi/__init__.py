@@ -29,16 +29,30 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "driver": driver
         }
 
+        update={
+            "suntime":"Suntim not updated",
+            "weather":"Weather not updated",
+            "rank":"Rank not updated",
+
+        }
+
+        
         
         for i in params['update']:
             if "suntime" in i:
-                initializer = Handler(config).updateSunsetSunrise()
+                initializer=1 # initializer = Handler(config).updateSunsetSunrise()
+                
             elif "weather" in i:
                 initializer = Handler(config).updateWeatherForecast()
-            else: return func.HttpResponse("update type not allowed", status_code=405)
-            
-
+                
+            elif "rank" in i:
+                initializer = Handler(config).updateWeatherRank()
+                
+            else: return func.HttpResponse(f"update type {i} not allowed. {update['suntime']}, {update['weather']}, {update['rank']}", status_code=405)
+            update.update({i:initializer})
         
+        initializer=update
+
         return func.HttpResponse(f'{initializer}',status_code=200)
     except Exception as e:
         return func.HttpResponse(f'Error from Python: {e}',status_code=500)

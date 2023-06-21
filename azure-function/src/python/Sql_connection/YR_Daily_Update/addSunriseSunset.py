@@ -1,11 +1,11 @@
 import pyodbc 
 import pandas as pd
-from src.python.Sql_connection.YR_Daily_Update.sunrise import getSunrise
+from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
 import datetime
 
 #todo, fix 503 response code
 
-def addSunriseSunset_response(server,database,username,password,driver,country):
+def addSunriseSunset(server,database,username,password,driver,country):
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
@@ -38,7 +38,7 @@ def addSunriseSunset_response(server,database,username,password,driver,country):
     '''
 
     # Get data from table
-    cursor.execute(sql,"Norway")
+    cursor.execute(sql,country)
     data = cursor.fetchall()
 
     #add data from sql to pandas 
@@ -50,7 +50,7 @@ def addSunriseSunset_response(server,database,username,password,driver,country):
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1][:-1])
         
-        suntime_schedule=getSunrise(lat,lon,date=datetime.datetime.now().date())
+        suntime_schedule=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
 
         #delete previous records for the specific location and add new data
         cursor.execute('''

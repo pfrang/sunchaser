@@ -1,11 +1,6 @@
 import pyodbc
 
-def weatherRanking(server,database,username,password,driver):
-	server = 'sunchaser.database.windows.net'
-	database = 'sunchaser'
-	username = 'sunchaser_admin'
-	password = 'Sommerogsol2023'   
-	driver= '{ODBC Driver 17 for SQL Server}'
+def weatherRanking(server,database,username,password,driver,country):
 
 	conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 	cursor = conn.cursor()

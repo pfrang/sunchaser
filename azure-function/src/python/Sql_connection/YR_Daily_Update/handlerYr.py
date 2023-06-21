@@ -1,6 +1,7 @@
-from src.python.Sql_connection.YR_Daily_Update.addSunriseSunset import addSunriseSunset_response
+from src.python.Sql_connection.YR_Daily_Update.addSunriseSunset import addSunriseSunset
 from src.python.Sql_connection.YR_Daily_Update.addWeatherForecast import weatherForecast
 from src.python.Sql_connection.YR_Daily_Update.addWeatherRank import weatherRanking
+
 
 class Handler:
     def __init__(self,config) -> None:
@@ -21,7 +22,7 @@ class Handler:
         driver=self.driver
         country="Norway"
 
-        addSunriseSunset_response(server,db,username,password,driver,country)
+        # addSunriseSunset(server,db,username,password,driver,country)
 
         response = "Sunrise and sunset updated successfully"
         return response
@@ -34,7 +35,20 @@ class Handler:
         driver=self.driver
         country="Norway"
 
-        weatherForecast(server,db,username,password,driver,country)
+        # weatherForecast(server,db,username,password,driver,country)
 
         response= "Weatherforecast updated successfully"
+        return response
+    
+    def updateWeatherRank(self):
+        server=self.server
+        db=self.db
+        username=self.username
+        password=self.password
+        driver=self.driver
+        country="Norway"
+
+        # weatherRanking(server,db,username,password,driver,country)
+
+        response="Weatherranking updated successfully"
         return response

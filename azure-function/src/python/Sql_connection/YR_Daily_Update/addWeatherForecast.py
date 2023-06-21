@@ -1,6 +1,6 @@
 import pyodbc
 import pandas as pd
-from src.python.Sql_connection.YR_Daily_Update.apiRequestToYr import getWeather
+from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiWeather import Handler
 import datetime
 
 def weatherForecast(server,database,username,password,driver,country):
@@ -33,7 +33,7 @@ def weatherForecast(server,database,username,password,driver,country):
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1])
         
-        forecast_schedule=getWeather(lat,lon,str(datetime.datetime.now().date()))
+        forecast_schedule=Handler(lat,lon).make_api_call()
 
         #delete previous records for the specific location and add new data
         cursor.execute('''
