@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import { Text } from "../../../ui-kit/components/text";
 import { Flex } from "../../../ui-kit/components/flex";
@@ -56,12 +56,12 @@ export const HighlightedCard = ({
 }: CardProps) => {
   const svgElementRef = useRef(null);
   const svgContainerRef = useRef(null);
+  const [isScrolling, setIsScrolling] = useState(false);
   const modifiedDate =
     date &&
     `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
       month: "short",
     })}`;
-  // const modifiedTime = date && `${date.slice(0, -3)}`;
 
   const gridWidth = {
     mobile: "75px",
@@ -72,22 +72,19 @@ export const HighlightedCard = ({
     const svgContainer = svgContainerRef.current;
     const svgElement = svgElementRef.current;
 
-    function updateSvgPosition() {
-      const rect = svgContainer.getBoundingClientRect();
-      const scrollLeft = svgContainer.scrollLeft;
-
-      svgElement.style.top = `${rect.top + rect.height / 2}px`;
-      svgElement.style.left = `${30 + scrollLeft}px`; // Adjust the value as needed
+    function checkIfScroll() {
+      //check if user is currently scrolling
+      if (svgContainer.scrollLeft !== 0) {
+        setIsScrolling(true);
+      } else {
+        setIsScrolling(false);
+      }
     }
 
-    svgContainer.addEventListener("scroll", updateSvgPosition);
-    window.addEventListener("resize", updateSvgPosition);
-
-    updateSvgPosition();
+    svgContainer.addEventListener("scroll", checkIfScroll);
 
     return () => {
-      svgContainer.removeEventListener("scroll", updateSvgPosition);
-      window.removeEventListener("resize", updateSvgPosition);
+      svgContainer.removeEventListener("scroll", checkIfScroll);
     };
   }, []);
 
@@ -121,11 +118,15 @@ export const HighlightedCard = ({
 
       <div
         ref={svgContainerRef}
-        className="relative flex overflow-x-auto color-black-600 z-10"
+        className="relative flex overflow-x-auto overflow-y-hidden color-black-600 z-10 max-w-max"
       >
-        <svg ref={svgElementRef} viewBox="0 0 24 24" id="bouncingArrow">
-          <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
-        </svg>
+        <span
+          className={`absolute right-4 bottom-1/2 ${isScrolling && "hidden"}`}
+        >
+          <svg ref={svgElementRef} viewBox="0 0 24 24" id="bouncingArrow">
+            <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
+          </svg>
+        </span>
         <FourHorizontalGrid
           borderRight
           className="sticky bg-white -mb-1 left-0 z-10"

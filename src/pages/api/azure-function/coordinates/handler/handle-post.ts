@@ -13,9 +13,9 @@ export const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const body = req.body;
 
-    // const response = await new CoordinatesAPiClient().post(body);
+    const response = await new CoordinatesAPiClient().post(body);
 
-    const mappedResponse = new CoordinatesMapper(dummyData).getProps();
+    const mappedResponse = new CoordinatesMapper(response).getProps();
 
     return res.status(200).json({
       ...mappedResponse,

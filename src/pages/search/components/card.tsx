@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSwiper } from "swiper/react";
 
 import { Angel } from "../../../ui-kit/angel/angel";
@@ -32,20 +32,18 @@ export const Card = ({
 
   const swiper = useSwiper();
 
-  const [height, setHeight] = useState(0);
-
   //TODO handle de-highlighting on same item does not slide to the card
 
   const onClick = async (item: AzureFunctionCoordinatesMappedItems) => {
     setZoomAndHighlightCard(item, true);
 
-    const clientHeight = swiper.wrapperEl.parentElement.clientHeight;
-    const clientWidth = window.innerWidth;
-    if (clientWidth <= 480) {
-      setHeight(clientHeight - 140); //TODO find out this mobile toolbar browser at the bottom
-    } else {
-      setHeight(clientHeight - 150);
-    }
+    // const clientHeight = swiper.wrapperEl.parentElement.clientHeight;
+    // const clientWidth = window.innerWidth;
+    // if (clientWidth <= 480) {
+    //   setHeight(clientHeight - 140); //TODO find out this mobile toolbar browser at the bottom
+    // } else {
+    //   setHeight(clientHeight - 150);
+    // }
 
     setTimeout(() => {
       swiper.update();
@@ -67,6 +65,14 @@ export const Card = ({
 
   const modifiedTemperature = new Temperature(temperature);
 
+  const desktopHeightOfCard = 150;
+  const mobileHeightOfCard = 80;
+
+  // const setHeight = useMemo(() => {
+  //   const height = swiper.height;
+  //   return height;
+  // }, []);
+
   return (
     <div>
       <Flex
@@ -75,7 +81,7 @@ export const Card = ({
         justifyContent={"center"}
         // border={"2px solid black"}
         padding={[4, 6]}
-        height={["80px", "150px"]}
+        height={[`${mobileHeightOfCard}px`, `${desktopHeightOfCard}px`]}
         borderBottomWidth={"2px"}
         borderWidth={2}
         color={`${isHighlighted ? "white" : "black"}`}
@@ -132,7 +138,16 @@ export const Card = ({
           </Flex>
         </Flex>
       </Flex>
-      <Flex height={isHighlighted ? `${height}px` : "0px"}>
+      <Flex
+        height={
+          isHighlighted
+            ? [
+                `${swiper.height - mobileHeightOfCard - 40}px`,
+                `${swiper.height - desktopHeightOfCard - 80}px`,
+              ]
+            : "0px"
+        }
+      >
         {isHighlighted && <HighlightedCard {...item} />}
       </Flex>
     </div>

@@ -1,14 +1,10 @@
 import type { NextPage } from "next";
 import { useState } from "react";
 import styled from "styled-components";
-import { useRouter } from "next/router";
 
-import { Flex } from "../ui-kit/components/flex";
 import { theme } from "../ui-kit/theme/theme";
 import { Text } from "../ui-kit/components/text";
-import { Spacer } from "../ui-kit/spacer/spacer";
 
-import SearchCriterias from "./components/search-criterias";
 import {
   WeatherCarousell,
   WeatherOptions,
@@ -42,13 +38,7 @@ const Home: NextPage = () => {
   return (
     <>
       <TwoGridHorizontalContainer>
-        <div
-          className="grid"
-          // style={{ backgroundColor: getColor(weather) }}
-        >
-          {/* <div className="m-auto">
-          <h3 className="text-white text-xl">Choose weather</h3>
-        </div> */}
+        <div className="grid">
           <div className="overflow-hidden bg-inherit h-full relative">
             <div className="absolute flex justify-center z-10 w-full">
               <Text variant="subtitle-large">Choose weather</Text>

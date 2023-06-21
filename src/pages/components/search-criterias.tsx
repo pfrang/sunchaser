@@ -42,9 +42,8 @@ export const FormStyle = styled.form`
 export interface PayLoadParams {
   lon: string;
   lat: string;
-  transport: string;
   date: string;
-  travel_distance: string;
+  distance: string;
 }
 
 interface UserFormProps {
@@ -53,40 +52,20 @@ interface UserFormProps {
 }
 
 export default function UserForm({ header, weatherSelected }: UserFormProps) {
-  const [highlightedTransport, setHighlightedTransport] = useState("");
   // const [userGeoLocation, setUserGeoLocation] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
+
+  const [error, setError] = useState(false);
   const [townId, setTownId] = useState("");
   const locationRef = useRef<HTMLInputElement>(null);
-  const [longitudeLatitude, setLongitudeLatitude] = useState({
-    longitude: 0,
-    latitude: 0,
-  });
-  const [travelDistance, setTravelDistance] = useState("");
 
-  const travelItems = ["Walk", "Car", "Bike", "Public Transportation"];
+  const [travelDistance, setTravelDistance] = useState("");
 
   const router = useRouter();
 
   const sunSelected = weatherSelected === "Sun";
-
-  // const checkIfTransportAndCalendarValuesAreFilled = () => {
-  //   const check = { transport: "check", calendarValue: "check" };
-
-  //   if (!highlightedTransport) {
-  //     setUnfilledHighlightedTransport(true);
-  //     check.transport = "";
-  //   }
-
-  //   if (!selectedDate) {
-  //     setUnfilledCalendar(true);
-  //     check.calendarValue = "";
-  //   }
-
-  //   return check;
-  // };
 
   const fetchTownDetails = async () => {
     const town = await axios
@@ -94,7 +73,10 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
         `${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`
       )
       .then((response) => response.data)
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        setError(true);
+        console.error(e);
+      });
 
     if (!town) return;
 
@@ -119,6 +101,7 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
 
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
+      setError(true);
       return;
     }
 
@@ -143,9 +126,8 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
     const params: PayLoadParams = {
       lon: longitude,
       lat: latitude,
-      transport: highlightedTransport,
       date: formatDate(selectedDate),
-      travel_distance: travelDistance,
+      distance: travelDistance,
     };
 
     const urlPar = Object.keys(params)
@@ -162,9 +144,8 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
     const params: PayLoadParams = {
       lon: longitude,
       lat: latitude,
-      transport: highlightedTransport,
       date: formatDate(selectedDate),
-      travel_distance: travelDistance,
+      distance: travelDistance,
     };
 
     const urlPar = Object.keys(params)
@@ -176,26 +157,33 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
 
   return (
     //TODO submit is not triggering
-    <FormStyle onSubmit={onSubmit}>
-      {header && (
-        <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
-      )}
-      <ChooseCalendarValue
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-      />
-      <ChooseTravelDistance setTravelDistance={setTravelDistance} />
-      {/* <ChooseTransportationMethod
+    <>
+      <FormStyle onSubmit={onSubmit}>
+        {header && (
+          <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
+        )}
+        <ChooseCalendarValue
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+        />
+        <ChooseTravelDistance setTravelDistance={setTravelDistance} />
+        {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}
         unfilledHighlightedTransport={unfilledHighlightedTransport}
       >
         {travelItems}
       </ChooseTransportationMethod> */}
-      <Spacer vertical={1} />
-      <div className="flex justify-center">
-        <Button disabled={!sunSelected}>Find the sun</Button>
-      </div>
-    </FormStyle>
+        <Spacer vertical={1} />
+        <div className="flex justify-center">
+          <Button disabled={!sunSelected}>Find the sun</Button>
+        </div>
+      </FormStyle>
+      {error && (
+        <div className="flex justify-center">
+          <p>Something went wrong</p>
+        </div>
+      )}
+    </>
   );
 }
