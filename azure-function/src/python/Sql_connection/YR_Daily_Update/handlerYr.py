@@ -22,7 +22,7 @@ class Handler:
         driver=self.driver
         country="Norway"
 
-        # addSunriseSunset(server,db,username,password,driver,country)
+        addSunriseSunset(server,db,username,password,driver,country)
 
         response = "Sunrise and sunset updated successfully"
         return response
@@ -35,7 +35,7 @@ class Handler:
         driver=self.driver
         country="Norway"
 
-        # weatherForecast(server,db,username,password,driver,country)
+        weatherForecast(server,db,username,password,driver,country)
 
         response= "Weatherforecast updated successfully"
         return response
@@ -48,7 +48,7 @@ class Handler:
         driver=self.driver
         country="Norway"
 
-        # weatherRanking(server,db,username,password,driver,country)
+        weatherRanking(server,db,username,password,driver,country)
 
         response="Weatherranking updated successfully"
         return response

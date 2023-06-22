@@ -40,7 +40,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         
         for i in params['update']:
             if "suntime" in i:
-                initializer=1 # initializer = Handler(config).updateSunsetSunrise()
+                initializer=Handler(config).updateSunsetSunrise()
                 
             elif "weather" in i:
                 initializer = Handler(config).updateWeatherForecast()
