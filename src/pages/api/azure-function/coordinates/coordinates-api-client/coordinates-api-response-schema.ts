@@ -1,25 +1,31 @@
 export interface AzureFunctionCoordinatesItems {
-  weatherRank: number;
   latitude: number;
   longitude: number;
+  primary_name: string;
+  tertiary_name: string;
+  quarternary_name: string;
   date: string;
-  time: string;
-  temperature: number;
-  wind: number;
   symbol: string;
-  location: string;
+  temperature: number;
+  time: string;
+  wind: number;
+  total_rank: number;
+  sunrise_date: string | null;
+  sunset_date: string | null;
 }
 export interface AzureFunctionCoordinatesMappedItems {
   rank: string;
   date: Date;
   latitude: number;
   longitude: number;
-  location: string;
   times: Times[];
 }
 
 export interface AzureFunctionCoordinatesMappedData {
-  userLocation: AzureFunctionCoordinatesMappedItems[];
+  userLocation: Pick<
+    AzureFunctionCoordinatesMappedItems,
+    "longitude" | "latitude"
+  >;
   ranks: AzureFunctionCoordinatesMappedItems[];
 }
 
@@ -37,7 +43,7 @@ export interface AzureFunctionMappedResponseItem
 }
 
 export interface AzureFunctionCoordinatesData {
-  userLocation: Record<string, AzureFunctionCoordinatesItems[]>;
+  userLocation: Pick<AzureFunctionCoordinatesItems, "latitude" | "longitude">;
   ranks: Record<string, AzureFunctionCoordinatesItems[]>;
 }
 
