@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Wrapper>
           <HeaderComponent isHomePage={isHomePage} />
           <Component {...pageProps} />
-          <Spacer height={64} />
+          <Spacer height={32} />
         </Wrapper>
       </ThemeProvider>
       <Analytics />
