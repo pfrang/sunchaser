@@ -16,7 +16,6 @@ export class CoordinatesAPiClient extends AzureFunctionApiClient {
         this.url,
         body
       );
-
     return { data: response.data };
   };
 }

@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme/theme";
@@ -45,6 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Wrapper>
         <HeaderComponent isHomePage={isHomePage} />
         <Component {...pageProps} />
+        <Analytics />
         <Spacer height={64} />
       </Wrapper>
     </ThemeProvider>

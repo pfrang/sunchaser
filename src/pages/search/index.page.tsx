@@ -38,7 +38,6 @@ export default function Search({
   mapBoxkey,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data, isLoading, error }: HookProperties = useCoordinates(query);
-
   mapboxgl.accessToken = mapBoxkey;
 
   const [items, setItems] = useState<
@@ -153,7 +152,7 @@ export default function Search({
         ) : (
           <>
             {error && (
-              <div className="flex absolute top-0 items-center h-full w-full justify-center">
+              <div className="flex absolute mt-[80px] top-0 items-center h-full w-full justify-center">
                 <p>
                   {emptyDataError
                     ? "We could not find any locations with the provided coordinates, please increase the distance"
