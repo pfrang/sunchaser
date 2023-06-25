@@ -1,5 +1,4 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
-import Script from "next/script";
 import { ServerStyleSheet } from "styled-components";
 
 export default class MyDocument extends Document {
@@ -36,6 +35,10 @@ export default class MyDocument extends Document {
           <link
             href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css"
             rel="stylesheet"
+          />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
           {/* <link rel="shortcut icon" type="image/png" href="sunny.png" /> */}
           <body>
