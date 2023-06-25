@@ -39,7 +39,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             }
         
         dfDict = sql_df.groupby('group_rank').apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time']].to_dict(orient='records')).to_dict()
-        tmpDict = {'userlocation':StartLocation,'ranks': dfDict}
+        tmpDict = {'user_location':StartLocation,'ranks': dfDict}
         
         response_str = json.dumps(tmpDict , indent=4,default=str)
 

@@ -30,9 +30,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         }
 
         update={
-            "suntime":"Suntim not updated",
+            "suntime":"Suntime not updated",
             "weather":"Weather not updated",
             "rank":"Rank not updated",
+            "delete":"Nothing is deleted",
 
         }
 
@@ -47,6 +48,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 
             elif "rank" in i:
                 initializer = Handler(config).updateWeatherRank()
+            elif "delete" in i:
+                initializer = Handler(config).deleteOldData()
                 
             else: return func.HttpResponse(f"update type {i} not allowed. {update['suntime']}, {update['weather']}, {update['rank']}", status_code=405)
             update.update({i:initializer})

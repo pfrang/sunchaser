@@ -1,7 +1,7 @@
 from src.python.Sql_connection.YR_Daily_Update.addSunriseSunset import addSunriseSunset
 from src.python.Sql_connection.YR_Daily_Update.addWeatherForecast import weatherForecast
 from src.python.Sql_connection.YR_Daily_Update.addWeatherRank import weatherRanking
-
+from src.python.Sql_connection.YR_Daily_Update.removeWeatherDatafromDB import deleteHistoricData
 
 class Handler:
     def __init__(self,config) -> None:
@@ -51,4 +51,17 @@ class Handler:
         weatherRanking(server,db,username,password,driver,country)
 
         response="Weatherranking updated successfully"
+        return response
+    
+    def deleteOldData(self):
+        server=self.server
+        db=self.db
+        username=self.username
+        password=self.password
+        driver=self.driver
+        country="Norway"
+
+        deleteHistoricData(server,db,username,password,driver,country)
+
+        response="Weatherdata deleted successfully"
         return response
