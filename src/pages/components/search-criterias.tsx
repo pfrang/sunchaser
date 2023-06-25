@@ -43,9 +43,14 @@ export const FormStyle = styled.form`
 interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
   weatherSelected?: WeatherOptions;
+  isHomePage?: boolean;
 }
 
-export default function UserForm({ header, weatherSelected }: UserFormProps) {
+export default function UserForm({
+  header,
+  weatherSelected,
+  isHomePage,
+}: UserFormProps) {
   // const [userGeoLocation, setUserGeoLocation] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
@@ -149,6 +154,8 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
     router.push(`search?${urlPar}`);
   };
 
+  const disableButton = !isHomePage ? false : !sunSelected;
+
   return (
     //TODO submit is not triggering
     <>
@@ -170,7 +177,7 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
       </ChooseTransportationMethod> */}
         <Spacer vertical={1} />
         <div className="flex justify-center">
-          <Button disabled={!sunSelected}>Find the sun</Button>
+          <Button disabled={disableButton}>Find the sun</Button>
         </div>
       </FormStyle>
       {error && (
