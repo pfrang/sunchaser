@@ -1,9 +1,13 @@
 import styled from "styled-components";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 
 import { Text } from "../../../ui-kit/components/text";
 import { Flex } from "../../../ui-kit/components/flex";
-import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import {
+  Times,
+  UserLocation,
+} from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { LinkContent } from "../../../ui-kit/components/link-content";
 
 import { TimeSeries } from "./time-series";
 
@@ -44,24 +48,36 @@ export const GridItem = styled.div`
   }
 `;
 
-interface CardProps extends AzureFunctionCoordinatesMappedItems {}
+interface CardProps {
+  date: Date;
+  userLocation: UserLocation;
+  longitude: number;
+  latitude: number;
+  sunriseTime: string;
+  sunsetTime: string;
+  times: Times[];
+}
 
 export const HighlightedCard = ({
-  rank,
   date,
-  latitude,
+  userLocation,
   longitude,
-  location,
+  latitude,
+  sunriseTime,
+  sunsetTime,
   times,
 }: CardProps) => {
-  const svgElementRef = useRef(null);
   const svgContainerRef = useRef(null);
   const [isScrolling, setIsScrolling] = useState(false);
-  const modifiedDate =
-    date &&
-    `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
-      month: "short",
-    })}`;
+
+  const modifiedDate = useMemo(() => {
+    return `${new Date(date).getDate()}-${new Date(date).toLocaleString(
+      "default",
+      {
+        month: "short",
+      }
+    )}`;
+  }, []);
 
   const gridWidth = {
     mobile: "75px",
@@ -70,7 +86,6 @@ export const HighlightedCard = ({
 
   useEffect(() => {
     const svgContainer = svgContainerRef.current;
-    const svgElement = svgElementRef.current;
 
     function checkIfScroll() {
       //check if user is currently scrolling
@@ -91,25 +106,34 @@ export const HighlightedCard = ({
   return (
     <TwoHorizontalGrid>
       <Flex
-        justifyContent={"space-around"}
-        gap={4}
         alignItems={"center"}
         position={"relative"}
+        flexDirection={"column"}
+        paddingX={4}
       >
-        <Flex position={"absolute"} left={2} top={0}>
+        <Flex width={"100%"} justifyContent={"space-between"}>
           <Text>{`${modifiedDate}`}</Text>
+          <LinkContent>
+            <a
+              target="_blank"
+              href={`https://www.google.com/maps/dir/${userLocation.latitude},${userLocation.longitude}/${latitude},${longitude}`}
+            >
+              <Text color="inherit">{`Google Maps`}</Text>
+            </a>
+          </LinkContent>
         </Flex>
         <Flex
           width={"100%"}
+          height={"100%"}
           justifyContent={"space-around"}
           alignItems={"center"}
         >
           <Flex justifyContent={"flex-end"} height={[28, 54]}>
-            <Text noWrap>{`sunrise ${times[0].time}`}</Text>
+            <Text noWrap>{`sunrise ${sunriseTime}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
           <Flex height={[28, 54]}>
-            <Text noWrap>{`sunset ${times[0].time}`}</Text>
+            <Text noWrap>{`sunset ${sunsetTime}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
         </Flex>
@@ -123,7 +147,7 @@ export const HighlightedCard = ({
         <span
           className={`absolute right-4 bottom-1/2 ${isScrolling && "hidden"}`}
         >
-          <svg ref={svgElementRef} viewBox="0 0 24 24" id="bouncingArrow">
+          <svg viewBox="0 0 24 24" id="bouncingArrow">
             <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
           </svg>
         </span>

@@ -1,20 +1,22 @@
-import { useMemo, useState } from "react";
 import { useSwiper } from "swiper/react";
+import { useMemo } from "react";
 
 import { Angel } from "../../../ui-kit/angel/angel";
 import { Flex } from "../../../ui-kit/components/flex";
 import { theme } from "../../../ui-kit/theme/theme";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
-import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import {
+  AzureFunctionCoordinatesMappedItems,
+  UserLocation,
+} from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Text } from "../../../ui-kit/components/text";
-import { Temperature } from "../../utils/temperature";
-import { Spacer } from "../../../ui-kit/spacer/spacer";
 
 import { HighlightedCard } from "./highlighted-card";
 
 interface SmallCardProps {
   isHighlighted: boolean;
   item: AzureFunctionCoordinatesMappedItems;
+  userLocation: UserLocation;
   index: number;
   setZoomAndHighlightCard: (
     item: AzureFunctionCoordinatesMappedItems,
@@ -24,15 +26,25 @@ interface SmallCardProps {
 
 export const Card = ({
   isHighlighted,
+  userLocation,
   index,
   item,
   setZoomAndHighlightCard,
 }: SmallCardProps) => {
-  const { date, location, times } = item;
+  const {
+    date,
+    primaryName,
+    secondaryName,
+    tertiaryName,
+    quaternaryName,
+    times,
+    sunriseTime,
+    sunsetTime,
+    longitude,
+    latitude,
+  } = item;
 
   const swiper = useSwiper();
-
-  //TODO handle de-highlighting on same item does not slide to the card
 
   const onClick = async (item: AzureFunctionCoordinatesMappedItems) => {
     setZoomAndHighlightCard(item, true);
@@ -58,12 +70,19 @@ export const Card = ({
     })}`;
   // const modifiedTime = date && `${date.slice(0, -3)}`;
 
-  const { temperature, wind, time, symbol } = times[0];
+  const icon = useMemo(() => {
+    const filterTimes = times.filter((time) => {
+      return time.date === date;
+    });
 
-  const icon =
-    WeatherIconList[symbol.charAt(0).toUpperCase() + symbol.slice(1)];
+    const highestRank = filterTimes.reduce((prev, current) => {
+      return prev.rank > current.rank ? prev : current;
+    });
 
-  const modifiedTemperature = new Temperature(temperature);
+    return WeatherIconList[
+      highestRank.symbol.charAt(0).toUpperCase() + highestRank.symbol.slice(1)
+    ];
+  }, []);
 
   const desktopHeightOfCard = 150;
   const mobileHeightOfCard = 80;
@@ -115,11 +134,7 @@ export const Card = ({
             height={"100%"}
             alignItems={"center"}
           >
-            <Text variant="body-large">{item.location}</Text>
-            {/* <Spacer vertical={4} />
-            <Text variant="subtitle-small-bold" color="red">
-              {modifiedTemperature.toString()}
-            </Text> */}
+            <Text variant="body-large">{primaryName}</Text>
           </Flex>
           <Flex
             position={"relative"}
@@ -148,7 +163,17 @@ export const Card = ({
             : "0px"
         }
       >
-        {isHighlighted && <HighlightedCard {...item} />}
+        {isHighlighted && (
+          <HighlightedCard
+            date={date}
+            userLocation={userLocation}
+            longitude={longitude}
+            latitude={latitude}
+            sunsetTime={sunsetTime}
+            sunriseTime={sunriseTime}
+            times={times}
+          />
+        )}
       </Flex>
     </div>
   );

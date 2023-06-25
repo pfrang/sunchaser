@@ -1,17 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import mapboxgl from "mapbox-gl";
+import mapboxgl, { LngLatBounds, LngLatBoundsLike } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { InferGetServerSidePropsType } from "next";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
 import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/mapper/coordinates-mapper";
-import { Spacer } from "../../ui-kit/spacer/spacer";
 import { AppConfig } from "../../app-config";
-import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import {
+  AzureFunctionCoordinatesMappedItems,
+  UserLocation,
+} from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Flex } from "../../ui-kit/components/flex/flex";
-import { PayLoadParams } from "../components/search-criterias";
+import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
 
 import { MapBoxHelper, StartAndEndCoordinates } from "./mapbox-settings";
 import { Carousell } from "./components/carousell";
@@ -43,9 +45,9 @@ export default function Search({
     undefined | AzureFunctionCoordinatesMappedItems[]
   >(undefined);
 
-  const [userLocation, setUserLocation] = useState<
-    undefined | AzureFunctionCoordinatesMappedItems
-  >(undefined);
+  const [userLocation, setUserLocation] = useState<undefined | UserLocation>(
+    undefined
+  );
 
   const [highlightedCard, setHighlightedCard] = useState<
     undefined | AzureFunctionCoordinatesMappedItems
@@ -55,10 +57,12 @@ export default function Search({
 
   const [mapObject, setMap] = useState<undefined | mapboxgl.Map>(undefined);
 
+  const emptyDataError = error && error.response.data.error === "No data found";
+
   useEffect(() => {
     if (data) {
-      const userLocation = data.items.userLocation[0];
-      setItems([...data.items.ranks, userLocation]);
+      const userLocation = data.items.userLocation;
+      setItems([...data.items.ranks]);
       // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
       setUserLocation(userLocation);
 
@@ -70,9 +74,8 @@ export default function Search({
         latitudes,
         userLocation.longitude,
         userLocation.latitude
-      ).setMarkers();
+      ).setMarkersAndFitBounds();
 
-      //TODO maybe add below code to class
       map.addControl(new mapboxgl.NavigationControl());
 
       map.on("load", () => {
@@ -121,7 +124,7 @@ export default function Search({
 
       MapBoxHelper.fitBounds(mapObject, coordinates, 50, 1000);
 
-      MapBoxHelper.addLayer(mapObject, coordinates);
+      MapBoxHelper.drawLine(mapObject, coordinates);
     }
   }, [highlightedCard]);
 
@@ -145,18 +148,32 @@ export default function Search({
             <div id="map" className="w-full h-full m-auto "></div>
           </div>
         </section>
-        {!items ? (
+        {isLoading ? (
           <SearchLoader />
         ) : (
-          <Flex flexDirection={"column"} paddingX={[40, 50]}>
-            <section id="section-carousell" className="h-full">
-              <Carousell
-                items={items}
-                setZoomAndHighlightCard={setZoomAndHighlightCard}
-                highlightedCard={highlightedCard}
-              />
-            </section>
-          </Flex>
+          <>
+            {error && (
+              <div className="flex absolute top-0 items-center h-full w-full justify-center">
+                <p>
+                  {emptyDataError
+                    ? "We could not find any locations with the provided coordinates, please increase the distance"
+                    : "Something went wrong"}
+                </p>
+              </div>
+            )}
+            {items && (
+              <Flex flexDirection={"column"} paddingX={[40, 50]}>
+                <section id="section-carousell" className="h-full">
+                  <Carousell
+                    userLocation={userLocation}
+                    items={items}
+                    setZoomAndHighlightCard={setZoomAndHighlightCard}
+                    highlightedCard={highlightedCard}
+                  />
+                </section>
+              </Flex>
+            )}
+          </>
         )}
       </TwoGridRow>
     </Flex>
@@ -165,7 +182,7 @@ export default function Search({
 
 interface GetServerSidePropsSearch {
   props: {
-    query: PayLoadParams;
+    query: PayloadParams;
     mapBoxkey: string;
   };
 }
@@ -173,7 +190,7 @@ interface GetServerSidePropsSearch {
 export async function getServerSideProps(
   context
 ): Promise<GetServerSidePropsSearch> {
-  const query: PayLoadParams = context.query;
+  const query: PayloadParams = context.query;
 
   const mapBoxkey = new AppConfig().mapBox.key;
 

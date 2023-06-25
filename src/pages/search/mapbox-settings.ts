@@ -12,19 +12,19 @@ export interface StartAndEndCoordinates {
 
 export class MapBoxHelper {
   map: mapboxgl.Map;
-  lat: number[];
-  lon: number[];
+  latitudes: number[];
+  longitudes: number[];
   centerLon?: number;
   centerLat?: number;
 
   constructor(
-    lon?: number[],
-    lat?: number[],
+    longitudes?: number[],
+    latitudes?: number[],
     centerLon?: number,
     centerLat?: number
   ) {
-    this.lon = lon;
-    this.lat = lat;
+    this.longitudes = longitudes;
+    this.latitudes = latitudes;
     this.centerLon = centerLon;
     this.centerLat = centerLat;
     this.map = new mapboxgl.Map({
@@ -36,16 +36,29 @@ export class MapBoxHelper {
     });
   }
 
-  setMarkers() {
-    const marker = this.lon.forEach((lon, index) => {
+  setMarkersAndFitBounds() {
+    const marker = this.longitudes.forEach((lon, index) => {
       new mapboxgl.Marker()
-        .setLngLat([this.lon[index], this.lat[index]])
+        .setLngLat([this.longitudes[index], this.latitudes[index]])
         .addTo(this.map);
     });
 
     const centerMarker = new mapboxgl.Marker({ color: "red" })
       .setLngLat([this.centerLon, this.centerLat])
       .addTo(this.map);
+
+    const bounds = new mapboxgl.LngLatBounds();
+
+    this.longitudes.map((longitude, index) => {
+      bounds.extend(new mapboxgl.LngLat(longitude, this.latitudes[index]));
+    });
+
+    bounds.extend(new mapboxgl.LngLat(this.centerLon, this.centerLat));
+
+    this.map.fitBounds(bounds, {
+      padding: 50,
+      duration: 1000,
+    });
 
     return this.map;
   }
@@ -65,7 +78,7 @@ export class MapBoxHelper {
     );
   }
 
-  static addLayer(map: mapboxgl.Map, coordinates: StartAndEndCoordinates) {
+  static drawLine(map: mapboxgl.Map, coordinates: StartAndEndCoordinates) {
     if (map.getLayer("route")) {
       map.removeLayer("route");
     }

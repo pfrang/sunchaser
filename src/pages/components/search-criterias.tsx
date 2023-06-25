@@ -9,6 +9,7 @@ import { Spacer } from "../../ui-kit/spacer/spacer";
 import { formatDate } from "../utils/convert-date";
 import { GoogleMapsDetailsResponse } from "../api/google-maps/details/mapper/gmaps-details-mapper";
 import { ResponseDTO } from "../api/next-api.client";
+import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { ChooseCalendarValue } from "./choose-calendar-value";
@@ -38,13 +39,6 @@ export const FormStyle = styled.form`
   height: 100%;
   padding: 16px;
 `;
-
-export interface PayLoadParams {
-  lon: string;
-  lat: string;
-  date: string;
-  distance: string;
-}
 
 interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
@@ -123,7 +117,7 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
 
     // if (check.calendarValue === "" || check.transport === "") return;
 
-    const params: PayLoadParams = {
+    const params: PayloadParams = {
       lon: longitude,
       lat: latitude,
       date: formatDate(selectedDate),
@@ -141,7 +135,7 @@ export default function UserForm({ header, weatherSelected }: UserFormProps) {
   const sendData = (str: string) => {
     const { longitude, latitude } = destructureMyPosition(str);
 
-    const params: PayLoadParams = {
+    const params = {
       lon: longitude,
       lat: latitude,
       date: formatDate(selectedDate),

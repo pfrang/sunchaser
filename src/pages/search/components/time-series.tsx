@@ -2,6 +2,7 @@ import { Flex } from "../../../ui-kit/components/flex";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Times } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Text } from "../../../ui-kit/components/text";
+import { Temperature } from "../../utils/temperature";
 
 import { GridItem } from "./highlighted-card";
 
@@ -9,7 +10,7 @@ interface TimeSeriesProps extends Times {}
 
 export const TimeSeries = ({
   time,
-  weatherRank,
+  rank,
   symbol,
   temperature,
   wind,
@@ -51,7 +52,7 @@ export const TimeSeries = ({
           justifyContent={"center"}
           alignItems={"center"}
         >
-          <Text noWrap>{`${temperature}`}</Text>
+          <Text noWrap>{`${new Temperature(temperature).toString()}`}</Text>
         </Flex>
       </GridItem>
 

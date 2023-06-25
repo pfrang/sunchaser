@@ -1,24 +1,17 @@
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-import {
-  Pagination,
-  Navigation,
-  Scrollbar,
-  Mousewheel,
-  Keyboard,
-  FreeMode,
-} from "swiper";
+import { Navigation, Scrollbar, Mousewheel, Keyboard, FreeMode } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 
-import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
-import { theme } from "../../../ui-kit/theme/theme";
+import {
+  AzureFunctionCoordinatesMappedItems,
+  UserLocation,
+} from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Flex } from "../../../ui-kit/components/flex";
 
 import { Card } from "./card";
-import { HighlightedCard } from "./highlighted-card";
 
 // SwiperCore.use([Keyboard, Mousewheel]);
 
@@ -29,10 +22,12 @@ interface CarousellProps {
     bool: boolean
   ) => void;
   highlightedCard: AzureFunctionCoordinatesMappedItems;
+  userLocation: UserLocation;
 }
 
 export const Carousell = ({
   items,
+  userLocation,
   setZoomAndHighlightCard,
   highlightedCard,
 }: CarousellProps) => {
@@ -95,6 +90,7 @@ export const Carousell = ({
               {
                 <Card
                   isHighlighted={isHighlighted}
+                  userLocation={userLocation}
                   setZoomAndHighlightCard={setZoomAndHighlightCard}
                   index={idx}
                   item={item}
