@@ -15,10 +15,10 @@ class Handler:
 
     def make_api_call(self):
         try:
-            response =self.get_result(self)
+            response =self.get_result()
             response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
 
-            return self.handle_result(self,response)
+            return self.handle_result(response)
         
         except requests.exceptions.HTTPError as err:
             if response.status_code == 503:
@@ -45,10 +45,11 @@ class Handler:
         headers={'User-Agent':'Hjemmeprosjekt'}
         return requests.get(url,headers=headers)
 
-    def handle_result(self,json):
+    def handle_result(self,response):
         lat=self.lat
         lon=self.lon
-        response_json=json.loads(json.text)    
+        response_json=response.json()    
+        response_json=response_json['properties']["timeseries"]
 
         times = []
         weatherDate=[]

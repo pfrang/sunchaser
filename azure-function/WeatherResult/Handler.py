@@ -67,7 +67,7 @@ class Handler:
        df = pd.DataFrame(data)
        conn.commit()
 
-       df2=pd.DataFrame(columns=['latitude','longitude','group_rank','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','total_rank','sunrise_date','sunset_date'])
+       df2=pd.DataFrame(columns=['latitude','longitude','group_rank','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time'])
             
 
        for index, row in df.iterrows():
@@ -83,9 +83,9 @@ class Handler:
           df2.loc[index,'temperature']=row[0][9]
           df2.loc[index,'time']=row[0][10]
           df2.loc[index,'wind']=row[0][11]
-          df2.loc[index,'total_rank']=row[0][12]
-          df2.loc[index,'sunrise_date']=row[0][13]
-          df2.loc[index,'sunset_date']=row[0][14]
+          df2.loc[index,'rank']=row[0][12]
+          df2.loc[index,'sunrise_time']=row[0][13]
+          df2.loc[index,'sunset_time']=row[0][14]
 
        return df2
     

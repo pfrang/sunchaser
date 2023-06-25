@@ -38,7 +38,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "longitude": params['lon']
             }
         
-        dfDict = sql_df.groupby('group_rank').apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','total_rank','sunrise_date','sunset_date']].to_dict(orient='records')).to_dict()
+        dfDict = sql_df.groupby('group_rank').apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time']].to_dict(orient='records')).to_dict()
         tmpDict = {'userlocation':StartLocation,'ranks': dfDict}
         
         response_str = json.dumps(tmpDict , indent=4,default=str)
