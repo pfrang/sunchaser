@@ -4,7 +4,7 @@ import json
 import pandas as pd
 from datetime import datetime
 from src.python.Sql_connection.API_error_log_to_sql import Handler as Error
-
+import logging
 class Handler:
     def __init__(self,lat,lon,date) -> None:
        
@@ -50,6 +50,7 @@ class Handler:
         apisource=self.apisource
 
         url=f'{apisource}?lat={lat}&lon={lon}&date={date}&offset={offset}&days={days}'
+        logging.info(url)
         headers={'User-Agent':'Hjemmeprosjekt'}
        
         return requests.get(url,headers=headers)

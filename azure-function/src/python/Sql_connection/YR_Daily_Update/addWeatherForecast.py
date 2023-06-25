@@ -2,6 +2,7 @@ import pyodbc
 import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiWeather import Handler
 import datetime
+import logging
 
 def weatherForecast(server,database,username,password,driver,country):
 
@@ -32,7 +33,7 @@ def weatherForecast(server,database,username,password,driver,country):
     for index,row in df.iterrows():
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1])
-        
+
         try:
     
             forecast_schedule=Handler(lat,lon).make_api_call()

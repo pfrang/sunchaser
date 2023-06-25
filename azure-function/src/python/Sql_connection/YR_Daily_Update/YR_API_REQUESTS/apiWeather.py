@@ -43,7 +43,7 @@ class Handler:
         lon=self.lon
         apisource=self.apisource
 
-        url=f'{apisource}?lat={lat}&lon={lon}|||'
+        url=f'{apisource}?lat={lat}&lon={lon}'
         headers={'User-Agent':'Hjemmeprosjekt'}
         return requests.get(url,headers=headers)
 
