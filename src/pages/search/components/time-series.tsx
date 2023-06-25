@@ -61,6 +61,7 @@ export const TimeSeries = ({
         height={"100%"}
         justifyContent={"center"}
         alignItems={"center"}
+        flex={"1 1 auto"}
       >
         <Text noWrap>{`${wind}`}</Text>
       </Flex>

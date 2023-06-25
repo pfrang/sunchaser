@@ -84,7 +84,8 @@ export const Card = ({
     ];
   }, []);
 
-  const desktopHeightOfCard = 150;
+  const desktopHeightOfCard = 120;
+  const tabletHeightOfCard = 100;
   const mobileHeightOfCard = 80;
 
   // const setHeight = useMemo(() => {
@@ -100,7 +101,11 @@ export const Card = ({
         justifyContent={"center"}
         // border={"2px solid black"}
         padding={[4, 6]}
-        height={[`${mobileHeightOfCard}px`, `${desktopHeightOfCard}px`]}
+        height={[
+          `${mobileHeightOfCard}px`,
+          `${tabletHeightOfCard}px`,
+          `${desktopHeightOfCard}px`,
+        ]}
         borderBottomWidth={"2px"}
         borderWidth={2}
         color={`${isHighlighted ? "white" : "black"}`}
@@ -158,7 +163,7 @@ export const Card = ({
           isHighlighted
             ? [
                 `${swiper.height - mobileHeightOfCard - 40}px`,
-                `${swiper.height - desktopHeightOfCard - 80}px`,
+                `${swiper.height - desktopHeightOfCard - 60}px`,
               ]
             : "0px"
         }

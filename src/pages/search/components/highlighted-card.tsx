@@ -188,6 +188,7 @@ export const HighlightedCard = ({
           <Flex
             justifyContent={"center"}
             alignItems={"center"}
+            flex={"1 1 auto"}
             width={[gridWidth.mobile, gridWidth.pc]}
           >
             <Text>Wind m/s</Text>
