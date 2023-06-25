@@ -3,7 +3,7 @@ import requests
 import json
 import pandas as pd
 from datetime import datetime
-
+from src.python.Sql_connection.API_error_log_to_sql import Handler as Error
 
 class Handler:
     def __init__(self,lat,lon,date) -> None:
@@ -17,13 +17,14 @@ class Handler:
        
 
     def make_api_call(self):
+
         try:
             response =self.get_result()
             response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-            
             return self.handle_result(response)
         
         except requests.exceptions.HTTPError as err:
+            self.error_handeling(response.status_code)
             if response.status_code == 503:
                 # Handle 503 error
                 print("Service Unavailable. Retry later or try another key.")
@@ -36,6 +37,7 @@ class Handler:
         except Exception as err:
             # Handle any other exceptions
             print(f"Error: {err}")
+            
 
 
     def get_result(self):
@@ -83,3 +85,6 @@ class Handler:
             
         })
         return sunSchedule
+    
+    def error_handeling(self,response_code):
+        return Error(self.lat,self.lon,self.apisource,response_code).logError()

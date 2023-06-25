@@ -3,7 +3,7 @@ import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
 import datetime
 
-#todo, fix 503 response code
+
 
 def addSunriseSunset(server,database,username,password,driver,country):
 
@@ -50,21 +50,23 @@ def addSunriseSunset(server,database,username,password,driver,country):
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1])
         
+        try:
+            suntime_schedule=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
 
-        suntime_schedule=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
-
-        #delete previous records for the specific location and add new data
-        cursor.execute('''
-                    DELETE FROM suntime_schedule 
-                    WHERE lat=? and lon=?
-                ''',lat,lon)
-
-        conn.commit()
-        
-        #add the new data to the table
-        for index,suntime in suntime_schedule.iterrows():
+            #delete previous records for the specific location and add new data
             cursor.execute('''
-            INSERT INTO suntime_schedule (lat, lon, date, sunrise_date, sunset_date, local_time) 
-            VALUES (?, ?, ?, ?, ?, ?)
-            ''', (suntime[0],suntime[1],suntime[2],suntime[3],suntime[4],suntime[5]))
+                        DELETE FROM suntime_schedule 
+                        WHERE lat=? and lon=?
+                    ''',lat,lon)
+
             conn.commit()
+            
+            #add the new data to the table
+            for index,suntime in suntime_schedule.iterrows():
+                cursor.execute('''
+                INSERT INTO suntime_schedule (lat, lon, date, sunrise_date, sunset_date, local_time) 
+                VALUES (?, ?, ?, ?, ?, ?)
+                ''', (suntime[0],suntime[1],suntime[2],suntime[3],suntime[4],suntime[5]))
+                conn.commit()
+        except:
+            pass

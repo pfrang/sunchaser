@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 import pandas as pd
 from src.python.api_client import APISOURCE
+from src.python.Sql_connection.API_error_log_to_sql import Handler as Error
 
 class Handler:
     def __init__(self,lat,lon) -> None:
@@ -17,10 +18,12 @@ class Handler:
         try:
             response =self.get_result()
             response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
-
+            
             return self.handle_result(response)
-        
+            
         except requests.exceptions.HTTPError as err:
+            
+            self.error_handeling(response.status_code)
             if response.status_code == 503:
                 # Handle 503 error
                 print("Service Unavailable. Retry later or try another key.")
@@ -36,12 +39,11 @@ class Handler:
 
 
     def get_result(self):
-
         lat=self.lat
         lon=self.lon
         apisource=self.apisource
 
-        url=f'{apisource}?lat={lat}&lon={lon}'
+        url=f'{apisource}?lat={lat}&lon={lon}|||'
         headers={'User-Agent':'Hjemmeprosjekt'}
         return requests.get(url,headers=headers)
 
@@ -81,3 +83,6 @@ class Handler:
             'src': "yr api",
         })
         return weatherDataDataFrame
+    
+    def error_handeling(self,response_code):
+        return Error(self.lat,self.lon,self.apisource,response_code).logError()

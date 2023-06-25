@@ -47,7 +47,6 @@ class Handler:
         password=self.password
         driver=self.driver
         country="Norway"
-
         weatherRanking(server,db,username,password,driver,country)
 
         response="Weatherranking updated successfully"
