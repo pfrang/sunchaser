@@ -8,10 +8,8 @@
 
 import logging
 import time
-
+from WeatherResult import main
 
 def main(name: str) -> str:
-    logging.info("Starting await")
-    time.sleep(5)
     logging.info(f'Done with {name}')
     return f"Hello {name}!"
