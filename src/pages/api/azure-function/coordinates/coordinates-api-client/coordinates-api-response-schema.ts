@@ -1,40 +1,48 @@
 export interface AzureFunctionCoordinatesItems {
+  rank: number;
   latitude: number;
   longitude: number;
-  primary_name: string;
-  tertiary_name: string;
-  quarternary_name: string;
   date: string;
+  primary_name: string;
+  secondary_name: string;
+  tertiary_name: string;
+  quaternary_name: string;
   symbol: string;
   temperature: number;
   time: string;
   wind: number;
-  total_rank: number;
-  sunrise_date: string | null;
-  sunset_date: string | null;
+  sunrise_time: string | null;
+  sunset_time: string | null;
 }
 export interface AzureFunctionCoordinatesMappedItems {
   rank: string;
-  date: Date;
   latitude: number;
   longitude: number;
+  date: Date;
+  primaryName: string;
+  secondaryName: string;
+  tertiaryName: string;
+  quaternaryName: string;
+  sunriseTime: string;
+  sunsetTime: string;
   times: Times[];
 }
 
-export interface AzureFunctionCoordinatesMappedData {
-  userLocation: Pick<
-    AzureFunctionCoordinatesMappedItems,
-    "longitude" | "latitude"
-  >;
-  ranks: AzureFunctionCoordinatesMappedItems[];
-}
-
 export interface Times {
-  weatherRank: number;
+  rank: number;
   symbol: string;
   temperature: number;
   wind: number;
   time: string;
+  date: Date;
+}
+
+export interface UserLocation
+  extends Pick<AzureFunctionCoordinatesMappedItems, "longitude" | "latitude"> {}
+
+export interface AzureFunctionCoordinatesMappedData {
+  userLocation: UserLocation;
+  ranks: AzureFunctionCoordinatesMappedItems[];
 }
 
 export interface AzureFunctionMappedResponseItem
@@ -43,7 +51,7 @@ export interface AzureFunctionMappedResponseItem
 }
 
 export interface AzureFunctionCoordinatesData {
-  userLocation: Pick<AzureFunctionCoordinatesItems, "latitude" | "longitude">;
+  user_location: Pick<AzureFunctionCoordinatesItems, "latitude" | "longitude">;
   ranks: Record<string, AzureFunctionCoordinatesItems[]>;
 }
 

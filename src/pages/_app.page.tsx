@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme/theme";
@@ -31,23 +32,22 @@ function MyApp({ Component, pageProps }: AppProps) {
   const isHomePage = pageProps.currentUrl === "/";
 
   return (
-    <ThemeProvider theme={theme}>
-      <Head>
-        <title>Sunchaser</title>
-        <meta name="description" content="Sunchaser" />
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-      </Head>
-      <Wrapper>
-        <HeaderComponent isHomePage={isHomePage} />
-        <Component {...pageProps} />
-        <Spacer height={64} />
-      </Wrapper>
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <Head>
+          <title>Sunchaser</title>
+          <meta name="description" content="Sunchaser" />
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <Wrapper>
+          <HeaderComponent isHomePage={isHomePage} />
+          <Component {...pageProps} />
+          <Spacer height={32} />
+        </Wrapper>
+      </ThemeProvider>
+      <Analytics />
+    </>
   );
 }
 

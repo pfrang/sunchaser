@@ -67,7 +67,7 @@ export default function HeaderComponent({ isHomePage }) {
             borderColor: theme.color.white,
           }}
         >
-          <UserForm header={modal} />
+          <UserForm header={modal} isHomePage={isHomePage} />
           <span
             onClick={() => onClose()}
             className="absolute right-0 top-0 cursor-pointer border-l-2 border-b-2 border-black w-6 text-center hover:bg-gray-600 hover:border-none  transition-all duration-300 ease-in-out "

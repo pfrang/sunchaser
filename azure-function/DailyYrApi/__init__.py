@@ -1,9 +1,6 @@
-from http.client import HTTPResponse
 import logging
-from urllib.error import HTTPError
 import azure.functions as func
 import os
-import json
 from src.python.Sql_connection.YR_Daily_Update.handlerYr import Handler
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -21,6 +18,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         username = os.getenv('SQL_Username')
         password = os.getenv('SQL_Password')
         driver = os.getenv('SQL_Driver')
+
         config = {
             "server": server,
             "db": db,
@@ -37,28 +35,23 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         }
 
-        
-        
         for i in params['update']:
             if "suntime" in i:
                 initializer=Handler(config).updateSunsetSunrise()
-                
+
             elif "weather" in i:
                 initializer = Handler(config).updateWeatherForecast()
-                
+
             elif "rank" in i:
                 initializer = Handler(config).updateWeatherRank()
             elif "delete" in i:
                 initializer = Handler(config).deleteOldData()
-                
+
             else: return func.HttpResponse(f"update type {i} not allowed. {update['suntime']}, {update['weather']}, {update['rank']}", status_code=405)
             update.update({i:initializer})
-        
+
         initializer=update
 
         return func.HttpResponse(f'{initializer}',status_code=200)
     except Exception as e:
         return func.HttpResponse(f'Error from Python: {e}',status_code=500)
-
-
-    

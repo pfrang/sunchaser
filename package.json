@@ -21,6 +21,7 @@
     "@types/styled-system__css": "^5.0.17",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
+    "@vercel/analytics": "^1.0.1",
     "axios": "^0.27.2",
     "daisyui": "^2.51.6",
     "date-fns": "^2.29.3",

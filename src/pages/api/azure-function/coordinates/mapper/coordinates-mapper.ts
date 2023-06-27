@@ -18,12 +18,12 @@ export class CoordinatesMapper {
   assembleItem = (items: AzureFunctionCoordinatesItems[]) => {
     const mappedItems = items.map((item) => {
       return {
-        weatherRank: item.total_rank,
-        sunriseDate: new Date(item.sunrise_date),
-        sunsetDate: new Date(item.sunset_date),
-        date: new Date(item.date),
         time: item.time.split(":").slice(0, 2).join(":"),
-        ...item,
+        symbol: item.symbol,
+        temperature: item.temperature,
+        wind: item.wind,
+        rank: item.rank,
+        date: new Date(item.date),
       };
     });
     return mappedItems;
@@ -37,8 +37,11 @@ export class CoordinatesMapper {
         latitude: ranks[rank][0].latitude,
         longitude: ranks[rank][0].longitude,
         primaryName: ranks[rank][0].primary_name,
+        secondaryName: ranks[rank][0].secondary_name,
         tertiaryName: ranks[rank][0].tertiary_name,
-        quarternaryName: ranks[rank][0].quarternary_name,
+        quaternaryName: ranks[rank][0].quaternary_name,
+        sunriseTime: ranks[rank][0].sunrise_time,
+        sunsetTime: ranks[rank][0].sunset_time,
         times: this.assembleItem(ranks[rank]),
       };
     });
@@ -52,7 +55,7 @@ export class CoordinatesMapper {
         metaData: {},
         items: {
           userLocation: {
-            ...this.contentData.userLocation,
+            ...this.contentData.user_location,
           },
           ranks: this.assembleItems(this.contentData.ranks),
         },
