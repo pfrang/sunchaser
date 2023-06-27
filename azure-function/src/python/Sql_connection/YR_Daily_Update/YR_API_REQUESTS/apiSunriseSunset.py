@@ -14,6 +14,7 @@ class Handler:
        self.offset='+01:00'
        self.days=11
        self.apisource=APISOURCE.getSunRise()
+       self.apiuseragent=APISOURCE.getUserAgent()
        
 
     def make_api_call(self):
@@ -48,10 +49,11 @@ class Handler:
         offset=self.offset
         days=self.days
         apisource=self.apisource
+        apiuseragent=self.apiuseragent
 
         url=f'{apisource}?lat={lat}&lon={lon}&date={date}&offset={offset}&days={days}'
         logging.info(url)
-        headers={'User-Agent':'Hjemmeprosjekt'}
+        headers={'User-Agent':apiuseragent}
        
         return requests.get(url,headers=headers)
 

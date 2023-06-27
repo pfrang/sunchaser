@@ -1,6 +1,11 @@
-
+import os
 
 class APISOURCE:
+
+    def getUserAgent():
+        contactInfo = os.getenv('EMAIL_CONTACT')
+        return f'Hjemmeprosjekt {contactInfo}'
+
     def getKartverket(params=True):
 
         baseUrl='https://ws.geonorge.no/stedsnavn/v1/punkt'

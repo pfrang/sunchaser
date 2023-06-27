@@ -12,7 +12,7 @@ class Handler:
        self.lat=lat
        self.lon=lon
        self.apisource=APISOURCE.getYR()
-       
+       self.apiuseragent=APISOURCE.getUserAgent()
 
     def make_api_call(self):
         try:
@@ -42,9 +42,10 @@ class Handler:
         lat=self.lat
         lon=self.lon
         apisource=self.apisource
+        apiuseragent=self.apiuseragent
 
         url=f'{apisource}?lat={lat}&lon={lon}'
-        headers={'User-Agent':'Hjemmeprosjekt'}
+        headers={'User-Agent':apiuseragent}
         return requests.get(url,headers=headers)
 
     def handle_result(self,response):
