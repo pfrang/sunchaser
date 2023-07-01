@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import { theme } from "../ui-kit/theme/theme";
 import { Text } from "../ui-kit/components/text";
+import { Flex } from "../ui-kit/components/flex";
+import { Spacer } from "../ui-kit/spacer/spacer";
 
 import {
   WeatherCarousell,
@@ -47,19 +49,20 @@ const Home: NextPage = () => {
             <WeatherCarousell weather={weather} setWeather={setWeather} />
           </div>
         </div>
-        <div className="px-10 pt-5">
+        <Flex flexDirection={"column"} paddingX={[4, 6]}>
+          <Spacer height={32} />
           <section id="form" className="h-full">
             <div
               className="z-10 border-2 rounded-xl h-full shadow-2xl"
               style={{
                 backgroundColor: theme.colors.whiteSmoke,
-                borderColor: theme.color.white,
+                borderColor: theme.color.green[1],
               }}
             >
               <UserForm weatherSelected={weather} />
             </div>
           </section>
-        </div>
+        </Flex>
       </TwoGridHorizontalContainer>
       {/* <Spacer height={64} /> */}
     </>

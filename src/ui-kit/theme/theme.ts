@@ -75,7 +75,7 @@ const yellows = [
 ] as const;
 const greens = [
   0,
-  "#E8FDEF",
+  "#F1FAEE",
   "#D3FBE0",
   "#B1F6C7",
   "#7CECA1",
@@ -180,7 +180,7 @@ export const theme = {
     whiteSmoke: colors.grey[1],
     yellowLight: colors.yellow[2],
     yellow: colors.yellow[6],
-    green: colors.green[6],
+    green: colors.green[1],
     greenLight: colors.green[1],
     greenMediumLight: colors.green[1],
     greenDark: colors.green[11],
