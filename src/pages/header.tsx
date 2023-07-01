@@ -37,7 +37,7 @@ export default function HeaderComponent({ isHomePage }) {
 
   return (
     <Flex
-      bg={theme.colors.pink}
+      bg={theme.colors.green}
       height={[48, 60]}
       paddingX={[2, 14]}
       justifyContent={"space-between"}

@@ -15,6 +15,7 @@ import { Spacer } from "../../ui-kit/spacer/spacer";
 import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
 import { Text } from "../../ui-kit/components/text";
 import { Flex } from "../../ui-kit/components/flex";
+import { theme } from "../../ui-kit/theme/theme";
 
 export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
   const popperRef = useRef<HTMLDivElement>(null);
@@ -114,7 +115,14 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
           onSelect={Submit}
           showOutsideDays
           fixedWeeks
-          style={{ margin: "0px" }}
+          style={{
+            margin: "10px",
+            border: "1px dotted gray",
+            borderRadius: "4px",
+            backgroundColor: `${theme.colors.green}`,
+            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+            padding: "10px",
+          }}
           styles={{
             caption: { display: "none" },
             head: {

@@ -1,9 +1,9 @@
-import pyodbc 
+import pyodbc
 import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
 import datetime
 import json
-
+import os
 
 def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
 
@@ -25,14 +25,14 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
                             a.lo, 
                             coordinates_all.country, 
                             coordinates_all.lat,
-                            coordinates_all.lon 
+                            coordinates_all.lon
             from (
                 select	lat as "la",
                         lon as "lo",
-                        date 
-                from suntime_schedule 
+                        date
+                from suntime_schedule
                 where suntime_schedule.date > DATEADD(day, 10, GETUTCDATE())) as a
-        
+
             Right JOIN coordinates_all
             ON a.la=coordinates_all.lat and a.lo=coordinates_all.lon
             Where a.la IS Null and a.lo IS Null) as p
@@ -44,15 +44,21 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
     cursor.execute(sql,country)
     data = cursor.fetchall()
 
-    #add data from sql to pandas 
+    #add data from sql to pandas
     df = pd.DataFrame(data)
     conn.commit()
+
+
+    script_dir = os.path.dirname(__file__)
+    rel_path = "../file.parquet"
+    abs_file_path = os.path.join(script_dir, rel_path)
+
 
     #loop each lat lon pair to run YR.api for sunset and sunrise
     for index,row in df.iterrows():
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1])
-        
+
         try:
             suntime_schedule=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
 

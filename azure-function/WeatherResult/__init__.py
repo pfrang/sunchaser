@@ -9,7 +9,7 @@ import pandas as pd
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+    logging.info('Hello from weather result')
     allowed_methods = ["GET", "POST"]
 
     if req.method not in allowed_methods: return func.HttpResponse("Method not allowed", status_code=404)

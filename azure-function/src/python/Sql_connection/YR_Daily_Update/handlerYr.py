@@ -66,7 +66,7 @@ class Handler:
 
         response="Weatherranking updated successfully"
         return response
-    
+
     def deleteOldData(self):
         server=self.server
         db=self.db

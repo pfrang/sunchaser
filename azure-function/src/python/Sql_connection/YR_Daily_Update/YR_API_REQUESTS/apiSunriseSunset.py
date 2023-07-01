@@ -7,7 +7,7 @@ from src.python.Sql_connection.API_error_log_to_sql import Handler as Error
 import logging
 class Handler:
     def __init__(self,lat,lon,date) -> None:
-       
+
        self.lat=lat
        self.lon=lon
        self.date=date
@@ -23,7 +23,7 @@ class Handler:
             response =self.get_result()
             response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
             return self.handle_result(response)
-        
+
         except requests.exceptions.HTTPError as err:
             self.error_handeling(response.status_code)
             if response.status_code == 503:
@@ -38,7 +38,7 @@ class Handler:
         except Exception as err:
             # Handle any other exceptions
             print(f"Error: {err}")
-            
+
 
 
     def get_result(self):
@@ -61,7 +61,7 @@ class Handler:
         lat=self.lat
         lon=self.lon
         offset=self.offset
-        response_json=response.json()  
+        response_json=response.json()
         response_json=response_json["location"]["time"]
 
         date=[]
@@ -69,7 +69,7 @@ class Handler:
         sunsetDate=[]
 
         date_format_full="%Y-%m-%dT%H:%M:%S"
-        
+
 
         for i in response_json:
             if "sunset" in i:
@@ -85,9 +85,9 @@ class Handler:
             'sunriseDate': sunriseDate,
             'sunsetDate': sunsetDate,
             'localTime' : offset
-            
+
         })
         return sunSchedule
-    
+
     def error_handeling(self,response_code):
         return Error(self.lat,self.lon,self.apisource,response_code).logError()

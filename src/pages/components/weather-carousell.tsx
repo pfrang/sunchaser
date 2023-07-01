@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 import { Text } from "../../ui-kit/components/text";
+import { theme } from "../../ui-kit/theme/theme";
 
 export type WeatherOptions = "Sun" | "Rain" | "Snow";
 
@@ -51,6 +52,8 @@ export const WeatherCarousell = ({
       style={{
         height: "100%",
         width: "100%",
+        //@ts-ignore
+        "--swiper-navigation-color": `#7CECA1`,
       }}
       keyboard={{
         enabled: true,
@@ -61,7 +64,10 @@ export const WeatherCarousell = ({
       // slidesPerGroup={3}
       loop={true}
       // loopFillGroupWithBlank={false}
-      pagination
+      pagination={{
+        clickable: true,
+        dynamicBullets: true,
+      }}
       navigation
       onSlideChange={(el) => {
         setWeather(items[el.realIndex] as WeatherOptions);

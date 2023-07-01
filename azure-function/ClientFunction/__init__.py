@@ -4,7 +4,6 @@
 # - create a Durable activity function (default name is "Hello")
 # - add azure-functions-durable to requirements.txt
 # - run pip install -r requirements.txt
- 
 import logging
 
 import azure.functions as func
@@ -13,7 +12,8 @@ import azure.durable_functions as df
 
 async def main(req: func.HttpRequest, starter: str) -> func.HttpResponse:
     client = df.DurableOrchestrationClient(starter)
-    instance_id = await client.start_new(req.route_params["functionName"], None, None)
+    request_body = req.get_json()
+    instance_id = await client.start_new(req.route_params["functionName"], None, request_body)
 
     logging.info(f"Started orchestration with ID = '{instance_id}'.")
 
