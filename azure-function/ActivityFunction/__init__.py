@@ -28,8 +28,9 @@ def main(name: str) -> str:
     if(type(body) != dict):
         return "Please send a json body"
 
+    if "localhost" in host:
+        write_to_file(abs_file_path, body, "Starting processing...", False)
 
-    write_to_file(abs_file_path, body, "Starting processing...", False)
 
     try:
         # response = requests.post(url, headers=headers, json=body)
@@ -40,7 +41,8 @@ def main(name: str) -> str:
         return f"Succeeded with {body['params']['update']}"
         return response.status_code
     except requests.exceptions.RequestException as e:
-        write_to_file(abs_file_path, False, f"Error l0l: {e}")
+        if "localhost" in host:
+            write_to_file(abs_file_path, False, f"Error l0l: {e}")
 
         # Handle request exceptions
         print(f"Error from Python: {e}")
