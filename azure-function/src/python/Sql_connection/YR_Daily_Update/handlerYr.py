@@ -5,7 +5,7 @@ from src.python.Sql_connection.YR_Daily_Update.removeWeatherDatafromDB import de
 
 class Handler:
     def __init__(self,config) -> None:
-       
+
        self.input=config["db"]
        self.server=config["server"]
        self.db=config["db"]
@@ -26,7 +26,7 @@ class Handler:
 
         response = "Sunrise and sunset updated successfully"
         return response
-    
+
     def updateWeatherForecast(self):
         server=self.server
         db=self.db
@@ -39,7 +39,7 @@ class Handler:
 
         response= "Weatherforecast updated successfully"
         return response
-    
+
     def updateWeatherRank(self):
         server=self.server
         db=self.db
@@ -51,7 +51,7 @@ class Handler:
 
         response="Weatherranking updated successfully"
         return response
-    
+
     def deleteOldData(self):
         server=self.server
         db=self.db

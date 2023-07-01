@@ -6,14 +6,18 @@
 # - add azure-functions-durable to requirements.txt
 # - run pip install -r requirements.txt
 
+import time
 import requests
 import os
 from src.python.utils.write_to_file import write_to_file
-
+import logging
 
 
 def main(name: str) -> str:
-    url = "http://localhost:7071/api/DailyYrApi"  # Replace with the appropriate URL for the WeatherResult function
+    host = os.getenv("HOST_URL")
+    code = os.getenv("DAILYYR_API_CODE")
+    url = f"{host}/DailyYrApi?code={code}"  # Replace with the appropriate URL for the WeatherResult function
+    logging.info(url)
     script_dir = os.path.dirname(__file__)
     rel_path = "../logs/logs.txt"
     abs_file_path = os.path.join(script_dir, rel_path)
@@ -27,9 +31,12 @@ def main(name: str) -> str:
     write_to_file(abs_file_path, body, "Starting processing...", False)
 
     try:
-        response = requests.post(url, headers=headers, json=body)
-        response.raise_for_status()
-        write_to_file(abs_file_path, f"Completed request l0l : {response.status_code + response.reason}", False)
+        # response = requests.post(url, headers=headers, json=body)
+        # response.raise_for_status()
+        # write_to_file(abs_file_path, f"Completed request l0l : {response.status_code + response.reason}", False)
+        time.sleep(5)
+        logging.info(f"Done with running {body}")
+        return f"Succeeded with {body['params']['update']}"
         return response.status_code
     except requests.exceptions.RequestException as e:
         write_to_file(abs_file_path, False, f"Error l0l: {e}")
