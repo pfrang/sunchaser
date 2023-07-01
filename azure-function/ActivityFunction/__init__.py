@@ -28,6 +28,7 @@ def main(name: str) -> str:
     if(type(body) != dict):
         return "Please send a json body"
 
+
     write_to_file(abs_file_path, body, "Starting processing...", False)
 
     try:
