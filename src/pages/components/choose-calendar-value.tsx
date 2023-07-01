@@ -1,11 +1,4 @@
-import {
-  DayModifiers,
-  DayPicker,
-  Matcher,
-  ModifiersStyles,
-  Row,
-  RowProps,
-} from "react-day-picker";
+import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { differenceInCalendarDays } from "date-fns";
 import nb from "date-fns/locale/nb";
@@ -30,7 +23,7 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
   };
 
   // const modifiers: DayModifiers = {
-  //   highlightDays: {
+  //   highlightDays: {_
   //     from: inTenDays,
   //     to: inTenDays,
   //   },
@@ -114,7 +107,6 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
           selected={selectedDate}
           onSelect={Submit}
           showOutsideDays
-          fixedWeeks
           style={{
             margin: "10px",
             border: "1px dotted gray",
