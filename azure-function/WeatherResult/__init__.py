@@ -34,28 +34,16 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         print(config)
 
         sql_df=Handler.Handler(config,float(params['lat']),float(params['lon']),params['date'],float(params['distance'])).recommendation_response_sql()
-<<<<<<< HEAD
-            
-=======
-
->>>>>>> fba16702b512966e2a433e3d7894d376e64eacb5
         StartLocation = {
             "latitude": params['lat'],
             "longitude": params['lon']
             }
-<<<<<<< HEAD
-        
-        dfDict = sql_df.groupby('group_rank',group_keys=True).apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time']].to_dict(orient='records')).to_dict()
-        tmpDict = {'user_location':StartLocation,'ranks': dfDict}
-    
-=======
 
         if sql_df.empty:
             return func.HttpResponse(status_code=204)
 
         dfDict = sql_df.groupby('group_rank', group_keys=True).apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time']].to_dict(orient='records')).to_dict()
         tmpDict = {'user_location':StartLocation,'ranks': dfDict}
->>>>>>> fba16702b512966e2a433e3d7894d376e64eacb5
 
         response_str = json.dumps(tmpDict , indent=4,default=str)
 

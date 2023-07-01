@@ -2,10 +2,13 @@ import pyodbc
 import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
 import datetime
+import json
 
 
+def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
 
-def addSunriseSunset(server,database,username,password,driver,country):
+    emptylist={}
+    BLOB_jsonData=json.dumps(emptylist)
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
@@ -16,7 +19,7 @@ def addSunriseSunset(server,database,username,password,driver,country):
     #Filter out locations that have today pluss 10 more days (max) of forecast. This indicates that the location is already populated today
     sql='''
     
-        Select p.lat,p.lon,p.country from(
+        Select top(10) p.lat,p.lon,p.country from(
             
                     Select	a.la, 
                             a.lo, 
@@ -53,20 +56,25 @@ def addSunriseSunset(server,database,username,password,driver,country):
         try:
             suntime_schedule=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
 
-            #delete previous records for the specific location and add new data
-            cursor.execute('''
-                        DELETE FROM suntime_schedule 
-                        WHERE lat=? and lon=?
-                    ''',lat,lon)
-
-            conn.commit()
-            
-            #add the new data to the table
-            for index,suntime in suntime_schedule.iterrows():
+            if SQL_workflow==True:
+                #delete previous records for the specific location and add new data
                 cursor.execute('''
-                INSERT INTO suntime_schedule (lat, lon, date, sunrise_date, sunset_date, local_time) 
-                VALUES (?, ?, ?, ?, ?, ?)
-                ''', (suntime[0],suntime[1],suntime[2],suntime[3],suntime[4],suntime[5]))
+                            DELETE FROM suntime_schedule 
+                            WHERE lat=? and lon=?
+                        ''',lat,lon)
+
                 conn.commit()
+                
+                #add the new data to the table
+                for index,suntime in suntime_schedule.iterrows():
+                    cursor.execute('''
+                    INSERT INTO suntime_schedule (lat, lon, date, sunrise_date, sunset_date, local_time) 
+                    VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (suntime[0],suntime[1],suntime[2],suntime[3],suntime[4],suntime[5]))
+                    conn.commit()
+            if BLOB_workflow==True:
+                BLOB_jsonData.update(suntime_schedule)
+
+            return BLOB_jsonData
         except:
             pass

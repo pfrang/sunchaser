@@ -52,7 +52,7 @@ class Handler:
         apiuseragent=self.apiuseragent
 
         url=f'{apisource}?lat={lat}&lon={lon}&date={date}&offset={offset}&days={days}'
-        logging.info(url)
+        # logging.info(url)
         headers={'User-Agent':apiuseragent}
        
         return requests.get(url,headers=headers)

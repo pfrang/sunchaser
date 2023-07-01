@@ -2,6 +2,7 @@ import logging
 import azure.functions as func
 import os
 from src.python.Sql_connection.YR_Daily_Update.handlerYr import Handler
+from src.python.Sql_connection.YR_Daily_Update.addResultAzureBlob import Handler as BLOB
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
@@ -34,18 +35,32 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "delete":"Nothing is deleted",
 
         }
+        SQL_workflow=False
+        BLOB_workflow=False
+        for i in params['routine']:
+            if "BLOB" in i:
+                BLOB_workflow=True
+            if "SQL" in i:
+                SQL_workflow=True
+
+        if SQL_workflow==BLOB_workflow==False:
+            return func.HttpResponse(f"No rutine specified for SQL:{SQL_workflow} and BLOB:{BLOB_workflow}", status_code=405)
 
         for i in params['update']:
             if "suntime" in i:
-                initializer=Handler(config).updateSunsetSunrise()
+                initializer=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise()
+                if BLOB_workflow==True:
+                    initializer=BLOB(i,initializer).pushToBlob()
 
             elif "weather" in i:
-                initializer = Handler(config).updateWeatherForecast()
-
+                initializer = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast()
+                if BLOB_workflow==True:
+                    initializer=BLOB(i,initializer).pushToBlob()
             elif "rank" in i:
-                initializer = Handler(config).updateWeatherRank()
+                initializer = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherRank()
+                
             elif "delete" in i:
-                initializer = Handler(config).deleteOldData()
+                initializer = Handler(config,BLOB_workflow,SQL_workflow).deleteOldData()
 
             else: return func.HttpResponse(f"update type {i} not allowed. {update['suntime']}, {update['weather']}, {update['rank']}", status_code=405)
             update.update({i:initializer})

@@ -3,8 +3,12 @@ import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiWeather import Handler
 import datetime
 import logging
+import json
 
-def weatherForecast(server,database,username,password,driver,country):
+def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
+
+    emptylist={}
+    BLOB_jsonData=json.dumps(emptylist)
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
@@ -38,20 +42,26 @@ def weatherForecast(server,database,username,password,driver,country):
     
             forecast_schedule=Handler(lat,lon).make_api_call()
 
-            #delete previous records for the specific location and add new data
-            cursor.execute('''
-                        DELETE FROM weather_forecast
-                        WHERE lat=? and lon=?
-                    ''',lat,lon)
-
-            conn.commit()
-
-            #add the new data to the table
-            for index,forecast in forecast_schedule.iterrows():
+            if SQL_workflow==True:
+                #delete previous records for the specific location and add new data
                 cursor.execute('''
-                INSERT INTO weather_forecast (lat, lon, date, time, symbol, temperature,wind,src)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (forecast[0],forecast[1],forecast[2],forecast[3],str(forecast[4]).split("_")[0],forecast[5],forecast[6],forecast[7]))
+                            DELETE FROM weather_forecast
+                            WHERE lat=? and lon=?
+                        ''',lat,lon)
+
                 conn.commit()
+
+                #add the new data to the table
+                for index,forecast in forecast_schedule.iterrows():
+                    cursor.execute('''
+                    INSERT INTO weather_forecast (lat, lon, date, time, symbol, temperature,wind,src)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (forecast[0],forecast[1],forecast[2],forecast[3],str(forecast[4]).split("_")[0],forecast[5],forecast[6],forecast[7]))
+                    conn.commit()
+
+            if BLOB_workflow==True:
+                BLOB_jsonData.update(forecast_schedule)
+            
+            return BLOB_jsonData
         except:
             pass
