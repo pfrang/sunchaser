@@ -271,8 +271,6 @@ input[type=range]:focus::-ms-fill-upper {
 
 #bouncingArrow {
   right: 20px;
-  height: 20px;
-  width: 24px;
   z-index: 100;
   animation: bounce 2s infinite;
 }

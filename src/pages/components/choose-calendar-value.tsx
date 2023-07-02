@@ -71,8 +71,8 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
           </Text>
           <div
             tabIndex={0}
-            className={`cursor-pointer absolute right-1 ${isPopperOpen && "bg-gray-300"
-              } hover:bg-gray-300 rounded-lg`}
+            className={`cursor-pointer absolute right-1
+            ${isPopperOpen && "bg-gray-300"} hover:bg-gray-300 rounded-lg`}
             ref={popperRef}
             onClick={() => setIsPopperOpen(!isPopperOpen)}
           >
