@@ -1,5 +1,5 @@
-import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
 import { differenceInCalendarDays } from "date-fns";
 import nb from "date-fns/locale/nb";
 import { useEffect, useRef, useState } from "react";
@@ -21,19 +21,6 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
   const disabledDays: Matcher | Matcher[] = {
     after: inTenDays,
   };
-
-  // const modifiers: DayModifiers = {
-  //   highlightDays: {_
-  //     from: inTenDays,
-  //     to: inTenDays,
-  //   },
-  // };
-
-  // const modifiersStyles: ModifiersStyles = {
-  //   highlightDays: {
-  //     backgroundColor: "gray",
-  //   },
-  // };
 
   useEffect(() => {
     setLocale(navigator.language);
@@ -84,9 +71,8 @@ export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
           </Text>
           <div
             tabIndex={0}
-            className={`cursor-pointer absolute right-1 ${
-              isPopperOpen && "bg-gray-300"
-            } hover:bg-gray-300 rounded-lg`}
+            className={`cursor-pointer absolute right-1 ${isPopperOpen && "bg-gray-300"
+              } hover:bg-gray-300 rounded-lg`}
             ref={popperRef}
             onClick={() => setIsPopperOpen(!isPopperOpen)}
           >

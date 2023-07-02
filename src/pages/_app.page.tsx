@@ -2,7 +2,6 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
-import { useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
