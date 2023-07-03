@@ -40,6 +40,7 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
+          {/* <link rel="stylesheet" href="../styles/globals.css" /> */}
           {/* <link
             rel="stylesheet"
             href="https://unpkg.com/react-day-picker/lib/style.css"

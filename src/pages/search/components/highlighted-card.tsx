@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useRef, useEffect, useState, useMemo } from "react";
 
 import { Text } from "../../../ui-kit/components/text";
@@ -86,9 +86,9 @@ export const HighlightedCard = ({
 
   useEffect(() => {
     const svgContainer = svgContainerRef.current;
+    const hasScroll = svgContainer.scrollWidth > svgContainer.clientWidth;
 
     function checkIfScroll() {
-      //check if user is currently scrolling
       if (svgContainer.scrollLeft !== 0) {
         setIsScrolling(true);
       } else {
@@ -99,9 +99,24 @@ export const HighlightedCard = ({
     svgContainer.addEventListener("scroll", checkIfScroll);
 
     return () => {
+      if (!hasScroll) return setIsScrolling(true);
       svgContainer.removeEventListener("scroll", checkIfScroll);
     };
   }, []);
+
+  const animationStyle = `
+  @keyframes bounce {
+    0% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(10px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+`;
 
   return (
     <TwoHorizontalGrid>
@@ -142,18 +157,17 @@ export const HighlightedCard = ({
 
       <div
         ref={svgContainerRef}
-        className="relative flex overflow-x-auto overflow-y-hidden color-black-600 z-10 max-w-max "
+        className="relative flex overflow-x-auto overflow-y-hidden color-black-600 z-10 "
       >
         <span
-          className={`absolute right-4 bottom-1/2 ${isScrolling && "hidden"
-            } animate-bounce z-99`}
+          id="bouncingArrow"
+          style={{
+            animationName: "bounce",
+          }}
+          className={`absolute m-r-12 right-4 bottom-1/2 z-10 ${isScrolling && "hidden"
+            }`}
         >
-          <svg
-            viewBox="0 0 24 24"
-            id="bouncingArrow"
-            height={"20px"}
-            width={"24px"}
-          >
+          <svg viewBox="0 0 24 24" height={"20px"} width={"24px"}>
             <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
           </svg>
         </span>
