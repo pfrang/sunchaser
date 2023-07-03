@@ -142,10 +142,11 @@ export const HighlightedCard = ({
 
       <div
         ref={svgContainerRef}
-        className="relative flex overflow-x-auto overflow-y-hidden color-black-600 z-10 max-w-max"
+        className="relative flex overflow-x-auto overflow-y-hidden color-black-600 z-10 max-w-max "
       >
         <span
-          className={`absolute right-4 bottom-1/2 ${isScrolling && "hidden"}`}
+          className={`absolute right-4 bottom-1/2 ${isScrolling && "hidden"
+            } animate-bounce z-99`}
         >
           <svg
             viewBox="0 0 24 24"

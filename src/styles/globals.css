@@ -268,9 +268,3 @@ input[type=range]:focus::-ms-fill-upper {
     transform: translateX(0px);
   }
 }
-
-#bouncingArrow {
-  right: 20px;
-  z-index: 100;
-  animation: bounce 2s infinite;
-}
