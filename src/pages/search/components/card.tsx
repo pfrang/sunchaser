@@ -109,9 +109,8 @@ export const Card = ({
         borderBottomWidth={"2px"}
         borderWidth={2}
         color={`${isHighlighted ? "white" : "black"}`}
-        backgroundColor={`${
-          isHighlighted ? `${theme.colors.black[3]}` : `${theme.color.white}`
-        }`}
+        backgroundColor={`${isHighlighted ? `${theme.colors.black[3]}` : `${theme.color.white}`
+          }`}
       >
         <div className="absolute top-[10px] right-[10px]">
           {isHighlighted ? (
@@ -162,9 +161,9 @@ export const Card = ({
         height={
           isHighlighted
             ? [
-                `${swiper.height - mobileHeightOfCard - 40}px`,
-                `${swiper.height - desktopHeightOfCard - 60}px`,
-              ]
+              `${swiper.height - mobileHeightOfCard - 40}px`,
+              `${swiper.height - desktopHeightOfCard - 60}px`,
+            ]
             : "0px"
         }
       >

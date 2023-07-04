@@ -6,7 +6,7 @@ export const LinkWrapper = styled.span<{
   wrapWhitespace: boolean;
 }>`
   text-decoration: ${(props) => (props.noUnderline ? "none" : "underline")};
-  color: inherit;
+  color: blue;
   text-decoration-thickness: from-font;
   text-underline-offset: 2px;
   white-space: ${({ wrapWhitespace }) => !wrapWhitespace && "nowrap"};

@@ -8,6 +8,8 @@ import {
   UserLocation,
 } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { LinkContent } from "../../../ui-kit/components/link-content";
+import { getSortedTemperatureFromArrOfTimes } from "../../utils/get-today-from-object";
+import { Temperature } from "../../utils/temperature";
 
 import { TimeSeries } from "./time-series";
 
@@ -118,6 +120,10 @@ export const HighlightedCard = ({
   }
 `;
 
+  const maxTemperatureToday = getSortedTemperatureFromArrOfTimes(times, "desc");
+
+  const minTemperatureToday = getSortedTemperatureFromArrOfTimes(times, "asc");
+
   return (
     <TwoHorizontalGrid>
       <Flex
@@ -152,8 +158,15 @@ export const HighlightedCard = ({
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
         </Flex>
+        <Flex width={"100%"} justifyContent={"space-between"}>
+          <Text variant="body-small">{`Max ${new Temperature(
+            maxTemperatureToday.temperature
+          ).toString()} at ${maxTemperatureToday.time}`}</Text>
+          <Text variant="body-small">{`Min ${new Temperature(
+            minTemperatureToday.temperature
+          ).toString()} at ${minTemperatureToday.time}`}</Text>
+        </Flex>
       </Flex>
-      {/* <Spacer line /> */}
 
       <div
         ref={svgContainerRef}
