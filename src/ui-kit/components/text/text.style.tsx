@@ -41,13 +41,13 @@ export const TextWrapper = styled.p<{
     ["body-small"]: {
       fontFamily: "ProximaNova",
       fontWeight: "400",
-      fontSize: ["16px", "16px", "18px"],
+      fontSize: ["12px", "16px", "18px"],
       lineHeight: ["24px", "24px", "28px"],
     },
     ["body-small-bold"]: {
       fontFamily: "ProximaNova",
       fontWeight: "600",
-      fontSize: ["16px", "16px", "18px"],
+      fontSize: ["12px", "16px", "18px"],
       lineHeight: ["24px", "24px", "28px"],
     },
     ["body-large"]: {
