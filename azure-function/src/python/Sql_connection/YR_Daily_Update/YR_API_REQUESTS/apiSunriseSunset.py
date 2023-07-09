@@ -70,13 +70,12 @@ class Handler:
 
         date_format_full="%Y-%m-%dT%H:%M:%S"
 
-
         for i in response_json:
             if "sunset" in i:
                 sunrise_var=datetime.strptime(str(i["sunrise"]["time"]).split("+")[0],date_format_full)
                 date.append(sunrise_var.date())
-                sunriseDate.append(str(sunrise_var))
-                sunsetDate.append(str(datetime.strptime(str(i["sunset"]["time"]).split("+")[0],date_format_full)))
+                sunriseDate.append(sunrise_var)
+                sunsetDate.append(datetime.strptime(str(i["sunset"]["time"]).split("+")[0],date_format_full))
 
         sunSchedule=pd.DataFrame({
             'lat': lat,

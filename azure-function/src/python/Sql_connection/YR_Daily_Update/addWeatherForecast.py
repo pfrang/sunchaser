@@ -41,11 +41,10 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
 
             forecast_schedule_response=Handler(lat,lon).make_api_call()
 
-            logging.info(f"Received response from yr on weather {forecast_schedule_response}")
-
 
             if BLOB_workflow==True:
                 dfs.append(forecast_schedule_response)
+
 
 
             if SQL_workflow==True:
@@ -68,6 +67,5 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
             pass
     if not dfs:
         return
-
     result = pd.concat(dfs)
     return result

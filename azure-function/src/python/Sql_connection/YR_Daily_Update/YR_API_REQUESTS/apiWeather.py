@@ -54,7 +54,6 @@ class Handler:
         response_json=response.json()
         response_json=response_json['properties']["timeseries"]
 
-        times = []
         weatherDate=[]
         weatherTime=[]
         weatherSymbol= []
@@ -62,6 +61,7 @@ class Handler:
         weatherWind=[]
         latArr=[]
         lonArr=[]
+
 
         for i in response_json:
             if("next_6_hours" in i["data"].keys()):

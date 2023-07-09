@@ -18,7 +18,8 @@ class Handler():
             todays_date = str(datetime.now().date())
             todays_date_with_time =  datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
             #Dependent variables
-            self.df=DataFrame
+            # //update dataFrame to not preservE_index
+            self.df= DataFrame
             self.destination_folder=todays_date
             self.parquet_file_name=ApiParamsUpdateRef[0:3].upper()+"_"+todays_date_with_time+".parquet"
             self.ApiParamsUpdateRef=ApiParamsUpdateRef
@@ -50,8 +51,13 @@ class Handler():
             if not directory_client.exists():
                 directory_client.create_directory()
 
+
+
             parquet_file = BytesIO()
             #start streaming
+
+            # self.df['date'] = pd.to_datetime(self.df['date'])
+
             self.df.to_parquet(parquet_file, engine='pyarrow')
             parquet_file.seek(0)
 
