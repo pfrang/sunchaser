@@ -48,25 +48,25 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         for i in params['update']:
             if "suntime" in i:
-                initializer=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise()
+                response=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise()
                 if BLOB_workflow==True:
-                    initializer=BLOB(i,initializer).pushToBlob()
+                    response=BLOB(i,response).pushToBlob()
 
             elif "weather" in i:
-                initializer = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast()
+                response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast()
                 if BLOB_workflow==True:
-                    initializer=BLOB(i,initializer).pushToBlob()
+                    response=BLOB(i,response).pushToBlob()
             elif "rank" in i:
-                initializer = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherRank()
-                
+                response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherRank()
+
             elif "delete" in i:
-                initializer = Handler(config,BLOB_workflow,SQL_workflow).deleteOldData()
+                response = Handler(config,BLOB_workflow,SQL_workflow).deleteOldData()
 
             else: return func.HttpResponse(f"update type {i} not allowed. {update['suntime']}, {update['weather']}, {update['rank']}", status_code=405)
-            update.update({i:initializer})
+            update.update({i:response})
 
-        initializer=update
+        response=update
 
-        return func.HttpResponse(f'{initializer}',status_code=200)
+        return func.HttpResponse(f'{response}',status_code=200)
     except Exception as e:
         return func.HttpResponse(f'Error from Python: {e}',status_code=500)

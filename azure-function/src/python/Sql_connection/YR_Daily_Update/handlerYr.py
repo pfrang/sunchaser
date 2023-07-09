@@ -5,7 +5,7 @@ from src.python.Sql_connection.YR_Daily_Update.removeWeatherDatafromDB import de
 
 class Handler:
     def __init__(self,config,BLOB_workflow,SQL_workflow) -> None:
-       
+
        self.input=config["db"]
        self.server=config["server"]
        self.db=config["db"]
@@ -26,14 +26,14 @@ class Handler:
         SQL_workflow=self.SQL_workflow
         BLOB_workflow=self.BLOB_workflow
 
-        jsonData=addSunriseSunset(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow)
+        df=addSunriseSunset(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow)
 
         if BLOB_workflow==True:
-            return jsonData
+            return df
         else:
             response = "Sunrise and sunset updated successfully"
             return response
-    
+
     def updateWeatherForecast(self):
         server=self.server
         db=self.db
@@ -44,14 +44,14 @@ class Handler:
         SQL_workflow=self.SQL_workflow
         BLOB_workflow=self.BLOB_workflow
 
-        jsonData=weatherForecast(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow)
+        df=weatherForecast(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow)
 
         if BLOB_workflow==True:
-            return jsonData
+            return df
         else:
             response= "Weatherforecast updated successfully"
             return response
-    
+
     def updateWeatherRank(self):
         server=self.server
         db=self.db

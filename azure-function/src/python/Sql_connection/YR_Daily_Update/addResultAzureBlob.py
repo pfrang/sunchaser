@@ -1,12 +1,12 @@
-from azure.storage.filedatalake import DataLakeFileClient
-import pandas as pd
-import pyarrow.parquet as pq
+from azure.storage.filedatalake import DataLakeFileClient, DataLakeDirectoryClient
 from datetime import datetime
 import os
 import logging
+from io import BytesIO
+import pandas as pd
 
 class Handler():
-    def __init__(self,ApiParamsUpdateRef,jsonFile):
+    def __init__(self,ApiParamsUpdateRef,DataFrame: pd.DataFrame):
 
         try:
             #Datalak fixed keys
@@ -15,39 +15,53 @@ class Handler():
             self.file_system_name=os.getenv('BLOB_File_System_Name')
             self.file_path=os.getenv('BLOB_File_Path')
 
+            todays_date = str(datetime.now().date())
+            todays_date_with_time =  datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
             #Dependent variables
-            self.json=jsonFile
-            self.destination_folder=str(datetime.now().date())
-            self.json_parquet_name=ApiParamsUpdateRef[0:3].upper()+"_"+str(datetime.now()).replace(":","").replace(".","")+".parquet"
+            self.df=DataFrame
+            self.destination_folder=todays_date
+            self.parquet_file_name=ApiParamsUpdateRef[0:3].upper()+"_"+todays_date_with_time+".parquet"
             self.ApiParamsUpdateRef=ApiParamsUpdateRef
         except Exception as e:
             logging.info(e)
             return(f"Error: {e}")
 
     def pushToBlob(self):
-        
+
+        # Azure Data Lake Storage details
+        ApiParamsUpdateRef=self.ApiParamsUpdateRef
+
+        configAzure = {
+            "account_url": f"https://{self.account_name}.dfs.core.windows.net",
+            "file_system_name": self.file_system_name,
+            "folder_path": self.destination_folder,
+            "file_path": f"{self.destination_folder}/{self.parquet_file_name}",
+            "credentials": self.account_key
+        }
+
         try:
-            # Azure Data Lake Storage details 
-            account_name = self.account_name 
-            account_key = self.account_key 
-            file_system_name = self.file_system_name 
-            destination_folder = self.destination_folder 
-            file_name = self.json
-            ApiParamsUpdateRef=self.ApiParamsUpdateRef
-            
-            # Convert JSON to Parquet 
-            parquet_file_name = self.json_parquet_name 
-            pq.write_table(pq.Table.from_pandas(file_name), parquet_file_name) 
-            
-            # Upload Parquet file to Azure Data Lake Storage 
-            service_client = DataLakeFileClient(account_url=f"https://{account_name}.dfs.core.windows.net", 
-                file_system_name=file_system_name, 
-                file_path=f"{destination_folder}/{parquet_file_name}", 
-                credential=account_key) 
-            
-            with open(parquet_file_name, 'rb') as file: 
-                service_client.upload_data(file, overwrite=True)
-            
+            directory_client = DataLakeDirectoryClient(
+                account_url=configAzure["account_url"],
+                file_system_name=configAzure["file_system_name"],
+                directory_name=configAzure["folder_path"],
+                credential=configAzure["credentials"]
+            )
+
+            if not directory_client.exists():
+                directory_client.create_directory()
+
+            parquet_file = BytesIO()
+            #start streaming
+            self.df.to_parquet(parquet_file, engine='pyarrow')
+            parquet_file.seek(0)
+
+            service_client = DataLakeFileClient(account_url=f"{configAzure['account_url']}/",
+                file_system_name=configAzure["file_system_name"],
+                file_path=configAzure["file_path"],
+                credential=configAzure["credentials"])
+
+            service_client.upload_data(data=parquet_file, overwrite=True)
+
             return(f"File uploaded successfully for {ApiParamsUpdateRef}!")
         except Exception as e:
             logging.info(e)

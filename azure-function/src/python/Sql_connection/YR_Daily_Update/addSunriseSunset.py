@@ -7,23 +7,22 @@ import os
 
 def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
 
-    emptylist={}
-    BLOB_jsonData=json.dumps(emptylist)
-
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
+
+    dfs = []
 
     #Connecting to master sql table to collect all lat, lon
     #sql="SELECT lat,lon FROM coordinates_all where country=?"
 
     #Filter out locations that have today pluss 10 more days (max) of forecast. This indicates that the location is already populated today
     sql='''
-    
+
         Select top(10) p.lat,p.lon,p.country from(
-            
-                    Select	a.la, 
-                            a.lo, 
-                            coordinates_all.country, 
+
+                    Select	a.la,
+                            a.lo,
+                            coordinates_all.country,
                             coordinates_all.lat,
                             coordinates_all.lon
             from (
@@ -48,39 +47,38 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
     df = pd.DataFrame(data)
     conn.commit()
 
-
-    script_dir = os.path.dirname(__file__)
-    rel_path = "../file.parquet"
-    abs_file_path = os.path.join(script_dir, rel_path)
-
-
     #loop each lat lon pair to run YR.api for sunset and sunrise
     for index,row in df.iterrows():
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1])
 
         try:
-            suntime_schedule=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
+            suntime_schedule_response=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
+
+            if BLOB_workflow==True:
+                dfs.append(suntime_schedule_response)
 
             if SQL_workflow==True:
                 #delete previous records for the specific location and add new data
                 cursor.execute('''
-                            DELETE FROM suntime_schedule 
+                            DELETE FROM suntime_schedule
                             WHERE lat=? and lon=?
                         ''',lat,lon)
 
                 conn.commit()
-                
+
                 #add the new data to the table
-                for index,suntime in suntime_schedule.iterrows():
+                for index,suntime in suntime_schedule_response.iterrows():
                     cursor.execute('''
-                    INSERT INTO suntime_schedule (lat, lon, date, sunrise_date, sunset_date, local_time) 
+                    INSERT INTO suntime_schedule (lat, lon, date, sunrise_date, sunset_date, local_time)
                     VALUES (?, ?, ?, ?, ?, ?)
                     ''', (suntime[0],suntime[1],suntime[2],suntime[3],suntime[4],suntime[5]))
                     conn.commit()
-            if BLOB_workflow==True:
-                BLOB_jsonData.update(suntime_schedule)
-
-            return BLOB_jsonData
         except:
             pass
+
+    if not dfs:
+        return
+
+    result = pd.concat(dfs)
+    return result

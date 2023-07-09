@@ -7,17 +7,16 @@ import json
 
 def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
 
-    emptylist={}
-    BLOB_jsonData=json.dumps(emptylist)
-
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
+
+    dfs = []
 
     #Connecting to master sql table to collect all lat, lon
     #sql="SELECT lat,lon FROM coordinates_all where country=?"
 
     sql='''
-    Select res.lat,res.lon,res.country from (Select filter.wind,co.lat,co.lon,co.country from (Select * from weather_forecast
+    Select top(10) res.lat,res.lon,res.country from (Select filter.wind,co.lat,co.lon,co.country from (Select * from weather_forecast
     where date>DATEADD(day, 9, GETUTCDATE())) as filter
     Right JOIN coordinates_all as co ON co.lat=filter.lat and co.lon=filter.lon
     where filter.wind is NULL) as res
@@ -39,8 +38,15 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
         lon=float(str(row[0]).split(",")[1])
 
         try:
-    
-            forecast_schedule=Handler(lat,lon).make_api_call()
+
+            forecast_schedule_response=Handler(lat,lon).make_api_call()
+
+            logging.info(f"Received response from yr on weather {forecast_schedule_response}")
+
+
+            if BLOB_workflow==True:
+                dfs.append(forecast_schedule_response)
+
 
             if SQL_workflow==True:
                 #delete previous records for the specific location and add new data
@@ -52,16 +58,16 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
                 conn.commit()
 
                 #add the new data to the table
-                for index,forecast in forecast_schedule.iterrows():
+                for index,forecast in forecast_schedule_response.iterrows():
                     cursor.execute('''
                     INSERT INTO weather_forecast (lat, lon, date, time, symbol, temperature,wind,src)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     ''', (forecast[0],forecast[1],forecast[2],forecast[3],str(forecast[4]).split("_")[0],forecast[5],forecast[6],forecast[7]))
                     conn.commit()
-
-            if BLOB_workflow==True:
-                BLOB_jsonData.update(forecast_schedule)
-            
-            return BLOB_jsonData
         except:
             pass
+    if not dfs:
+        return
+
+    result = pd.concat(dfs)
+    return result

@@ -15,7 +15,7 @@ class Handler:
        self.days=11
        self.apisource=APISOURCE.getSunRise()
        self.apiuseragent=APISOURCE.getUserAgent()
-       
+
 
     def make_api_call(self):
 
@@ -54,7 +54,7 @@ class Handler:
         url=f'{apisource}?lat={lat}&lon={lon}&date={date}&offset={offset}&days={days}'
         # logging.info(url)
         headers={'User-Agent':apiuseragent}
-       
+
         return requests.get(url,headers=headers)
 
     def handle_result(self,response):
@@ -75,16 +75,16 @@ class Handler:
             if "sunset" in i:
                 sunrise_var=datetime.strptime(str(i["sunrise"]["time"]).split("+")[0],date_format_full)
                 date.append(sunrise_var.date())
-                sunriseDate.append(sunrise_var)
-                sunsetDate.append(datetime.strptime(str(i["sunset"]["time"]).split("+")[0],date_format_full))
+                sunriseDate.append(str(sunrise_var))
+                sunsetDate.append(str(datetime.strptime(str(i["sunset"]["time"]).split("+")[0],date_format_full)))
 
         sunSchedule=pd.DataFrame({
-            'latitude': lat,
-            'longitude': lon,
+            'lat': lat,
+            'lon': lon,
             'date': date,
-            'sunriseDate': sunriseDate,
-            'sunsetDate': sunsetDate,
-            'localTime' : offset
+            'sunrise_date': sunriseDate,
+            'sunset_date': sunsetDate,
+            'local_time' : offset
 
         })
         return sunSchedule
