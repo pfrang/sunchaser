@@ -17,7 +17,7 @@ def main(name: str) -> str:
     host = os.getenv("HOST_URL")
     code = os.getenv("DAILYYR_API_CODE")
     url = f"{host}/DailyYrApi?code={code}"  # Replace with the appropriate URL for the WeatherResult function
-    logging.info(url)
+
     script_dir = os.path.dirname(__file__)
     rel_path = "../logs/logs.txt"
     abs_file_path = os.path.join(script_dir, rel_path)
@@ -30,7 +30,6 @@ def main(name: str) -> str:
 
     # if "localhost" in host:
     #     write_to_file(abs_file_path, body, "Starting processing...", False)
-
 
     try:
         response = requests.post(url, headers=headers, json=body)

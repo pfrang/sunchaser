@@ -2,9 +2,9 @@ from src.python.Sql_connection.YR_Daily_Update.addSunriseSunset import addSunris
 from src.python.Sql_connection.YR_Daily_Update.addWeatherForecast import weatherForecast
 from src.python.Sql_connection.YR_Daily_Update.addWeatherRank import weatherRanking
 from src.python.Sql_connection.YR_Daily_Update.removeWeatherDatafromDB import deleteHistoricData
-
+import time
 class Handler:
-    def __init__(self,config,BLOB_workflow,SQL_workflow) -> None:
+    def __init__(self,config,BLOB_workflow = False,SQL_workflow=False) -> None:
 
        self.input=config["db"]
        self.server=config["server"]
@@ -79,3 +79,18 @@ class Handler:
 
         response="Weatherdata deleted successfully"
         return response
+
+
+config = {
+    "db":"sunchaser",
+    "server": "sunchaser.database.windows.net",
+    "username": "sunchaser_admin",
+    "driver": "{ODBC Driver 17 for SQL Server}",
+    "password": "Sommerogsol2023"
+}
+
+time_start = time.time()
+print(f"Starting {time_start}")
+a = Handler(config, BLOB_workflow=True)
+a.updateWeatherForecast()
+print("time it took", time.time() - time_start )

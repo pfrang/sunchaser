@@ -18,7 +18,7 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
     #Filter out locations that have today pluss 10 more days (max) of forecast. This indicates that the location is already populated today
     sql='''
 
-        Select top(10) p.lat,p.lon,p.country from(
+        Select p.lat,p.lon,p.country from(
 
                     Select	a.la,
                             a.lo,

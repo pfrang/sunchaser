@@ -1,9 +1,10 @@
 import pyodbc
 import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiWeather import Handler
-import datetime
+from datetime import datetime
 import logging
 import json
+import time
 
 def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
 
@@ -16,13 +17,14 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
     #sql="SELECT lat,lon FROM coordinates_all where country=?"
 
     sql='''
-    Select top(10) res.lat,res.lon,res.country from (Select filter.wind,co.lat,co.lon,co.country from (Select * from weather_forecast
+    Select res.lat,res.lon,res.country from (Select filter.wind,co.lat,co.lon,co.country from (Select * from weather_forecast
     where date>DATEADD(day, 9, GETUTCDATE())) as filter
     Right JOIN coordinates_all as co ON co.lat=filter.lat and co.lon=filter.lon
     where filter.wind is NULL) as res
     where res.country=?
 
     '''
+
 
     # Get data from table
     cursor.execute(sql,country)
@@ -32,6 +34,10 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
     df = pd.DataFrame(data)
     conn.commit()
 
+
+    time_start = time.time()
+    # logging.info(f"starting {time_start}")
+
     #loop each lat lon pair to run YR.api for sunset and sunrise
     for index,row in df.iterrows():
         lat=float(str(row[0]).split(",")[0][1:])
@@ -40,11 +46,16 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
         try:
 
             forecast_schedule_response=Handler(lat,lon).make_api_call()
+            time.sleep(0.05)
+            time_spent = time.time() - time_start
+
+            # logging.info(f"time spent: {time_spent.seconds}")
+            # logging.info(f"row: {forecast_schedule_response}")
+            # logging.info(f"Fetched a row, {time_spent.seconds}")
 
 
             if BLOB_workflow==True:
                 dfs.append(forecast_schedule_response)
-
 
 
             if SQL_workflow==True:
@@ -63,7 +74,8 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     ''', (forecast[0],forecast[1],forecast[2],forecast[3],str(forecast[4]).split("_")[0],forecast[5],forecast[6],forecast[7]))
                     conn.commit()
-        except:
+        except Exception as e:
+            print(f"Encountered error on lat: {lat} lon: {lon}, error: {e} ")
             pass
     if not dfs:
         return

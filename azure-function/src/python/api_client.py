@@ -3,8 +3,8 @@ import os
 class APISOURCE:
 
     def getUserAgent():
-        contactInfo = os.getenv('EMAIL_CONTACT')
-        return f'Hjemmeprosjekt {contactInfo}'
+        # contactInfo = os.getenv('EMAIL_CONTACT')
+        return f'Hjemmeprosjekt {1+1}'
 
     def getKartverket(params=True):
 
