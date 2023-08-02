@@ -41,12 +41,11 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
     # Get data from table
     cursor.execute(sql,country,offset)
-    
-    try:
-        data = cursor.fetchall()
-    except IndexError: #if datafram is empty, the startpoint/offset value is greater than the size of the master data tabel
-        return "All locations are updated"
 
+    data = cursor.fetchall()
+
+    if len(data) == 0:
+        return "All locations are updated"
 
     #add data from sql to pandas
     df = pd.DataFrame(data)
@@ -55,7 +54,7 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
     time_start = time.time()
     timeout_minutes = 26
     dfs = []
-    
+
     for index,row in df.iterrows():
         time_stamp = time.time()
         time_difference = time_stamp - time_start
@@ -66,7 +65,6 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
         try:
             suntime_schedule_response=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
-
             if BLOB_workflow==True:
                 dfs.append(suntime_schedule_response)
 
@@ -91,6 +89,6 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
     if not dfs:
         return
-    checkpoint_for_next_run=index+offset
+    checkpoint_for_next_run=index+offset + 1
     result = [pd.concat(dfs),checkpoint_for_next_run]
     return result

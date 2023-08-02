@@ -33,8 +33,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "weather":"Weather not updated",
             "rank":"Rank not updated",
             "delete":"Nothing is deleted",
-
         }
+
         SQL_workflow=False
         BLOB_workflow=False
         for i in params['routine']:
@@ -51,17 +51,17 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         for i in params['update']:
             if "suntime" in i:
-                offset = i["suntime"]["offset"]
+                offset = int(params["update"][i]["offset"])
                 response=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise(offset)
                 if BLOB_workflow==True and response != "All locations are updated":
-                    response=BLOB(i,response[0]).pushToBlob()
+                    blob_response=BLOB(i,response[0]).pushToBlob()
                     return func.HttpResponse(f'{response[1]}',status_code=200)
 
             elif "weather" in i:
-                offset = i["weather"]["offset"]
+                offset = int(params["update"][i]["offset"])
                 response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast(offset)
                 if BLOB_workflow==True and response != "All locations are updated":
-                    response=BLOB(i,response[0]).pushToBlob()
+                    blob_response=BLOB(i,response[0]).pushToBlob()
                     return func.HttpResponse(f'{response[1]}',status_code=200)
 
             elif "rank" in i:

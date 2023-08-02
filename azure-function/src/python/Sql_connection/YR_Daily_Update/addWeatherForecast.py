@@ -17,7 +17,7 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
     sql='''
     Select res.lat,res.lon,res.country from (Select filter.wind,co.lat,co.lon,co.country from (Select * from weather_forecast
     where date>DATEADD(day, 9, GETUTCDATE())) as filter
-    Right JOIN coordinates_all as co ON 
+    Right JOIN coordinates_all as co ON
     co.lat=filter.lat and co.lon=filter.lon
     where filter.wind is NULL) as res
     where res.country=?
@@ -29,9 +29,9 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
     # Get data from table
     cursor.execute(sql,country,offset)
 
-    try:
-        data = cursor.fetchall()
-    except IndexError: #if datafram is empty, the startpoint/offset value is greater than the size of the master data tabel
+    data = cursor.fetchall()
+
+    if len(data) == 0:
         return "All locations are updated"
 
     #add data from sql to pandas
@@ -79,6 +79,6 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
             pass
     if not dfs:
         return
-    checkpoint_for_next_run=index+offset
+    checkpoint_for_next_run=index+offset + 1
     result = [pd.concat(dfs),checkpoint_for_next_run]
     return result

@@ -72,7 +72,7 @@ class Handler:
         date_format_time= "%H:%M:%S"
 
         for i in response_json:
-            if "sunset" in i:
+            if "sunrise" in i:
                 sunrise_var=datetime.strptime(str(i["sunrise"]["time"]).split("+")[0],date_format_full)
                 date.append(sunrise_var.date())
                 sunriseDate.append(str(i["sunrise"]["time"]).split("+")[0].split("T")[1])

@@ -30,7 +30,7 @@ class Handler:
 
         if BLOB_workflow==True:
             return result
-        else: 
+        else:
             return "Sunrise and sunset updated successfully"
 
     def updateWeatherForecast(self, offset=0):
@@ -80,16 +80,16 @@ class Handler:
         return response
 
 
-config = {
-    "db":"sunchaser",
-    "server": "sunchaser.database.windows.net",
-    "username": "sunchaser_admin",
-    "driver": "{ODBC Driver 17 for SQL Server}",
-    "password": "Sommerogsol2023"
-}
+# config = {
+#     "db":"sunchaser",
+#     "server": "sunchaser.database.windows.net",
+#     "username": "sunchaser_admin",
+#     "driver": "{ODBC Driver 17 for SQL Server}",
+#     "password": "Sommerogsol2023"
+# }
 
-time_start = time.time()
-print(f"Starting {time_start}")
-a = Handler(config, BLOB_workflow=True)
-a.updateWeatherForecast()
-print("time it took", time.time() - time_start )
+# time_start = time.time()
+# print(f"Starting {time_start}")
+# a = Handler(config, BLOB_workflow=True)
+# a.updateWeatherForecast()
+# print("time it took", time.time() - time_start )
