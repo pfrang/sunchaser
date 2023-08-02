@@ -25,7 +25,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "db": db,
             "username": username,
             "password": password,
-            "driver": driver
+            "driver": driver,
         }
 
         update={
@@ -46,16 +46,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         if SQL_workflow==BLOB_workflow==False:
             return func.HttpResponse(f"No rutine specified for SQL:{SQL_workflow} and BLOB:{BLOB_workflow}", status_code=405)
 
+        if SQL_workflow==BLOB_workflow==True:
+            return func.HttpResponse(f"Only select one rutine. Specified for SQL:{SQL_workflow} and BLOB:{BLOB_workflow}", status_code=405)
+
         for i in params['update']:
             if "suntime" in i:
-                response=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise()
-                if BLOB_workflow==True:
-                    response=BLOB(i,response).pushToBlob()
+                offset = i["suntime"]["offset"]
+                response=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise(offset)
+                if BLOB_workflow==True and response != "All locations are updated":
+                    response=BLOB(i,response[0]).pushToBlob()
+                    return func.HttpResponse(f'{response[1]}',status_code=200)
 
             elif "weather" in i:
-                response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast()
-                if BLOB_workflow==True:
-                    response=BLOB(i,response).pushToBlob()
+                offset = i["weather"]["offset"]
+                response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast(offset)
+                if BLOB_workflow==True and response != "All locations are updated":
+                    response=BLOB(i,response[0]).pushToBlob()
+                    return func.HttpResponse(f'{response[1]}',status_code=200)
+
             elif "rank" in i:
                 response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherRank()
 

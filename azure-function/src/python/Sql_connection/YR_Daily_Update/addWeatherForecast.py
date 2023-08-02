@@ -6,12 +6,10 @@ import logging
 import json
 import time
 
-def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
+def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset):
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
-
-    dfs = []
 
     #Connecting to master sql table to collect all lat, lon
     #sql="SELECT lat,lon FROM coordinates_all where country=?"
@@ -19,44 +17,46 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
     sql='''
     Select res.lat,res.lon,res.country from (Select filter.wind,co.lat,co.lon,co.country from (Select * from weather_forecast
     where date>DATEADD(day, 9, GETUTCDATE())) as filter
-    Right JOIN coordinates_all as co ON co.lat=filter.lat and co.lon=filter.lon
+    Right JOIN coordinates_all as co ON 
+    co.lat=filter.lat and co.lon=filter.lon
     where filter.wind is NULL) as res
     where res.country=?
+    order by res.lat, res.lon
+    offset ? rows
 
     '''
 
-
     # Get data from table
-    cursor.execute(sql,country)
-    data = cursor.fetchall()
+    cursor.execute(sql,country,offset)
+
+    try:
+        data = cursor.fetchall()
+    except IndexError: #if datafram is empty, the startpoint/offset value is greater than the size of the master data tabel
+        return "All locations are updated"
 
     #add data from sql to pandas
     df = pd.DataFrame(data)
     conn.commit()
 
-
     time_start = time.time()
-    # logging.info(f"starting {time_start}")
+    timeout_minutes = 26
+    dfs = []
 
     #loop each lat lon pair to run YR.api for sunset and sunrise
     for index,row in df.iterrows():
+        time_stamp = time.time()
+        time_difference = time_stamp - time_start
+        if time_difference >= (timeout_minutes * 60):
+            break  # You can choose to exit the loop when the timeout occurs
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1])
 
         try:
 
             forecast_schedule_response=Handler(lat,lon).make_api_call()
-            time.sleep(0.05)
-            time_spent = time.time() - time_start
-
-            # logging.info(f"time spent: {time_spent.seconds}")
-            # logging.info(f"row: {forecast_schedule_response}")
-            # logging.info(f"Fetched a row, {time_spent.seconds}")
-
 
             if BLOB_workflow==True:
                 dfs.append(forecast_schedule_response)
-
 
             if SQL_workflow==True:
                 #delete previous records for the specific location and add new data
@@ -79,5 +79,6 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
             pass
     if not dfs:
         return
-    result = pd.concat(dfs)
+    checkpoint_for_next_run=index+offset
+    result = [pd.concat(dfs),checkpoint_for_next_run]
     return result

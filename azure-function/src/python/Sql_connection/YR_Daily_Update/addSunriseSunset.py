@@ -4,13 +4,12 @@ from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset 
 import datetime
 import json
 import os
+import time
 
-def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow):
+def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset):
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
-
-    dfs = []
 
     #Connecting to master sql table to collect all lat, lon
     #sql="SELECT lat,lon FROM coordinates_all where country=?"
@@ -36,19 +35,32 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
             ON a.la=coordinates_all.lat and a.lo=coordinates_all.lon
             Where a.la IS Null and a.lo IS Null) as p
             Where p.country=?
-            Order by p.lat
+            Order by p.lat,p.lon
+            offset ? rows
     '''
 
     # Get data from table
-    cursor.execute(sql,country)
-    data = cursor.fetchall()
+    cursor.execute(sql,country,offset)
+    
+    try:
+        data = cursor.fetchall()
+    except IndexError: #if datafram is empty, the startpoint/offset value is greater than the size of the master data tabel
+        return "All locations are updated"
+
 
     #add data from sql to pandas
     df = pd.DataFrame(data)
     conn.commit()
 
-    #loop each lat lon pair to run YR.api for sunset and sunrise
+    time_start = time.time()
+    timeout_minutes = 26
+    dfs = []
+    
     for index,row in df.iterrows():
+        time_stamp = time.time()
+        time_difference = time_stamp - time_start
+        if time_difference >= (timeout_minutes * 60):
+            break  # You can choose to exit the loop when the timeout occurs
         lat=float(str(row[0]).split(",")[0][1:])
         lon=float(str(row[0]).split(",")[1])
 
@@ -79,6 +91,6 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
     if not dfs:
         return
-
-    result = pd.concat(dfs)
+    checkpoint_for_next_run=index+offset
+    result = [pd.concat(dfs),checkpoint_for_next_run]
     return result
