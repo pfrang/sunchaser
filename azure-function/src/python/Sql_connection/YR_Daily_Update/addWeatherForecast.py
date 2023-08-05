@@ -39,7 +39,7 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
     conn.commit()
 
     time_start = time.time()
-    timeout_minutes = 26
+    timeout_minutes = 7
     dfs = []
 
     #loop each lat lon pair to run YR.api for sunset and sunrise

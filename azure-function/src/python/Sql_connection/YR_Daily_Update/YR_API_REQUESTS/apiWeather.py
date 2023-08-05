@@ -19,7 +19,7 @@ class Handler:
             time_now_api = time.time()
             response =self.get_result()
             if(time.time() - time_now_api > 3):
-                print(f"Request was very slow for time: {time.time() - time_now_api} seconds, status code {response.status_code}, result: {response.text}")
+                print(f"Request was very slow for time: {time.time() - time_now_api} seconds, status code {response.status_code}, lat: {self.lat}, lon: {self.lon}")
             response.raise_for_status()  # Raise an exception for 4xx or 5xx status codes
 
             return self.handle_result(response)
