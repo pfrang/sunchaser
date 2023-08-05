@@ -6,7 +6,7 @@ from io import BytesIO
 import pandas as pd
 
 class Handler():
-    def __init__(self,ApiParamsUpdateRef,DataFrame: pd.DataFrame):
+    def __init__(self,ApiParamsUpdateRef,offset, step, DataFrame: pd.DataFrame):
 
         try:
             #Datalak fixed keys
@@ -16,16 +16,21 @@ class Handler():
             self.file_path=os.getenv('BLOB_File_Path')
 
             todays_date = str(datetime.now().date())
-            todays_date_with_time =  datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
             #Dependent variables
             # //update dataFrame to not preservE_index
             self.df= DataFrame
+            self.offset = offset
+            self.step = step
             self.destination_folder=todays_date
-            self.parquet_file_name=ApiParamsUpdateRef[0:3].upper()+"_"+todays_date_with_time+".parquet"
             self.ApiParamsUpdateRef=ApiParamsUpdateRef
+            self.parquet_file_name=self.generateFileName()
         except Exception as e:
             logging.info(e)
             return(f"Error: {e}")
+
+    def generateFileName(self):
+        todays_date_with_time =  datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+        return self.ApiParamsUpdateRef[0:3].upper()+"_"+f'{self.offset}-{self.offset + self.step}'+"_"+todays_date_with_time+".parquet"
 
     def pushToBlob(self):
 

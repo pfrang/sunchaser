@@ -6,7 +6,7 @@ import json
 import os
 import time
 
-def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset):
+def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
@@ -37,10 +37,11 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
             Where p.country=?
             Order by p.lat,p.lon
             offset ? rows
+            Fetch Next ? ROWS ONLY;
     '''
 
     # Get data from table
-    cursor.execute(sql,country,offset)
+    cursor.execute(sql,country,offset, step)
 
     data = cursor.fetchall()
 

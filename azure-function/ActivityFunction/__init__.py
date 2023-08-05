@@ -18,9 +18,6 @@ def main(name: str) -> str:
     code = os.getenv("DAILYYR_API_CODE")
     url = f"{host}/DailyYrApi?code={code}"  # Replace with the appropriate URL for the WeatherResult function
 
-    script_dir = os.path.dirname(__file__)
-    rel_path = "../logs/logs.txt"
-    abs_file_path = os.path.join(script_dir, rel_path)
     headers = {
         "Content-Type": "application/json"
     }

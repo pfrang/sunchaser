@@ -19,7 +19,7 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
     try:
         if("weather" in params):
             transformed_body_weather = transformed_body
-            transformed_body_weather["params"]["update"] = ["weather"]
+            # transformed_body_weather["params"]["update"] = ["weather"]
             result1 = yield context.call_activity('ActivityFunction', transformed_body_weather)
         if("suntime" in params):
             transformed_body_suntime = transformed_body

@@ -52,16 +52,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         for i in params['update']:
             if "suntime" in i:
                 offset = int(params["update"][i]["offset"])
-                response=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise(offset)
+                step = int(params["update"][i]["step"])
+                response=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise(offset, step)
                 if BLOB_workflow==True and response != "All locations are updated":
-                    blob_response=BLOB(i,response[0]).pushToBlob()
+                    blob_response=BLOB(i,offset, step, response[0]).pushToBlob()
                     return func.HttpResponse(f'{response[1]}',status_code=200)
 
             elif "weather" in i:
                 offset = int(params["update"][i]["offset"])
-                response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast(offset)
+                step = int(params["update"][i]["step"])
+                response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast(offset, step)
                 if BLOB_workflow==True and response != "All locations are updated":
-                    blob_response=BLOB(i,response[0]).pushToBlob()
+                    blob_response=BLOB(i, offset, step, response[0]).pushToBlob()
                     return func.HttpResponse(f'{response[1]}',status_code=200)
 
             elif "rank" in i:

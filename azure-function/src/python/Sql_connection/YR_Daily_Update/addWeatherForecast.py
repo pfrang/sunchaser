@@ -6,7 +6,7 @@ import logging
 import json
 import time
 
-def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset):
+def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
     cursor = conn.cursor()
@@ -23,11 +23,11 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
     where res.country=?
     order by res.lat, res.lon
     offset ? rows
-
+    Fetch Next ? ROWS ONLY;
     '''
 
     # Get data from table
-    cursor.execute(sql,country,offset)
+    cursor.execute(sql,country,offset, step)
 
     data = cursor.fetchall()
 

@@ -16,7 +16,7 @@ class Handler:
        self.SQL_workflow=SQL_workflow
 
 
-    def updateSunsetSunrise(self, offset=0):
+    def updateSunsetSunrise(self, offset=0, step=0):
         server=self.server
         db=self.db
         username=self.username
@@ -26,14 +26,14 @@ class Handler:
         SQL_workflow=self.SQL_workflow
         BLOB_workflow=self.BLOB_workflow
 
-        result=addSunriseSunset(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow, offset)
+        result=addSunriseSunset(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step)
 
         if BLOB_workflow==True:
             return result
         else:
             return "Sunrise and sunset updated successfully"
 
-    def updateWeatherForecast(self, offset=0):
+    def updateWeatherForecast(self, offset=0, step=0):
         server=self.server
         db=self.db
         username=self.username
@@ -43,7 +43,7 @@ class Handler:
         SQL_workflow=self.SQL_workflow
         BLOB_workflow=self.BLOB_workflow
 
-        result=weatherForecast(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow, offset)
+        result=weatherForecast(server,db,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step)
 
         if BLOB_workflow==True:
             return result
