@@ -25,8 +25,7 @@ class Handler():
             self.ApiParamsUpdateRef=ApiParamsUpdateRef
             self.parquet_file_name=self.generateFileName()
         except Exception as e:
-            logging.info(e)
-            return(f"Error: {e}")
+            raise Exception("Failed to get env vars in blob class")
 
     def generateFileName(self):
         todays_date_with_time =  datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -75,5 +74,4 @@ class Handler():
 
             return(f"File uploaded successfully for {ApiParamsUpdateRef}!")
         except Exception as e:
-            logging.info(e)
-            return(f"Error: {e}")
+            raise Exception("Failed on Blob dump")
