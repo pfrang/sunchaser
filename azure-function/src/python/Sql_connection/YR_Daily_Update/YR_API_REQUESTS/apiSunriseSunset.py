@@ -12,7 +12,7 @@ class Handler:
        self.lon=lon
        self.date=date
        self.offset='+01:00'
-       self.days=11
+       self.days=15
        self.apisource=APISOURCE.getSunRise()
        self.apiuseragent=APISOURCE.getUserAgent()
 

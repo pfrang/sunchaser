@@ -22,14 +22,14 @@ def weatherRanking(server,database,username,password,driver,country,SQL_workflow
 			DROP TABLE weather_forecast_local
 			DROP TABLE weather_forecast_global
 
-			Select *, 
+			Select *,
 
 			s.symbol_rank*s.weight_symbol+s.temperature_rank*s.weight_temp+s.wind_rank*s.weight_wind as total_rank
 
 			INTO weather_forecast_local
 
 			FROM(
-				SELECT *, 
+				SELECT *,
 
 				/* Calculating the ranking based on the wind, weather and temperature*/
 				1/(1+EXP(-(g.symbol_alfa+g.symbol_beta*f.rank_value)))		as symbol_rank,
@@ -37,15 +37,15 @@ def weatherRanking(server,database,username,password,driver,country,SQL_workflow
 				1/(1+EXP(-(g.wind_alfa+g.wind_beta*f.wind)))				as wind_rank
 
 					FROM (
-						SELECT weather_forecast.*,symbol_rank.rank_value 
-				
+						SELECT weather_forecast.*,symbol_rank.rank_value
+
 						/* Weather symbol comes as text. Using a join to connect a numbervalue to use in the ranking formula*/
 						FROM weather_forecast
 						JOIN symbol_rank
 						ON weather_forecast.symbol = symbol_rank.symbol) as f
 
 						CROSS JOIN rank_variables as g) as s
-			
+
 			/* Removing the stuff we don't need anymore.*/
 			Alter Table weather_forecast_local
 			DROP COLUMN
