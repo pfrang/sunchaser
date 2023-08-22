@@ -8,7 +8,10 @@ import {
   UserLocation,
 } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { LinkContent } from "../../../ui-kit/components/link-content";
-import { getSortedTemperatureFromArrOfTimes } from "../../utils/get-today-from-object";
+import {
+  getSortedTemperatureFromArrOfTimes,
+  plus2HoursOnTime,
+} from "../../utils/sorting-and-filtering-functions";
 import { Temperature } from "../../utils/temperature";
 
 import { TimeSeries } from "./time-series";
@@ -150,11 +153,11 @@ export const HighlightedCard = ({
           alignItems={"center"}
         >
           <Flex justifyContent={"flex-end"} height={[28, 54]}>
-            <Text noWrap>{`sunrise ${sunriseTime}`}</Text>
+            <Text noWrap>{`sunrise ${plus2HoursOnTime(sunriseTime)}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
           <Flex height={[28, 54]}>
-            <Text noWrap>{`sunset ${sunsetTime}`}</Text>
+            <Text noWrap>{`sunset ${plus2HoursOnTime(sunsetTime)}`}</Text>
             <img src="/icons/black/svg/partlysunny.svg" />
           </Flex>
         </Flex>
@@ -177,8 +180,9 @@ export const HighlightedCard = ({
           style={{
             animationName: "bounce",
           }}
-          className={`absolute m-r-12 right-4 bottom-1/2 z-10 ${isScrolling && "hidden"
-            }`}
+          className={`absolute m-r-12 right-4 bottom-1/2 z-10 ${
+            isScrolling && "hidden"
+          }`}
         >
           <svg viewBox="0 0 24 24" height={"20px"} width={"24px"}>
             <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />

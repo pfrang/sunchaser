@@ -8,8 +8,4 @@ export class Temperature {
   toString() {
     return `${this.temperature}°`;
   }
-
-  hei() {
-    return "hi";
-  }
 }

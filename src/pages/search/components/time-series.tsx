@@ -3,6 +3,7 @@ import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-li
 import { Times } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Text } from "../../../ui-kit/components/text";
 import { Temperature } from "../../utils/temperature";
+import { plus2HoursOnTime } from "../../utils/sorting-and-filtering-functions";
 
 import { GridItem } from "./highlighted-card";
 
@@ -34,7 +35,7 @@ export const TimeSeries = ({
           alignItems={"center"}
           justifyContent={"center"}
         >
-          <Text noWrap>{time}</Text>
+          <Text noWrap>{plus2HoursOnTime(time)}</Text>
         </Flex>
       </GridItem>
 
