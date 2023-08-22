@@ -53,7 +53,7 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
     conn.commit()
 
     time_start = time.time()
-    timeout_minutes = 26
+    timeout_minutes = 7
     dfs = []
 
     for index,row in df.iterrows():

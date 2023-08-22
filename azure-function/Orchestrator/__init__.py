@@ -23,11 +23,11 @@ def orchestrator_function(context: df.DurableOrchestrationContext):
             result1 = yield context.call_activity('ActivityFunction', transformed_body_weather)
         if("suntime" in params):
             transformed_body_suntime = transformed_body
-            transformed_body_suntime["params"]["update"] = ["suntime"]
+            # transformed_body_suntime["params"]["update"] = ["suntime"]
             result2 = yield context.call_activity('ActivityFunction', transformed_body_suntime)
         if("rank" in params):
             transformed_body_rank = transformed_body
-            transformed_body_rank["params"]["update"] = ["rank"]
+            # transformed_body_rank["params"]["update"] = ["rank"]
             result3 = yield context.call_activity('ActivityFunction', transformed_body_rank)
         return [result1, result2, result3]
     except Exception as e:
