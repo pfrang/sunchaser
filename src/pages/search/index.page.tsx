@@ -40,8 +40,6 @@ export default function Search({
   const { data, isLoading, error }: HookProperties = useCoordinates(query);
   mapboxgl.accessToken = mapBoxkey;
 
-  console.log(data);
-
   const [items, setItems] = useState<
     undefined | AzureFunctionCoordinatesMappedItems[]
   >(undefined);
@@ -60,30 +58,34 @@ export default function Search({
 
   const emptyDataError = error && error.response.data.error === "No data found";
 
+  const resetMap = () => {
+    const userLocation = data.items.userLocation;
+    setItems([...data.items.ranks]);
+    // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
+    setUserLocation(userLocation);
+
+    const longitudes = data.items.ranks.map((item) => item.longitude);
+    const latitudes = data.items.ranks.map((item) => item.latitude);
+
+    let map = new MapBoxHelper(
+      longitudes,
+      latitudes,
+      userLocation.longitude,
+      userLocation.latitude
+    ).setMarkersAndFitBounds();
+
+    map.addControl(new mapboxgl.NavigationControl());
+
+    map.on("load", () => {
+      map.resize();
+    });
+
+    setMap(map);
+  };
+
   useEffect(() => {
     if (data) {
-      const userLocation = data.items.userLocation;
-      setItems([...data.items.ranks]);
-      // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
-      setUserLocation(userLocation);
-
-      const longitudes = data.items.ranks.map((item) => item.longitude);
-      const latitudes = data.items.ranks.map((item) => item.latitude);
-
-      let map = new MapBoxHelper(
-        longitudes,
-        latitudes,
-        userLocation.longitude,
-        userLocation.latitude
-      ).setMarkersAndFitBounds();
-
-      map.addControl(new mapboxgl.NavigationControl());
-
-      map.on("load", () => {
-        map.resize();
-      });
-
-      setMap(map);
+      resetMap();
     }
   }, [data]);
 
@@ -125,8 +127,9 @@ export default function Search({
 
       MapBoxHelper.fitBounds(mapObject, coordinates, 50, 1000);
 
-      MapBoxHelper.drawLine(mapObject, coordinates);
+      return MapBoxHelper.drawLine(mapObject, coordinates);
     }
+    resetMap();
   }, [highlightedCard]);
 
   const setZoomAndHighlightCard = (

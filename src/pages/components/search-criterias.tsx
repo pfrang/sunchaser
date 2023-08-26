@@ -10,10 +10,10 @@ import { formatDate } from "../utils/convert-date";
 import { GoogleMapsDetailsResponse } from "../api/google-maps/details/mapper/gmaps-details-mapper";
 import { ResponseDTO } from "../api/next-api.client";
 import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
+import { destructureMyPosition } from "../utils/get-user-location";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { ChooseCalendarValue } from "./choose-calendar-value";
-import { destructureMyPosition } from "./get-user-location";
 import WhereAreYou from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
 

@@ -4,8 +4,10 @@ import { styled } from "@mui/material/styles";
 
 import { Text } from "../../ui-kit/components/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";
-
-import { setUIOnNumber, distanceArray } from "./travel-distance-settings";
+import {
+  setUIOnNumber,
+  distanceArray,
+} from "../utils/travel-distance-settings";
 
 const CustomizedSlider = styled(Slider)`
   color: #20b2aa;
@@ -41,7 +43,7 @@ export const ChooseTravelDistance = ({
   // const [marks, setMarks] = useState(marks);
 
   useEffect(() => {
-    setTravelDistance(valuesForSlider[index - 1].value);
+    setTravelDistance(Number(valuesForSlider[index - 1].label));
   }, [index]);
 
   const handleSlide = (e: any, num) => {
@@ -63,7 +65,7 @@ export const ChooseTravelDistance = ({
         <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
         <Slider
           aria-label="Temperature"
-          defaultValue={index}
+          value={index}
           getAriaValueText={valuetext}
           valueLabelDisplay="auto"
           valueLabelFormat={`${valueToDisplay}`}

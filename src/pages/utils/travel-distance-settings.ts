@@ -10,7 +10,7 @@ export const distanceArray = (step = 3): Range[] => {
   for (let i = 1; i <= max; i += step) {
     range.push({
       value: counter,
-      label: `${i}`,
+      label: `${step + i - 1}`,
     });
     counter += 1;
   }
