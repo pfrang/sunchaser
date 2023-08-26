@@ -40,6 +40,8 @@ export default function Search({
   const { data, isLoading, error }: HookProperties = useCoordinates(query);
   mapboxgl.accessToken = mapBoxkey;
 
+  console.log(data);
+
   const [items, setItems] = useState<
     undefined | AzureFunctionCoordinatesMappedItems[]
   >(undefined);

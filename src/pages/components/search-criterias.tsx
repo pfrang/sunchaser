@@ -60,7 +60,9 @@ export default function UserForm({
   const [townId, setTownId] = useState("");
   const locationRef = useRef<HTMLInputElement>(null);
 
-  const [travelDistance, setTravelDistance] = useState("");
+  const [travelDistance, setTravelDistance] = useState<number | undefined>(
+    undefined
+  );
 
   const router = useRouter();
 
@@ -126,7 +128,7 @@ export default function UserForm({
       lon: longitude,
       lat: latitude,
       date: formatDate(selectedDate),
-      distance: travelDistance,
+      distance: travelDistance.toString(),
     };
 
     const urlPar = Object.keys(params)

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
-import ButtonGroup from "@mui/material/ButtonGroup";
 
 import { Text } from "../../ui-kit/components/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 
-import { setUIOnNumber, valueRange } from "./travel-distance-settings";
+import { setUIOnNumber, distanceArray } from "./travel-distance-settings";
 
 const CustomizedSlider = styled(Slider)`
   color: #20b2aa;
@@ -23,41 +22,36 @@ const CustomizedSlider = styled(Slider)`
 function valuetext(value: number) {
   return `${value} km`;
 }
-const marks = [
-  {
-    value: 1,
-    label: "< 1",
-  },
-  {
-    value: 5,
-    label: "10",
-  },
-  {
-    value: 9,
-    label: "> 100",
-  },
-];
 
 function valueLabelFormat(value: number) {
-  return `${valueRange[value].label}`;
+  return `${distanceArray()[value].label}`;
 }
 
 interface ChooseTravelDistanceProps {
-  setTravelDistance: (value: string) => void;
+  setTravelDistance: (value: number) => void;
 }
 
 export const ChooseTravelDistance = ({
   setTravelDistance,
 }: ChooseTravelDistanceProps) => {
-  const [value, setValue] = useState(5);
+  const step = 5;
+  const valuesForSlider = distanceArray(step);
+  const [index, setIndex] = useState(valuesForSlider.length / 2);
+
+  // const [marks, setMarks] = useState(marks);
 
   useEffect(() => {
-    setTravelDistance(valueRange[value].value);
-  }, [value]);
+    setTravelDistance(valuesForSlider[index - 1].value);
+  }, [index]);
 
   const handleSlide = (e: any, num) => {
-    setValue(num);
+    setIndex(num);
   };
+
+  const min = 1;
+  const max = valuesForSlider.length;
+
+  const valueToDisplay = valuesForSlider[index - 1].label;
 
   return (
     <section id="distance_traveling" className="w-full">
@@ -66,21 +60,21 @@ export const ChooseTravelDistance = ({
           How far are you willing to travel?
         </Text>
         <Spacer height={2} />
-        <Text noWrap variant="body-large">{`${setUIOnNumber(value)}km`}</Text>
+        <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
         <Slider
           aria-label="Temperature"
-          defaultValue={5}
+          defaultValue={index}
           getAriaValueText={valuetext}
           valueLabelDisplay="auto"
-          valueLabelFormat={valueLabelFormat}
+          valueLabelFormat={`${valueToDisplay}`}
           step={1}
           onChange={handleSlide}
-          marks={marks}
-          min={1}
-          max={9}
+          marks={valuesForSlider}
+          min={min}
+          max={max}
         />
         <div className="w-full flex justify-between text-xs ">
-          {Array.from({ length: 9 }).map((_, idx) => {
+          {Array.from({ length: valuesForSlider.length }).map((_, idx) => {
             return (
               <span key={idx} className="text-black">
                 |
