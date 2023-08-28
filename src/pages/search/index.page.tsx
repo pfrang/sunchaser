@@ -59,28 +59,30 @@ export default function Search({
   const emptyDataError = error && error.response.data.error === "No data found";
 
   const resetMap = () => {
-    const userLocation = data.items.userLocation;
-    setItems([...data.items.ranks]);
-    // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
-    setUserLocation(userLocation);
+    if (data) {
+      const userLocation = data.items.userLocation;
+      setItems([...data.items.ranks]);
+      // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
+      setUserLocation(userLocation);
 
-    const longitudes = data.items.ranks.map((item) => item.longitude);
-    const latitudes = data.items.ranks.map((item) => item.latitude);
+      const longitudes = data.items.ranks.map((item) => item.longitude);
+      const latitudes = data.items.ranks.map((item) => item.latitude);
 
-    let map = new MapBoxHelper(
-      longitudes,
-      latitudes,
-      userLocation.longitude,
-      userLocation.latitude
-    ).setMarkersAndFitBounds();
+      let map = new MapBoxHelper(
+        longitudes,
+        latitudes,
+        userLocation.longitude,
+        userLocation.latitude
+      ).setMarkersAndFitBounds();
 
-    map.addControl(new mapboxgl.NavigationControl());
+      map.addControl(new mapboxgl.NavigationControl());
 
-    map.on("load", () => {
-      map.resize();
-    });
+      map.on("load", () => {
+        map.resize();
+      });
 
-    setMap(map);
+      setMap(map);
+    }
   };
 
   useEffect(() => {

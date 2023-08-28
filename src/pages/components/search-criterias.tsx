@@ -13,7 +13,7 @@ import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api
 import { destructureMyPosition } from "../utils/get-user-location";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
-import { ChooseCalendarValue } from "./choose-calendar-value";
+import { Calendar } from "./calendar";
 import WhereAreYou from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
 
@@ -165,7 +165,7 @@ export default function UserForm({
         {header && (
           <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
         )}
-        <ChooseCalendarValue
+        <Calendar
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         />

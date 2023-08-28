@@ -10,7 +10,7 @@ import { Text } from "../../ui-kit/components/text";
 import { Flex } from "../../ui-kit/components/flex";
 import { theme } from "../../ui-kit/theme/theme";
 
-export const ChooseCalendarValue = ({ selectedDate, setSelectedDate }) => {
+export const Calendar = ({ selectedDate, setSelectedDate }) => {
   const popperRef = useRef<HTMLDivElement>(null);
   const [isPopperOpen, setIsPopperOpen] = useState(false);
   const [locale, setLocale] = useState("en-US");

@@ -11,11 +11,16 @@ export class CoordinatesAPiClient extends AzureFunctionApiClient {
   readonly url = this.baseUrl + this.endpointUrl + this.key;
 
   post = async (body: AzureFunctionPostPayloadParams) => {
-    const response =
-      await this.axiosInstance.post<AzureFunctionCoordinatesData>(
-        this.url,
-        body
-      );
-    return { data: response.data };
+    try {
+      const response =
+        await this.axiosInstance.post<AzureFunctionCoordinatesData>(
+          this.url,
+          body
+        );
+
+      return { data: response.data };
+    } catch (e) {
+      return { data: e };
+    }
   };
 }
