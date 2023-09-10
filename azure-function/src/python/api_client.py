@@ -52,4 +52,4 @@ class APISOURCE:
         return baseUrl
 
     def getSunRise():
-        return 'https://api.met.no/weatherapi/sunrise/2.0/.json'
+        return 'https://api.met.no/weatherapi/sunrise/3.0/sun'

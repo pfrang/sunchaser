@@ -3,7 +3,7 @@ import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
 from src.python.sunrise_calculations.main import main as sunrise_calculations
 import time
-
+from datetime import datetime
 def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
@@ -43,9 +43,8 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
     data = cursor.fetchall()
 
-    if len(data) == 0:
-        return "All locations are updated"
-
+    # if len(data) == 0:
+    #     return "All locations are updated"
     #add data from sql to pandas
     df = pd.DataFrame(data)
     conn.commit()
@@ -63,7 +62,7 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
         lon=float(str(row[0]).split(",")[1])
 
         try:
-            # suntime_schedule_response=Handler(lat,lon,date=datetime.datetime.now().date()).make_api_call()
+            # suntime_schedule_response=Handler(lat,lon,date=datetime.now().date()).make_api_call()
             suntime_schedule_response=sunrise_calculations(lat,lon)
             if BLOB_workflow==True:
                 dfs.append(suntime_schedule_response)

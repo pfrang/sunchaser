@@ -14,8 +14,8 @@ def main(latitude, longitude, days_ahead=15):
     bluffton = api.wgs84.latlon(latitude, longitude)
 
 
-    sunrise_dates= []
-    sunset_dates = []
+    sunrise_times= []
+    sunset_times = []
     dates=[]
 
     for i in range(0, days_ahead):
@@ -28,16 +28,16 @@ def main(latitude, longitude, days_ahead=15):
         sunset_date = datetime.strptime(t.utc_iso()[1], date_format_full)
         sunrise_2_hours = sunrise_date + timedelta(hours=2)
         sunset_2_hours = sunset_date + timedelta(hours=2)
-        sunrise_dates.append(sunrise_2_hours)
-        sunset_dates.append(sunset_2_hours)
+        sunrise_times.append(str(sunrise_2_hours).split(" ")[1][:5])
+        sunset_times.append(str(sunset_2_hours).split(" ")[1][:5])
         dates.append(current_date_i.date())
 
     df = pd.DataFrame({
             'lat': latitude,
             'lon': longitude,
             'date': dates,
-            'sunrise_date': sunrise_dates,
-            'sunset_date': sunset_dates,
+            'sunrise_date': sunrise_times,
+            'sunset_date': sunset_times,
             'local_time' : "+00:00"
         })
 

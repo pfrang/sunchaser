@@ -54,8 +54,9 @@ class Handler:
         apisource=self.apisource
         apiuseragent=self.apiuseragent
 
-        url=f'{apisource}?lat={lat}&lon={lon}&date={date}&offset={offset}&days={days}'
+        url=f'{apisource}?lat={lat}&lon={lon}&date={date}'
         # logging.info(url)
+        # removed query params &offset={offset}&days={days}
         headers={'User-Agent':apiuseragent}
 
         return requests.get(url,headers=headers)
@@ -65,7 +66,8 @@ class Handler:
         lon=self.lon
         offset=self.offset
         response_json=response.json()
-        response_json=response_json["location"]["time"]
+        sunrise_response=response_json["properties"]["sunrise"]
+        sunset_response=response_json["properties"]["sunrise"]
 
         date=[]
         sunriseDate=[]
@@ -78,8 +80,9 @@ class Handler:
             if "sunrise" in i:
                 sunrise_var=datetime.strptime(str(i["sunrise"]["time"]).split("+")[0],date_format_full)
                 date.append(sunrise_var.date())
-                sunriseDate.append(str(i["sunrise"]["time"]).split("+")[0].split("T")[1])
-                sunsetDate.append(str(i["sunset"]["time"]).split("+")[0].split("T")[1])
+                sunriseDate.append(str(sunrise_response).split("+")[0].split("T")[1])
+                sunsetDate.append(str(sunset_response).split("+")[0].split("T")[1])
+                print(sunriseDate)
 
         sunSchedule=pd.DataFrame({
             'lat': lat,
