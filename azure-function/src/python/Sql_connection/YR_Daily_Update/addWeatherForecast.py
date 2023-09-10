@@ -1,9 +1,6 @@
 import pyodbc
 import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiWeather import Handler
-from datetime import datetime
-import logging
-import json
 import time
 
 def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
@@ -72,7 +69,7 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
                     cursor.execute('''
                     INSERT INTO weather_forecast (lat, lon, date, time, symbol, temperature,wind,src)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                    ''', (forecast[0],forecast[1],forecast[2],forecast[3],str(forecast[4]).split("_")[0],forecast[5],forecast[6],forecast[7]))
+                    ''', (forecast[0],forecast[1],forecast[2],forecast[3],forecast[4],forecast[5],forecast[6],forecast[7]))
                     conn.commit()
         except Exception as e:
             print(f"Encountered error on lat: {lat} lon: {lon}, error: {e} ")

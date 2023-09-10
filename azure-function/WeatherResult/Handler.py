@@ -1,4 +1,4 @@
-import pyodbc 
+import pyodbc
 import pandas as pd
 from src.python.coordinateGenerator import GetCoordinates
 
@@ -6,7 +6,7 @@ from src.python.coordinateGenerator import GetCoordinates
 
 class Handler:
     def __init__(self,config,lat,lon,date,distance):
-       
+
        self.input=config["db"]
        self.server=config["server"]
        self.db=config["db"]
@@ -28,7 +28,7 @@ class Handler:
        password=self.password
        server=self.server
        username=self.username
-       
+
        conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
        cursor = conn.cursor()
        sql='''
@@ -39,18 +39,18 @@ class Handler:
                      	location.primary_name,
                      	location.secondary_name,
                      	location.tertiary_name,
-                     	location.quaternary_name from 
-              	
+                     	location.quaternary_name from
+
                      	(SELECT TOP (?) [lat]
                             ,[lon]
                             ,[date]
                             ,[group_rank]
                      	FROM [dbo].[weather_forecast_global]
-       	
+
                      	where date=?
-                     	and lat<? and lat>? and lon<? and lon>? 
+                     	and lat<? and lat>? and lon<? and lon>?
                      	order by group_rank desc) as best_rank
-       	
+
               	JOIN coordinates_locationdata location
               	ON best_rank.lat=location.lat and best_rank.lon=location.lon) as t
        	JOIN weather_forecast_local local ON t.lat=local.lat and t.lon=local.lon
@@ -61,14 +61,14 @@ class Handler:
        # Get data from table
        cursor.execute(sql,10,date,lat_high,lat_low,lon_high,lon_low,date)
        data = cursor.fetchall()
-      
-       
-       #add data from sql to pandas 
+
+
+       #add data from sql to pandas
        df = pd.DataFrame(data)
        conn.commit()
 
        df2=pd.DataFrame(columns=['latitude','longitude','group_rank','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time'])
-            
+
 
        for index, row in df.iterrows():
           df2.loc[index,'latitude']=row[0][0]
@@ -88,6 +88,3 @@ class Handler:
           df2.loc[index,'sunset_time']=row[0][14]
 
        return df2
-    
-
-   

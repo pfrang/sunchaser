@@ -1,7 +1,5 @@
-from time import strftime, time
+from time import time
 import requests
-import json
-from datetime import datetime
 import pandas as pd
 from src.python.api_client import APISOURCE
 from src.python.Sql_connection.API_error_log_to_sql import Handler as CustomError
@@ -67,7 +65,7 @@ class Handler:
                 weatherTime.append(str(i["time"]).split('T')[1][:-1])
                 weatherTemperature.append(i["data"]["instant"]["details"]["air_temperature"])
                 weatherWind.append(i["data"]["instant"]["details"]["wind_speed"])
-                weatherSymbol.append(i["data"]["next_1_hours"]["summary"]["symbol_code"])
+                weatherSymbol.append(i["data"]["next_1_hours"]["summary"]["symbol_code"].split("_")[0])
                 latArr.append(lat)
                 lonArr.append(lon)
             elif("next_6_hours" in i["data"].keys()):
@@ -75,7 +73,7 @@ class Handler:
                 weatherTime.append(str(i["time"]).split('T')[1][:-1])
                 weatherTemperature.append(i["data"]["instant"]["details"]["air_temperature"])
                 weatherWind.append(i["data"]["instant"]["details"]["wind_speed"])
-                weatherSymbol.append(i["data"]["next_6_hours"]["summary"]["symbol_code"])
+                weatherSymbol.append(i["data"]["next_6_hours"]["summary"]["symbol_code"].split("_")[0])
                 latArr.append(lat)
                 lonArr.append(lon)
 
