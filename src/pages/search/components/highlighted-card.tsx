@@ -164,10 +164,14 @@ export const HighlightedCard = ({
         <Flex width={"100%"} justifyContent={"space-between"}>
           <Text variant="body-small">{`Max ${new Temperature(
             maxTemperatureToday.temperature
-          ).toString()} at ${maxTemperatureToday.time}`}</Text>
+          ).toString()} at ${plus2HoursOnTime(
+            maxTemperatureToday.time
+          )}`}</Text>
           <Text variant="body-small">{`Min ${new Temperature(
             minTemperatureToday.temperature
-          ).toString()} at ${minTemperatureToday.time}`}</Text>
+          ).toString()} at ${plus2HoursOnTime(
+            minTemperatureToday.time
+          )}`}</Text>
         </Flex>
       </Flex>
 

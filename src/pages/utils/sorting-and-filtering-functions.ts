@@ -37,7 +37,9 @@ export const getEarliestDay = (arr: Times[]) => {
   return earliestDate;
 };
 
-export const plus2HoursOnTime = (time: string) => {
+export const plus2HoursOnTime = (time: string | null) => {
+  if (!time) return "";
+
   const timeParts = time.split(":");
   const hours = parseInt(timeParts[0]);
   const minutes = parseInt(timeParts[1]);

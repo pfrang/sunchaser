@@ -3,6 +3,7 @@ import azure.functions as func
 import os
 from src.python.Sql_connection.YR_Daily_Update.handlerYr import Handler
 from src.python.Sql_connection.YR_Daily_Update.addResultAzureBlob import Handler as BLOB
+import pandas as pd
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
@@ -54,17 +55,17 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 offset = int(params["update"][i]["offset"])
                 step = int(params["update"][i]["step"])
                 response=Handler(config,BLOB_workflow,SQL_workflow).updateSunsetSunrise(offset, step)
-                if BLOB_workflow==True and response != "All locations are updated":
-                    blob_response=BLOB(i,offset, step, response[0]).pushToBlob()
-                    return func.HttpResponse(f'{response[1]}',status_code=200)
+                if BLOB_workflow==True and isinstance(response, pd.DataFrame):
+                    blob_response=BLOB(i,offset, step, response).pushToBlob()
+                    return func.HttpResponse(f'All suntime locations are pushed to blob',status_code=200)
 
             elif "weather" in i:
                 offset = int(params["update"][i]["offset"])
                 step = int(params["update"][i]["step"])
                 response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherForecast(offset, step)
-                if BLOB_workflow==True and response != "All locations are updated":
-                    blob_response=BLOB(i, offset, step, response[0]).pushToBlob()
-                    return func.HttpResponse(f'{response[1]}',status_code=200)
+                if BLOB_workflow==True and isinstance(response, pd.DataFrame):
+                    blob_response=BLOB(i, offset, step, response).pushToBlob()
+                    return func.HttpResponse(f'All weather locations are pushed to blob',status_code=200)
 
             elif "rank" in i:
                 response = Handler(config,BLOB_workflow,SQL_workflow).updateWeatherRank()

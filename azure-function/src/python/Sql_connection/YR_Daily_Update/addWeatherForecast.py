@@ -76,6 +76,5 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
             pass
     if not dfs:
         return
-    checkpoint_for_next_run=index+offset + 1
-    result = [pd.concat(dfs),checkpoint_for_next_run]
+    result = pd.concat(dfs)
     return result

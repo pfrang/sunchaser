@@ -55,12 +55,11 @@ class Handler():
             if not directory_client.exists():
                 directory_client.create_directory()
 
-
-
             parquet_file = BytesIO()
             #start streaming
 
             # self.df['date'] = pd.to_datetime(self.df['date'])
+
 
             self.df.to_parquet(parquet_file, engine='pyarrow')
             parquet_file.seek(0)
