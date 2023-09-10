@@ -5,6 +5,9 @@ import pandas as pd
 from datetime import datetime
 from src.python.Sql_connection.API_error_log_to_sql import Handler as Error
 import logging
+
+
+
 class Handler:
     def __init__(self,lat,lon,date) -> None:
 
