@@ -8,10 +8,7 @@ import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
 import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/mapper/coordinates-mapper";
 import { AppConfig } from "../../app-config";
-import {
-  AzureFunctionCoordinatesMappedItems,
-  UserLocation,
-} from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Flex } from "../../ui-kit/components/flex/flex";
 import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
 
@@ -40,13 +37,7 @@ export default function Search({
   const { data, isLoading, error }: HookProperties = useCoordinates(query);
   mapboxgl.accessToken = mapBoxkey;
 
-  const [items, setItems] = useState<
-    undefined | AzureFunctionCoordinatesMappedItems[]
-  >(undefined);
-
-  const [userLocation, setUserLocation] = useState<undefined | UserLocation>(
-    undefined
-  );
+  const { userLocation, ranks: items } = data.items;
 
   const [highlightedCard, setHighlightedCard] = useState<
     undefined | AzureFunctionCoordinatesMappedItems
@@ -60,11 +51,6 @@ export default function Search({
 
   const resetMap = () => {
     if (data) {
-      const userLocation = data.items.userLocation;
-      setItems([...data.items.ranks]);
-      // setHighlightedCard(topRankCard); //UNComment if we want 1st card highlighted
-      setUserLocation(userLocation);
-
       const longitudes = data.items.ranks.map((item) => item.longitude);
       const latitudes = data.items.ranks.map((item) => item.latitude);
 
@@ -172,7 +158,7 @@ export default function Search({
                 <section id="section-carousell" className="h-full">
                   <Carousell
                     userLocation={userLocation}
-                    items={items}
+                    items={data.items.ranks}
                     setZoomAndHighlightCard={setZoomAndHighlightCard}
                     highlightedCard={highlightedCard}
                   />
