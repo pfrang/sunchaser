@@ -37,7 +37,7 @@ export default function Search({
   const { data, isLoading, error }: HookProperties = useCoordinates(query);
   mapboxgl.accessToken = mapBoxkey;
 
-  const { userLocation, ranks: items } = data.items;
+  const { userLocation, ranks: items } = data?.items;
 
   const [highlightedCard, setHighlightedCard] = useState<
     undefined | AzureFunctionCoordinatesMappedItems

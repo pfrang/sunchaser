@@ -1,8 +1,8 @@
 import pyodbc
 import pandas as pd
 from src.python.coordinateGenerator import GetCoordinates
-
-
+import time
+import logging
 
 class Handler:
     def __init__(self,config,lat,lon,date,distance):
@@ -48,43 +48,38 @@ class Handler:
                      	FROM [dbo].[weather_forecast_global]
 
                      	where date=?
-                     	and lat<? and lat>? and lon<? and lon>?
+                     	AND lat<? AND lat>? AND lon<? AND lon>?
                      	order by group_rank desc) as best_rank
 
               	JOIN coordinates_locationdata location
-              	ON best_rank.lat=location.lat and best_rank.lon=location.lon) as t
-       	JOIN weather_forecast_local local ON t.lat=local.lat and t.lon=local.lon
-       	where local.date>=?) as weather_result
-       	Left JOIN suntime_schedule sun on weather_result.lat=sun.lat and weather_result.lon=sun.lon and weather_result.date=sun.date
+              	ON best_rank.lat=location.lat AND best_rank.lon=location.lon) as t
+       	JOIN weather_forecast_local local ON t.lat=local.lat AND t.lon=local.lon AND local.date>=?) as weather_result
+       	Left JOIN suntime_schedule sun on weather_result.lat=sun.lat AND weather_result.lon=sun.lon AND weather_result.date=sun.date
        '''
 
-       # Get data from table
+       # HERE THE EXEUCTION HAPPENS, TIME LAG
        cursor.execute(sql,10,date,lat_high,lat_low,lon_high,lon_low,date)
        data = cursor.fetchall()
 
-
-       #add data from sql to pandas
        df = pd.DataFrame(data)
        conn.commit()
-
-       df2=pd.DataFrame(columns=['latitude','longitude','group_rank','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time'])
-
+       empty_df_schema=pd.DataFrame(columns=['latitude','longitude','group_rank','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time'])
 
        for index, row in df.iterrows():
-          df2.loc[index,'latitude']=row[0][0]
-          df2.loc[index,'longitude']=row[0][1]
-          df2.loc[index,'group_rank']=row[0][2]
-          df2.loc[index,'primary_name']=row[0][3]
-          df2.loc[index,'secondary_name']=row[0][4]
-          df2.loc[index,'tertiary_name']=row[0][5]
-          df2.loc[index,'quaternary_name']=row[0][6]
-          df2.loc[index,'date']=row[0][7]
-          df2.loc[index,'symbol']=row[0][8]
-          df2.loc[index,'temperature']=row[0][9]
-          df2.loc[index,'time']=row[0][10]
-          df2.loc[index,'wind']=row[0][11]
-          df2.loc[index,'rank']=row[0][12]
-          df2.loc[index,'sunrise_time']=row[0][13]
-          df2.loc[index,'sunset_time']=row[0][14]
+          empty_df_schema.loc[index,'latitude']=row[0][0]
+          empty_df_schema.loc[index,'longitude']=row[0][1]
+          empty_df_schema.loc[index,'group_rank']=row[0][2]
+          empty_df_schema.loc[index,'primary_name']=row[0][3]
+          empty_df_schema.loc[index,'secondary_name']=row[0][4]
+          empty_df_schema.loc[index,'tertiary_name']=row[0][5]
+          empty_df_schema.loc[index,'quaternary_name']=row[0][6]
+          empty_df_schema.loc[index,'date']=row[0][7]
+          empty_df_schema.loc[index,'symbol']=row[0][8]
+          empty_df_schema.loc[index,'temperature']=row[0][9]
+          empty_df_schema.loc[index,'time']=row[0][10]
+          empty_df_schema.loc[index,'wind']=row[0][11]
+          empty_df_schema.loc[index,'rank']=row[0][12]
+          empty_df_schema.loc[index,'sunrise_time']=row[0][13]
+          empty_df_schema.loc[index,'sunset_time']=row[0][14]
 
-       return df2
+       return empty_df_schema
