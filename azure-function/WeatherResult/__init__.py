@@ -9,7 +9,6 @@ import pandas as pd
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Hello from weather result')
     allowed_methods = ["GET", "POST"]
 
     if req.method not in allowed_methods: return func.HttpResponse("Method not allowed", status_code=404)
@@ -31,7 +30,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "driver": driver
         }
 
-
         sql_df=Handler.Handler(config,float(params['lat']),float(params['lon']),params['date'],float(params['distance'])).recommendation_response_sql()
         StartLocation = {
             "latitude": params['lat'],
@@ -41,13 +39,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         if sql_df.empty:
             return func.HttpResponse(status_code=204)
 
-        dfDict = sql_df.groupby('group_rank', group_keys=True).apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time']].to_dict(orient='records')).to_dict()
+        dfDict = sql_df.groupby(sql_df['group_rank'].astype(float), group_keys=True).apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time']].to_dict(orient='records')).to_dict()
         tmpDict = {'user_location':StartLocation,'ranks': dfDict}
 
-        response_str = json.dumps(tmpDict , indent=4,default=str)
-
-        initializer=response_str
-
+        response_stringified_json = json.dumps(tmpDict , indent=4,default=str)
+        initializer=response_stringified_json
         return func.HttpResponse(f'{initializer}',status_code=200)
     except Exception as e:
         return func.HttpResponse(f'Error from Python: {e}',status_code=500)

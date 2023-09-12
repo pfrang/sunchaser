@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import mapboxgl, { LngLatBounds, LngLatBoundsLike } from "mapbox-gl";
+import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { InferGetServerSidePropsType } from "next";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
-import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/mapper/coordinates-mapper";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Flex } from "../../ui-kit/components/flex/flex";
 import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
+import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
 
 import { MapBoxHelper, StartAndEndCoordinates } from "./mapbox-settings";
 import { Carousell } from "./components/carousell";
@@ -24,20 +24,13 @@ const TwoGridRow = styled.div`
   /* margin-bottom: 200px; */
 `;
 
-export interface HookProperties {
-  data: CoordinatesMappedResponse;
-  isLoading: any;
-  error: any;
-}
-
 export default function Search({
   query,
   mapBoxkey,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data, isLoading, error }: HookProperties = useCoordinates(query);
-  mapboxgl.accessToken = mapBoxkey;
+  const { data, isLoading, error } = useCoordinates(query);
 
-  const { userLocation, ranks: items } = data?.items;
+  mapboxgl.accessToken = mapBoxkey;
 
   const [highlightedCard, setHighlightedCard] = useState<
     undefined | AzureFunctionCoordinatesMappedItems
@@ -47,12 +40,11 @@ export default function Search({
 
   const [mapObject, setMap] = useState<undefined | mapboxgl.Map>(undefined);
 
-  const emptyDataError = error && error.response.data.error === "No data found";
-
   const resetMap = () => {
     if (data) {
       const longitudes = data.items.ranks.map((item) => item.longitude);
       const latitudes = data.items.ranks.map((item) => item.latitude);
+      const userLocation = data.items.userLocation;
 
       let map = new MapBoxHelper(
         longitudes,
@@ -79,6 +71,7 @@ export default function Search({
 
   useEffect(() => {
     if (highlightedCard && zoom) {
+      const userLocation = data.items.userLocation;
       const { lat, lon } = {
         lat: highlightedCard.latitude,
         lon: highlightedCard.longitude,
@@ -140,11 +133,15 @@ export default function Search({
             <div id="map" className="w-full h-full m-auto "></div>
           </div>
         </section>
-        {isLoading ? (
-          <SearchLoader />
-        ) : (
-          <>
-            {error && (
+        <ConditionalPresenter
+          isLoading={isLoading}
+          error={error}
+          data={data}
+          renderLoading={() => <SearchLoader />}
+          renderError={() => {
+            const emptyDataError =
+              error.response.data.error === "No data found";
+            return (
               <div className="flex absolute mt-[80px] top-0 items-center w-full justify-center">
                 <p>
                   {emptyDataError
@@ -152,21 +149,24 @@ export default function Search({
                     : "Something went wrong"}
                 </p>
               </div>
-            )}
-            {items && (
+            );
+          }}
+          renderData={(data) => {
+            const { userLocation, ranks } = data.items;
+            return (
               <Flex flexDirection={"column"} paddingX={[40, 50]}>
                 <section id="section-carousell" className="h-full">
                   <Carousell
                     userLocation={userLocation}
-                    items={data.items.ranks}
+                    items={ranks}
                     setZoomAndHighlightCard={setZoomAndHighlightCard}
                     highlightedCard={highlightedCard}
                   />
                 </section>
               </Flex>
-            )}
-          </>
-        )}
+            );
+          }}
+        />
       </TwoGridRow>
     </Flex>
   );

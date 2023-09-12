@@ -6,7 +6,9 @@ import { CoordinatesMappedResponse } from "../api/azure-function/coordinates/map
 
 export const useCoordinates = (params) => {
   const fetcher = async (url) =>
-    await axios.post(url, params).then((res) => res.data);
+    await axios
+      .post(url, params)
+      .then((res) => res.data as CoordinatesMappedResponse);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { data, error } = useSWR(azureFuncGetCoordinatesEndPoint, fetcher);
