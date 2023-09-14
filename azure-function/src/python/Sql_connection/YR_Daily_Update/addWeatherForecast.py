@@ -2,6 +2,8 @@ import pyodbc
 import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiWeather import Handler
 import time
+import logging
+import decimal
 
 def weatherForecast(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
 
@@ -44,9 +46,9 @@ def weatherForecast(server,database,username,password,driver,country,SQL_workflo
         time_stamp = time.time()
         time_difference = time_stamp - time_start
         if time_difference >= (timeout_minutes * 60):
-            break  # You can choose to exit the loop when the timeout occurs
-        lat=float(str(row[0]).split(",")[0][1:])
-        lon=float(str(row[0]).split(",")[1])
+            break  # You can choose to exit the loop when the timeout occurs'
+        lat=float(row[0][0])
+        lon=float(row[0][1])
 
         try:
 

@@ -3,7 +3,7 @@ import pandas as pd
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
 from src.python.sunrise_calculations.main import main as sunrise_calculations
 import time
-from datetime import datetime
+
 def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
 
     conn=pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
@@ -43,9 +43,8 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
     data = cursor.fetchall()
 
-    # if len(data) == 0:
-    #     return "All locations are updated"
-    #add data from sql to pandas
+    if len(data) == 0:
+        return "All locations are updated"
     df = pd.DataFrame(data)
     conn.commit()
 
@@ -58,8 +57,8 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
         time_difference = time_stamp - time_start
         if time_difference >= (timeout_minutes * 60):
             break  # You can choose to exit the loop when the timeout occurs
-        lat=float(str(row[0]).split(",")[0][1:])
-        lon=float(str(row[0]).split(",")[1])
+        lat=float(row[0][0])
+        lon=float(row[0][1])
 
         try:
             # suntime_schedule_response=Handler(lat,lon,date=datetime.now().date()).make_api_call()

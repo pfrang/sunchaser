@@ -44,6 +44,8 @@ class Handler():
             "credentials": self.account_key
         }
 
+        logging.info(f'Pushing to blob for {ApiParamsUpdateRef} with this config {configAzure}')
+
         try:
             directory_client = DataLakeDirectoryClient(
                 account_url=configAzure["account_url"],
