@@ -5,7 +5,9 @@ const config: CapacitorConfig = {
   appName: "sunchaser",
   webDir: "out",
   server: {
-    androidScheme: "https",
+    // androidScheme: "https",
+    url: "http://192.168.0.83:3000",
+    cleartext: true,
   },
 };
 

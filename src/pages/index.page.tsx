@@ -43,7 +43,7 @@ const Home: NextPage = () => {
         <div className="grid">
           <div className="overflow-hidden bg-inherit h-full relative">
             <div className="absolute flex justify-center z-10 w-full">
-              <Text variant="subtitle-large">Choose weather</Text>
+              <Text variant="subtitle-large">Choose weather 2</Text>
             </div>
 
             <WeatherCarousell weather={weather} setWeather={setWeather} />
@@ -67,13 +67,6 @@ const Home: NextPage = () => {
       {/* <Spacer height={64} /> */}
     </>
   );
-};
-
-export const getStaitcPaths = async () => {
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
 };
 
 export const getStaticProps = async () => {

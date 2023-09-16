@@ -10,7 +10,7 @@ import {
 export const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (!isBodyValid(req.body)) {
-      return res.status(403).json({
+      return res.status(400).json({
         error: "Body didnt have the necessary parameters",
       });
     }

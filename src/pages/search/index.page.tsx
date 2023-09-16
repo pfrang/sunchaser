@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { InferGetServerSidePropsType } from "next";
+import { GetStaticPaths, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import App from "next/app";
+import { mutate } from "swr";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
@@ -26,12 +28,19 @@ const TwoGridRow = styled.div`
 `;
 
 export default function Search({
-  mapBoxkey,
+  mapBoxKey,
 }: InferGetServerSidePropsType<typeof getStaticProps>) {
-  const { query } = useRouter();
-  const { data, isLoading, error } = useCoordinates(query);
+  const router = useRouter();
 
-  mapboxgl.accessToken = mapBoxkey;
+  mapboxgl.accessToken = mapBoxKey;
+
+  const { data, isLoading, error } = useCoordinates(
+    {
+      params: router.query,
+      data: router.query,
+    },
+    router.isReady
+  );
 
   const [highlightedCard, setHighlightedCard] = useState<
     undefined | AzureFunctionCoordinatesMappedItems
@@ -63,6 +72,13 @@ export default function Search({
       setMap(map);
     }
   };
+
+  // useEffect(() => {
+  //   const onChange = async () => {
+  //     await mutate("something", query);
+  //   };
+  //   onChange();
+  // }, [query]);
 
   useEffect(() => {
     if (data) {
@@ -140,8 +156,7 @@ export default function Search({
           data={data}
           renderLoading={() => <SearchLoader />}
           renderError={() => {
-            const emptyDataError =
-              error.response.data.error === "No data found";
+            const emptyDataError = false;
             return (
               <div className="flex absolute mt-[80px] top-0 items-center w-full justify-center">
                 <p>
@@ -181,11 +196,11 @@ interface GetServerSidePropsSearch {
 }
 
 export const getStaticProps = async () => {
-  const mapBoxkey = new AppConfig().mapBox.key;
+  const mapBoxKey = new AppConfig().mapBox.key;
 
   return {
     props: {
-      mapBoxkey,
+      mapBoxKey,
     },
   };
 };
