@@ -8,9 +8,15 @@
     "start": "next start",
     "lint": "eslint .",
     "static": "next build && next export",
-    "export": "next export"
+    "export": "next export",
+    "cap-on-android": "run-cap-on-android -id com.example.app",
+    "build-android": "npx cap add android",
+    "build-ios": "npx cap add ios"
   },
   "dependencies": {
+    "@capacitor/android": "^5.4.0",
+    "@capacitor/core": "^5.4.0",
+    "@capacitor/ios": "^5.4.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.2",
@@ -48,6 +54,7 @@
     "weather-underground-icons": "^1.0.0"
   },
   "devDependencies": {
+    "@capacitor/cli": "^5.4.0",
     "@types/lodash": "^4.14.195",
     "@types/mapbox-gl": "^2.7.7",
     "@types/node": "18.7.11",
@@ -61,6 +68,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
+    "run-cap-on-android": "^1.0.3",
     "tailwindcss": "^3.1.8",
     "typescript": "4.7.4"
   },
