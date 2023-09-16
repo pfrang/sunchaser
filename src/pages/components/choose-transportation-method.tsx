@@ -43,11 +43,19 @@ export default function ChooseTransportationMethod({
         {children.map((item, i) => {
           return highlightedTransport === item ? (
             <HighlightedDivItem key={i}>
-              <Image src={`/transportation/${item}.png`} layout="fill" />
+              <Image
+                src={`/transportation/${item}.png`}
+                fill
+                alt="highlighted transportation method"
+              />
             </HighlightedDivItem>
           ) : (
             <DivItem key={i} onClick={(e) => setHighlightedTransport(item)}>
-              <Image src={`/transportation/${item}.png`} layout="fill" />
+              <Image
+                src={`/transportation/${item}.png`}
+                fill
+                alt="highlighted transportation method"
+              />
             </DivItem>
           );
         })}

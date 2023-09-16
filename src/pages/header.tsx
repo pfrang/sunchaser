@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { useRouter } from "next/router";
 
 import { theme } from "../ui-kit/theme/theme";
 import { Flex } from "../ui-kit/components/flex";
@@ -19,7 +18,6 @@ const Header = styled.header`
   padding: 6px;
 `;
 
-//NOT USED CURRENTLY
 export default function HeaderComponent({ isHomePage }) {
   const modal = useRef<HTMLDialogElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -44,18 +42,14 @@ export default function HeaderComponent({ isHomePage }) {
     >
       <Flex paddingY={2} position={"relative"} alignItems={"center"}>
         <Link href="/">
-          <a>
-            <Image
-              style={{ cursor: "pointer" }}
-              layout="fixed"
-              objectFit="contain"
-              width={250}
-              height={"60px"}
-              // sizes="(max-width: 800px) 100px, 50px"
-              alt="Logo"
-              src={"/logo.svg"}
-            />
-          </a>
+          <Image
+            style={{ cursor: "pointer" }}
+            width={250}
+            height={60}
+            // sizes="(max-width: 800px) 100px, 50px"
+            alt="Logo"
+            src={"/logo.svg"}
+          />
         </Link>
         {/* <Text variant="body-large-bold">Sunchaser</Text> */}
       </Flex>

@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    unoptimized: true,
+  },
   pageExtensions: ["page.tsx", "endpoint.ts"],
   eslint: {
     ignoreDuringBuilds: true,

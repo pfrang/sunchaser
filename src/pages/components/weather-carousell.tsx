@@ -90,15 +90,13 @@ export const WeatherCarousell = ({
               </div>
             )}
             <Image
+              alt="weather"
               className={`rounded-b-[50px] w-full h-full ${
                 isDisabled && "opacity-[50%]"
               }`}
-              // style={{
-              //   boxShadow: "rgba(0,0,0,0.4) 0px 0px 10px",
-              // }}
               src={`/photo-and-layout/${item.toLowerCase()}.png`}
-              layout="fill"
-              objectFit="cover"
+              fill
+              style={{ objectFit: "cover" }}
             />
           </SwiperSlide>
         );

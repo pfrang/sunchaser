@@ -3,6 +3,7 @@ import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
@@ -25,9 +26,9 @@ const TwoGridRow = styled.div`
 `;
 
 export default function Search({
-  query,
   mapBoxkey,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetServerSidePropsType<typeof getStaticProps>) {
+  const { query } = useRouter();
   const { data, isLoading, error } = useCoordinates(query);
 
   mapboxgl.accessToken = mapBoxkey;
@@ -179,17 +180,27 @@ interface GetServerSidePropsSearch {
   };
 }
 
-export async function getServerSideProps(
-  context
-): Promise<GetServerSidePropsSearch> {
-  const query: PayloadParams = context.query;
-
+export const getStaticProps = async () => {
   const mapBoxkey = new AppConfig().mapBox.key;
 
   return {
     props: {
-      query,
       mapBoxkey,
     },
   };
-}
+};
+
+// export async function getServerSideProps(
+//   context
+// ): Promise<GetServerSidePropsSearch> {
+//   const query: PayloadParams = context.query;
+
+//   const mapBoxkey = new AppConfig().mapBox.key;
+
+//   return {
+//     props: {
+//       query,
+//       mapBoxkey,
+//     },
+//   };
+// }

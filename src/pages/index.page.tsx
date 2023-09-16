@@ -69,12 +69,19 @@ const Home: NextPage = () => {
   );
 };
 
-export async function getServerSideProps({ req, query, resolvedUrl }) {
+export const getStaitcPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps = async () => {
   return {
     props: {
-      currentUrl: resolvedUrl,
-    }, // will be passed to the page component as props
+      currentUrl: "/",
+    },
   };
-}
+};
 
 export default Home;
