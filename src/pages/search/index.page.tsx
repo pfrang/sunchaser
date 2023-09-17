@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { GetStaticPaths, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import App from "next/app";
-import { mutate } from "swr";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";

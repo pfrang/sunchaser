@@ -23,7 +23,7 @@ class Handler:
             return self.handle_result(response)
 
         except requests.exceptions.HTTPError as err:
-
+            self.error_handeling(response.status_code)
             # self.error_handeling(response.status_code)
             raise Exception(err)
         except requests.exceptions.RequestException as err:

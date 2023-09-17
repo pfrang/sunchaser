@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { Geolocation } from "@capacitor/geolocation";
 
 import { AppConfig } from "../../app-config";
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
@@ -111,22 +112,24 @@ export default function UserForm({
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    let longitudeInput;
+    let latitudeInput;
+
     if (!header) {
-      getCurrentPos();
-      return;
+      const position = await Geolocation.getCurrentPosition();
+      const { latitude, longitude } = position.coords;
+      latitudeInput = latitude;
+      longitudeInput = longitude;
+    } else {
+      const townDetails = await fetchTownDetails();
+      if (!townDetails) return;
+      longitudeInput = townDetails.longitude;
+      latitudeInput = townDetails.latitude;
     }
-    const { longitude, latitude } = await fetchTownDetails();
-    // const { longitude, latitude } = await fetchTownDetails();
-    // // console.log(",,", longitude, latitude);
-
-    // setUnfilledHighlightedTransport(false);
-    // const check = checkIfTransportAndCalendarValuesAreFilled();
-
-    // if (check.calendarValue === "" || check.transport === "") return;
 
     const params: PayloadParams = {
-      lon: longitude,
-      lat: latitude,
+      lon: String(longitudeInput),
+      lat: String(latitudeInput),
       date: formatDate(selectedDate),
       distance: travelDistance.toString(),
     };
@@ -136,7 +139,7 @@ export default function UserForm({
       .join("&");
 
     router.push(`search?${urlPar}`);
-    header.current.close();
+    header?.current.close();
   };
 
   const sendData = (str: string) => {

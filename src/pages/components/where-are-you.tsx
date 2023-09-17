@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
 
 import { Spinner } from "../../ui-kit/spinner/spinner";
-import { fetcher } from "../api/common-swr-fetcher-with-params";
-import { gmapsAutoSearchUrl } from "../api/google-maps/auto-search/index.endpoint";
 import { GoogleMapsAutoSearchMappedData } from "../api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
 import { Text } from "../../ui-kit/components/text";
+import { useFetchGoogleMapsSearches } from "../hooks/use-google-maps-auto-search";
+import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
 
 interface WhereAreYouProps {
   locationRef: React.MutableRefObject<HTMLInputElement>;
@@ -19,22 +18,8 @@ export default function WhereAreYou({
   const [townSearch, setTownSearch] = useState("");
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [geoLocationSearchItems, setGeoLocationSearchItems] = useState([]);
-  const [isGeoLocationLoading, setIsGeoLocationLoading] = useState(false);
 
-  const { data, error } = useSWR(
-    townSearch ? [gmapsAutoSearchUrl, { input: townSearch }] : null,
-    fetcher
-  );
-
-  useEffect(() => {
-    if (!townSearch) return;
-    if (!data && !error) {
-      setIsGeoLocationLoading(true);
-      return;
-    }
-    setIsGeoLocationLoading(false);
-    setGeoLocationSearchItems(data.items);
-  }, [data, error, townSearch]);
+  const { data, error, isLoading } = useFetchGoogleMapsSearches(townSearch);
 
   const setLocationAndClearList = ({ value, id }) => {
     setTownSearch(value);
@@ -65,38 +50,46 @@ export default function WhereAreYou({
             id=""
             value={townSearch}
           />
-          {isGeoLocationLoading && (
+          {isLoading && (
             <div className="absolute right-2 top-2">
               <Spinner />
             </div>
           )}
         </div>
-        {!isLocationChosen && townSearch && (
-          <div className="relative w-full z-10">
-            <ul className="absolute left-0 w-full rounded-md border-1-black margin-0 padding-0">
-              {geoLocationSearchItems &&
-                geoLocationSearchItems.map(
-                  (item: GoogleMapsAutoSearchMappedData, index) => {
-                    return (
-                      <li
-                        key={index}
-                        id={item.place_id}
-                        className="relative p-2 border-2 bg-slate-200 text-xl cursor-pointer border-2 rounded-sm border-slate-300"
-                        onClick={(e) =>
-                          setLocationAndClearList({
-                            value: e.currentTarget.innerHTML,
-                            id: e.currentTarget.id,
-                          })
-                        }
-                      >
-                        {item.place}
-                      </li>
-                    );
-                  }
-                )}
-            </ul>
-          </div>
-        )}
+        <ConditionalPresenter
+          data={data}
+          error={error}
+          isLoading={false}
+          renderData={(data) => {
+            const { items } = data;
+
+            return (
+              <div className="relative w-full z-10">
+                <ul className="absolute left-0 w-full rounded-md border-1-black margin-0 padding-0">
+                  {items &&
+                    !isLocationChosen &&
+                    items.map((item: GoogleMapsAutoSearchMappedData, index) => {
+                      return (
+                        <li
+                          key={index}
+                          id={item.place_id}
+                          className="relative p-2 border-2 bg-slate-200 text-xl cursor-pointer border-2 rounded-sm border-slate-300"
+                          onClick={(e) =>
+                            setLocationAndClearList({
+                              value: e.currentTarget.innerHTML,
+                              id: e.currentTarget.id,
+                            })
+                          }
+                        >
+                          {item.place}
+                        </li>
+                      );
+                    })}
+                </ul>
+              </div>
+            );
+          }}
+        />
       </div>
     </section>
   );

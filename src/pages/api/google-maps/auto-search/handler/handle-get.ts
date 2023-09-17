@@ -21,9 +21,7 @@ export const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   ).getProps();
 
   return res.status(200).json({
-    response: {
-      metaData: {},
-      items: placesAutoSearchMappedData.data,
-    },
+    metaData: {},
+    items: placesAutoSearchMappedData.data,
   });
 };

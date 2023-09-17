@@ -39,7 +39,7 @@ export const ConditionalPresenter = <Data, Error>({
 
   switch (state) {
     case StateStage.Initial:
-      return renderLoading();
+      return isLoading ? renderLoading() : <></>;
     case StateStage.Error:
       return renderError();
     case StateStage.Loading:

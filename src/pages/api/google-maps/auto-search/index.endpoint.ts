@@ -1,8 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { handleGet } from "./handler/handle-get";
+import { GoogleMapsAutoSearchMappedData } from "./mapper/gmaps-auto-search-mapper";
 
-export const gmapsAutoSearchUrl = "/api/google-maps/auto-search";
+export const gmapsAutoSearchUrl = "google-maps/auto-search";
+
+export interface GoogleMapsAutoSearchNextApiResponse {
+  metaData: {};
+  items: GoogleMapsAutoSearchMappedData[];
+}
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {

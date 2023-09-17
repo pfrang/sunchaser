@@ -1,25 +1,38 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import useSWR from "swr";
 
-export const useGMapsAutoSearch = (townSearch) => {
-  const h = "hei";
+import {
+  GoogleMapsAutoSearchNextApiResponse,
+  gmapsAutoSearchUrl,
+} from "../api/google-maps/auto-search/index.endpoint";
 
-  if (!townSearch) return { data: null, isLoading: true, error: null };
-  const params = {
-    input: townSearch,
+interface NextApiRequest extends AxiosRequestConfig {}
+
+export const useFetchGoogleMapsSearches = (townSearch: string) => {
+  const urlWithParams = `${gmapsAutoSearchUrl}?input=${townSearch}`;
+
+  const fetcherRequest = {
+    url: gmapsAutoSearchUrl,
+    params: { input: townSearch },
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
   };
 
-  const fetcher = async (url) =>
-    await axios
-      .get(url, {
-        params,
-      })
-      .then((res) => res.data);
+  let { data, error, mutate } = useSWR(
+    townSearch ? urlWithParams : null,
+    townSearch ? () => fetcherFactory(fetcherRequest) : null
+  );
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data, error } = useSWR("/api/google-maps/auto-search", fetcher);
+  const isLoading = !data && !error && townSearch;
 
-  const isLoading = !data && !error;
+  return { data, error, isLoading };
+};
 
-  return { data, isLoading, error };
+export const fetcherFactory = async (
+  requestConfig: NextApiRequest
+): Promise<GoogleMapsAutoSearchNextApiResponse> => {
+  const response = await axios({ ...requestConfig, baseURL: "/api/" });
+  return response.data;
 };
