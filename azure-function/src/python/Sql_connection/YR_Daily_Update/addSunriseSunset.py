@@ -57,8 +57,8 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
         time_difference = time_stamp - time_start
         if time_difference >= (timeout_minutes * 60):
             break  # You can choose to exit the loop when the timeout occurs
-        lat=float(row[0][0])
-        lon=float(row[0][1])
+        lat=str(row[0][0])
+        lon=str(row[0][1])
 
         try:
             # suntime_schedule_response=Handler(lat,lon,date=datetime.now().date()).make_api_call()
