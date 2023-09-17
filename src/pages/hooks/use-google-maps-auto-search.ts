@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import useSWR from "swr";
 
 import {
@@ -6,7 +6,7 @@ import {
   gmapsAutoSearchUrl,
 } from "../api/google-maps/auto-search/index.endpoint";
 
-interface NextApiRequest extends AxiosRequestConfig {}
+import { NextApiRequest } from "./common-types";
 
 export const useFetchGoogleMapsSearches = (townSearch: string) => {
   const urlWithParams = `${gmapsAutoSearchUrl}?input=${townSearch}`;

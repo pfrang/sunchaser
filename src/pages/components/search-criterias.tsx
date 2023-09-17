@@ -12,6 +12,7 @@ import { GoogleMapsDetailsResponse } from "../api/google-maps/details/mapper/gma
 import { ResponseDTO } from "../api/next-api.client";
 import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
 import { destructureMyPosition } from "../utils/get-user-location";
+import { fetchTownDetails } from "../hooks/fetch-town-details";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";
@@ -69,47 +70,6 @@ export default function UserForm({
 
   const sunSelected = weatherSelected === "Sun";
 
-  const fetchTownDetails = async () => {
-    const town = await axios
-      .get<ResponseDTO<GoogleMapsDetailsResponse>>(
-        `${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`
-      )
-      .then((response) => response.data)
-      .catch((e) => {
-        setError(true);
-        console.error(e);
-      });
-
-    if (!town) return;
-
-    return {
-      latitude: town.data.latitude,
-      longitude: town.data.longitude,
-    };
-  };
-
-  const getCurrentPos = () => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    function success(pos) {
-      const crd = pos.coords;
-      const str = `lat=${crd.latitude}&lon=${crd.longitude}`;
-      sendData(str);
-    }
-
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-      setError(true);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  };
-
   const onSubmit = async (e) => {
     e.preventDefault();
     let longitudeInput;
@@ -121,7 +81,13 @@ export default function UserForm({
       latitudeInput = latitude;
       longitudeInput = longitude;
     } else {
-      const townDetails = await fetchTownDetails();
+      let townDetails;
+      try {
+        townDetails = await fetchTownDetails(townId);
+      } catch (e) {
+        setError(true);
+      }
+
       if (!townDetails) return;
       longitudeInput = townDetails.longitude;
       latitudeInput = townDetails.latitude;
@@ -140,23 +106,6 @@ export default function UserForm({
 
     router.push(`search?${urlPar}`);
     header?.current.close();
-  };
-
-  const sendData = (str: string) => {
-    const { longitude, latitude } = destructureMyPosition(str);
-
-    const params = {
-      lon: longitude,
-      lat: latitude,
-      date: formatDate(selectedDate),
-      distance: travelDistance,
-    };
-
-    const urlPar = Object.keys(params)
-      .map((key) => key + "=" + params[key])
-      .join("&");
-
-    router.push(`search?${urlPar}`);
   };
 
   const disableButton = !isHomePage ? false : !sunSelected;

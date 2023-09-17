@@ -4,8 +4,7 @@ import useSWR from "swr";
 import { azureFuncGetCoordinatesEndPoint } from "../api/azure-function/coordinates/index.endpoint";
 
 import { useNextApiRequest } from "./use.next-api-request";
-
-interface NextApiRequest extends AxiosRequestConfig {}
+import { NextApiRequest } from "./common-types";
 
 export const useCoordinates = (
   requestConfig: Pick<NextApiRequest, "data" | "params">,
