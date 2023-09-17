@@ -84,7 +84,8 @@ export const Carousell = ({
         modules={[Navigation, Scrollbar, Mousewheel, Keyboard, FreeMode]}
       >
         {items.map((item, idx) => {
-          const isHighlighted = item === highlightedCard;
+          const isHighlighted =
+            item.primaryName === highlightedCard?.primaryName;
           return (
             <SwiperSlide key={`card-${idx}`}>
               {

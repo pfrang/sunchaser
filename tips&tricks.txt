@@ -3,10 +3,9 @@ CSS Mobile height - https://css-tricks.com/the-trick-to-viewport-units-on-mobile
 
 How to publish android app - https://orangesoft.co/blog/how-to-publish-an-android-app-on-google-play-store
 
+Geo permissions in mainfest file:
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-OPPGAVER FOR I MORGEN
+android sutdio logs
 
-så at resultater for 1 ga bare 2 resultater, samme når jeg endret bare bittelitt, kun 2 resultater
-dobbelsjekke om query indeks før og etter funker
-
-suntime sunrise ikke med i response
+C:\Users\Peder\AppData\Local\Google\AndroidStudio2022.3\log
