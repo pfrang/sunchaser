@@ -4,7 +4,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { add } from "lodash";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";

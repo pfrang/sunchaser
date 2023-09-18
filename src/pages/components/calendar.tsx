@@ -1,4 +1,3 @@
-import "react-day-picker/dist/style.css";
 import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
 import { differenceInCalendarDays } from "date-fns";
 import nb from "date-fns/locale/nb";

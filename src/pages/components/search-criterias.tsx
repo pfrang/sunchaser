@@ -1,23 +1,19 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { Geolocation } from "@capacitor/geolocation";
 
-import { AppConfig } from "../../app-config";
-import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { formatDate } from "../utils/convert-date";
-import { GoogleMapsDetailsResponse } from "../api/google-maps/details/mapper/gmaps-details-mapper";
-import { ResponseDTO } from "../api/next-api.client";
 import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
-import { destructureMyPosition } from "../utils/get-user-location";
 import { fetchTownDetails } from "../hooks/fetch-town-details";
+import { useUserLocation } from "../hooks/use-user-location";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";
 import WhereAreYou from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
+import { CircularMap } from "./circular-map";
 
 const Button = styled.button<{ disabled?: boolean }>`
   background-color: ${(props) => (props.disabled ? "gray" : "#1215fd")};
@@ -46,17 +42,20 @@ interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
   weatherSelected?: WeatherOptions;
   isHomePage?: boolean;
+  mapBoxKey?: string;
 }
 
 export default function UserForm({
   header,
   weatherSelected,
   isHomePage,
+  mapBoxKey,
 }: UserFormProps) {
   // const [userGeoLocation, setUserGeoLocation] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
+  const { userLocation } = useUserLocation();
 
   const [error, setError] = useState(false);
   const [townId, setTownId] = useState("");
@@ -76,10 +75,8 @@ export default function UserForm({
     let latitudeInput;
 
     if (!header) {
-      const position = await Geolocation.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
-      latitudeInput = latitude;
-      longitudeInput = longitude;
+      latitudeInput = userLocation.latitude;
+      longitudeInput = userLocation.longitude;
     } else {
       let townDetails;
       try {
@@ -121,7 +118,11 @@ export default function UserForm({
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         />
-        <ChooseTravelDistance setTravelDistance={setTravelDistance} />
+        {/* <CircularMap mapBoxKey={mapBoxKey} /> */}
+        <ChooseTravelDistance
+          setTravelDistance={setTravelDistance}
+          mapBoxKey={mapBoxKey}
+        />
         {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}
