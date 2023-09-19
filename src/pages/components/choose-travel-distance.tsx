@@ -1,28 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Slider from "@mui/material/Slider";
-import { styled } from "@mui/material/styles";
 
 import { Text } from "../../ui-kit/components/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { distanceArray } from "../utils/travel-distance-settings";
 
 import { CircularMap } from "./circular-map";
-
-const CustomizedSlider = styled(Slider)`
-  color: #20b2aa;
-
-  :hover {
-    color: #2e8b57;
-  }
-
-  & .MuiSlider-thumb {
-    border-radius: 1px;
-  }
-`;
-
-function valuetext(value: number) {
-  return `${value} km`;
-}
 
 interface ChooseTravelDistanceProps {
   setTravelDistance: (value: number) => void;
@@ -33,7 +16,7 @@ export const ChooseTravelDistance = ({
   setTravelDistance,
   mapBoxKey,
 }: ChooseTravelDistanceProps) => {
-  const [zoom, setZoom] = useState(8);
+  const [kilometers, setKilometers] = useState(50);
   const step = 5;
   const valuesForSlider = distanceArray(step);
   const [index, setIndex] = useState(valuesForSlider.length / 2);
@@ -41,7 +24,7 @@ export const ChooseTravelDistance = ({
   const handleSlide = (e: any, num) => {
     setIndex(num);
     setTravelDistance(Number(valuesForSlider[num - 1].label));
-    setZoom(Number(valuesForSlider[valuesForSlider.length - num].value));
+    setKilometers(Number(valuesForSlider[num - 1].label));
   };
 
   const min = 1;
@@ -57,12 +40,12 @@ export const ChooseTravelDistance = ({
         </Text>
         <Spacer height={2} />
         {/* // Remove component here for old */}
-        <CircularMap zoom={zoom} mapBoxKey={mapBoxKey} />
+        <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
         <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
         <Slider
           aria-label="Temperature"
           value={index}
-          getAriaValueText={valuetext}
+          getAriaValueText={(value: number) => `${value}km`}
           valueLabelDisplay="auto"
           valueLabelFormat={`${valueToDisplay}`}
           step={1}

@@ -50,7 +50,7 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
   type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
   return (
-    <section id="calendar w-full">
+    <section id="calendar w-full relative">
       <div className="flex flex-col items-center gap-1">
         <Text variant="caption-large">When do you want to travel?</Text>
         <Spacer vertical={2} />
@@ -80,45 +80,49 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
         </Flex>
       </div>
       {isPopperOpen && (
-        <DayPicker
-          weekStartsOn={new Date().getDay() as WeekDayNumb}
-          disabled={disabledDays}
-          // fromDate={new Date()}
-          // hidden={{ before: new Date(), to: inTwoWeeks }}
-          components={{ Row: OnlyFutureRow }}
-          locale={nb}
-          disableNavigation
-          mode="single"
-          selected={selectedDate}
-          onSelect={Submit}
-          showOutsideDays
-          style={{
-            margin: "10px",
-            border: "1px dotted gray",
-            borderRadius: "4px",
-            backgroundColor: `${theme.colors.green}`,
-            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
-            padding: "10px",
-          }}
-          styles={{
-            caption: { display: "none" },
-            head: {
-              fontSize: "1rem",
-              fontWeight: "bold",
-              padding: "0.5rem 0.5rem",
-              color: "black",
-            },
-            day: {
-              width: "2rem",
-              height: "2rem",
-              fontSize: "1rem",
-              margin: "0px",
-              padding: "0px",
-              borderRadius: "0px",
-              color: "black",
-            },
-          }}
-        />
+        <Flex justifyContent={"center"}>
+          <DayPicker
+            weekStartsOn={new Date().getDay() as WeekDayNumb}
+            disabled={disabledDays}
+            // fromDate={new Date()}
+            // hidden={{ before: new Date(), to: inTwoWeeks }}
+            components={{ Row: OnlyFutureRow }}
+            locale={nb}
+            disableNavigation
+            mode="single"
+            selected={selectedDate}
+            onSelect={Submit}
+            showOutsideDays
+            style={{
+              margin: "10px",
+              border: "1px dotted gray",
+              borderRadius: "4px",
+              backgroundColor: `${theme.colors.green}`,
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+              padding: "10px",
+              position: "absolute",
+              zIndex: 1,
+            }}
+            styles={{
+              caption: { display: "none" },
+              head: {
+                fontSize: "1rem",
+                fontWeight: "bold",
+                padding: "0.5rem 0.5rem",
+                color: "black",
+              },
+              day: {
+                width: "2rem",
+                height: "2rem",
+                fontSize: "1rem",
+                margin: "0px",
+                padding: "0px",
+                borderRadius: "0px",
+                color: "black",
+              },
+            }}
+          />
+        </Flex>
       )}
     </section>
   );

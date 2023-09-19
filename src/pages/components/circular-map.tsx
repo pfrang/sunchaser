@@ -1,57 +1,79 @@
-import React, { useEffect, useState } from "react";
-import ReactMapGL, { Marker } from "react-map-gl";
+import React, { useEffect, useRef, useState } from "react";
+import * as turf from "@turf/turf";
+import ReactMapGL, { Layer, MapRef, Marker, Source } from "react-map-gl";
 
-import { UserLocation } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { useUserLocation } from "../hooks/use-user-location";
 import { Flex } from "../../ui-kit/components/flex";
+import { getBoundingBox } from "../utils/get-boundaries-lng-lat";
 
-export const CircularMap = ({ mapBoxKey, zoom }) => {
+export const CircularMap = ({ mapBoxKey, kilometers }) => {
   const { userLocation } = useUserLocation();
+  const mapRef = useRef<MapRef>();
 
-  const [width, setWidth] = useState(0);
-  const [viewState, setViewState] = React.useState({
-    longitude: 0,
-    latitude: 0,
-    zoom: zoom,
-  });
-
-  useEffect(() => {
-    setViewState({
-      ...viewState,
-      zoom: zoom,
-    });
-  }, [zoom]);
+  const [polygon, setPolygon] = useState<null | turf.helpers.Feature<
+    turf.helpers.Polygon,
+    {
+      [name: string]: any;
+    }
+  >>(null);
 
   useEffect(() => {
     if (userLocation) {
-      setViewState({
-        ...viewState,
-        longitude: userLocation.longitude,
-        latitude: userLocation.latitude,
-      });
+      setPolygon(
+        turf.circle(
+          [userLocation.longitude, userLocation.latitude],
+          kilometers,
+          {
+            units: "kilometers",
+          }
+        )
+      );
+
+      const { sw, ne } = getBoundingBox(userLocation, kilometers);
+
+      mapRef.current?.fitBounds(
+        [
+          [sw.longitude, sw.latitude],
+          [ne.longitude, ne.latitude],
+        ],
+        { padding: 20, duration: 1000 }
+      );
     }
-  }, [userLocation]);
+  }, [kilometers, userLocation]);
+
+  const disableInteractivitySettings = {
+    dragPan: false,
+    dragRotate: false,
+    scrollZoom: false,
+    touchZoom: false,
+    touchRotate: false,
+    keyboard: false,
+    doubleClickZoom: false,
+  };
 
   return (
-    <Flex justifyContent={"center"} width={"100%"} height={"200px"}>
+    <Flex
+      justifyContent={"center"}
+      alignItems={"center"}
+      width={"100%"}
+      height={"200px"}
+    >
       {userLocation && (
         <ReactMapGL
-          {...viewState}
-          mapStyle="mapbox://styles/mapbox/streets-v11"
-          mapboxAccessToken={
-            "pk.eyJ1IjoicGVmZiIsImEiOiJja3d3bjQxbmgwNWR4MnZxMWJub25yZXc4In0.OHql2CO2vCja5LzugCaaCg"
-          }
-          // onViewportChange={setViewport}
-
+          ref={mapRef}
           initialViewState={{
-            longitude: userLocation?.longitude,
-            latitude: userLocation?.latitude,
-            zoom: 8,
+            longitude: userLocation.longitude,
+            latitude: userLocation.latitude,
+            zoom: 6,
           }}
-          onMove={(evt) => setViewState(evt.viewState)}
+          mapStyle="mapbox://styles/mapbox/streets-v11"
+          mapboxAccessToken={mapBoxKey}
+          // onMove={(evt) => setViewState(evt.viewState)}
+          {...disableInteractivitySettings}
           style={{
-            borderRadius: "80%",
-            width: "50%",
+            // borderRadius: "40%",
+            width: `100%`,
+            height: `100%`,
           }}
         >
           <Marker
@@ -80,6 +102,18 @@ export const CircularMap = ({ mapBoxKey, zoom }) => {
               />
             </div>
           </Marker>
+          {polygon && (
+            <Source id="geofence" type="geojson" data={polygon}>
+              <Layer
+                id="geofence"
+                type="fill"
+                paint={{
+                  "fill-color": "#007cbf",
+                  "fill-opacity": 0.2,
+                }}
+              />
+            </Source>
+          )}
         </ReactMapGL>
       )}
     </Flex>

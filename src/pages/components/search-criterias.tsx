@@ -130,10 +130,8 @@ export default function UserForm({
       >
         {travelItems}
       </ChooseTransportationMethod> */}
-        <Spacer vertical={1} />
-        <div className="flex justify-center">
-          <Button disabled={disableButton}>Find the sun</Button>
-        </div>
+        <Spacer paddingTop={3} />
+        <Button disabled={disableButton}>Find the sun</Button>
       </FormStyle>
       {error && (
         <div className="flex justify-center">
