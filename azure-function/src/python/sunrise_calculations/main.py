@@ -2,6 +2,7 @@ from skyfield import api, almanac
 from skyfield.api import load_file
 from datetime import datetime, timedelta
 import pandas as pd
+import logging
 
 def main(latitude, longitude, days_ahead=15):
     ts = api.load.timescale()
@@ -11,9 +12,7 @@ def main(latitude, longitude, days_ahead=15):
     current_date = datetime.now()
     date_format_full="%Y-%m-%dT%H:%M:%SZ"
 
-    bluffton = api.wgs84.latlon(latitude, longitude)
-
-
+    bluffton = api.wgs84.latlon(float(latitude), float(longitude))
     sunrise_times= []
     sunset_times = []
     dates=[]
