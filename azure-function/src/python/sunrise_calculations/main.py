@@ -1,12 +1,9 @@
 from skyfield import api, almanac
-from skyfield.api import load_file
 from datetime import datetime, timedelta
 import pandas as pd
-import logging
 
-def main(latitude, longitude, days_ahead=15):
-    ts = api.load.timescale()
-    eph = load_file("de421.bsp")
+
+def main(latitude: str, longitude: str,ts: api.load.timescale, model , days_ahead=15) -> pd.DataFrame:
 
     # Get the current date
     current_date = datetime.now()
@@ -22,7 +19,7 @@ def main(latitude, longitude, days_ahead=15):
         current_date_i_1 = current_date + timedelta(days=i + 1)
         t0 = ts.utc(current_date_i.year, current_date_i.month, current_date_i.day)
         t1 = ts.utc(current_date_i_1.year, current_date_i_1.month, current_date_i_1.day)
-        t, y = almanac.find_discrete(t0, t1, almanac.sunrise_sunset(eph, bluffton))
+        t, y = almanac.find_discrete(t0, t1, almanac.sunrise_sunset(model, bluffton))
         sunrise_date = datetime.strptime(t.utc_iso()[0], date_format_full)
         sunset_date = datetime.strptime(t.utc_iso()[1], date_format_full)
         sunrise_2_hours = sunrise_date + timedelta(hours=2)
