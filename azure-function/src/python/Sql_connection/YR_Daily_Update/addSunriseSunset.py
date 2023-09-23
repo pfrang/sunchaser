@@ -5,7 +5,7 @@ from skyfield.api import load_file
 import time
 
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
-from src.python.sunrise_calculations.main import main as sunrise_calculations
+from src.python.sunrise_calculations.sunrise_with_offset import main as sunrise_calculations
 
 def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
 
@@ -68,7 +68,7 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
         try:
             # suntime_schedule_response=Handler(lat,lon,date=datetime.now().date()).make_api_call()
-            suntime_schedule_response=sunrise_calculations(lat,lon, ts, model)
+            suntime_schedule_response=sunrise_calculations(lat,lon, ts, model,15)
 
             if BLOB_workflow==True:
                 dfs.append(suntime_schedule_response)
