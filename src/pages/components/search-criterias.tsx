@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { Geolocation } from "@capacitor/geolocation";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { formatDate } from "../utils/convert-date";
@@ -13,7 +12,6 @@ import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";
 import WhereAreYou from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
-import { CircularMap } from "./circular-map";
 
 const Button = styled.button<{ disabled?: boolean }>`
   background-color: ${(props) => (props.disabled ? "gray" : "#1215fd")};
@@ -61,9 +59,7 @@ export default function UserForm({
   const [townId, setTownId] = useState("");
   const locationRef = useRef<HTMLInputElement>(null);
 
-  const [travelDistance, setTravelDistance] = useState<number | undefined>(
-    undefined
-  );
+  const [travelDistance, setTravelDistance] = useState<number>(50);
 
   const router = useRouter();
 

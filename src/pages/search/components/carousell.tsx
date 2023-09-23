@@ -17,10 +17,7 @@ import { Card } from "./card";
 
 interface CarousellProps {
   items: AzureFunctionCoordinatesMappedItems[];
-  setZoomAndHighlightCard: (
-    item: AzureFunctionCoordinatesMappedItems,
-    bool: boolean
-  ) => void;
+  onClickCard: (item: AzureFunctionCoordinatesMappedItems) => void;
   highlightedCard: AzureFunctionCoordinatesMappedItems;
   userLocation: UserLocation;
 }
@@ -28,7 +25,7 @@ interface CarousellProps {
 export const Carousell = ({
   items,
   userLocation,
-  setZoomAndHighlightCard,
+  onClickCard,
   highlightedCard,
 }: CarousellProps) => {
   return (
@@ -84,15 +81,15 @@ export const Carousell = ({
         modules={[Navigation, Scrollbar, Mousewheel, Keyboard, FreeMode]}
       >
         {items.map((item, idx) => {
-          const isHighlighted =
-            item.primaryName === highlightedCard?.primaryName;
+          const isHighlighted = item.index === highlightedCard?.index;
+          const highlightedCardIndex = highlightedCard?.index;
           return (
             <SwiperSlide key={`card-${idx}`}>
               {
                 <Card
-                  isHighlighted={isHighlighted}
+                  highlightedCardIndex={highlightedCardIndex}
                   userLocation={userLocation}
-                  setZoomAndHighlightCard={setZoomAndHighlightCard}
+                  onClickCard={onClickCard}
                   index={idx}
                   item={item}
                 />

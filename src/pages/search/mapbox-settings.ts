@@ -1,4 +1,5 @@
 import mapboxgl from "mapbox-gl";
+import syncMaps from "@mapbox/mapbox-gl-sync-move";
 
 interface Coordinates {
   longitude: number;
@@ -12,6 +13,7 @@ export interface StartAndEndCoordinates {
 
 export class MapBoxHelper {
   map: mapboxgl.Map;
+  originalMap: mapboxgl.Map;
   latitudes: number[];
   longitudes: number[];
   centerLon?: number;
@@ -27,25 +29,33 @@ export class MapBoxHelper {
     this.latitudes = latitudes;
     this.centerLon = centerLon;
     this.centerLat = centerLat;
-    this.map = new mapboxgl.Map({
-      container: "map", // container ID
-      style: "mapbox://styles/mapbox/streets-v11", // style URL
-      center: [this.centerLon, this.centerLat], // starting position [lng, lat]
-      zoom: 8, // starting zoom
-      // projection: "globe", // display the map as a 3D globe
-    });
   }
 
-  setMarkersAndFitBounds() {
+  initializeMap(name: string) {
+    const map = new mapboxgl.Map({
+      container: name,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [this.centerLon, this.centerLat],
+      zoom: 8,
+    });
+
+    return this.setMarkersAndFitBounds(map);
+  }
+
+  static sync = (map: mapboxgl.Map, originalMap) => {
+    syncMaps(map, originalMap);
+  };
+
+  private setMarkersAndFitBounds(map: mapboxgl.Map) {
     const marker = this.longitudes.forEach((lon, index) => {
       new mapboxgl.Marker()
         .setLngLat([this.longitudes[index], this.latitudes[index]])
-        .addTo(this.map);
+        .addTo(map);
     });
 
     const centerMarker = new mapboxgl.Marker({ color: "red" })
       .setLngLat([this.centerLon, this.centerLat])
-      .addTo(this.map);
+      .addTo(map);
 
     const bounds = new mapboxgl.LngLatBounds();
 
@@ -55,12 +65,12 @@ export class MapBoxHelper {
 
     bounds.extend(new mapboxgl.LngLat(this.centerLon, this.centerLat));
 
-    this.map.fitBounds(bounds, {
+    map.fitBounds(bounds, {
       padding: 50,
       duration: 1000,
     });
 
-    return this.map;
+    return map;
   }
 
   static fitBounds(
@@ -105,7 +115,7 @@ export class MapBoxHelper {
                 ],
               },
               properties: {
-                title: "Somethign",
+                title: "Something",
               },
             },
           ],

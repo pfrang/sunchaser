@@ -35,6 +35,7 @@ export class CoordinatesMapper {
     const mappedItems = Object.keys(ranks).map((rank, idx) => {
       return {
         rank: rank,
+        index: idx,
         date: new Date(ranks[rank][0].date),
         latitude: ranks[rank][0].latitude,
         longitude: ranks[rank][0].longitude,

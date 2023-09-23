@@ -16,6 +16,7 @@ export interface AzureFunctionCoordinatesItems {
 }
 export interface AzureFunctionCoordinatesMappedItems {
   rank: string;
+  index: number;
   latitude: number;
   longitude: number;
   date: Date;

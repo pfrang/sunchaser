@@ -14,22 +14,19 @@ import { Text } from "../../../ui-kit/components/text";
 import { HighlightedCard } from "./highlighted-card";
 
 interface SmallCardProps {
-  isHighlighted: boolean;
+  highlightedCardIndex: number | undefined;
   item: AzureFunctionCoordinatesMappedItems;
   userLocation: UserLocation;
   index: number;
-  setZoomAndHighlightCard: (
-    item: AzureFunctionCoordinatesMappedItems,
-    bool: boolean
-  ) => void;
+  onClickCard: (item: AzureFunctionCoordinatesMappedItems) => void;
 }
 
 export const Card = ({
-  isHighlighted,
+  highlightedCardIndex,
   userLocation,
   index,
   item,
-  setZoomAndHighlightCard,
+  onClickCard,
 }: SmallCardProps) => {
   const {
     date,
@@ -46,29 +43,18 @@ export const Card = ({
 
   const swiper = useSwiper();
 
-  const onClick = async (item: AzureFunctionCoordinatesMappedItems) => {
-    setZoomAndHighlightCard(item, true);
+  const isHighlighted = useMemo(() => {
+    return highlightedCardIndex === index;
+  }, [highlightedCardIndex]);
 
-    // const clientHeight = swiper.wrapperEl.parentElement.clientHeight;
-    // const clientWidth = window.innerWidth;
-    // if (clientWidth <= 480) {
-    //   setHeight(clientHeight - 140); //TODO find out this mobile toolbar browser at the bottom
-    // } else {
-    //   setHeight(clientHeight - 150);
-    // }
-
+  const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
+    onClickCard(item);
+    // TODO bug on initial open
     setTimeout(() => {
       swiper.update();
-      swiper.slideTo(index, 1000);
+      swiper.slideTo(item.index, 1000);
     }, 500);
   };
-
-  const modifiedDate =
-    date &&
-    `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
-      month: "short",
-    })}`;
-  // const modifiedTime = date && `${date.slice(0, -3)}`;
 
   const icon = useMemo(() => {
     const filterTimes = times.filter((time) => {
@@ -88,14 +74,10 @@ export const Card = ({
   const tabletHeightOfCard = 100;
   const mobileHeightOfCard = 80;
 
-  // const setHeight = useMemo(() => {
-  //   const height = swiper.height;
-  //   return height;
-  // }, []);
-
   return (
     <div>
       <Flex
+        className="cursor-pointer"
         onClick={() => onClick(item)}
         flexDirection={"column"}
         justifyContent={"center"}
