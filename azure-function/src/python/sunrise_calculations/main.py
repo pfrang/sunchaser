@@ -2,7 +2,6 @@ from skyfield import api, almanac
 from datetime import datetime, timedelta
 import pandas as pd
 
-
 def main(latitude: str, longitude: str,ts: api.load.timescale, model , days_ahead=15) -> pd.DataFrame:
 
     # Get the current date
@@ -13,6 +12,7 @@ def main(latitude: str, longitude: str,ts: api.load.timescale, model , days_ahea
     sunrise_times= []
     sunset_times = []
     dates=[]
+
 
     for i in range(0, days_ahead):
         current_date_i = current_date + timedelta(days=i)
@@ -27,6 +27,7 @@ def main(latitude: str, longitude: str,ts: api.load.timescale, model , days_ahea
         sunrise_times.append(str(sunrise_2_hours).split(" ")[1][:5])
         sunset_times.append(str(sunset_2_hours).split(" ")[1][:5])
         dates.append(current_date_i.date())
+
 
     df = pd.DataFrame({
             'lat': latitude,

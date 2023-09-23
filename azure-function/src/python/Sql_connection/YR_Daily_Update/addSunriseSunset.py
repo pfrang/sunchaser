@@ -3,8 +3,6 @@ import pandas as pd
 from skyfield import api, almanac
 from skyfield.api import load_file
 import time
-import logging
-from src.python.utils.write_to_file import write_to_file
 
 from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
 from src.python.sunrise_calculations.main import main as sunrise_calculations
@@ -70,11 +68,7 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
 
         try:
             # suntime_schedule_response=Handler(lat,lon,date=datetime.now().date()).make_api_call()
-            try:
-                 suntime_schedule_response=sunrise_calculations(lat,lon, ts, model)
-            except Exception as e:
-                write_to_file("logs.txt", e, "", "error")
-                raise Exception(e)
+            suntime_schedule_response=sunrise_calculations(lat,lon, ts, model)
 
             if BLOB_workflow==True:
                 dfs.append(suntime_schedule_response)
