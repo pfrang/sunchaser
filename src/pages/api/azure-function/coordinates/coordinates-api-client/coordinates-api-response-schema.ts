@@ -59,6 +59,3 @@ export type AzureFunctionCoordinateResponseMappedItems = Record<
   string,
   AzureFunctionCoordinatesMappedItems[]
 >;
-
-export type AzureFunctionCoordinateMappedResponse =
-  AzureFunctionCoordinateResponseMappedItems[];

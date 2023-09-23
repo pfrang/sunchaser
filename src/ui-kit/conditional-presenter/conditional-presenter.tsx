@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { isEmpty as _isEmpty } from "lodash";
+import { render } from "react-dom";
 
 interface ConditionalPresenterProps<Data, Error> {
   isLoading: boolean;
@@ -41,7 +42,7 @@ export const ConditionalPresenter = <Data, Error>({
     case StateStage.Initial:
       return isLoading ? renderLoading() : <></>;
     case StateStage.Error:
-      return renderError();
+      return renderError() ? renderError() : <></>;
     case StateStage.Loading:
       return renderLoading();
     case StateStage.Loaded:

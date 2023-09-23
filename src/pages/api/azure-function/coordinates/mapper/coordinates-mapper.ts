@@ -2,12 +2,14 @@ import { CommonData, CommonMetaData } from "../../../common-proprties";
 import {
   AzureFunctionCoordinatesData,
   AzureFunctionCoordinatesItems,
-  AzureFunctionCoordinatesMappedData,
+  AzureFunctionCoordinatesMappedItems,
+  UserLocation,
 } from "../coordinates-api-client/coordinates-api-response-schema";
 
 export interface CoordinatesMappedResponse {
   metaData: CommonMetaData;
-  items: AzureFunctionCoordinatesMappedData;
+  userLocation: UserLocation;
+  ranks: AzureFunctionCoordinatesMappedItems[];
 }
 export class CoordinatesMapper {
   readonly contentData: AzureFunctionCoordinatesData;
@@ -53,12 +55,10 @@ export class CoordinatesMapper {
     try {
       return {
         metaData: {},
-        items: {
-          userLocation: {
-            ...this.contentData.user_location,
-          },
-          ranks: this.assembleItems(this.contentData.ranks),
+        userLocation: {
+          ...this.contentData.user_location,
         },
+        ranks: this.assembleItems(this.contentData.ranks),
       };
     } catch (e) {
       throw e;

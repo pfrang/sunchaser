@@ -1,53 +1,30 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Slider from "@mui/material/Slider";
-import { styled } from "@mui/material/styles";
 
 import { Text } from "../../ui-kit/components/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";
-import {
-  setUIOnNumber,
-  distanceArray,
-} from "../utils/travel-distance-settings";
+import { distanceArray } from "../utils/travel-distance-settings";
 
-const CustomizedSlider = styled(Slider)`
-  color: #20b2aa;
-
-  :hover {
-    color: #2e8b57;
-  }
-
-  & .MuiSlider-thumb {
-    border-radius: 1px;
-  }
-`;
-
-function valuetext(value: number) {
-  return `${value} km`;
-}
-
-function valueLabelFormat(value: number) {
-  return `${distanceArray()[value].label}`;
-}
+import { CircularMap } from "./circular-map";
 
 interface ChooseTravelDistanceProps {
   setTravelDistance: (value: number) => void;
+  mapBoxKey: string;
 }
 
 export const ChooseTravelDistance = ({
   setTravelDistance,
+  mapBoxKey,
 }: ChooseTravelDistanceProps) => {
+  const [kilometers, setKilometers] = useState(50);
   const step = 5;
   const valuesForSlider = distanceArray(step);
   const [index, setIndex] = useState(valuesForSlider.length / 2);
 
-  // const [marks, setMarks] = useState(marks);
-
-  useEffect(() => {
-    setTravelDistance(Number(valuesForSlider[index - 1].label));
-  }, [index]);
-
   const handleSlide = (e: any, num) => {
     setIndex(num);
+    setTravelDistance(Number(valuesForSlider[num - 1].label));
+    setKilometers(Number(valuesForSlider[num - 1].label));
   };
 
   const min = 1;
@@ -62,11 +39,13 @@ export const ChooseTravelDistance = ({
           How far are you willing to travel?
         </Text>
         <Spacer height={2} />
+        {/* // Remove component here for old */}
+        <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
         <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
         <Slider
           aria-label="Temperature"
           value={index}
-          getAriaValueText={valuetext}
+          getAriaValueText={(value: number) => `${value}km`}
           valueLabelDisplay="auto"
           valueLabelFormat={`${valueToDisplay}`}
           step={1}

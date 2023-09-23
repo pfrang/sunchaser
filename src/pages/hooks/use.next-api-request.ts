@@ -1,7 +1,7 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import useSWR from "swr";
 
-interface NextApiRequest extends AxiosRequestConfig {}
+import { NextApiRequest } from "./common-types";
 
 export const useNextApiRequest = (
   requestConfig: Pick<NextApiRequest, "data" | "params" | "url">,

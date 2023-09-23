@@ -1,11 +1,12 @@
-import type { NextPage } from "next";
-import { useState } from "react";
+import type { InferGetStaticPropsType, NextPage } from "next";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { theme } from "../ui-kit/theme/theme";
 import { Text } from "../ui-kit/components/text";
 import { Flex } from "../ui-kit/components/flex";
 import { Spacer } from "../ui-kit/spacer/spacer";
+import { AppConfig } from "../app-config";
 
 import {
   WeatherCarousell,
@@ -23,7 +24,9 @@ const TwoGridHorizontalContainer = styled.div`
   /* z-index: -1; */
 `;
 
-const Home: NextPage = () => {
+const Home: NextPage = ({
+  mapBoxKey,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [weather, setWeather] = useState<WeatherOptions>("Sun");
 
   const getColor = (weather: string) => {
@@ -43,7 +46,7 @@ const Home: NextPage = () => {
         <div className="grid">
           <div className="overflow-hidden bg-inherit h-full relative">
             <div className="absolute flex justify-center z-10 w-full">
-              <Text variant="subtitle-large">Choose weather 22</Text>
+              <Text variant="subtitle-large">Choose weather</Text>
             </div>
 
             <WeatherCarousell weather={weather} setWeather={setWeather} />
@@ -59,7 +62,7 @@ const Home: NextPage = () => {
                 borderColor: theme.color.green[1],
               }}
             >
-              <UserForm weatherSelected={weather} />
+              <UserForm weatherSelected={weather} mapBoxKey={mapBoxKey} />
             </div>
           </section>
         </Flex>
@@ -70,9 +73,11 @@ const Home: NextPage = () => {
 };
 
 export const getStaticProps = async () => {
+  const mapBoxKey = new AppConfig().mapBox.key;
   return {
     props: {
       currentUrl: "/",
+      mapBoxKey,
     },
   };
 };

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { handleGet } from "./handler/handle-get";
 
-export const gmapsDetailsUrl = "/api/google-maps/details";
+export const gmapsDetailsUrl = "google-maps/details";
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {

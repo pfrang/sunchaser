@@ -1,22 +1,19 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { Geolocation } from "@capacitor/geolocation";
 
-import { AppConfig } from "../../app-config";
-import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { formatDate } from "../utils/convert-date";
-import { GoogleMapsDetailsResponse } from "../api/google-maps/details/mapper/gmaps-details-mapper";
-import { ResponseDTO } from "../api/next-api.client";
 import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
-import { destructureMyPosition } from "../utils/get-user-location";
+import { fetchTownDetails } from "../hooks/fetch-town-details";
+import { useUserLocation } from "../hooks/use-user-location";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";
 import WhereAreYou from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
+import { CircularMap } from "./circular-map";
 
 const Button = styled.button<{ disabled?: boolean }>`
   background-color: ${(props) => (props.disabled ? "gray" : "#1215fd")};
@@ -45,17 +42,20 @@ interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
   weatherSelected?: WeatherOptions;
   isHomePage?: boolean;
+  mapBoxKey?: string;
 }
 
 export default function UserForm({
   header,
   weatherSelected,
   isHomePage,
+  mapBoxKey,
 }: UserFormProps) {
   // const [userGeoLocation, setUserGeoLocation] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
+  const { userLocation } = useUserLocation();
 
   const [error, setError] = useState(false);
   const [townId, setTownId] = useState("");
@@ -69,59 +69,22 @@ export default function UserForm({
 
   const sunSelected = weatherSelected === "Sun";
 
-  const fetchTownDetails = async () => {
-    const town = await axios
-      .get<ResponseDTO<GoogleMapsDetailsResponse>>(
-        `${new AppConfig().next.host}${gmapsDetailsUrl}?place_id=${townId}`
-      )
-      .then((response) => response.data)
-      .catch((e) => {
-        setError(true);
-        console.error(e);
-      });
-
-    if (!town) return;
-
-    return {
-      latitude: town.data.latitude,
-      longitude: town.data.longitude,
-    };
-  };
-
-  const getCurrentPos = () => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-    };
-
-    function success(pos) {
-      const crd = pos.coords;
-      const str = `lat=${crd.latitude}&lon=${crd.longitude}`;
-      sendData(str);
-    }
-
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-      setError(true);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
-  };
-
   const onSubmit = async (e) => {
     e.preventDefault();
     let longitudeInput;
     let latitudeInput;
 
     if (!header) {
-      const position = await Geolocation.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
-      latitudeInput = latitude;
-      longitudeInput = longitude;
+      latitudeInput = userLocation.latitude;
+      longitudeInput = userLocation.longitude;
     } else {
-      const townDetails = await fetchTownDetails();
+      let townDetails;
+      try {
+        townDetails = await fetchTownDetails(townId);
+      } catch (e) {
+        setError(true);
+      }
+
       if (!townDetails) return;
       longitudeInput = townDetails.longitude;
       latitudeInput = townDetails.latitude;
@@ -142,23 +105,6 @@ export default function UserForm({
     header?.current.close();
   };
 
-  const sendData = (str: string) => {
-    const { longitude, latitude } = destructureMyPosition(str);
-
-    const params = {
-      lon: longitude,
-      lat: latitude,
-      date: formatDate(selectedDate),
-      distance: travelDistance,
-    };
-
-    const urlPar = Object.keys(params)
-      .map((key) => key + "=" + params[key])
-      .join("&");
-
-    router.push(`search?${urlPar}`);
-  };
-
   const disableButton = !isHomePage ? false : !sunSelected;
 
   return (
@@ -172,7 +118,11 @@ export default function UserForm({
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
         />
-        <ChooseTravelDistance setTravelDistance={setTravelDistance} />
+        {/* <CircularMap mapBoxKey={mapBoxKey} /> */}
+        <ChooseTravelDistance
+          setTravelDistance={setTravelDistance}
+          mapBoxKey={mapBoxKey}
+        />
         {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}
@@ -180,10 +130,8 @@ export default function UserForm({
       >
         {travelItems}
       </ChooseTransportationMethod> */}
-        <Spacer vertical={1} />
-        <div className="flex justify-center">
-          <Button disabled={disableButton}>Find the sun</Button>
-        </div>
+        <Spacer paddingTop={3} />
+        <Button disabled={disableButton}>Find the sun</Button>
       </FormStyle>
       {error && (
         <div className="flex justify-center">

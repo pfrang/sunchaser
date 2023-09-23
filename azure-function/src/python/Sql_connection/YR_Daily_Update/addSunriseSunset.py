@@ -1,8 +1,11 @@
 import pyodbc
 import pandas as pd
-from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
-from src.python.sunrise_calculations.main import main as sunrise_calculations
+from skyfield import api, almanac
+from skyfield.api import load_file
 import time
+
+from src.python.Sql_connection.YR_Daily_Update.YR_API_REQUESTS.apiSunriseSunset import Handler
+from src.python.sunrise_calculations.sunrise_with_offset import main as sunrise_calculations
 
 def addSunriseSunset(server,database,username,password,driver,country,SQL_workflow,BLOB_workflow, offset, step):
 
@@ -52,17 +55,21 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
     timeout_minutes = 7
     dfs = []
 
+    ts = api.load.timescale()
+    model = load_file("de421.bsp")
+
     for index,row in df.iterrows():
         time_stamp = time.time()
         time_difference = time_stamp - time_start
         if time_difference >= (timeout_minutes * 60):
             break  # You can choose to exit the loop when the timeout occurs
-        lat=float(row[0][0])
-        lon=float(row[0][1])
+        lat=str(row[0][0])
+        lon=str(row[0][1])
 
         try:
             # suntime_schedule_response=Handler(lat,lon,date=datetime.now().date()).make_api_call()
-            suntime_schedule_response=sunrise_calculations(lat,lon)
+            suntime_schedule_response=sunrise_calculations(lat,lon, ts, model,15)
+
             if BLOB_workflow==True:
                 dfs.append(suntime_schedule_response)
 

@@ -50,9 +50,9 @@ export default function Search({
 
   const resetMap = () => {
     if (data) {
-      const longitudes = data.items.ranks.map((item) => item.longitude);
-      const latitudes = data.items.ranks.map((item) => item.latitude);
-      const userLocation = data.items.userLocation;
+      const longitudes = data.ranks.map((item) => item.longitude);
+      const latitudes = data.ranks.map((item) => item.latitude);
+      const userLocation = data.userLocation;
 
       let map = new MapBoxHelper(
         longitudes,
@@ -86,7 +86,7 @@ export default function Search({
 
   useEffect(() => {
     if (highlightedCard && zoom) {
-      const userLocation = data.items.userLocation;
+      const userLocation = data.userLocation;
       const { lat, lon } = {
         lat: highlightedCard.latitude,
         lon: highlightedCard.longitude,
@@ -132,7 +132,7 @@ export default function Search({
     item: AzureFunctionCoordinatesMappedItems,
     zoom?: boolean
   ) => {
-    if (item === highlightedCard) {
+    if (item.primaryName === highlightedCard?.primaryName) {
       setHighlightedCard(undefined);
       return;
     }
@@ -166,13 +166,32 @@ export default function Search({
             );
           }}
           renderData={(data) => {
-            const { userLocation, ranks } = data.items;
+            const { userLocation, ranks } = data;
+
+            const aheadOfNow = ranks.map((rank) => {
+              return {
+                ...rank,
+                times: rank.times.filter((time) => {
+                  const nowPlusOneHour = new Date().setHours(
+                    new Date().getHours() + 1
+                  );
+
+                  const dateTimeString =
+                    time.date.toString().slice(0, 11) +
+                    time.time +
+                    time.date.toString().slice(-1);
+
+                  return new Date(dateTimeString) >= new Date();
+                }),
+              };
+            });
+
             return (
               <Flex flexDirection={"column"} paddingX={[40, 50]}>
                 <section id="section-carousell" className="h-full">
                   <Carousell
                     userLocation={userLocation}
-                    items={ranks}
+                    items={aheadOfNow}
                     setZoomAndHighlightCard={setZoomAndHighlightCard}
                     highlightedCard={highlightedCard}
                   />

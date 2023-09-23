@@ -1,8 +1,6 @@
 import pyodbc
 import pandas as pd
 from src.python.coordinateGenerator import GetCoordinates
-import time
-import logging
 
 class Handler:
     def __init__(self,config,lat,lon,date,distance):
