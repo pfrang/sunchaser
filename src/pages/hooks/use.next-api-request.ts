@@ -30,6 +30,7 @@ export const useNextApiRequest = (
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      revalidateIfStale: false,
     }
   );
 
