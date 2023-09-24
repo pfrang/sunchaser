@@ -1,5 +1,5 @@
 import { useSwiper } from "swiper/react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Swiper } from "swiper/types";
 
 import { Angel } from "../../../ui-kit/angel/angel";
@@ -15,7 +15,7 @@ import { Text } from "../../../ui-kit/components/text";
 import { HighlightedCard } from "./highlighted-card";
 
 interface SmallCardProps {
-  highlightedCardIndex: number | undefined;
+  highlightedCardIndex?: number;
   item: AzureFunctionCoordinatesMappedItems;
   userLocation: UserLocation;
   index: number;
@@ -59,6 +59,9 @@ export const Card = ({
     const filterTimes = times.filter((time) => {
       return time.date === date;
     });
+
+    // TODO investigate why this can happen
+    if (!filterTimes.length) return;
 
     const highestRank = filterTimes.reduce((prev, current) => {
       return prev.rank > current.rank ? prev : current;
@@ -109,10 +112,16 @@ export const Card = ({
             height={[48, 96]}
             width={[48, 96]}
           >
-            <img
-              className="object-contain"
-              src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
-            />
+            <>
+              {icon && (
+                <img
+                  className="object-contain"
+                  src={`/icons/${
+                    isHighlighted ? "white" : "black"
+                  }/svg/${icon}`}
+                />
+              )}
+            </>
           </Flex>
           <Flex
             flexDirection={"column"}

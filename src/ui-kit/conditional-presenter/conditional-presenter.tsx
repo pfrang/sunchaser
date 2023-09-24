@@ -42,9 +42,9 @@ export const ConditionalPresenter = <Data, Error>({
     case StateStage.Initial:
       return isLoading ? renderLoading() : <></>;
     case StateStage.Error:
-      return renderError() ? renderError() : <></>;
+      return typeof renderError === "function" ? renderError() : <></>;
     case StateStage.Loading:
-      return renderLoading();
+      return typeof renderLoading === "function" ? renderLoading() : <></>;
     case StateStage.Loaded:
       return <>{_isEmpty(data) ? <></> : renderData(data)}</>;
     default:

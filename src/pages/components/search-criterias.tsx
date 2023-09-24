@@ -1,12 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
-import { formatDate } from "../utils/convert-date";
-import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
 import { fetchTownDetails } from "../hooks/fetch-town-details";
 import { useUserLocation } from "../hooks/use-user-location";
+import { createPayloadParams } from "../utils/create-payload-params";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";
@@ -49,19 +48,21 @@ export default function UserForm({
   isHomePage,
   mapBoxKey,
 }: UserFormProps) {
-  // const [userGeoLocation, setUserGeoLocation] = useState(null);
+  const router = useRouter();
+  const { userLocation } = useUserLocation();
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
-  const { userLocation } = useUserLocation();
+
+  useEffect(() => {
+    setSelectedDate(new Date(router.query?.date as string));
+  }, [router.query]);
 
   const [error, setError] = useState(false);
   const [townId, setTownId] = useState("");
   const locationRef = useRef<HTMLInputElement>(null);
-
-  const [travelDistance, setTravelDistance] = useState<number>(50);
-
-  const router = useRouter();
+  const travelDistanceRef = useRef<HTMLInputElement>(null);
 
   const sunSelected = weatherSelected === "Sun";
 
@@ -69,6 +70,10 @@ export default function UserForm({
     e.preventDefault();
     let longitudeInput;
     let latitudeInput;
+    const travelDistance = Number(
+      travelDistanceRef?.current?.querySelector(".MuiSlider-valueLabelLabel")
+        .innerHTML
+    );
 
     if (!header) {
       latitudeInput = userLocation.latitude;
@@ -86,25 +91,27 @@ export default function UserForm({
       latitudeInput = townDetails.latitude;
     }
 
-    const params: PayloadParams = {
-      lon: String(longitudeInput),
-      lat: String(latitudeInput),
-      date: formatDate(selectedDate),
-      distance: travelDistance.toString(),
-    };
+    const payloadParams = createPayloadParams({
+      longitude: longitudeInput,
+      latitude: latitudeInput,
+      date: selectedDate,
+      travelDistance,
+      townSearch: locationRef?.current?.value || "",
+    });
 
-    const urlPar = Object.keys(params)
-      .map((key) => key + "=" + params[key])
+    const urlPar = Object.keys(payloadParams)
+      .map((key) => key + "=" + payloadParams[key])
       .join("&");
 
-    router.push(`search?${urlPar}`);
+    router.push(`search?${urlPar}`, undefined, {
+      shallow: false,
+    });
     header?.current.close();
   };
 
   const disableButton = !isHomePage ? false : !sunSelected;
 
   return (
-    //TODO submit is not triggering
     <>
       <FormStyle onSubmit={onSubmit}>
         {header && (
@@ -116,7 +123,7 @@ export default function UserForm({
         />
         {/* <CircularMap mapBoxKey={mapBoxKey} /> */}
         <ChooseTravelDistance
-          setTravelDistance={setTravelDistance}
+          travelDistanceRef={travelDistanceRef}
           mapBoxKey={mapBoxKey}
         />
         {/* <ChooseTransportationMethod

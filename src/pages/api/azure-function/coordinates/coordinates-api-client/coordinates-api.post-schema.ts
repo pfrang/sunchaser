@@ -3,6 +3,7 @@ export interface PayloadParams {
   lat: string;
   date: string;
   distance: string;
+  location?: string;
 }
 
 export interface AzureFunctionPostPayloadParams {
