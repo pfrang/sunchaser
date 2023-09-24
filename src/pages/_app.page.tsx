@@ -35,6 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      {/* @ts-ignore*/}
       <ThemeProvider theme={theme}>
         <Head>
           <title>Sunchaser</title>
