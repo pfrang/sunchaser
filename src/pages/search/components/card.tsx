@@ -1,5 +1,6 @@
 import { useSwiper } from "swiper/react";
 import { useMemo } from "react";
+import { Swiper } from "swiper/types";
 
 import { Angel } from "../../../ui-kit/angel/angel";
 import { Flex } from "../../../ui-kit/components/flex";
@@ -18,7 +19,10 @@ interface SmallCardProps {
   item: AzureFunctionCoordinatesMappedItems;
   userLocation: UserLocation;
   index: number;
-  onClickCard: (item: AzureFunctionCoordinatesMappedItems) => void;
+  onClickCard: (
+    item: AzureFunctionCoordinatesMappedItems,
+    swiper: Swiper
+  ) => void;
 }
 
 export const Card = ({
@@ -48,12 +52,7 @@ export const Card = ({
   }, [highlightedCardIndex]);
 
   const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
-    onClickCard(item);
-    // TODO bug on initial open
-    setTimeout(() => {
-      swiper.update();
-      swiper.slideTo(item.index, 1000);
-    }, 500);
+    onClickCard(item, swiper);
   };
 
   const icon = useMemo(() => {

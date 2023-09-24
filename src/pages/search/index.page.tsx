@@ -3,7 +3,7 @@ import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import syncMaps from "@mapbox/mapbox-gl-sync-move";
+import { Swiper } from "swiper/types";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
@@ -44,18 +44,17 @@ export default function Search({
   >(undefined);
 
   const [mapObject, setMap] = useState<undefined | mapboxgl.Map>(undefined);
-  const [originalMap, setOriginalMap] = useState<undefined | mapboxgl.Map>(
+  const [mapInstance, setMapInstance] = useState<undefined | MapBoxHelper>(
     undefined
   );
 
   const resetMap = () => {
-    const { lng, lat } = originalMap.getCenter();
-
-    const zoom = originalMap.getZoom();
+    mapObject.removeLayer("route");
     mapObject.flyTo({
-      center: [lng, lat],
-      zoom,
+      center: [data.userLocation.longitude, data.userLocation.latitude],
+      duration: 500,
     });
+    mapInstance.setFitBounds(mapObject);
   };
 
   useEffect(() => {
@@ -63,41 +62,36 @@ export default function Search({
       const longitudes = data.ranks.map((item) => item.longitude);
       const latitudes = data.ranks.map((item) => item.latitude);
       const userLocation = data.userLocation;
-      let mapInstance = new MapBoxHelper(
+      const mapInitializer = new MapBoxHelper(
         longitudes,
         latitudes,
         userLocation.longitude,
         userLocation.latitude
       );
 
-      const primaryMap = mapInstance.initializeMap("map");
-      const initialMap = mapInstance.initializeMap("original-map");
-      // MapBoxHelper.sync(map, originalMapInstance);
+      const primaryMap = mapInitializer.initializeMap("map");
 
       primaryMap.addControl(new mapboxgl.NavigationControl());
-
-      Promise.all([
-        new Promise((resolve) => primaryMap.on("load", resolve)),
-        new Promise((resolve) => initialMap.on("load", resolve)),
-      ]).then(() => {
-        syncMaps(primaryMap, initialMap);
-      });
 
       primaryMap.on("load", () => {
         primaryMap.resize();
       });
 
+      setMapInstance(mapInitializer);
       setMap(primaryMap);
-      setOriginalMap(initialMap);
     }
   }, [data]);
 
-  const onClickCard = (item: AzureFunctionCoordinatesMappedItems) => {
+  const onClickCard = (
+    item: AzureFunctionCoordinatesMappedItems,
+    swiper: Swiper
+  ) => {
     if (item.index !== highlightedCard?.index) {
       const { lat, lon } = {
         lat: item.latitude,
         lon: item.longitude,
       };
+
       const coordinates: StartAndEndCoordinates = {
         start: {
           longitude: lon,
@@ -109,21 +103,22 @@ export default function Search({
         },
       };
 
-      const config = {
-        map: mapObject,
-        coordinates,
-        padding: 100,
-        duration: 1000,
-      };
-
       MapBoxHelper.fitBounds(mapObject, coordinates, 50, 1000);
 
       MapBoxHelper.drawLine(mapObject, coordinates);
 
-      return setHighlightedCard(item);
+      setHighlightedCard(item);
+
+      return setTimeout(() => {
+        swiper.update();
+        swiper.slideTo(item.index, 1000);
+      }, 500);
     }
     setHighlightedCard(undefined);
     resetMap();
+    return setTimeout(() => {
+      swiper.update();
+    }, 500);
   };
 
   return (

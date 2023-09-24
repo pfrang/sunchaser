@@ -1,5 +1,4 @@
 import mapboxgl from "mapbox-gl";
-import syncMaps from "@mapbox/mapbox-gl-sync-move";
 
 interface Coordinates {
   longitude: number;
@@ -39,14 +38,12 @@ export class MapBoxHelper {
       zoom: 8,
     });
 
-    return this.setMarkersAndFitBounds(map);
+    this.setMarkers(map);
+
+    return this.setFitBounds(map);
   }
 
-  static sync = (map: mapboxgl.Map, originalMap) => {
-    syncMaps(map, originalMap);
-  };
-
-  private setMarkersAndFitBounds(map: mapboxgl.Map) {
+  private setMarkers(map: mapboxgl.Map) {
     const marker = this.longitudes.forEach((lon, index) => {
       new mapboxgl.Marker()
         .setLngLat([this.longitudes[index], this.latitudes[index]])
@@ -56,7 +53,9 @@ export class MapBoxHelper {
     const centerMarker = new mapboxgl.Marker({ color: "red" })
       .setLngLat([this.centerLon, this.centerLat])
       .addTo(map);
+  }
 
+  setFitBounds(map: mapboxgl.Map) {
     const bounds = new mapboxgl.LngLatBounds();
 
     this.longitudes.map((longitude, index) => {

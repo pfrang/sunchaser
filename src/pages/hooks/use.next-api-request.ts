@@ -1,5 +1,5 @@
 import axios from "axios";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 
 import { NextApiRequest } from "./common-types";
 
@@ -26,7 +26,11 @@ export const useNextApiRequest = (
 
   let { data, error, mutate } = useSWR(
     isReady ? urlWithParams : null,
-    isReady ? () => fetcherFactory(fetcherRequest) : null
+    isReady ? () => fetcherFactory(fetcherRequest) : null,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
   );
 
   const isLoading = !data && !error;

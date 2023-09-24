@@ -17,7 +17,7 @@ import { Card } from "./card";
 
 interface CarousellProps {
   items: AzureFunctionCoordinatesMappedItems[];
-  onClickCard: (item: AzureFunctionCoordinatesMappedItems) => void;
+  onClickCard: (item: AzureFunctionCoordinatesMappedItems, swiper: any) => void;
   highlightedCard: AzureFunctionCoordinatesMappedItems;
   userLocation: UserLocation;
 }
@@ -81,7 +81,6 @@ export const Carousell = ({
         modules={[Navigation, Scrollbar, Mousewheel, Keyboard, FreeMode]}
       >
         {items.map((item, idx) => {
-          const isHighlighted = item.index === highlightedCard?.index;
           const highlightedCardIndex = highlightedCard?.index;
           return (
             <SwiperSlide key={`card-${idx}`}>
