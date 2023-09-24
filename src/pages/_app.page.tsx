@@ -5,7 +5,6 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
-import { SWRConfig } from "swr";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme/theme";
@@ -13,7 +12,7 @@ import { theme } from "../ui-kit/theme/theme";
 import HeaderComponent from "./header";
 
 const Wrapper = styled.div`
-  height: 100svh;
+  min-height: 100svh;
   /* min-height: 100vh; */
   min-height: -moz-available;
   min-height: -webkit-fill-available;
@@ -43,13 +42,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <SWRConfig value={{}}>
-          <Wrapper>
-            <HeaderComponent isHomePage={isHomePage} />
-            <Component {...pageProps} />
-            <Spacer height={32} />
-          </Wrapper>
-        </SWRConfig>
+        <Wrapper>
+          <HeaderComponent isHomePage={isHomePage} />
+          <Component {...pageProps} />
+          <Spacer height={32} />
+        </Wrapper>
       </ThemeProvider>
       <Analytics />
     </>
