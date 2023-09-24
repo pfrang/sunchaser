@@ -43,18 +43,18 @@ export default function Search({
     undefined | AzureFunctionCoordinatesMappedItems
   >(undefined);
 
-  const [mapObject, setMap] = useState<undefined | mapboxgl.Map>(undefined);
+  const [map, setMap] = useState<undefined | mapboxgl.Map>(undefined);
   const [mapInstance, setMapInstance] = useState<undefined | MapBoxHelper>(
     undefined
   );
 
   const resetMap = () => {
-    mapObject.removeLayer("route");
-    mapObject.flyTo({
+    map.removeLayer("route");
+    map.flyTo({
       center: [data.userLocation.longitude, data.userLocation.latitude],
       duration: 500,
     });
-    mapInstance.setFitBounds(mapObject);
+    mapInstance.setFitBounds(map);
   };
 
   useEffect(() => {
@@ -71,14 +71,12 @@ export default function Search({
 
       const primaryMap = mapInitializer.initializeMap("map");
 
-      primaryMap.addControl(new mapboxgl.NavigationControl());
-
       primaryMap.on("load", () => {
         primaryMap.resize();
+        primaryMap.addControl(new mapboxgl.NavigationControl());
+        setMapInstance(mapInitializer);
+        setMap(primaryMap);
       });
-
-      setMapInstance(mapInitializer);
-      setMap(primaryMap);
     }
   }, [data]);
 
@@ -103,9 +101,9 @@ export default function Search({
         },
       };
 
-      MapBoxHelper.fitBounds(mapObject, coordinates, 50, 1000);
+      MapBoxHelper.fitBounds(map, coordinates, 50, 1000);
 
-      MapBoxHelper.drawLine(mapObject, coordinates);
+      MapBoxHelper.drawLine(map, coordinates);
 
       setHighlightedCard(item);
 
@@ -125,13 +123,15 @@ export default function Search({
     <Flex height={"100%"}>
       <TwoGridRow>
         <section id="section-map">
-          <div className="flex items-center h-full justify-center sticky top-0">
-            <div id="map" className="w-full h-full m-auto "></div>
-            <div
-              id="original-map"
-              className="w-full h-full m-auto hidden"
-            ></div>
-          </div>
+          {data && data.ranks.length > 0 && (
+            <div className="flex items-center h-full justify-center sticky top-0">
+              <div id="map" className="w-full h-full m-auto "></div>
+              <div
+                id="original-map"
+                className="w-full h-full m-auto hidden"
+              ></div>
+            </div>
+          )}
         </section>
         <ConditionalPresenter
           isLoading={isLoading}

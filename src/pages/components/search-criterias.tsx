@@ -56,7 +56,9 @@ export default function UserForm({
   );
 
   useEffect(() => {
-    setSelectedDate(new Date(router.query?.date as string));
+    setSelectedDate(
+      router.query?.date ? new Date(router.query?.date as string) : new Date()
+    );
   }, [router.query]);
 
   const [error, setError] = useState(false);

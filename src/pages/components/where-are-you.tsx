@@ -23,8 +23,10 @@ export default function WhereAreYou({
   const [dataFetched, setDatafetched] = useState(false);
 
   useEffect(() => {
-    setTownSearch((router.query?.location as string) || "");
-    setLocationChosen(true);
+    if (router.query?.distance) {
+      setTownSearch((router.query?.location as string) || "");
+      setLocationChosen(true);
+    }
   }, [router.query]);
 
   useEffect(() => {

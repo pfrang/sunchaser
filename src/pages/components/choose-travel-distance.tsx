@@ -35,14 +35,12 @@ export const ChooseTravelDistance = ({
 
   useEffect(() => {
     setKilometers(Number(router.query.distance) || 50);
-    setIndex(
-      // TODO jesus refactor
-      getCounterValue(
-        valuesForSlider,
-        (router.query?.distance as string) ||
-          (valuesForSlider.length / 2).toString()
-      )
-    );
+    if (router.query?.distance) {
+      return setIndex(
+        getCounterValue(valuesForSlider, router.query?.distance as string)
+      );
+    }
+    return setIndex(valuesForSlider.length / 2);
   }, [router.query]);
 
   const min = 1;

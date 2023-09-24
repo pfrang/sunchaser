@@ -41,7 +41,7 @@ export default function HeaderComponent({ isHomePage }) {
       justifyContent={"space-between"}
     >
       <Flex paddingY={2} position={"relative"} alignItems={"center"}>
-        <Link href="/">
+        <Link href="/" tabIndex={0}>
           <Image
             style={{ cursor: "pointer" }}
             width={250}
