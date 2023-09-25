@@ -12,7 +12,7 @@ import { theme } from "../ui-kit/theme/theme";
 import HeaderComponent from "./header";
 
 const Wrapper = styled.div`
-  min-height: 100svh;
+  height: 100svh;
   /* min-height: 100vh; */
   min-height: -moz-available;
   min-height: -webkit-fill-available;
