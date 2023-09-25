@@ -127,6 +127,7 @@ export default function UserForm({
         <ChooseTravelDistance
           travelDistanceRef={travelDistanceRef}
           mapBoxKey={mapBoxKey}
+          isHomePage={isHomePage}
         />
         {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}

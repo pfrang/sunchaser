@@ -15,11 +15,13 @@ import { CircularMap } from "./circular-map";
 interface ChooseTravelDistanceProps {
   travelDistanceRef: React.MutableRefObject<HTMLInputElement>;
   mapBoxKey: string;
+  isHomePage?: boolean;
 }
 
 export const ChooseTravelDistance = ({
   travelDistanceRef,
   mapBoxKey,
+  isHomePage,
 }: ChooseTravelDistanceProps) => {
   const router = useRouter();
   const [kilometers, setKilometers] = useState(50);
@@ -48,6 +50,8 @@ export const ChooseTravelDistance = ({
 
   const valueToDisplay = valuesForSlider[index - 1].label;
 
+  console.log(isHomePage);
+
   return (
     <section id="distance_traveling" className="w-full">
       <div className="w-full flex justify-center items-center flex-col">
@@ -56,7 +60,9 @@ export const ChooseTravelDistance = ({
         </Text>
         <Spacer height={2} />
         {/* // Remove component here for old */}
-        <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
+        {isHomePage && (
+          <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
+        )}
         <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
         <Slider
           ref={travelDistanceRef}
