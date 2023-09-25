@@ -38,18 +38,17 @@ export const FormStyle = styled.form`
 interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
   weatherSelected?: WeatherOptions;
-  isHomePage?: boolean;
   mapBoxKey?: string;
 }
 
 export default function UserForm({
   header,
   weatherSelected,
-  isHomePage,
   mapBoxKey,
 }: UserFormProps) {
   const router = useRouter();
   const { userLocation } = useUserLocation();
+  const isHomePage = router.pathname === "/";
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
@@ -127,7 +126,6 @@ export default function UserForm({
         <ChooseTravelDistance
           travelDistanceRef={travelDistanceRef}
           mapBoxKey={mapBoxKey}
-          isHomePage={isHomePage}
         />
         {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}

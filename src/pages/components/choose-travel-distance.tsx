@@ -21,9 +21,10 @@ interface ChooseTravelDistanceProps {
 export const ChooseTravelDistance = ({
   travelDistanceRef,
   mapBoxKey,
-  isHomePage,
 }: ChooseTravelDistanceProps) => {
   const router = useRouter();
+
+  const isHomePage = router.pathname === "/";
   const [kilometers, setKilometers] = useState(50);
 
   const step = 5;
@@ -49,8 +50,6 @@ export const ChooseTravelDistance = ({
   const max = valuesForSlider.length;
 
   const valueToDisplay = valuesForSlider[index - 1].label;
-
-  console.log(isHomePage);
 
   return (
     <section id="distance_traveling" className="w-full">
