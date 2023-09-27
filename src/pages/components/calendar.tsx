@@ -84,12 +84,9 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
       {isPopperOpen && (
         <Flex justifyContent={"center"}>
           <DayPicker
+            // classNames={classNames}
             weekStartsOn={new Date().getDay() as WeekDayNumb}
             disabled={disabledDays}
-            fromDate={new Date()}
-            toDate={inTenDays}
-            // fromDate={new Date()}
-            // hidden={{ before: new Date(), to: inTwoWeeks }}
             components={{ Row: OnlyFutureRow }}
             locale={nb}
             disableNavigation
@@ -97,6 +94,7 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
             selected={selectedDate}
             onSelect={Submit}
             showOutsideDays
+            fixedWeeks
             style={{
               margin: "10px",
               border: "1px dotted gray",
@@ -113,15 +111,6 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
                 fontSize: "1rem",
                 fontWeight: "bold",
                 padding: "0.5rem 0.5rem",
-                color: "black",
-              },
-              day: {
-                width: "2rem",
-                height: "2rem",
-                fontSize: "1rem",
-                margin: "0px",
-                padding: "0px",
-                borderRadius: "0px",
                 color: "black",
               },
             }}

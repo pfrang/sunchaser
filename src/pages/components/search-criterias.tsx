@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { startOfToday } from "date-fns";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { fetchTownDetails } from "../hooks/fetch-town-details";
@@ -9,7 +10,7 @@ import { createPayloadParams } from "../utils/create-payload-params";
 import { DatePicker } from "../../ui-kit/date-picker/date-picker";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
-import { Calendar } from "./calendar-raeact-datepicker";
+import { Calendar } from "./calendar";
 import WhereAreYou from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
 
@@ -119,16 +120,17 @@ export default function UserForm({
         {header && (
           <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
         )}
-        {/* <Calendar
+        <Calendar
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
-        /> */}
-        <DatePicker
+        />
+        {/* <DatePicker
           selected={selectedDate}
-          isDateBlocked={(date) => date < new Date()}
+          isDateBlocked={(date) => date < startOfToday()}
+          onSelect={setSelectedDate}
           onChange={setSelectedDate}
           label="When do you want to travel?"
-        />
+        /> */}
         {/* <CircularMap mapBoxKey={mapBoxKey} /> */}
         <ChooseTravelDistance
           travelDistanceRef={travelDistanceRef}

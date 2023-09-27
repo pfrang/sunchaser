@@ -1,14 +1,20 @@
 /* eslint-disable no-console */
-import "react-datepicker/dist/react-datepicker.css";
 import React from "react";
 import BaseDatePicker, {
   registerLocale,
   ReactDatePickerProps,
 } from "react-datepicker";
 import { nb } from "date-fns/locale";
-import { isSameDay, isSameMonth, isSameYear, startOfToday } from "date-fns";
+import {
+  addDays,
+  isSameDay,
+  isSameMonth,
+  isSameYear,
+  startOfToday,
+} from "date-fns";
 registerLocale("nb", nb);
 import { LayoutProps } from "styled-system";
+import { capitalize } from "lodash";
 
 import { Text } from "../text";
 import { InputContainer } from "../input-container/input-container";
@@ -31,7 +37,7 @@ export interface DatePickerProps
 
 export const DatePicker = ({
   label,
-  locale = "en",
+  locale = "nb",
   errored = false,
   onChange,
   onSelect,
@@ -60,6 +66,57 @@ export const DatePicker = ({
       isSameMonth(date, datePickerValue) &&
       isSameYear(date, datePickerValue));
 
+  const isWithinNext14Days = (date: Date) => {
+    const today = startOfToday();
+    const next14Days = addDays(today, 14);
+    return date >= today && date <= next14Days;
+  };
+
+  // return (
+  //   <BaseDatePicker
+  //     customInput={
+  //       <div>
+  //         <InputContainer
+  //           label={{ text: label }}
+  //           input={
+  //             <Flex
+  //               border={2}
+  //               borderRadius={2}
+  //               position={"relative"}
+  //               width={["200px"]}
+  //               alignItems={"center"}
+  //             >
+  //               <input
+  //                 type="text"
+  //                 onChange={(e) => {
+  //                   setRawInputValue(e.target.value);
+  //                 }}
+  //                 className="p-1 text-center text-lg border-2 rounded-lg"
+  //                 value={rawInputValue}
+  //               />
+  //               <div
+  //                 tabIndex={0}
+  //                 className={`cursor-pointer absolute right-1 hover:bg-gray-300 rounded-lg`}
+  //               >
+  //                 <CalendarIcon />
+  //               </div>
+  //             </Flex>
+  //           }
+  //           width={["100%"]}
+  //         />
+  //       </div>
+  //     }
+  //     wrapperClassName="datePicker"
+  //     startDate={startOfToday()}
+  //     maxDate={addDays(new Date(), 9)}
+  //     filterDate={(date) => !isDateBlocked(date)}
+  //     selected={datePickerValue}
+  //     onChange={(date) => setDatePickerValue(date)}
+  //     calendarContainer={s.Calendar}
+  //     calendarStartDay={1}
+  //   />
+  // );
+
   return (
     <s.Wrapper>
       {/*
@@ -75,14 +132,15 @@ export const DatePicker = ({
                   borderRadius={2}
                   position={"relative"}
                   width={["200px"]}
+                  alignItems={"center"}
                 >
                   <input
                     type="text"
                     onChange={(e) => {
                       setRawInputValue(e.target.value);
                     }}
-                    placeholder="DD.MM.YYYY"
-                    className="p-2"
+                    className="p-1 text-center text-lg border-2 rounded-lg"
+                    value={rawInputValue}
                   />
                   <div
                     tabIndex={0}
@@ -97,29 +155,38 @@ export const DatePicker = ({
           </div>
         }
         wrapperClassName="datePicker"
+        startDate={startOfToday()}
+        maxDate={addDays(new Date(), 9)}
         filterDate={(date) => !isDateBlocked(date)}
         selected={datePickerValue}
         onChange={(date) => setDatePickerValue(date)}
+        excludeDates={[
+          addDays(new Date(), 1),
+          addDays(new Date(), 5),
+          addDays(new Date(), 7),
+          addDays(new Date(), 12),
+        ]}
         calendarContainer={s.Calendar}
-        renderDayContents={(dayOfMonth: number, date: Date) => {
-          const dayWrapped = (day: number) => (
-            <Text
-              variant="subtitle-small"
-              padding={1}
-              color={isDateBlocked(date) ? "graniteMedium" : undefined}
-            >
-              {day}
-            </Text>
-          );
+        calendarStartDay={startOfToday().getDay()}
+        // renderDayContents={(dayOfMonth: number, date: Date) => {
+        //   const dayWrapped = (day: number) => (
+        //     <Text
+        //       variant="subtitle-small"
+        //       padding={1}
+        //       color={isDateBlocked(date) ? "graniteMedium" : undefined}
+        //     >
+        //       {day}
+        //     </Text>
+        //   );
 
-          return isEqualToSelectedDate(date) ? (
-            <s.SelectedDayWrapper>
-              {dayWrapped(dayOfMonth)}
-            </s.SelectedDayWrapper>
-          ) : (
-            <s.DayWrapper>{dayWrapped(dayOfMonth)}</s.DayWrapper>
-          );
-        }}
+        //   return isEqualToSelectedDate(date) ? (
+        //     <s.SelectedDayWrapper>
+        //       {dayWrapped(dayOfMonth)}
+        //     </s.SelectedDayWrapper>
+        //   ) : (
+        //     <s.DayWrapper>{dayWrapped(dayOfMonth)}</s.DayWrapper>
+        //   );
+        // }}
         renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => {
           const month = new Intl.DateTimeFormat(locale, {
             month: "long",
@@ -130,18 +197,13 @@ export const DatePicker = ({
 
           return (
             <s.Header>
-              <s.MonthSwitcher>
-                <button onClick={decreaseMonth}>-</button>
-                <Text
-                  paddingX={3}
-                  variant="subtitle-small-bold"
-                >{`${month} ${year}`}</Text>
-                <button onClick={increaseMonth}>+</button>
-              </s.MonthSwitcher>
+              <Text paddingX={3} variant="subtitle-small-bold">{`${capitalize(
+                month
+              )} ${year}`}</Text>
             </s.Header>
           );
         }}
-        locale={locale === "no" ? "nb" : "en"}
+        locale={locale}
         onCalendarOpen={() => {
           const selectedDate =
             datePickerValue || initialDateOnOpenCalendar || startOfToday();
@@ -164,7 +226,7 @@ const convertToHTMLCompliant = (date: Date): string => {
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
     const year = date.getFullYear();
 
-    return `${year}-${month}-${day}`;
+    return date.toLocaleDateString(navigator.language);
   } catch (error) {
     console.error("Error processing the date:", date);
     return "";

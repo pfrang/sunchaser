@@ -94,6 +94,39 @@ dialog[open] {
   }
 }
 
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-caption-font-size: 18px;
+  --rdp-accent-color: #4f4f5b;
+  --rdp-background-color: #4f4f5b;
+  --rdp-accent-color-dark: #3003e1;
+  --rdp-background-color-dark: #180270;
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  /* Outline border for focused elements */
+  --rdp-outline-selected: 3px solid var(--rdp-accent-color);
+  /* Outline border for focused _and_ selected elements */
+
+  margin: 1em;
+}
+
+.rdp-day,
+.rdp-day_outside,
+.rdp-day_today:not(.rdp-day_outside) {
+  color: #424253;
+  opacity: 1;
+  font-weight: inherit;
+}
+
+.rdp-day_selected,
+.rdp-day_selected:focus-visible,
+.rdp-day.rdp-day_selected {
+  color: "white";
+  opacity: 1;
+  background-color: var(--rdp-accent-color);
+}
+
+
+
 /*
 @media screen and (min-width: 1100px) {
   .swiper-button-next{
