@@ -9,7 +9,7 @@ import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Flex } from "../../ui-kit/components/flex/flex";
+import { Flex } from "../../ui-kit/flex/flex";
 import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
 
 import { MapBoxHelper, StartAndEndCoordinates } from "./mapbox-settings";

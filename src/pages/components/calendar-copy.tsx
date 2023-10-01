@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
-import { Text } from "../../ui-kit/components/text";
-import { Flex } from "../../ui-kit/components/flex";
-import { theme } from "../../ui-kit/theme/theme";
+import { Text } from "../../ui-kit/text";
+import { Flex } from "../../ui-kit/flex";
+import { theme } from "../../ui-kit/theme";
 
 export const Calendar = ({ selectedDate, setSelectedDate }) => {
   const popperRef = useRef<HTMLDivElement>(null);

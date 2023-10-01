@@ -7,7 +7,7 @@ import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
-import { theme } from "../ui-kit/theme/theme";
+import { theme } from "../ui-kit/theme";
 
 import HeaderComponent from "./header";
 

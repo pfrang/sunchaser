@@ -3,9 +3,9 @@ import Link from "next/link";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
-import { theme } from "../ui-kit/theme/theme";
-import { Flex } from "../ui-kit/components/flex";
-import { Text } from "../ui-kit/components/text";
+import { theme } from "../ui-kit/theme";
+import { Flex } from "../ui-kit/flex";
+import { Text } from "../ui-kit/text";
 
 import UserForm from "./components/search-criterias";
 

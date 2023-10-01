@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import { Spinner } from "../../ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchMappedData } from "../api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
-import { Text } from "../../ui-kit/components/text";
+import { Text } from "../../ui-kit/text";
 import { useFetchGoogleMapsSearches } from "../hooks/use-google-maps-auto-search";
 import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
 

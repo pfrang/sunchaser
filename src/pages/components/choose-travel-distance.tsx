@@ -3,7 +3,7 @@ import Slider from "@mui/material/Slider";
 import { useRouter } from "next/router";
 import { values } from "lodash";
 
-import { Text } from "../../ui-kit/components/text";
+import { Text } from "../../ui-kit/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import {
   distanceArray,
