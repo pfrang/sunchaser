@@ -1,13 +1,13 @@
 import styled, { keyframes } from "styled-components";
 import { useRef, useEffect, useState, useMemo } from "react";
 
-import { Text } from "../../../ui-kit/components/text";
-import { Flex } from "../../../ui-kit/components/flex";
+import { Text } from "../../../ui-kit/text";
+import { Flex } from "../../../ui-kit/flex";
 import {
   Times,
   UserLocation,
 } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { LinkContent } from "../../../ui-kit/components/link-content";
+import { LinkContent } from "../../../ui-kit/link-content";
 import {
   getSortedTemperatureFromArrOfTimes,
   plus2HoursOnTime,

@@ -1,13 +1,13 @@
 import "react-day-picker/dist/style.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
-import { SWRConfig } from "swr";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
-import { theme } from "../ui-kit/theme/theme";
+import { theme } from "../ui-kit/theme";
 
 import HeaderComponent from "./header";
 
@@ -34,6 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      {/* @ts-ignore*/}
       <ThemeProvider theme={theme}>
         <Head>
           <title>Sunchaser</title>
@@ -41,13 +42,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <SWRConfig value={{}}>
-          <Wrapper>
-            <HeaderComponent isHomePage={isHomePage} />
-            <Component {...pageProps} />
-            <Spacer height={32} />
-          </Wrapper>
-        </SWRConfig>
+        <Wrapper>
+          <HeaderComponent isHomePage={isHomePage} />
+          <Component {...pageProps} />
+          <Spacer height={32} />
+        </Wrapper>
       </ThemeProvider>
       <Analytics />
     </>

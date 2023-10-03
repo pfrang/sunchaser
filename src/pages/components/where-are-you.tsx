@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import { Spinner } from "../../ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchMappedData } from "../api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
-import { Text } from "../../ui-kit/components/text";
+import { Text } from "../../ui-kit/text";
 import { useFetchGoogleMapsSearches } from "../hooks/use-google-maps-auto-search";
 import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
 
@@ -15,17 +16,31 @@ export default function WhereAreYou({
   locationRef,
   setTownId,
 }: WhereAreYouProps) {
+  const router = useRouter();
   const [townSearch, setTownSearch] = useState("");
   const [isLocationChosen, setLocationChosen] = useState(false);
-  const [geoLocationSearchItems, setGeoLocationSearchItems] = useState([]);
-
   const { data, error, isLoading } = useFetchGoogleMapsSearches(townSearch);
+  const [dataFetched, setDatafetched] = useState(false);
+
+  useEffect(() => {
+    if (router.query?.distance) {
+      setTownSearch((router.query?.location as string) || "");
+      setLocationChosen(true);
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    if (!dataFetched && data) {
+      // Incase user does not change a selection on mount
+      setTownId(data?.items[0].place_id);
+      setDatafetched(true);
+    }
+  }, [data, dataFetched]);
 
   const setLocationAndClearList = ({ value, id }) => {
     setTownSearch(value);
     setTownId(id);
     setLocationChosen(true);
-    setGeoLocationSearchItems([]);
   };
 
   const onSearchChange = (e) => {
@@ -46,8 +61,6 @@ export default function WhereAreYou({
             key={"inputBox"}
             onChange={(e) => onSearchChange(e.target.value)}
             type="text"
-            name=""
-            id=""
             value={townSearch}
           />
           {isLoading && (

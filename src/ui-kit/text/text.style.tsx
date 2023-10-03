@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { color, typography, variant, space, layout } from "styled-system";
 
-import { Color } from "../../theme/theme";
+import { Color } from "../theme";
 
 import { TextVariant } from "./text.type";
 

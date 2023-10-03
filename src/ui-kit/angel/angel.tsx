@@ -2,7 +2,7 @@ import { FC } from "react";
 import styled from "styled-components";
 
 import { SpacerProps } from "../spacer/spacer";
-import { theme } from "../theme/theme";
+import { theme } from "../theme";
 
 const AngelStyle = styled.svg`
   height: 24px;

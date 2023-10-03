@@ -2,7 +2,7 @@ import styled from "styled-components";
 import sscss from "@styled-system/css";
 import { space, flexbox, color, layout, border, position } from "styled-system";
 
-import { theme } from "../../theme/theme";
+import { theme } from "../theme";
 
 const Wrapper = styled.div<{ gap: number | number[] }>`
   ${flexbox}

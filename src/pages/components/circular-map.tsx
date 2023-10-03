@@ -3,7 +3,7 @@ import * as turf from "@turf/turf";
 import ReactMapGL, { Layer, MapRef, Marker, Source } from "react-map-gl";
 
 import { useUserLocation } from "../hooks/use-user-location";
-import { Flex } from "../../ui-kit/components/flex";
+import { Flex } from "../../ui-kit/flex";
 import { getBoundingBox } from "../utils/get-boundaries-lng-lat";
 
 export const CircularMap = ({ mapBoxKey, kilometers }) => {

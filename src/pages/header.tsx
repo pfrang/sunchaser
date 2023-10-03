@@ -3,9 +3,9 @@ import Link from "next/link";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
-import { theme } from "../ui-kit/theme/theme";
-import { Flex } from "../ui-kit/components/flex";
-import { Text } from "../ui-kit/components/text";
+import { theme } from "../ui-kit/theme";
+import { Flex } from "../ui-kit/flex";
+import { Text } from "../ui-kit/text";
 
 import UserForm from "./components/search-criterias";
 
@@ -41,7 +41,7 @@ export default function HeaderComponent({ isHomePage }) {
       justifyContent={"space-between"}
     >
       <Flex paddingY={2} position={"relative"} alignItems={"center"}>
-        <Link href="/">
+        <Link href="/" tabIndex={0}>
           <Image
             style={{ cursor: "pointer" }}
             width={250}
@@ -61,7 +61,7 @@ export default function HeaderComponent({ isHomePage }) {
             borderColor: theme.color.white,
           }}
         >
-          <UserForm header={modal} isHomePage={isHomePage} />
+          <UserForm header={modal} />
           <span
             onClick={() => onClose()}
             className="absolute right-0 top-0 cursor-pointer border-l-2 border-b-2 border-black w-6 text-center hover:bg-gray-600 hover:border-none  transition-all duration-300 ease-in-out "

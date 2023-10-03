@@ -6,7 +6,7 @@ import {
   LayoutProps,
 } from "styled-system";
 
-import { Color } from "../../theme/theme";
+import { Color } from "../theme";
 
 import { TextWrapper } from "./text.style";
 import { TextVariant } from "./text.type";

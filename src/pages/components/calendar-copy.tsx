@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
-import { Text } from "../../ui-kit/components/text";
-import { Flex } from "../../ui-kit/components/flex";
-import { theme } from "../../ui-kit/theme/theme";
+import { Text } from "../../ui-kit/text";
+import { Flex } from "../../ui-kit/flex";
+import { theme } from "../../ui-kit/theme";
 
 export const Calendar = ({ selectedDate, setSelectedDate }) => {
   const popperRef = useRef<HTMLDivElement>(null);
@@ -30,6 +30,8 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
   }
 
   function afterTwoWeeks(date: Date) {
+    // console.log("--", date, differenceInCalendarDays(date, new Date()) >= 14);
+
     return differenceInCalendarDays(date, new Date()) >= 14;
   }
 
@@ -84,6 +86,8 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
           <DayPicker
             weekStartsOn={new Date().getDay() as WeekDayNumb}
             disabled={disabledDays}
+            fromDate={new Date()}
+            toDate={inTenDays}
             // fromDate={new Date()}
             // hidden={{ before: new Date(), to: inTwoWeeks }}
             components={{ Row: OnlyFutureRow }}

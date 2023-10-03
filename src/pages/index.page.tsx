@@ -1,10 +1,10 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
-import { theme } from "../ui-kit/theme/theme";
-import { Text } from "../ui-kit/components/text";
-import { Flex } from "../ui-kit/components/flex";
+import { theme } from "../ui-kit/theme";
+import { Text } from "../ui-kit/text";
+import { Flex } from "../ui-kit/flex";
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { AppConfig } from "../app-config";
 

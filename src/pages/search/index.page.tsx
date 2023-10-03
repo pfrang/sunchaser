@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { Swiper } from "swiper/types";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { SearchLoader } from "../../ui-kit/search-loader/search-loader";
 import { AppConfig } from "../../app-config";
 import { AzureFunctionCoordinatesMappedItems } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Flex } from "../../ui-kit/components/flex/flex";
-import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
+import { Flex } from "../../ui-kit/flex/flex";
 import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
 
 import { MapBoxHelper, StartAndEndCoordinates } from "./mapbox-settings";
@@ -44,64 +43,52 @@ export default function Search({
     undefined | AzureFunctionCoordinatesMappedItems
   >(undefined);
 
-  const [zoom, setZoom] = useState(false);
-
-  const [mapObject, setMap] = useState<undefined | mapboxgl.Map>(undefined);
+  const [map, setMap] = useState<undefined | mapboxgl.Map>(undefined);
+  const [mapInstance, setMapInstance] = useState<undefined | MapBoxHelper>(
+    undefined
+  );
 
   const resetMap = () => {
-    if (data) {
+    map.removeLayer("route");
+    map.flyTo({
+      center: [data.userLocation.longitude, data.userLocation.latitude],
+      duration: 500,
+    });
+    mapInstance.setFitBounds(map);
+  };
+
+  useEffect(() => {
+    if (data && data.ranks.length > 0) {
       const longitudes = data.ranks.map((item) => item.longitude);
       const latitudes = data.ranks.map((item) => item.latitude);
       const userLocation = data.userLocation;
-
-      let map = new MapBoxHelper(
+      const mapInitializer = new MapBoxHelper(
         longitudes,
         latitudes,
         userLocation.longitude,
         userLocation.latitude
-      ).setMarkersAndFitBounds();
+      );
 
-      map.addControl(new mapboxgl.NavigationControl());
+      const primaryMap = mapInitializer.initializeMap("map");
 
-      map.on("load", () => {
-        map.resize();
+      primaryMap.on("load", () => {
+        primaryMap.resize();
+        primaryMap.addControl(new mapboxgl.NavigationControl());
+        setMapInstance(mapInitializer);
+        setMap(primaryMap);
       });
-
-      setMap(map);
-    }
-  };
-
-  // useEffect(() => {
-  //   const onChange = async () => {
-  //     await mutate("something", query);
-  //   };
-  //   onChange();
-  // }, [query]);
-
-  useEffect(() => {
-    if (data) {
-      resetMap();
     }
   }, [data]);
 
-  useEffect(() => {
-    if (highlightedCard && zoom) {
-      const userLocation = data.userLocation;
+  const onClickCard = (
+    item: AzureFunctionCoordinatesMappedItems,
+    swiper: Swiper
+  ) => {
+    if (item.index !== highlightedCard?.index) {
       const { lat, lon } = {
-        lat: highlightedCard.latitude,
-        lon: highlightedCard.longitude,
+        lat: item.latitude,
+        lon: item.longitude,
       };
-
-      // mapObject.flyTo({
-      //   center: [lon, lat],
-      //   zoom: 10,
-      //   speed: 1,
-      //   curve: 1,
-      //   duration: 2000,
-      //   easing(t) {
-      //     return t;
-      //   },
-      // });
 
       const coordinates: StartAndEndCoordinates = {
         start: {
@@ -109,44 +96,42 @@ export default function Search({
           latitude: lat,
         },
         end: {
-          longitude: userLocation.longitude,
-          latitude: userLocation.latitude,
+          longitude: data.userLocation.longitude,
+          latitude: data.userLocation.latitude,
         },
       };
 
-      const config = {
-        map: mapObject,
-        coordinates,
-        padding: 100,
-        duration: 1000,
-      };
+      MapBoxHelper.fitBounds(map, coordinates, 50, 1000);
 
-      MapBoxHelper.fitBounds(mapObject, coordinates, 50, 1000);
+      MapBoxHelper.drawLine(map, coordinates);
 
-      return MapBoxHelper.drawLine(mapObject, coordinates);
+      setHighlightedCard(item);
+
+      return setTimeout(() => {
+        swiper.update();
+        swiper.slideTo(item.index, 1000);
+      }, 500);
     }
+    setHighlightedCard(undefined);
     resetMap();
-  }, [highlightedCard]);
-
-  const setZoomAndHighlightCard = (
-    item: AzureFunctionCoordinatesMappedItems,
-    zoom?: boolean
-  ) => {
-    if (item.primaryName === highlightedCard?.primaryName) {
-      setHighlightedCard(undefined);
-      return;
-    }
-    setHighlightedCard(item);
-    zoom && setZoom(zoom);
+    return setTimeout(() => {
+      swiper.update();
+    }, 500);
   };
 
   return (
     <Flex height={"100%"}>
       <TwoGridRow>
         <section id="section-map">
-          <div className="flex items-center h-full justify-center sticky top-0">
-            <div id="map" className="w-full h-full m-auto "></div>
-          </div>
+          {data && data.ranks.length > 0 && (
+            <div className="flex items-center h-full justify-center sticky top-0">
+              <div id="map" className="w-full h-full m-auto "></div>
+              <div
+                id="original-map"
+                className="w-full h-full m-auto hidden"
+              ></div>
+            </div>
+          )}
         </section>
         <ConditionalPresenter
           isLoading={isLoading}
@@ -154,19 +139,24 @@ export default function Search({
           data={data}
           renderLoading={() => <SearchLoader />}
           renderError={() => {
-            const emptyDataError = false;
             return (
-              <div className="flex absolute mt-[80px] top-0 items-center w-full justify-center">
-                <p>
-                  {emptyDataError
-                    ? "We could not find any locations with the provided coordinates, please increase the distance"
-                    : "Something went wrong"}
-                </p>
-              </div>
+              <Flex justifyContent={"center"}>
+                <p>Something went wrong</p>
+              </Flex>
             );
           }}
           renderData={(data) => {
             const { userLocation, ranks } = data;
+            if (ranks.length === 0) {
+              return (
+                <Flex justifyContent={"center"}>
+                  <p>
+                    We could not find any locations with the provided
+                    coordinates, please increase the distance
+                  </p>
+                </Flex>
+              );
+            }
 
             const aheadOfNow = ranks.map((rank) => {
               return {
@@ -192,7 +182,7 @@ export default function Search({
                   <Carousell
                     userLocation={userLocation}
                     items={aheadOfNow}
-                    setZoomAndHighlightCard={setZoomAndHighlightCard}
+                    onClickCard={onClickCard}
                     highlightedCard={highlightedCard}
                   />
                 </section>
@@ -203,13 +193,6 @@ export default function Search({
       </TwoGridRow>
     </Flex>
   );
-}
-
-interface GetServerSidePropsSearch {
-  props: {
-    query: PayloadParams;
-    mapBoxkey: string;
-  };
 }
 
 export const getStaticProps = async () => {

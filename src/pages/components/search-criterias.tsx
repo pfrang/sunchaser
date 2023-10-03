@@ -1,19 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { Geolocation } from "@capacitor/geolocation";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
-import { formatDate } from "../utils/convert-date";
-import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
 import { fetchTownDetails } from "../hooks/fetch-town-details";
 import { useUserLocation } from "../hooks/use-user-location";
+import { createPayloadParams } from "../utils/create-payload-params";
+import { DatePicker } from "../../ui-kit/date-picker/date-picker";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
-import { Calendar } from "./calendar";
+import { Calendar } from "./calendar-raeact-datepicker";
 import WhereAreYou from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
-import { CircularMap } from "./circular-map";
 
 const Button = styled.button<{ disabled?: boolean }>`
   background-color: ${(props) => (props.disabled ? "gray" : "#1215fd")};
@@ -41,31 +39,32 @@ export const FormStyle = styled.form`
 interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
   weatherSelected?: WeatherOptions;
-  isHomePage?: boolean;
   mapBoxKey?: string;
 }
 
 export default function UserForm({
   header,
   weatherSelected,
-  isHomePage,
   mapBoxKey,
 }: UserFormProps) {
-  // const [userGeoLocation, setUserGeoLocation] = useState(null);
+  const router = useRouter();
+  const { userLocation } = useUserLocation();
+  const isHomePage = router.pathname === "/";
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
-  const { userLocation } = useUserLocation();
+
+  useEffect(() => {
+    setSelectedDate(
+      router.query?.date ? new Date(router.query?.date as string) : new Date()
+    );
+  }, [router.query]);
 
   const [error, setError] = useState(false);
   const [townId, setTownId] = useState("");
   const locationRef = useRef<HTMLInputElement>(null);
-
-  const [travelDistance, setTravelDistance] = useState<number | undefined>(
-    undefined
-  );
-
-  const router = useRouter();
+  const travelDistanceRef = useRef<HTMLInputElement>(null);
 
   const sunSelected = weatherSelected === "Sun";
 
@@ -73,6 +72,10 @@ export default function UserForm({
     e.preventDefault();
     let longitudeInput;
     let latitudeInput;
+    const travelDistance = Number(
+      travelDistanceRef?.current?.querySelector(".MuiSlider-valueLabelLabel")
+        .innerHTML
+    );
 
     if (!header) {
       latitudeInput = userLocation.latitude;
@@ -90,37 +93,45 @@ export default function UserForm({
       latitudeInput = townDetails.latitude;
     }
 
-    const params: PayloadParams = {
-      lon: String(longitudeInput),
-      lat: String(latitudeInput),
-      date: formatDate(selectedDate),
-      distance: travelDistance.toString(),
-    };
+    const payloadParams = createPayloadParams({
+      longitude: longitudeInput,
+      latitude: latitudeInput,
+      date: selectedDate,
+      travelDistance,
+      townSearch: locationRef?.current?.value || "",
+    });
 
-    const urlPar = Object.keys(params)
-      .map((key) => key + "=" + params[key])
+    const urlPar = Object.keys(payloadParams)
+      .map((key) => key + "=" + payloadParams[key])
       .join("&");
 
-    router.push(`search?${urlPar}`);
+    router.push(`search?${urlPar}`, undefined, {
+      shallow: false,
+    });
     header?.current.close();
   };
 
   const disableButton = !isHomePage ? false : !sunSelected;
 
   return (
-    //TODO submit is not triggering
     <>
       <FormStyle onSubmit={onSubmit}>
         {header && (
           <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
         )}
-        <Calendar
+        {/* <Calendar
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+        /> */}
+        <DatePicker
+          selected={selectedDate}
+          isDateBlocked={(date) => date < new Date()}
+          onChange={setSelectedDate}
+          label="When do you want to travel?"
         />
         {/* <CircularMap mapBoxKey={mapBoxKey} /> */}
         <ChooseTravelDistance
-          setTravelDistance={setTravelDistance}
+          travelDistanceRef={travelDistanceRef}
           mapBoxKey={mapBoxKey}
         />
         {/* <ChooseTransportationMethod

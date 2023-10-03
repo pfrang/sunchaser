@@ -1,31 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
+import { useRouter } from "next/router";
+import { values } from "lodash";
 
-import { Text } from "../../ui-kit/components/text";
+import { Text } from "../../ui-kit/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";
-import { distanceArray } from "../utils/travel-distance-settings";
+import {
+  distanceArray,
+  getCounterValue,
+} from "../utils/travel-distance-settings";
 
 import { CircularMap } from "./circular-map";
 
 interface ChooseTravelDistanceProps {
-  setTravelDistance: (value: number) => void;
+  travelDistanceRef: React.MutableRefObject<HTMLInputElement>;
   mapBoxKey: string;
+  isHomePage?: boolean;
 }
 
 export const ChooseTravelDistance = ({
-  setTravelDistance,
+  travelDistanceRef,
   mapBoxKey,
 }: ChooseTravelDistanceProps) => {
+  const router = useRouter();
+
+  const isHomePage = router.pathname === "/";
   const [kilometers, setKilometers] = useState(50);
+
   const step = 5;
   const valuesForSlider = distanceArray(step);
   const [index, setIndex] = useState(valuesForSlider.length / 2);
 
   const handleSlide = (e: any, num) => {
     setIndex(num);
-    setTravelDistance(Number(valuesForSlider[num - 1].label));
     setKilometers(Number(valuesForSlider[num - 1].label));
   };
+
+  useEffect(() => {
+    setKilometers(Number(router.query.distance) || 50);
+    if (router.query?.distance) {
+      return setIndex(
+        getCounterValue(valuesForSlider, router.query?.distance as string)
+      );
+    }
+    return setIndex(valuesForSlider.length / 2);
+  }, [router.query]);
 
   const min = 1;
   const max = valuesForSlider.length;
@@ -40,9 +59,12 @@ export const ChooseTravelDistance = ({
         </Text>
         <Spacer height={2} />
         {/* // Remove component here for old */}
-        <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
+        {isHomePage && (
+          <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
+        )}
         <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
         <Slider
+          ref={travelDistanceRef}
           aria-label="Temperature"
           value={index}
           getAriaValueText={(value: number) => `${value}km`}

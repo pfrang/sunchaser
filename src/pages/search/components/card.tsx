@@ -1,35 +1,36 @@
 import { useSwiper } from "swiper/react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { Swiper } from "swiper/types";
 
 import { Angel } from "../../../ui-kit/angel/angel";
-import { Flex } from "../../../ui-kit/components/flex";
-import { theme } from "../../../ui-kit/theme/theme";
+import { Flex } from "../../../ui-kit/flex";
+import { theme } from "../../../ui-kit/theme";
 import { WeatherIconList } from "../../../ui-kit/weather-svg-ref/weather-icon-list";
 import {
   AzureFunctionCoordinatesMappedItems,
   UserLocation,
 } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Text } from "../../../ui-kit/components/text";
+import { Text } from "../../../ui-kit/text";
 
 import { HighlightedCard } from "./highlighted-card";
 
 interface SmallCardProps {
-  isHighlighted: boolean;
+  highlightedCardIndex?: number;
   item: AzureFunctionCoordinatesMappedItems;
   userLocation: UserLocation;
   index: number;
-  setZoomAndHighlightCard: (
+  onClickCard: (
     item: AzureFunctionCoordinatesMappedItems,
-    bool: boolean
+    swiper: Swiper
   ) => void;
 }
 
 export const Card = ({
-  isHighlighted,
+  highlightedCardIndex,
   userLocation,
   index,
   item,
-  setZoomAndHighlightCard,
+  onClickCard,
 }: SmallCardProps) => {
   const {
     date,
@@ -46,34 +47,21 @@ export const Card = ({
 
   const swiper = useSwiper();
 
-  const onClick = async (item: AzureFunctionCoordinatesMappedItems) => {
-    setZoomAndHighlightCard(item, true);
+  const isHighlighted = useMemo(() => {
+    return highlightedCardIndex === index;
+  }, [highlightedCardIndex]);
 
-    // const clientHeight = swiper.wrapperEl.parentElement.clientHeight;
-    // const clientWidth = window.innerWidth;
-    // if (clientWidth <= 480) {
-    //   setHeight(clientHeight - 140); //TODO find out this mobile toolbar browser at the bottom
-    // } else {
-    //   setHeight(clientHeight - 150);
-    // }
-
-    setTimeout(() => {
-      swiper.update();
-      swiper.slideTo(index, 1000);
-    }, 500);
+  const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
+    onClickCard(item, swiper);
   };
-
-  const modifiedDate =
-    date &&
-    `${new Date(date).getDate()}-${new Date(date).toLocaleString("default", {
-      month: "short",
-    })}`;
-  // const modifiedTime = date && `${date.slice(0, -3)}`;
 
   const icon = useMemo(() => {
     const filterTimes = times.filter((time) => {
       return time.date === date;
     });
+
+    // TODO investigate why this can happen
+    if (!filterTimes.length) return;
 
     const highestRank = filterTimes.reduce((prev, current) => {
       return prev.rank > current.rank ? prev : current;
@@ -88,14 +76,10 @@ export const Card = ({
   const tabletHeightOfCard = 100;
   const mobileHeightOfCard = 80;
 
-  // const setHeight = useMemo(() => {
-  //   const height = swiper.height;
-  //   return height;
-  // }, []);
-
   return (
     <div>
       <Flex
+        className="cursor-pointer"
         onClick={() => onClick(item)}
         flexDirection={"column"}
         justifyContent={"center"}
@@ -128,10 +112,16 @@ export const Card = ({
             height={[48, 96]}
             width={[48, 96]}
           >
-            <img
-              className="object-contain"
-              src={`/icons/${isHighlighted ? "white" : "black"}/svg/${icon}`}
-            />
+            <>
+              {icon && (
+                <img
+                  className="object-contain"
+                  src={`/icons/${
+                    isHighlighted ? "white" : "black"
+                  }/svg/${icon}`}
+                />
+              )}
+            </>
           </Flex>
           <Flex
             flexDirection={"column"}
