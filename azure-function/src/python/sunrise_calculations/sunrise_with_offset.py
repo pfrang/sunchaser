@@ -24,7 +24,7 @@ def main(latitude: str, longitude: str,ts: api.load.timescale,model,offset_date)
 
     try:
 
-        for i in range(15):
+        for i in range(4):
 
             # Calculate startpoint and values for sunrise sunset
             referenceDate_start_t0=referenceDate
