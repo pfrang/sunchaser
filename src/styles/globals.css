@@ -117,10 +117,14 @@ dialog[open] {
   font-weight: inherit;
 }
 
+.rdp-day:hover:not([disabled]) {
+  color: white;
+}
+
 .rdp-day_selected,
 .rdp-day_selected:focus-visible,
 .rdp-day.rdp-day_selected {
-  color: "white";
+  color: white;
   opacity: 1;
   background-color: var(--rdp-accent-color);
 }
