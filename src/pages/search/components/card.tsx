@@ -1,5 +1,5 @@
 import { useSwiper } from "swiper/react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Swiper } from "swiper/types";
 
 import { Angel } from "../../../ui-kit/angel/angel";

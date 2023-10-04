@@ -13,7 +13,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
 import { Text } from "../../ui-kit/text";
-import { theme } from "../../ui-kit/theme";
 
 export type WeatherOptions = "Sun" | "Rain" | "Snow";
 

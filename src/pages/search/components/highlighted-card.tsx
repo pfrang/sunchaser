@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { useRef, useEffect, useState, useMemo } from "react";
 
 import { Text } from "../../../ui-kit/text";
@@ -109,22 +109,7 @@ export const HighlightedCard = ({
     };
   }, []);
 
-  const animationStyle = `
-  @keyframes bounce {
-    0% {
-      transform: translateX(0);
-    }
-    50% {
-      transform: translateX(10px);
-    }
-    100% {
-      transform: translateX(0px);
-    }
-  }
-`;
-
   const maxTemperatureToday = getSortedTemperatureFromArrOfTimes(times, "desc");
-
   const minTemperatureToday = getSortedTemperatureFromArrOfTimes(times, "asc");
 
   return (

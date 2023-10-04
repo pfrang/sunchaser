@@ -1,7 +1,6 @@
 import "react-day-picker/dist/style.css";
-import "react-datepicker/dist/react-datepicker.css";
-import "mapbox-gl/dist/mapbox-gl.css";
 import "../styles/globals.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";

@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-import { startOfToday } from "date-fns";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { fetchTownDetails } from "../hooks/fetch-town-details";
 import { useUserLocation } from "../hooks/use-user-location";
 import { createPayloadParams } from "../utils/create-payload-params";
-import { DatePicker } from "../../ui-kit/date-picker/date-picker";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";

@@ -49,7 +49,7 @@ export const ChooseTravelDistance = ({
   const min = 1;
   const max = valuesForSlider.length;
 
-  const valueToDisplay = valuesForSlider[index - 1].label;
+  const valueToDisplay = valuesForSlider[index - 1]?.label;
 
   return (
     <section id="distance_traveling" className="w-full">

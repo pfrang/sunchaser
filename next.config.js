@@ -9,6 +9,12 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  compiler: {
+    styledComponents: {
+      ssr: true,
+      displayName: true,
+    },
+  },
 
   // typescript: {
   //   // !! WARN !!
