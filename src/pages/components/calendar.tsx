@@ -86,9 +86,7 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
       {isPopperOpen && (
         <Flex justifyContent={"center"}>
           <DayPicker
-            classNames={{
-              day_selected: "rdp-day_selected",
-            }}
+            // classNames={styles}
             weekStartsOn={new Date().getDay() as WeekDayNumb}
             disabled={disabledDays}
             components={{ Row: OnlyFutureRow }}

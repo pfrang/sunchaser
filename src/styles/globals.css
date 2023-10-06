@@ -47,6 +47,17 @@ h3 {
 }
 
 
+
+.rdp-day_selected,
+.rdp-day_selected:focus-visible,
+.rdp-day_selected:hover {
+  color: black !important;
+  opacity: 1;
+  background-color: gray !important;
+}
+
+
+
 dialog {
   pointer-events: none;
   opacity: 0;
@@ -93,7 +104,6 @@ dialog[open] {
     transform: translateX(0px);
   }
 }
-
 
 
 /*
