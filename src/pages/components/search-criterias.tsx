@@ -30,6 +30,7 @@ export const FormStyle = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 6px;
   align-items: center;
   height: 100%;
   padding: 16px;

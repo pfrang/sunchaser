@@ -18,10 +18,10 @@ const AnimationSun = keyframes`
 `;
 
 const AnimationLetters = keyframes`
-  0% { left: 20%;}
+  0% { left: 0%;}
   /* 13% { width: 13%; top: 25%;}
   25% { width: 25%; top: 20%;} */
-  50% { left: 75%;}
+  50% { left: 50%;}
   /* 75% { width: 50%; margin-left: 50%; top: 10%;} */
   100% { left:100%; white-space: nowrap; overflow: hidden;}
 `;
@@ -29,7 +29,6 @@ const AnimationLetters = keyframes`
 const StyledP = styled.p`
   position: absolute;
   top: 30%;
-  left: 20%;
   animation: ${AnimationLetters} 5s infinite linear;
   color: #d9ee36ea;
   text-shadow: 1px 1px #393636;
@@ -46,7 +45,8 @@ const Sun = styled.svg`
 
 const Wrapper = styled.div`
   position: relative;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
   white-space: nowrap;
   overflow: hidden;
 `;

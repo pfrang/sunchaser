@@ -6,6 +6,7 @@ import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalStyle } from "ui-kit/styles/global-style";
+import { Flex } from "ui-kit/flex";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
@@ -14,10 +15,11 @@ import HeaderComponent from "./header";
 
 const Wrapper = styled.div`
   height: 100svh;
+  /* overflow-y: hidden; */
   /* min-height: 100vh; */
-  min-height: -moz-available;
+  /* min-height: -moz-available;
   min-height: -webkit-fill-available;
-  min-height: fill-available;
+  min-height: fill-available; */
   display: flex;
   flex-direction: column;
   background-color: ${theme.color.grey[3]};
@@ -30,8 +32,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   //   // Then we set the value in the --vh custom property to the root of the document
   //   document.documentElement.style.setProperty("--vh", `${vh}px`);
   // }, []);
-
-  const isHomePage = pageProps.currentUrl === "/";
 
   return (
     <>
@@ -46,9 +46,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         {/* @ts-ignore*/}
         <GlobalStyle />
         <Wrapper>
-          <HeaderComponent isHomePage={isHomePage} />
+          <HeaderComponent />
           <Component {...pageProps} />
-          <Spacer height={32} />
+          <Spacer height={64} />
         </Wrapper>
       </ThemeProvider>
       <Analytics />

@@ -13,6 +13,7 @@ import { Flex } from "../../ui-kit/flex/flex";
 import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
 
 import { MapBoxHelper, StartAndEndCoordinates } from "./mapbox-settings";
+import { Map } from "./components/map";
 import { Carousell } from "./components/carousell";
 
 const TwoGridRow = styled.div`
@@ -57,28 +58,28 @@ export default function Search({
     mapInstance.setFitBounds(map);
   };
 
-  useEffect(() => {
-    if (data && data.ranks.length > 0) {
-      const longitudes = data.ranks.map((item) => item.longitude);
-      const latitudes = data.ranks.map((item) => item.latitude);
-      const userLocation = data.userLocation;
-      const mapInitializer = new MapBoxHelper(
-        longitudes,
-        latitudes,
-        userLocation.longitude,
-        userLocation.latitude
-      );
+  // useEffect(() => {
+  //   if (data && data.ranks.length > 0 && !isLoading) {
+  //     const longitudes = data.ranks.map((item) => item.longitude);
+  //     const latitudes = data.ranks.map((item) => item.latitude);
+  //     const userLocation = data.userLocation;
+  //     const mapInitializer = new MapBoxHelper(
+  //       longitudes,
+  //       latitudes,
+  //       userLocation.longitude,
+  //       userLocation.latitude
+  //     );
 
-      const primaryMap = mapInitializer.initializeMap("map");
+  //     const primaryMap = mapInitializer.initializeMap("map");
 
-      primaryMap.on("load", () => {
-        primaryMap.resize();
-        primaryMap.addControl(new mapboxgl.NavigationControl());
-        setMapInstance(mapInitializer);
-        setMap(primaryMap);
-      });
-    }
-  }, [data]);
+  //     primaryMap.on("load", () => {
+  //       primaryMap.resize();
+  //       primaryMap.addControl(new mapboxgl.NavigationControl());
+  //       setMapInstance(mapInitializer);
+  //       setMap(primaryMap);
+  //     });
+  //   }
+  // }, [data, isLoading]);
 
   const onClickCard = (
     item: AzureFunctionCoordinatesMappedItems,
@@ -121,62 +122,56 @@ export default function Search({
 
   return (
     <Flex height={"100%"}>
-      <TwoGridRow>
-        <section id="section-map">
-          {data && data.ranks.length > 0 && (
-            <div className="flex items-center h-full justify-center sticky top-0">
-              <div id="map" className="w-full h-full m-auto "></div>
-              <div
-                id="original-map"
-                className="w-full h-full m-auto hidden"
-              ></div>
-            </div>
-          )}
-        </section>
-        <ConditionalPresenter
-          isLoading={isLoading}
-          error={error}
-          data={data}
-          renderLoading={() => <SearchLoader />}
-          renderError={() => {
+      <ConditionalPresenter
+        isLoading={isLoading}
+        error={error}
+        data={data}
+        renderLoading={() => <SearchLoader />}
+        renderError={() => {
+          return (
+            <Flex justifyContent={"center"}>
+              <p>Something went wrong</p>
+            </Flex>
+          );
+        }}
+        renderData={(data) => {
+          const { userLocation, ranks } = data;
+          if (ranks.length === 0) {
             return (
               <Flex justifyContent={"center"}>
-                <p>Something went wrong</p>
+                <p>
+                  We could not find any locations with the provided coordinates,
+                  please increase the distance
+                </p>
               </Flex>
             );
-          }}
-          renderData={(data) => {
-            const { userLocation, ranks } = data;
-            if (ranks.length === 0) {
-              return (
-                <Flex justifyContent={"center"}>
-                  <p>
-                    We could not find any locations with the provided
-                    coordinates, please increase the distance
-                  </p>
-                </Flex>
-              );
-            }
+          }
 
-            const aheadOfNow = ranks.map((rank) => {
-              return {
-                ...rank,
-                times: rank.times.filter((time) => {
-                  const nowPlusOneHour = new Date().setHours(
-                    new Date().getHours() + 1
-                  );
+          const aheadOfNow = ranks.map((rank) => {
+            return {
+              ...rank,
+              times: rank.times.filter((time) => {
+                const nowPlusOneHour = new Date().setHours(
+                  new Date().getHours() + 1
+                );
 
-                  const dateTimeString =
-                    time.date.toString().slice(0, 11) +
-                    time.time +
-                    time.date.toString().slice(-1);
+                const dateTimeString =
+                  time.date.toString().slice(0, 11) +
+                  time.time +
+                  time.date.toString().slice(-1);
 
-                  return new Date(dateTimeString) >= new Date();
-                }),
-              };
-            });
+                return new Date(dateTimeString) >= new Date();
+              }),
+            };
+          });
 
-            return (
+          return (
+            <TwoGridRow>
+              <Map
+                data={data}
+                setMapInstance={setMapInstance}
+                setMap={setMap}
+              />
               <Flex flexDirection={"column"} paddingX={[40, 50]}>
                 <section id="section-carousell" className="h-full">
                   <Carousell
@@ -187,10 +182,10 @@ export default function Search({
                   />
                 </section>
               </Flex>
-            );
-          }}
-        />
-      </TwoGridRow>
+            </TwoGridRow>
+          );
+        }}
+      />
     </Flex>
   );
 }

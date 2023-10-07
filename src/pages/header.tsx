@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useRef } from "react";
+import { useRouter } from "next/router";
 
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
@@ -9,29 +9,15 @@ import { Text } from "../ui-kit/text";
 
 import UserForm from "./components/search-criterias";
 
-const Header = styled.header`
-  display: flex;
-  width: 100%;
-  height: 64px;
-  border-bottom: 2px solid ${theme.colors.greenDark};
-  justify-content: center;
-  padding: 6px;
-`;
-
-export default function HeaderComponent({ isHomePage }) {
+export default function HeaderComponent() {
+  const router = useRouter();
   const modal = useRef<HTMLDialogElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
     modal.current.showModal();
-    setIsOpen(true);
-    return;
   };
 
-  const onClose = () => {
-    modal.current.close();
-    setIsOpen(false);
-  };
+  const isHomePage = router.pathname === "/";
 
   return (
     <Flex
@@ -63,7 +49,7 @@ export default function HeaderComponent({ isHomePage }) {
         >
           <UserForm header={modal} />
           <span
-            onClick={() => onClose()}
+            onClick={() => modal.current.close()}
             className="absolute right-0 top-0 cursor-pointer border-l-2 border-b-2 border-black w-6 text-center hover:bg-gray-600 hover:border-none  transition-all duration-300 ease-in-out "
           >
             <Text variant="subtitle-small">X</Text>

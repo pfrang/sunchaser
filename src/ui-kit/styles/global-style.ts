@@ -19,7 +19,6 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
 
-
   a {
     color: inherit;
     text-decoration: none;
