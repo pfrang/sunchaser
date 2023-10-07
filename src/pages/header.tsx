@@ -2,12 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useRef } from "react";
 import { useRouter } from "next/router";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
 import { Text } from "../ui-kit/text";
 
 import UserForm from "./components/search-criterias";
+import SwipeableTemporaryDrawer from "./search/components/drawer";
 
 export default function HeaderComponent() {
   const router = useRouter();
@@ -39,7 +41,7 @@ export default function HeaderComponent() {
         </Link>
         {/* <Text variant="body-large-bold">Sunchaser</Text> */}
       </Flex>
-      <dialog className="p-0 rounded-md" ref={modal}>
+      {/* <dialog className="p-0 rounded-md" ref={modal}>
         <div
           className={`h-[500px] w-[300px]`}
           style={{
@@ -55,7 +57,7 @@ export default function HeaderComponent() {
             <Text variant="subtitle-small">X</Text>
           </span>
         </div>
-      </dialog>
+      </dialog> */}
       {!isHomePage && (
         <Flex paddingY={2} justifyContent={"flex-end"}>
           <img
@@ -64,6 +66,7 @@ export default function HeaderComponent() {
             className="cursor-pointer"
             src="/icons/black/svg/menu.svg"
           />
+          <SwipeableTemporaryDrawer />
         </Flex>
       )}
     </Flex>
