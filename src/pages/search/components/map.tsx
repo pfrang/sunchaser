@@ -3,7 +3,7 @@ import mapboxgl from "mapbox-gl";
 
 import { MapBoxHelper } from "../mapbox-settings";
 
-export const Map = ({ data, setMapInstance, setMap }) => {
+export const Map = ({ data, setMapInstance, setMap, map }) => {
   useEffect(() => {
     if (document.getElementById("map")) {
       const longitudes = data.ranks.map((item) => item.longitude);

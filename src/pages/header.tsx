@@ -60,12 +60,6 @@ export default function HeaderComponent() {
       </dialog> */}
       {!isHomePage && (
         <Flex paddingY={2} justifyContent={"flex-end"}>
-          <img
-            tabIndex={0}
-            onClick={onClick}
-            className="cursor-pointer"
-            src="/icons/black/svg/menu.svg"
-          />
           <SwipeableTemporaryDrawer />
         </Flex>
       )}

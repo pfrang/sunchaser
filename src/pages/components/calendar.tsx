@@ -71,6 +71,7 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
             {selectedDate.toLocaleDateString(locale)}
           </Text>
           <div
+            id="calendar-icon"
             tabIndex={0}
             className={`cursor-pointer absolute right-1
             ${isPopperOpen && "bg-gray-300"} hover:bg-gray-300 rounded-lg`}

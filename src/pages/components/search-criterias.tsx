@@ -40,12 +40,14 @@ interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
   weatherSelected?: WeatherOptions;
   mapBoxKey?: string;
+  setOpenDrawer?: (open: boolean) => void;
 }
 
 export default function UserForm({
   header,
   weatherSelected,
   mapBoxKey,
+  setOpenDrawer,
 }: UserFormProps) {
   const router = useRouter();
   const { userLocation } = useUserLocation();
@@ -77,7 +79,7 @@ export default function UserForm({
         .innerHTML
     );
 
-    if (!header) {
+    if (isHomePage) {
       latitudeInput = userLocation.latitude;
       longitudeInput = userLocation.longitude;
     } else {
@@ -108,7 +110,8 @@ export default function UserForm({
     router.push(`search?${urlPar}`, undefined, {
       shallow: false,
     });
-    header?.current.close();
+
+    setOpenDrawer && setOpenDrawer(false);
   };
 
   const disableButton = !isHomePage ? false : !sunSelected;
@@ -116,7 +119,7 @@ export default function UserForm({
   return (
     <>
       <FormStyle onSubmit={onSubmit}>
-        {header && (
+        {!isHomePage && (
           <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
         )}
         <Calendar

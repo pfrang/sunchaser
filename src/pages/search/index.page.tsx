@@ -50,12 +50,14 @@ export default function Search({
   );
 
   const resetMap = () => {
-    map.removeLayer("route");
-    map.flyTo({
-      center: [data.userLocation.longitude, data.userLocation.latitude],
-      duration: 500,
-    });
-    mapInstance.setFitBounds(map);
+    if (map) {
+      map.removeLayer("route");
+      map.flyTo({
+        center: [data.userLocation.longitude, data.userLocation.latitude],
+        duration: 500,
+      });
+      mapInstance.setFitBounds(map);
+    }
   };
 
   // useEffect(() => {
@@ -85,7 +87,7 @@ export default function Search({
     item: AzureFunctionCoordinatesMappedItems,
     swiper: Swiper
   ) => {
-    if (item.index !== highlightedCard?.index) {
+    if (item.index !== highlightedCard?.index && map) {
       const { lat, lon } = {
         lat: item.latitude,
         lon: item.longitude,
@@ -171,6 +173,7 @@ export default function Search({
                 data={data}
                 setMapInstance={setMapInstance}
                 setMap={setMap}
+                map={map}
               />
               <Flex flexDirection={"column"} paddingX={[40, 50]}>
                 <section id="section-carousell" className="h-full">

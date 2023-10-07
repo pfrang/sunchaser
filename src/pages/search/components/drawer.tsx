@@ -2,91 +2,76 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import UserForm from "pages/components/search-criterias";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { Flex } from "ui-kit/flex";
+import { IconButton } from "@mui/material";
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
 export default function SwipeableTemporaryDrawer() {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+  const [drawerIsOpen, setOpenDrawer] = React.useState(false);
 
   const toggleDrawer =
-    (anchor: Anchor, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
       if (
         event &&
         event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
+        (event as React.KeyboardEvent).key === "Escape"
+      ) {
+        setOpenDrawer(false);
+      } else if (
+        event &&
+        event.type === "click" &&
+        event.target instanceof HTMLElement &&
+        event.target.closest("#box-layout")
       ) {
         return;
+      } else if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof SVGElement
+      ) {
+        return;
+      } else {
+        setOpenDrawer(open);
       }
-
-      setState({ ...state, [anchor]: open });
     };
 
-  const list = (anchor: Anchor) => (
+  const BoxLayout = () => (
     <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
+      id="box-layout"
+      sx={{ width: 320 }}
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+      height={"100%"}
     >
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <UserForm setOpenDrawer={setOpenDrawer} />
     </Box>
   );
 
   return (
     <div>
-      {(["left", "right", "top", "bottom"] as const).map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          {/* @ts-ignore */}
-          <SwipeableDrawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            {list(anchor)}
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
+      <Button onClick={toggleDrawer(!drawerIsOpen)}>
+        <img
+          tabIndex={0}
+          className="cursor-pointer"
+          src="/icons/black/svg/menu.svg"
+        />
+      </Button>
+      {/* @ts-ignore */}
+      <SwipeableDrawer
+        variant="temporary"
+        anchor={"left"}
+        open={drawerIsOpen}
+        onClose={toggleDrawer(false)}
+        onOpen={toggleDrawer(true)}
+      >
+        {BoxLayout()}
+        <IconButton onClick={() => setOpenDrawer(false)}>
+          <ChevronLeftIcon />
+        </IconButton>
+      </SwipeableDrawer>
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
 import { useState } from "react";
-import styled from "styled-components";
 
 import { theme } from "../ui-kit/theme";
 import { Text } from "../ui-kit/text";
@@ -14,36 +13,15 @@ import {
 } from "./components/weather-carousell";
 import UserForm from "./components/search-criterias";
 
-const TwoGridHorizontalContainer = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 3fr;
-  height: 100%;
-  width: 100%;
-  /* border-radius: 100px; */
-  /* overflow: hidden; */
-  /* z-index: -1; */
-`;
-
 const Home: NextPage = ({
   mapBoxKey,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [weather, setWeather] = useState<WeatherOptions>("Sun");
 
-  const getColor = (weather: string) => {
-    switch (weather) {
-      case "sun":
-        return theme.color.yellow;
-      case "snow":
-        return theme.color.grey[1];
-      default:
-        return theme.colors.black;
-    }
-  };
-
   return (
     <>
       <Flex
-        height={["200px", "250px"]}
+        height={["250px"]}
         overflow={"hidden"}
         position={"relative"}
         flexDirection={"column"}
@@ -78,7 +56,6 @@ export const getStaticProps = async () => {
   const mapBoxKey = new AppConfig().mapBox.key;
   return {
     props: {
-      currentUrl: "/",
       mapBoxKey,
     },
   };
