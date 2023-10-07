@@ -1,9 +1,0 @@
-
-
-.rdp-day_selected,
-.rdp-day_selected:focus-visible,
-.rdp-day_selected:hover {
-  color: red !important;
-  opacity: 1;
-  background-color: var(--rdp-accent-color);
-}

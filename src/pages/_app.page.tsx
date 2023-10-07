@@ -5,6 +5,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
+import { GlobalStyle } from "ui-kit/styles/global-style";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
@@ -42,6 +43,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        {/* @ts-ignore*/}
+        <GlobalStyle />
         <Wrapper>
           <HeaderComponent isHomePage={isHomePage} />
           <Component {...pageProps} />

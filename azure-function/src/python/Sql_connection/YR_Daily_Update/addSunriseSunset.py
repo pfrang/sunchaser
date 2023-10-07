@@ -52,7 +52,7 @@ def addSunriseSunset(server,database,username,password,driver,country,SQL_workfl
     conn.commit()
 
     time_start = time.time()
-    timeout_minutes = 7
+    timeout_minutes = 100000000
     dfs = []
 
     ts = api.load.timescale()

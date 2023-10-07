@@ -10,11 +10,9 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   compiler: {
-    styledComponents: {
-      ssr: true,
-      displayName: true,
-    },
+    styledComponents: true,
   },
+  poweredByHeader: false,
 
   // typescript: {
   //   // !! WARN !!

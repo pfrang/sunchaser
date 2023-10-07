@@ -1,5 +1,3 @@
-import "react-day-picker/dist/style.css";
-import "./calendar.module.css";
 import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
 import { differenceInCalendarDays } from "date-fns";
 import nb from "date-fns/locale/nb";
@@ -86,7 +84,10 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
       {isPopperOpen && (
         <Flex justifyContent={"center"}>
           <DayPicker
-            // classNames={styles}
+            classNames={{
+              day_selected: "daypicker-selected-date",
+              day_today: "daypicker-today-date",
+            }}
             weekStartsOn={new Date().getDay() as WeekDayNumb}
             disabled={disabledDays}
             components={{ Row: OnlyFutureRow }}
