@@ -12,7 +12,11 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    background-color: "#F1F3FF";
+    background-color: #CFD1DE;
+  }
+
+  img {
+    width: 100%;
   }
 
   h3 {
@@ -31,7 +35,9 @@ export const GlobalStyle = createGlobalStyle`
 
   .rdp-button_reset.rdp-button.rdp-day.daypicker-selected-date {
     font-weight: bold !important;
+    background-color: var(--rdp-background-color);
   }
+
   .datepicker-today-date {
   }
 

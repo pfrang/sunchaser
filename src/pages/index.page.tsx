@@ -21,22 +21,19 @@ const Home: NextPage = ({
   return (
     <>
       <Flex
-        height={["250px"]}
+        height={["150px", "250px"]}
         overflow={"hidden"}
-        position={"relative"}
         flexDirection={"column"}
       >
-        <div className="bg-inherit h-full relative">
-          <div className="absolute flex justify-center z-10 w-full">
-            <Text variant="subtitle-large">Choose weather</Text>
-          </div>
-
-          <WeatherCarousell weather={weather} setWeather={setWeather} />
+        <div className="absolute flex justify-center z-10 w-full">
+          <Text variant="subtitle-large">Choose weather</Text>
         </div>
+
+        <WeatherCarousell weather={weather} setWeather={setWeather} />
       </Flex>
       <Spacer height={[16, 32]} />
-      <Flex flexGrow={1} flexDirection={"column"} paddingX={[4, 6]}>
-        <section id="form" className="grow">
+      <Flex flexDirection={"column"} paddingX={[4, 6]}>
+        <section id="form">
           <div
             className="border-2 rounded-xl h-full shadow-2xl"
             style={{

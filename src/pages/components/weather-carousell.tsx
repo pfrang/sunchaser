@@ -90,7 +90,7 @@ export const WeatherCarousell = ({
             )}
             <Image
               alt="weather"
-              className={`rounded-b-[50px] w-full h-full ${
+              className={`rounded-b-[50px] w-full  ${
                 isDisabled && "opacity-[50%]"
               }`}
               src={`/photo-and-layout/${item.toLowerCase()}.png`}
