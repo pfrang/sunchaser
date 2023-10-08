@@ -1,5 +1,6 @@
 from http.client import HTTPResponse
 import logging
+import datetime
 from urllib.error import HTTPError
 import azure.functions as func
 import os
@@ -16,6 +17,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         req_body = req.get_json()
         params = req_body["params"]
+        if(params['timer']):
+            utc_timestamp = datetime.datetime.utcnow().replace(
+                tzinfo=datetime.timezone.utc).isoformat()
+            return func.HttpResponse(f"Keep warm function triggered at {utc_timestamp}", status_code=200)
 
         server = os.getenv('SQL_Server')
         db = os.getenv('SQL_Database')

@@ -32,8 +32,8 @@ const Home: NextPage = ({
         <WeatherCarousell weather={weather} setWeather={setWeather} />
       </Flex>
       <Spacer height={[16, 32]} />
-      <Flex flexDirection={"column"} paddingX={[4, 6]}>
-        <section id="form">
+      <Flex flexDirection={"column"} paddingX={[4, 6]} flexGrow={1}>
+        <section id="form" className="grow">
           <div
             className="border-2 rounded-xl h-full shadow-2xl"
             style={{
