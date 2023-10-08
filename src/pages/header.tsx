@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useRef } from "react";
 import { useRouter } from "next/router";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
@@ -13,28 +12,24 @@ import SwipeableTemporaryDrawer from "./search/components/drawer";
 
 export default function HeaderComponent() {
   const router = useRouter();
-  const modal = useRef<HTMLDialogElement>(null);
-
-  const onClick = () => {
-    modal.current.showModal();
-  };
 
   const isHomePage = router.pathname === "/";
 
   return (
     <Flex
       bg={theme.colors.green}
-      height={[48, 60]}
+      height={60}
       paddingX={[2, 14]}
       justifyContent={"space-between"}
     >
-      <Flex paddingY={2} position={"relative"} alignItems={"center"}>
+      <Flex paddingY={2} position={"relative"} justifyContent={"flex-start"}>
         <Link href="/" tabIndex={0}>
           <Image
-            style={{ cursor: "pointer" }}
-            width={250}
-            height={60}
+            style={{ cursor: "pointer", objectFit: "contain" }}
+            // width={50}
+            // height={60}
             // sizes="(max-width: 800px) 100px, 50px"
+            fill
             alt="Logo"
             src={"/logo.svg"}
           />

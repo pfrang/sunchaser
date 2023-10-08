@@ -6,6 +6,7 @@ import UserForm from "pages/components/search-criterias";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Flex } from "ui-kit/flex";
 import { IconButton } from "@mui/material";
+import Image from "next/image";
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
@@ -52,11 +53,14 @@ export default function SwipeableTemporaryDrawer() {
 
   return (
     <div>
-      <Button onClick={toggleDrawer(!drawerIsOpen)}>
-        <img
+      <Button style={{ height: "100%" }} onClick={toggleDrawer(!drawerIsOpen)}>
+        <Image
+          alt="Menu"
+          fill
           tabIndex={0}
           className="cursor-pointer"
           src="/icons/black/svg/menu.svg"
+          style={{ objectFit: "contain" }}
         />
       </Button>
       {/* @ts-ignore */}
