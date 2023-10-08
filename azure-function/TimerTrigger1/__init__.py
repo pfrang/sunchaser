@@ -10,10 +10,6 @@ def main(mytimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
 
-    if mytimer.past_due:
-        logging.info('The timer is past due!')
-
-
     payload = {
         "params": {
             "timer": True
@@ -24,5 +20,10 @@ def main(mytimer: func.TimerRequest) -> None:
 
     try:
         response = requests.post(HOST, json=payload)
+        logging.info(response.text)
     except:
         logging.info(f"ERROR Trigger function, couldnt trigger /WeatherResult at {utc_timestamp}")
+
+
+    if mytimer.past_due:
+        logging.info('The timer is past due!')
