@@ -100,14 +100,12 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
             showOutsideDays
             fixedWeeks
             style={{
-              margin: "10px",
-              border: "1px dotted gray",
               borderRadius: "4px",
               backgroundColor: `${theme.colors.green}`,
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
               padding: "10px",
               position: "absolute",
-              zIndex: 1,
+              zIndex: 99,
             }}
             styles={{
               caption: { display: "none" },

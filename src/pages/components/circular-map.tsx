@@ -22,6 +22,8 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
 
   useEffect(() => {
     if (userLocation) {
+      const { sw, ne } = getBoundingBox(userLocation, kilometers);
+
       setPolygon(
         turf.circle(
           [userLocation.longitude, userLocation.latitude],
@@ -31,8 +33,6 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
           }
         )
       );
-
-      const { sw, ne } = getBoundingBox(userLocation, kilometers);
 
       mapRef.current?.fitBounds(
         [
