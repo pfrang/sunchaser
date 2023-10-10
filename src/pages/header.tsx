@@ -1,13 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
-import { Text } from "../ui-kit/text";
 
-import UserForm from "./components/search-criterias";
 import SwipeableTemporaryDrawer from "./search/components/drawer";
 
 export default function HeaderComponent() {
@@ -22,14 +20,13 @@ export default function HeaderComponent() {
       paddingX={[2, 14]}
       justifyContent={"space-between"}
     >
-      <Flex paddingY={2} position={"relative"} justifyContent={"flex-start"}>
+      <Flex paddingY={1} position={"relative"} justifyContent={"flex-start"}>
         <Link href="/" tabIndex={0}>
           <Image
-            style={{ cursor: "pointer", objectFit: "contain" }}
-            // width={50}
-            // height={60}
+            width={56}
+            height={56}
             // sizes="(max-width: 800px) 100px, 50px"
-            fill
+            // fill
             alt="Logo"
             src={"/logo.svg"}
           />

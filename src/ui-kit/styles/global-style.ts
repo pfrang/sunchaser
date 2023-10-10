@@ -15,8 +15,11 @@ export const GlobalStyle = createGlobalStyle`
     background-color: #CFD1DE;
   }
 
-  img {
-    width: 100%;
+
+
+  img[width], img[height] {
+    max-width: none;
+    height: 100%;
   }
 
   h3 {

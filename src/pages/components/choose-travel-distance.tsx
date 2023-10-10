@@ -52,8 +52,8 @@ export const ChooseTravelDistance = ({
   const valueToDisplay = valuesForSlider[index - 1]?.label;
 
   return (
-    <section id="distance_traveling" className="w-full">
-      <div className="w-full flex justify-center items-center flex-col">
+    <section id="distance_traveling" className="w-full grow">
+      <div className="w-full flex justify-center items-center flex-col h-full">
         <Text noWrap variant="caption-large">
           How far are you willing to travel?
         </Text>

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useRef, useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 
 import { Text } from "../../../ui-kit/text";
 import { Flex } from "../../../ui-kit/flex";
@@ -139,11 +140,21 @@ export const HighlightedCard = ({
         >
           <Flex justifyContent={"flex-end"} height={[28, 54]}>
             <Text noWrap>{`sunrise ${plus2HoursOnTime(sunriseTime)}`}</Text>
-            <img src="/icons/black/svg/partlysunny.svg" />
+            <Image
+              alt="partlySunny"
+              src="/icons/black/svg/partlysunny.svg"
+              width={64}
+              height={64}
+            />
           </Flex>
           <Flex height={[28, 54]}>
             <Text noWrap>{`sunset ${plus2HoursOnTime(sunsetTime)}`}</Text>
-            <img src="/icons/black/svg/partlysunny.svg" />
+            <Image
+              alt="partlySunny"
+              src="/icons/black/svg/partlysunny.svg"
+              width={64}
+              height={64}
+            />
           </Flex>
         </Flex>
         <Flex width={"100%"} justifyContent={"space-between"}>

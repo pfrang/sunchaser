@@ -56,7 +56,8 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
       justifyContent={"center"}
       alignItems={"center"}
       width={"100%"}
-      height={"200px"}
+      height={"100%"}
+      flexGrow={1}
     >
       {userLocation && (
         <ReactMapGL
@@ -74,6 +75,7 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
             // borderRadius: "40%",
             width: `100%`,
             height: `100%`,
+            borderRadius: "5%",
           }}
         >
           <Marker
