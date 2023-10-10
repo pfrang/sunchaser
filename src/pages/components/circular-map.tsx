@@ -4,7 +4,10 @@ import ReactMapGL, { Layer, MapRef, Marker, Source } from "react-map-gl";
 
 import { useUserLocation } from "../hooks/use-user-location";
 import { Flex } from "../../ui-kit/flex";
-import { getBoundingBox } from "../utils/get-boundaries-lng-lat";
+import {
+  getBoundingBox,
+  getBoundingBoxLngLatLike,
+} from "../utils/get-boundaries-lng-lat";
 
 export const CircularMap = ({ mapBoxKey, kilometers }) => {
   const { userLocation } = useUserLocation();
@@ -52,29 +55,23 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
   };
 
   return (
-    <Flex
-      justifyContent={"center"}
-      alignItems={"center"}
-      width={"100%"}
-      height={"100%"}
-      flexGrow={1}
-    >
+    <Flex justifyContent={"center"} alignItems={"center"} height={"100%"}>
       {userLocation && (
         <ReactMapGL
           ref={mapRef}
           initialViewState={{
             longitude: userLocation.longitude,
             latitude: userLocation.latitude,
-            zoom: 6,
+            bounds: getBoundingBoxLngLatLike(userLocation, kilometers),
+            fitBoundsOptions: {
+              padding: 20,
+            },
           }}
           mapStyle="mapbox://styles/mapbox/streets-v11"
           mapboxAccessToken={mapBoxKey}
           // onMove={(evt) => setViewState(evt.viewState)}
           {...disableInteractivitySettings}
           style={{
-            // borderRadius: "40%",
-            width: `100%`,
-            height: `100%`,
             borderRadius: "5%",
           }}
         >

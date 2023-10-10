@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Wrapper>
           <HeaderComponent />
           <Component {...pageProps} />
-          <Spacer height={64} />
+          <Spacer height={[32, 64]} />
         </Wrapper>
       </ThemeProvider>
       <Analytics />
