@@ -95,7 +95,7 @@ export const WeatherCarousell = ({
               }`}
               src={`/photo-and-layout/${item.toLowerCase()}.png`}
               fill
-              style={{ objectFit: "cover" }}
+              // style={{ objectFit: "cover" }}
             />
           </SwiperSlide>
         );

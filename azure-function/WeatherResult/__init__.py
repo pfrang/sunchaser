@@ -17,7 +17,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         req_body = req.get_json()
         params = req_body["params"]
-        if(params['timer']):
+        if('timer' in params):
             utc_timestamp = datetime.datetime.utcnow().replace(
                 tzinfo=datetime.timezone.utc).isoformat()
             return func.HttpResponse(f"Keep warm function triggered at {utc_timestamp}", status_code=200)

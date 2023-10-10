@@ -22,7 +22,7 @@ const Home: NextPage = ({
     <>
       <Flex
         height={["150px", "250px"]}
-        overflow={"hidden"}
+        // overflow={"hidden"}
         flexDirection={"column"}
       >
         <div className="absolute flex justify-center z-10 w-full">
