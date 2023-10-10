@@ -3,8 +3,13 @@ interface Range {
   label: string;
 }
 
-export const distanceArray = (step = 3): Range[] => {
-  const max = 100;
+export const distanceArray = ({
+  step,
+  max,
+}: {
+  step: number;
+  max: number;
+}): Range[] => {
   let counter = 1;
   const range = [];
   for (let i = 1; i <= max; i += step) {
@@ -25,10 +30,4 @@ export const getCounterValue = (
   const match = range.find((item) => item.label === label);
 
   return match ? match.value : undefined;
-};
-
-export const setUIOnNumber = (value: number) => {
-  const range = distanceArray()[value];
-
-  return range;
 };

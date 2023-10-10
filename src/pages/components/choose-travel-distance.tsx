@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { useRouter } from "next/router";
-import { values } from "lodash";
+import { styled } from "@mui/material";
 
 import { Text } from "../../ui-kit/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";
@@ -18,17 +18,58 @@ interface ChooseTravelDistanceProps {
   isHomePage?: boolean;
 }
 
+const PrettoSlider = styled(Slider)({
+  color: "#52af77",
+  height: 6,
+  "& .MuiSlider-track": {
+    border: "none",
+  },
+  "& .MuiSlider-thumb": {
+    height: 22,
+    width: 24,
+    backgroundColor: "#fff",
+    border: "2px solid currentColor",
+    "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
+      boxShadow: "inherit",
+    },
+    "&:before": {
+      display: "none",
+    },
+  },
+  "& .MuiSlider-valueLabel": {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: "unset",
+    padding: 0,
+    width: 32,
+    height: 32,
+    borderRadius: "50% 50% 50% 0",
+    backgroundColor: "#52af77",
+    transformOrigin: "bottom left",
+    transform: "translate(50%, -100%) rotate(-45deg) scale(0)",
+    "&:before": { display: "none" },
+    "&.MuiSlider-valueLabelOpen": {
+      transform: "translate(50%, -100%) rotate(-45deg) scale(1)",
+    },
+    "& > *": {
+      transform: "rotate(45deg)",
+    },
+  },
+});
+
 export const ChooseTravelDistance = ({
   travelDistanceRef,
   mapBoxKey,
 }: ChooseTravelDistanceProps) => {
   const router = useRouter();
+  const valuesForSlider = distanceArray({
+    step: 5,
+    max: 500,
+  });
 
   const isHomePage = router.pathname === "/";
-  const [kilometers, setKilometers] = useState(50);
+  const [kilometers, setKilometers] = useState(valuesForSlider.length / 2);
 
-  const step = 5;
-  const valuesForSlider = distanceArray(step);
   const [index, setIndex] = useState(valuesForSlider.length / 2);
 
   const handleSlide = (e: any, num) => {
@@ -37,7 +78,7 @@ export const ChooseTravelDistance = ({
   };
 
   useEffect(() => {
-    setKilometers(Number(router.query.distance) || 50);
+    setKilometers(Number(router.query.distance) || 250);
     if (router.query?.distance) {
       return setIndex(
         getCounterValue(valuesForSlider, router.query?.distance as string)
@@ -63,7 +104,7 @@ export const ChooseTravelDistance = ({
           <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
         )}
         <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
-        <Slider
+        <PrettoSlider
           ref={travelDistanceRef}
           aria-label="Temperature"
           value={index}
@@ -72,11 +113,11 @@ export const ChooseTravelDistance = ({
           valueLabelFormat={`${valueToDisplay}`}
           step={1}
           onChange={handleSlide}
-          marks={valuesForSlider}
+          // marks={valuesForSlider}
           min={min}
           max={max}
         />
-        <div className="w-full flex justify-between text-xs ">
+        {/* <div className="w-full flex justify-between text-xs ">
           {Array.from({ length: valuesForSlider.length }).map((_, idx) => {
             return (
               <span key={idx} className="text-black">
@@ -84,7 +125,7 @@ export const ChooseTravelDistance = ({
               </span>
             );
           })}
-        </div>
+        </div> */}
 
         {/* <datalist
           id="tickmarks"
