@@ -6,13 +6,12 @@ import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalStyle } from "ui-kit/styles/global-style";
-import { Flex } from "ui-kit/flex";
-import { useEffect } from "react";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
 
 import HeaderComponent from "./header";
+import { NavBar } from "./navbar";
 
 const Wrapper = styled.div`
   height: 100dvh; /* new browsers */
@@ -49,6 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <HeaderComponent />
           <Component {...pageProps} />
           <Spacer height={[32, 64]} />
+          <NavBar />
         </Wrapper>
       </ThemeProvider>
       <Analytics />
