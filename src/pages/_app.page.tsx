@@ -11,7 +11,7 @@ import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
 
 import HeaderComponent from "./header";
-import { NavBar } from "./navbar";
+import { Navbar } from "./navbar";
 
 const Wrapper = styled.div`
   height: 100dvh; /* new browsers */
@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <HeaderComponent />
           <Component {...pageProps} />
           <Spacer height={[32, 64]} />
-          <NavBar />
+          <Navbar />
         </Wrapper>
       </ThemeProvider>
       <Analytics />
