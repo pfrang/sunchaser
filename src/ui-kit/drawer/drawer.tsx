@@ -1,17 +1,20 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
-import UserForm from "pages/components/search-criterias";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { Flex } from "ui-kit/flex";
 import { IconButton } from "@mui/material";
-import Image from "next/image";
+
+import { useDisplayDrawer } from "../../states/drawer";
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
-export default function SwipeableTemporaryDrawer() {
-  const [drawerIsOpen, setOpenDrawer] = React.useState(false);
+interface DrawerProps {
+  children: React.ReactNode;
+  anchor: Anchor;
+}
+
+export const Drawer = ({ anchor, children }: DrawerProps) => {
+  const { drawerIsOpen, setOpenDrawer } = useDisplayDrawer();
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -47,26 +50,16 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(false)}
       height={"100%"}
     >
-      <UserForm setOpenDrawer={setOpenDrawer} />
+      {children}
     </Box>
   );
 
   return (
-    <div>
-      <Button style={{ height: "100%" }} onClick={toggleDrawer(!drawerIsOpen)}>
-        <Image
-          alt="Menu"
-          fill
-          tabIndex={0}
-          className="cursor-pointer"
-          src="/icons/black/svg/menu.svg"
-          style={{ objectFit: "contain" }}
-        />
-      </Button>
+    <>
       {/* @ts-ignore */}
       <SwipeableDrawer
         variant="temporary"
-        anchor={"left"}
+        anchor={anchor}
         open={drawerIsOpen}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
@@ -76,6 +69,6 @@ export default function SwipeableTemporaryDrawer() {
           <ChevronLeftIcon />
         </IconButton>
       </SwipeableDrawer>
-    </div>
+    </>
   );
-}
+};

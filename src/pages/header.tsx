@@ -2,13 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
+import Button from "@mui/material/Button";
 
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
+import { Drawer } from "../ui-kit/drawer/drawer";
+import { useDisplayDrawer } from "../states/drawer";
 
-import SwipeableTemporaryDrawer from "./search/components/drawer";
+import UserForm from "./components/search-criterias";
 
 export default function HeaderComponent() {
+  const { drawerIsOpen, setOpenDrawer } = useDisplayDrawer();
+
   const router = useRouter();
 
   const isHomePage = router.pathname === "/";
@@ -52,7 +57,22 @@ export default function HeaderComponent() {
       </dialog> */}
       {!isHomePage && (
         <Flex paddingY={2} justifyContent={"flex-end"}>
-          <SwipeableTemporaryDrawer />
+          <Button
+            style={{ height: "100%" }}
+            onClick={() => setOpenDrawer(!drawerIsOpen)}
+          >
+            <Image
+              alt="Menu"
+              fill
+              tabIndex={0}
+              className="cursor-pointer"
+              src="/icons/black/svg/menu.svg"
+              style={{ objectFit: "contain" }}
+            />
+          </Button>
+          <Drawer anchor={"left"}>
+            <UserForm />
+          </Drawer>
         </Flex>
       )}
     </Flex>

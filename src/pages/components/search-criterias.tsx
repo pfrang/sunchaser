@@ -6,6 +6,7 @@ import { Spacer } from "../../ui-kit/spacer/spacer";
 import { fetchTownDetails } from "../hooks/fetch-town-details";
 import { useUserLocation } from "../hooks/use-user-location";
 import { createPayloadParams } from "../utils/create-payload-params";
+import { useDisplayDrawer } from "../../states/drawer";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";
@@ -40,15 +41,14 @@ interface UserFormProps {
   header?: React.MutableRefObject<HTMLDialogElement>;
   weatherSelected?: WeatherOptions;
   mapBoxKey?: string;
-  setOpenDrawer?: (open: boolean) => void;
 }
 
 export default function UserForm({
   header,
   weatherSelected,
   mapBoxKey,
-  setOpenDrawer,
 }: UserFormProps) {
+  const { setOpenDrawer } = useDisplayDrawer();
   const router = useRouter();
   const { userLocation } = useUserLocation();
   const isHomePage = router.pathname === "/";
@@ -111,7 +111,7 @@ export default function UserForm({
       shallow: false,
     });
 
-    setOpenDrawer && setOpenDrawer(false);
+    setOpenDrawer(false);
   };
 
   const disableButton = !isHomePage ? false : !sunSelected;
