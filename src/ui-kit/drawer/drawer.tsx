@@ -65,9 +65,9 @@ export const Drawer = ({ anchor, children }: DrawerProps) => {
         onOpen={toggleDrawer(true)}
       >
         {BoxLayout()}
-        <IconButton onClick={() => setOpenDrawer(false)}>
+        {/* <IconButton onClick={() => setOpenDrawer(false)}>
           <ChevronLeftIcon />
-        </IconButton>
+        </IconButton> */}
       </SwipeableDrawer>
     </>
   );
