@@ -6,6 +6,7 @@ import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalStyle } from "ui-kit/styles/global-style";
+import { useRouter } from "next/router";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
@@ -32,7 +33,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   //   document.documentElement.style.setProperty("--vh", `${vh}px`);
   // }, []);
 
-  const isHomePage = Component.name === "Home";
+  const router = useRouter();
+
+  const isHomePage = router.pathname === "/";
 
   return (
     <>
