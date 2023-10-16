@@ -2,18 +2,18 @@ import styled from "styled-components";
 import { useRef, useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 
-import { Text } from "../../../ui-kit/text";
-import { Flex } from "../../../ui-kit/flex";
+import { Text } from "../../../../../ui-kit/text";
+import { Flex } from "../../../../../ui-kit/flex";
 import {
   Times,
   UserLocation,
-} from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { LinkContent } from "../../../ui-kit/link-content";
+} from "../../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { LinkContent } from "../../../../../ui-kit/link-content";
 import {
   getSortedTemperatureFromArrOfTimes,
   plus2HoursOnTime,
-} from "../../utils/sorting-and-filtering-functions";
-import { Temperature } from "../../utils/temperature";
+} from "../../../../utils/sorting-and-filtering-functions";
+import { Temperature } from "../../../../utils/temperature";
 
 import { TimeSeries } from "./time-series";
 

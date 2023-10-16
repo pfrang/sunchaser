@@ -62,8 +62,12 @@ const createNavItems = () => {
 
   return (
     <>
-      <Flex flexDirection={"column"} alignItems={"center"}>
-        <Button onClick={() => setFooterItem("weather")}>
+      <Button
+        style={{ height: "100%" }}
+        fullWidth
+        onClick={() => setFooterItem("weather")}
+      >
+        <Flex flexDirection={"column"} alignItems={"center"}>
           <Image
             alt="partlySunny"
             src={
@@ -74,13 +78,17 @@ const createNavItems = () => {
             width={64}
             height={64}
           />
-        </Button>
-        <Text color={footerItem === "weather" ? "white" : "black"} noWrap>
-          SOmeting
-        </Text>
-      </Flex>
-      <Flex flexDirection={"column"} alignItems={"center"}>
-        <Button onClick={() => setFooterItem("result")}>
+          <Text color={footerItem === "weather" ? "white" : "black"} noWrap>
+            SOmeting
+          </Text>
+        </Flex>
+      </Button>
+      <Button
+        style={{ height: "100%" }}
+        fullWidth
+        onClick={() => setFooterItem("result")}
+      >
+        <Flex flexDirection={"column"} alignItems={"center"}>
           <Image
             alt="partlySunny"
             src={
@@ -91,13 +99,17 @@ const createNavItems = () => {
             width={64}
             height={64}
           />
-        </Button>
-        <Text color={footerItem === "result" ? "white" : "black"} noWrap>
-          SOmeting
-        </Text>
-      </Flex>
-      <Flex flexDirection={"column"} alignItems={"center"}>
-        <Button onClick={() => setFooterItem("location")}>
+          <Text color={footerItem === "result" ? "white" : "black"} noWrap>
+            SOmeting
+          </Text>
+        </Flex>
+      </Button>
+      <Button
+        style={{ height: "100%" }}
+        fullWidth
+        onClick={() => setFooterItem("location")}
+      >
+        <Flex flexDirection={"column"} alignItems={"center"}>
           <Image
             alt="partlySunny"
             src={
@@ -108,13 +120,17 @@ const createNavItems = () => {
             width={64}
             height={64}
           />
-        </Button>
-        <Text color={footerItem === "location" ? "white" : "black"} noWrap>
-          SOmeting
-        </Text>
-      </Flex>
-      <Flex flexDirection={"column"} alignItems={"center"}>
-        <Button onClick={() => setFooterItem("date")}>
+          <Text color={footerItem === "location" ? "white" : "black"} noWrap>
+            SOmeting
+          </Text>
+        </Flex>
+      </Button>
+      <Button
+        style={{ height: "100%" }}
+        fullWidth
+        onClick={() => setFooterItem("date")}
+      >
+        <Flex flexDirection={"column"} alignItems={"center"}>
           <Image
             alt="partlySunny"
             src={
@@ -125,11 +141,11 @@ const createNavItems = () => {
             width={64}
             height={64}
           />
-        </Button>
-        <Text color={footerItem === "date" ? "white" : "black"} noWrap>
-          SOmeting
-        </Text>
-      </Flex>
+          <Text color={footerItem === "date" ? "white" : "black"} noWrap>
+            SOmeting
+          </Text>
+        </Flex>
+      </Button>
     </>
   );
 };
