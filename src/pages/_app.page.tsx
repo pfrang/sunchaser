@@ -11,7 +11,7 @@ import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
 
 import HeaderComponent from "./header";
-import { Navbar } from "./navbar";
+import { Footer } from "./footer";
 
 const Wrapper = styled.div`
   height: 100dvh; /* new browsers */
@@ -32,6 +32,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   //   document.documentElement.style.setProperty("--vh", `${vh}px`);
   // }, []);
 
+  const isHomePage = Component.name === "Home";
+
   return (
     <>
       {/* @ts-ignore*/}
@@ -48,7 +50,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <HeaderComponent />
           <Component {...pageProps} />
           <Spacer height={[32, 64]} />
-          <Navbar />
+          {!isHomePage && <Footer />}
         </Wrapper>
       </ThemeProvider>
       <Analytics />
