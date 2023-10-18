@@ -1,5 +1,5 @@
-export interface CommonData {
-  data: any;
+export interface CommonData<T> {
+  data: T;
 }
 
 export interface CommonMetaData {

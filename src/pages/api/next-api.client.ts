@@ -1,6 +1,4 @@
-import axios, { AxiosInstance } from "axios";
-
-const yr = "https://api.met.no/weatherapi/locationforecast/2.0/compact";
+import axios, { AxiosError, AxiosInstance } from "axios";
 
 export type ResponseDTO<Data> = {
   metadata: ResponseMetaData;
@@ -13,9 +11,26 @@ export class NextApiClient {
   constructor() {
     const axiosInstance = axios.create({
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "User-Agent": "Weather app",
+        "Content-Type": "application/json",
       },
     });
     this.axiosInstance = axiosInstance;
+
+    this.axiosInstance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        if (isAxiosError(error)) {
+          console.error(error.response.data);
+          return Promise.reject(error);
+        }
+      }
+    );
   }
 }
+
+export const isAxiosError = (error: any): error is AxiosError => {
+  return error.isAxiosError;
+};
