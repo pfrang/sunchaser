@@ -12,7 +12,7 @@ export interface GoogleMapsDetailsResponse {
 
 export class GoogleMapsDetailsMapper {
   readonly contentData: GetGoogleMapsDetailsSLApiResponse;
-  constructor(dataProps: CommonData) {
+  constructor(dataProps: CommonData<GetGoogleMapsDetailsSLApiResponse>) {
     if (!dataProps) return null;
     this.contentData = dataProps.data;
   }

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { InferGetServerSidePropsType } from "next";
 
 import { AppConfig } from "../../app-config";
 import { useDisplayFooter } from "../../states/footer";
 
-import { Sunchaser } from "./routes/sunchaser/index.page";
-import { Forecast } from "./routes/forecast/index.page";
+import { Sunchaser } from "./routes/sunchaser/index";
+import { Forecast } from "./routes/forecast/index";
 
 export default function Search({
   mapBoxKey,

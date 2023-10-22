@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { useRouter } from "next/router";
-import { styled } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { Text } from "../../ui-kit/text";
 import { Spacer } from "../../ui-kit/spacer/spacer";

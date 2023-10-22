@@ -13,7 +13,7 @@ export interface CoordinatesMappedResponse {
 }
 export class CoordinatesMapper {
   readonly contentData: AzureFunctionCoordinatesData;
-  constructor(dataProps: CommonData) {
+  constructor(dataProps: CommonData<AzureFunctionCoordinatesData>) {
     this.contentData = dataProps.data;
   }
 

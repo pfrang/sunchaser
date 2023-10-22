@@ -18,7 +18,7 @@ export interface GoogleMapsAutoSearchMappedResponse {
 
 export class GoogleMapsAutoSearchMapper {
   readonly contentData: GetGoogleMapsAutoSearchSLApiResponse;
-  constructor(dataProps: CommonData) {
+  constructor(dataProps: CommonData<GetGoogleMapsAutoSearchSLApiResponse>) {
     this.contentData = dataProps.data;
   }
 
