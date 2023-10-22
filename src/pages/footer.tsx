@@ -22,7 +22,7 @@ export const Footer = () => {
     <>
       <Box
         sx={{
-          position: "sticky",
+          position: isExpanded ? "fixed" : "sticky",
           bottom: 0,
           left: 0,
           right: 0,

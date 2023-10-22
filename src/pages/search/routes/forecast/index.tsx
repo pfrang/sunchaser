@@ -45,7 +45,7 @@ export const Forecast = () => {
   }, [townId]);
 
   return (
-    <Flex minHeight={"100%"} flexDirection={"column"} gap={4}>
+    <Flex height={"100%"} flexDirection={"column"} gap={4}>
       <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
       <ConditionalPresenter
         isLoading={isLoading}
