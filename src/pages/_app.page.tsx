@@ -19,8 +19,8 @@ const Wrapper = styled.div`
   /* overflow-y: hidden; */
   /* min-height: 100vh; */
   /* min-height: -moz-available;
-  min-height: -webkit-fill-available;
-  min-height: fill-available; */
+  min-height: -webkit-fill-available; */
+  /* min-height: fill-available; */
   display: flex;
   flex-direction: column;
 `;

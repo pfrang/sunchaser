@@ -3,8 +3,14 @@ import useSWR, { SWRConfig } from "swr";
 
 import { NextApiRequest } from "./common-types";
 
+export interface UseNextApiRequestResponse<Data> {
+  data?: Data;
+  error?: Error;
+  isLoading: boolean;
+}
+
 export const useNextApiRequest = (
-  requestConfig: Pick<NextApiRequest, "data" | "params" | "url">,
+  requestConfig: Pick<NextApiRequest, "data" | "params" | "url" | "method">,
   isReady?: boolean
 ) => {
   const params = requestConfig.params
@@ -18,7 +24,7 @@ export const useNextApiRequest = (
   const fetcherRequest = {
     ...requestConfig,
     url: urlWithParams,
-    method: "POST",
+    method: requestConfig.method || "GET",
     headers: {
       "Content-Type": "application/json",
     },

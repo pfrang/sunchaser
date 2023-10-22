@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
-type NavItem = "weather" | "location" | "result" | "date";
+export type FooterItems = "sunchaser" | "forecast" | "location" | "date";
 
 export interface DisplayDrawerStates {
-  footerItem: NavItem;
-  setFooterItem: (input: NavItem) => void;
+  footerItem: FooterItems;
+  setFooterItem: (input: FooterItems) => void;
 }
 
 export const useDisplayFooter = create<DisplayDrawerStates>((set) => ({
-  footerItem: "weather",
-  setFooterItem: (input: NavItem) => set(() => ({ footerItem: input })),
+  footerItem: "forecast",
+  setFooterItem: (input: FooterItems) => set(() => ({ footerItem: input })),
 }));

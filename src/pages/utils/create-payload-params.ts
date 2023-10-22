@@ -1,5 +1,3 @@
-import { PayloadParams } from "../api/azure-function/coordinates/coordinates-api-client/coordinates-api.post-schema";
-
 import { formatDate } from "./convert-date";
 
 export const createPayloadParams = ({

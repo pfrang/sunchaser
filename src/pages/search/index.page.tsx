@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { InferGetServerSidePropsType } from "next";
 
 import { AppConfig } from "../../app-config";
 import { useDisplayFooter } from "../../states/footer";
 
-import Sunchaser from "./components/sunchaser/index.page";
+import { Sunchaser } from "./routes/sunchaser/index.page";
+import { Forecast } from "./routes/forecast/index.page";
 
 export default function Search({
   mapBoxKey,
@@ -17,9 +17,9 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const { footerItem, setFooterItem } = useDisplayFooter();
 
   switch (footerItem) {
+    case "forecast":
+      return <Forecast />;
     case "location":
-      return <div>Coming</div>;
-    case "result":
       return <div>Coming</div>;
     case "date":
       return <div>Coming</div>;

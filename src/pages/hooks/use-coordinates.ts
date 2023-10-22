@@ -1,6 +1,3 @@
-import axios, { AxiosRequestConfig } from "axios";
-import useSWR from "swr";
-
 import {
   CoordinatesNextApiResponse,
   azureFuncGetCoordinatesEndPoint,
@@ -16,7 +13,7 @@ interface UseNextApiRequestResponse<Data> {
 }
 
 export const useCoordinates = (
-  requestConfig: Pick<NextApiRequest, "data" | "params">,
+  requestConfig: Pick<NextApiRequest, "data" | "params" | "method">,
   isReady?: boolean
 ) => {
   const {
@@ -27,6 +24,7 @@ export const useCoordinates = (
     {
       url: azureFuncGetCoordinatesEndPoint,
       params: requestConfig.params,
+      method: requestConfig.method,
       data: requestConfig.data,
     },
     isReady

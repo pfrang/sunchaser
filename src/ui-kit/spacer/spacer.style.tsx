@@ -6,7 +6,8 @@ export const Wrapper = styled.span<{
 }>`
   ${space};
   ${layout};
-  border-top: ${(props) => (props.line ? "2px solid black" : "")};
+  border-top: ${(props) => (props.line ? "1px solid black" : "")};
   display: block;
+  background-color: inherit;
   width: 100%;
 `;

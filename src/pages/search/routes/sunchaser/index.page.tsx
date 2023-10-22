@@ -1,11 +1,9 @@
 import mapboxgl from "mapbox-gl";
-import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
 import Swiper from "swiper";
 
-import { AppConfig } from "../../../../app-config";
 import { ConditionalPresenter } from "../../../../ui-kit/conditional-presenter/conditional-presenter";
 import { Flex } from "../../../../ui-kit/flex";
 import { SearchLoader } from "../../../../ui-kit/search-loader/search-loader";
@@ -25,13 +23,14 @@ const TwoGridRow = styled.div`
   /* margin-bottom: 200px; */
 `;
 
-export default function Sunchaser({ mapBoxKey }: { mapBoxKey: string }) {
+export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const router = useRouter();
 
   mapboxgl.accessToken = mapBoxKey;
 
   const { data, isLoading, error } = useCoordinates(
     {
+      method: "POST",
       params: router.query,
       data: router.query,
     },
@@ -189,7 +188,7 @@ export default function Sunchaser({ mapBoxKey }: { mapBoxKey: string }) {
       />
     </Flex>
   );
-}
+};
 
 // export async function getServerSideProps(
 //   context

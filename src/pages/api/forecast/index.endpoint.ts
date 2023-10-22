@@ -1,13 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { handleGet } from "./handlers/handle-get";
+import { ForecastMappedResponse } from "./mapper/forecast-mapper";
 
-export const yrUrl = "google-maps/auto-search";
+export const yrUrl = "forecast";
 
-export interface YrNextApiResponse {
-  metaData: {};
-  data: any;
-}
+export interface ForecastNextApiResponse extends ForecastMappedResponse {}
 
 export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {

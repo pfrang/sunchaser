@@ -1,12 +1,13 @@
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Box, Button, Collapse, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { capitalize } from "lodash";
 
 import { Flex } from "../ui-kit/flex";
 import { Text } from "../ui-kit/text";
-import { useDisplayFooter } from "../states/footer";
+import { FooterItems, useDisplayFooter } from "../states/footer";
 
 export const Footer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -15,11 +16,13 @@ export const Footer = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const footerItems = ["forecast", "sunchaser", "location", "date"];
+
   return (
     <>
       <Box
         sx={{
-          position: "fixed",
+          position: "sticky",
           bottom: 0,
           left: 0,
           right: 0,
@@ -48,7 +51,9 @@ export const Footer = () => {
             }}
           >
             <Flex justifyContent={"space-between"} height={"100%"}>
-              {createNavItems()}
+              {footerItems.map((item: FooterItems) => {
+                return createFooterItem(item);
+              })}
             </Flex>
           </Box>
         </Collapse>
@@ -57,95 +62,30 @@ export const Footer = () => {
   );
 };
 
-const createNavItems = () => {
+const createFooterItem = (item: FooterItems) => {
   const { footerItem, setFooterItem } = useDisplayFooter();
 
   return (
-    <>
-      <Button
-        style={{ height: "100%" }}
-        fullWidth
-        onClick={() => setFooterItem("weather")}
-      >
-        <Flex flexDirection={"column"} alignItems={"center"}>
-          <Image
-            alt="partlySunny"
-            src={
-              footerItem === "weather"
-                ? "/icons/white/svg/partlysunny.svg"
-                : "/icons/black/svg/partlysunny.svg"
-            }
-            width={64}
-            height={64}
-          />
-          <Text color={footerItem === "weather" ? "white" : "black"} noWrap>
-            SOmeting
-          </Text>
-        </Flex>
-      </Button>
-      <Button
-        style={{ height: "100%" }}
-        fullWidth
-        onClick={() => setFooterItem("result")}
-      >
-        <Flex flexDirection={"column"} alignItems={"center"}>
-          <Image
-            alt="partlySunny"
-            src={
-              footerItem === "result"
-                ? "/icons/white/svg/partlysunny.svg"
-                : "/icons/black/svg/partlysunny.svg"
-            }
-            width={64}
-            height={64}
-          />
-          <Text color={footerItem === "result" ? "white" : "black"} noWrap>
-            SOmeting
-          </Text>
-        </Flex>
-      </Button>
-      <Button
-        style={{ height: "100%" }}
-        fullWidth
-        onClick={() => setFooterItem("location")}
-      >
-        <Flex flexDirection={"column"} alignItems={"center"}>
-          <Image
-            alt="partlySunny"
-            src={
-              footerItem === "location"
-                ? "/icons/white/svg/partlysunny.svg"
-                : "/icons/black/svg/partlysunny.svg"
-            }
-            width={64}
-            height={64}
-          />
-          <Text color={footerItem === "location" ? "white" : "black"} noWrap>
-            SOmeting
-          </Text>
-        </Flex>
-      </Button>
-      <Button
-        style={{ height: "100%" }}
-        fullWidth
-        onClick={() => setFooterItem("date")}
-      >
-        <Flex flexDirection={"column"} alignItems={"center"}>
-          <Image
-            alt="partlySunny"
-            src={
-              footerItem === "date"
-                ? "/icons/white/svg/partlysunny.svg"
-                : "/icons/black/svg/partlysunny.svg"
-            }
-            width={64}
-            height={64}
-          />
-          <Text color={footerItem === "date" ? "white" : "black"} noWrap>
-            SOmeting
-          </Text>
-        </Flex>
-      </Button>
-    </>
+    <Button
+      style={{ height: "100%" }}
+      fullWidth
+      onClick={() => setFooterItem(item)}
+    >
+      <Flex flexDirection={"column"} alignItems={"center"}>
+        <Image
+          alt="partlySunny"
+          src={
+            footerItem === item
+              ? "/icons/white/svg/partlysunny.svg"
+              : "/icons/black/svg/partlysunny.svg"
+          }
+          width={64}
+          height={64}
+        />
+        <Text color={footerItem === item ? "white" : "black"} noWrap>
+          {capitalize(item)}
+        </Text>
+      </Flex>
+    </Button>
   );
 };
