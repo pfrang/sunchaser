@@ -189,18 +189,3 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
     </Flex>
   );
 };
-
-// export async function getServerSideProps(
-//   context
-// ): Promise<GetServerSidePropsSearch> {
-//   const query: PayloadParams = context.query;
-
-//   const mapBoxkey = new AppConfig().mapBox.key;
-
-//   return {
-//     props: {
-//       query,
-//       mapBoxkey,
-//     },
-//   };
-// }

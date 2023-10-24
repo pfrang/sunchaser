@@ -89,18 +89,11 @@ const greens = [
 ] as const;
 const greys = [
   0,
-  "#F1F3FF",
-  "#E3E5F2",
-  "#CFD1DE",
-  "#ACAEBB",
-  "#9395A2",
-  "#71737F",
-  "#585A67",
-  "#3E404D",
-  "#313340",
-  "#1F212E",
-  "#161822",
+  "rgba(255,250,250, 0.42)",
+  "rgba(136, 139, 154, 0.20)",
 ] as const;
+
+const blues = [0, "#00446A", "#004871", "#3C4566", "#323A55"] as const;
 
 const space1 = 4;
 const space2 = 8;
@@ -151,6 +144,7 @@ export const colors = {
   yellow: yellows,
   green: greens,
   grey: greys,
+  blues: blues,
 };
 
 export const theme = {

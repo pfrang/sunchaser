@@ -15,8 +15,6 @@ export const GlobalStyle = createGlobalStyle`
     background-color: #CFD1DE;
   }
 
-
-
   img[width], img[height] {
     max-width: none;
     height: 100%;
@@ -34,7 +32,6 @@ export const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
     box-sizing: inherit;
   }
-
 
   .rdp-button_reset.rdp-button.rdp-day.daypicker-selected-date {
     font-weight: bold !important;

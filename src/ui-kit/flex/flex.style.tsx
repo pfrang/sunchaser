@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import sscss from "@styled-system/css";
-import { space, flexbox, color, layout, border, position } from "styled-system";
+import {
+  space,
+  flexbox,
+  color,
+  layout,
+  border,
+  position,
+  shadow,
+} from "styled-system";
 
 import { theme } from "../theme";
 
@@ -10,6 +18,7 @@ const Wrapper = styled.div<{ gap: number | number[] }>`
   ${color}
   ${border}
   ${position}
+  ${shadow}
 
   /* transition: all 500ms ease; */
 

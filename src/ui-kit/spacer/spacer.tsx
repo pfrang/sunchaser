@@ -1,13 +1,19 @@
 import React, { FC, HTMLAttributes } from "react";
-import { LayoutProps, SpaceProps } from "styled-system";
-import { WidthProps } from "styled-system";
+import {
+  BorderProps,
+  LayoutProps,
+  SpaceProps,
+  ShadowProps,
+} from "styled-system";
 
 import { Wrapper } from "./spacer.style";
 
 export interface SpacerProps
   extends HTMLAttributes<HTMLDivElement>,
     SpaceProps,
-    LayoutProps {
+    ShadowProps,
+    LayoutProps,
+    BorderProps {
   vertical?: number;
   horizontal?: number;
   debug?: boolean;

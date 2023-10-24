@@ -6,6 +6,7 @@ import {
   LayoutProps,
   BorderProps,
   PositionProps,
+  ShadowProps,
 } from "styled-system";
 
 import { FlexStyle as s } from "./flex.style";
@@ -13,6 +14,7 @@ import { FlexStyle as s } from "./flex.style";
 export interface FlexProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "color">,
     ColorProps,
+    ShadowProps,
     SpaceProps,
     FlexboxProps,
     LayoutProps,
