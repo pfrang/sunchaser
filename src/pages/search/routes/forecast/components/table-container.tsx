@@ -31,8 +31,7 @@ export const ForecastTableContainer = ({
       MuiTableCell: {
         styleOverrides: {
           root: {
-            paddingTop: 0,
-            paddingBottom: 0,
+            padding: 0,
           },
         },
       },

@@ -4,6 +4,7 @@ import { Box, Button, Collapse, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { capitalize } from "lodash";
+import React from "react";
 
 import { Flex } from "../ui-kit/flex";
 import { Text } from "../ui-kit/text";
@@ -11,6 +12,7 @@ import { FooterItems, useDisplayFooter } from "../states/footer";
 
 export const Footer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [expandFooter, setExpandFooter] = useState(false);
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
@@ -22,7 +24,8 @@ export const Footer = () => {
     <>
       <Box
         sx={{
-          position: isExpanded ? "fixed" : "sticky",
+          // position: isExpanded ? "fixed" : "sticky",
+          position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
@@ -32,7 +35,7 @@ export const Footer = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          zIndex: 100,
+          zIndex: 999,
         }}
       >
         <Button fullWidth onClick={handleToggle}>
@@ -51,8 +54,12 @@ export const Footer = () => {
             }}
           >
             <Flex justifyContent={"space-between"} height={"100%"}>
-              {footerItems.map((item: FooterItems) => {
-                return createFooterItem(item);
+              {footerItems.map((item: FooterItems, index) => {
+                return (
+                  <React.Fragment key={item + index}>
+                    {createFooterItem(item)}
+                  </React.Fragment>
+                );
               })}
             </Flex>
           </Box>

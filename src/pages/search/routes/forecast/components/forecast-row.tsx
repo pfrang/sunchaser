@@ -29,7 +29,7 @@ export const ForecastTableRow = ({ day }: ForecastTableRowProps) => {
   return (
     <>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
+        <TableCell align="center">
           <IconButton
             aria-label="expand row"
             size="small"
@@ -51,7 +51,7 @@ export const ForecastTableRow = ({ day }: ForecastTableRowProps) => {
         <TableCell align="center">{overview.averageWind.toFixed(2)}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell colSpan={6}>
+        <TableCell sx={{ borderBottom: "unset" }} colSpan={5}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
@@ -70,7 +70,9 @@ export const ForecastTableRow = ({ day }: ForecastTableRowProps) => {
                 <TableBody>
                   {day.times.map((time, index) => (
                     <TableRow
-                      sx={{ height: "32px" }}
+                      sx={{
+                        height: "32px",
+                      }}
                       key={day.overview.date + index}
                     >
                       <ForecastRowDetails {...time} />
