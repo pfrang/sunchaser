@@ -2,6 +2,7 @@ import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
 import { differenceInCalendarDays } from "date-fns";
 import nb from "date-fns/locale/nb";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
@@ -11,8 +12,15 @@ import { theme } from "../../ui-kit/theme";
 
 export const Calendar = ({ selectedDate, setSelectedDate }) => {
   const popperRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [isPopperOpen, setIsPopperOpen] = useState(false);
   const [locale, setLocale] = useState("en-US");
+
+  useEffect(() => {
+    setSelectedDate(
+      router.query?.date ? new Date(router.query?.date as string) : new Date()
+    );
+  }, [router.query]);
 
   const today = new Date();
   const inTenDays = new Date(today.setDate(today.getDate() + 9));

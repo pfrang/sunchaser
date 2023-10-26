@@ -3,18 +3,18 @@ import { create } from "zustand";
 export type FooterItems = "sunchaser" | "forecast";
 export type FooterSubItems = "location" | "date" | "profile" | "map" | "result";
 
-export const footerSubItemsSunchaser = [
-  "location",
-  "date",
-  "profile",
-  "result",
-] as const;
-
 export const footerSubItemsForecast = [
+  "result",
   "map",
   "date",
   "profile",
+] as const;
+
+export const footerSubItemsSunchaser = [
   "result",
+  "location",
+  "date",
+  "profile",
 ] as const;
 
 export interface DisplayDrawerStates {
@@ -33,7 +33,7 @@ export const useDisplayFooter = create<DisplayDrawerStates>((set) => ({
 
 export const useDisplayFooterSubItems = create<DisplayDrawerSubItemsStates>(
   (set) => ({
-    footerSubItem: "location",
+    footerSubItem: "result",
     setFooterSubItem: (input: FooterSubItems) =>
       set(() => ({ footerSubItem: input })),
   })

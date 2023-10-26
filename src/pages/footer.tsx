@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { capitalize } from "lodash";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Spacer } from "ui-kit/spacer/spacer";
 import { useState } from "react";
 import { Box, Button, Collapse } from "@mui/material";
@@ -22,6 +22,8 @@ import { Flex } from "../ui-kit/flex";
 export const Footer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { footerItem, setFooterItem } = useDisplayFooter();
+  const [boxPosition, setBoxPosition] = useState("sticky");
+  const boxRef = useRef(null);
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
@@ -32,12 +34,29 @@ export const Footer = () => {
       ? footerSubItemsSunchaser
       : footerSubItemsForecast;
 
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      if (isExpanded) {
+        setBoxPosition("sticky");
+      } else {
+        setBoxPosition("fixed");
+      }
+      // set position sticky to this useRef below
+    }, 500);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [isExpanded]);
+
   return (
     <>
       <Box
+        ref={boxRef}
         sx={{
-          // position: isExpanded ? "fixed" : "sticky",
+          // position: isExpanded ? "sticky" : "fixed",
           position: "fixed",
+          // position: "sticky",
           bottom: 0,
           left: 0,
           right: 0,
@@ -115,7 +134,7 @@ const FooterButton = ({ text }: { text: FooterItems }) => {
 
   const handleClick = () => {
     setFooterItem(text);
-    setFooterSubItem(text === "forecast" ? "map" : "location");
+    setFooterSubItem("result");
   };
 
   return (

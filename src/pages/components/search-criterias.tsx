@@ -50,18 +50,13 @@ export default function UserForm({
 }: UserFormProps) {
   const { setOpenDrawer } = useDisplayDrawer();
   const router = useRouter();
+
   const { userLocation } = useUserLocation();
   const isHomePage = router.pathname === "/";
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
-
-  useEffect(() => {
-    setSelectedDate(
-      router.query?.date ? new Date(router.query?.date as string) : new Date()
-    );
-  }, [router.query]);
 
   const [error, setError] = useState(false);
   const [townId, setTownId] = useState("");

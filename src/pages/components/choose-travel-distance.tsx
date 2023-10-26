@@ -57,9 +57,16 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
+interface ChooseTravelDistanceProps {
+  travelDistanceRef: React.MutableRefObject<HTMLInputElement>;
+  mapBoxKey: string;
+  displayMap?: boolean;
+}
+
 export const ChooseTravelDistance = ({
   travelDistanceRef,
   mapBoxKey,
+  displayMap = true,
 }: ChooseTravelDistanceProps) => {
   const router = useRouter();
   const valuesForSlider = distanceArray({
@@ -67,7 +74,6 @@ export const ChooseTravelDistance = ({
     max: 500,
   });
 
-  const isHomePage = router.pathname === "/";
   const [kilometers, setKilometers] = useState(valuesForSlider.length / 2);
 
   const [index, setIndex] = useState(valuesForSlider.length / 2);
@@ -100,7 +106,7 @@ export const ChooseTravelDistance = ({
         </Text>
         <Spacer height={2} />
         {/* // Remove component here for old */}
-        {isHomePage && (
+        {displayMap && (
           <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
         )}
         <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>

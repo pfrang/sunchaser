@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 
 import { AppConfig } from "../../app-config";
-import { useDisplayFooter } from "../../states/footer";
+import {
+  useDisplayFooter,
+  useDisplayFooterSubItems,
+} from "../../states/footer";
+import { useCoordinates } from "../hooks/use-coordinates";
+import { ChooseTravelDistance } from "../components/choose-travel-distance";
+import { Calendar } from "../components/calendar";
 
 import { Sunchaser } from "./routes/sunchaser/index";
 import { Forecast } from "./routes/forecast/index";
@@ -15,16 +22,55 @@ export default function Search({
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const { footerItem, setFooterItem } = useDisplayFooter();
+  const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
+  const travelDistanceRef = useRef<HTMLInputElement>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
+  const router = useRouter();
+
+  const { data, isLoading, error } = useCoordinates(
+    {
+      method: "POST",
+      params: router.query,
+      data: router.query,
+    },
+    router.isReady
+  );
 
   switch (footerItem) {
     case "forecast":
-      return <Forecast />;
-    case "location":
-      return <div>Coming</div>;
-    case "date":
-      return <div>Coming</div>;
+      switch (footerSubItem) {
+        case "map":
+          return <>coming</>;
+        case "location":
+          return <>coming</>;
+        case "profile":
+          return <>coming</>;
+        default:
+          return <Forecast />;
+      }
     default:
-      return <Sunchaser mapBoxKey={mapBoxKey} />;
+      switch (footerSubItem) {
+        case "date":
+          return (
+            <Calendar
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
+          );
+        case "location":
+          return (
+            <ChooseTravelDistance
+              travelDistanceRef={travelDistanceRef}
+              mapBoxKey={mapBoxKey}
+            />
+          );
+        case "profile":
+          return <>coming</>;
+        default:
+          return <Sunchaser mapBoxKey={mapBoxKey} />;
+      }
   }
 };
 
