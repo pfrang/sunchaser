@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { Spinner } from "../../ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchMappedData } from "../api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
 import { Text } from "../../ui-kit/text";
 import { useFetchGoogleMapsSearches } from "../hooks/use-google-maps-auto-search";
 import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
-
+import { Flex } from "../../ui-kit/flex";
 interface WhereAreYouProps {
   locationRef: React.MutableRefObject<HTMLInputElement>;
   setTownId: (id: string) => void;
@@ -30,12 +31,12 @@ export default function WhereAreYou({
   }, [router.query]);
 
   useEffect(() => {
-    if (!dataFetched && data) {
+    if (!dataFetched && data && isLocationChosen) {
       // Incase user does not change a selection on mount
       setTownId(data?.items[0].place_id);
       setDatafetched(true);
     }
-  }, [data, dataFetched]);
+  }, [data, dataFetched, isLocationChosen]);
 
   const setLocationAndClearList = ({ value, id }) => {
     setTownSearch(value);
@@ -49,10 +50,15 @@ export default function WhereAreYou({
   };
 
   return (
-    <section id="where_are_you_seciton">
-      <div className="flex flex-col pr-2 text-center">
+    <section id="where_are_you_seciton" className="w-full">
+      <Flex
+        flexDirection={"column"}
+        paddingRight={2}
+        mx={"auto"}
+        maxWidth={"600px"}
+      >
         <Text variant="subtitle-small">Where do you want to travel from?</Text>
-        <div className="flex justify-between relative w-full">
+        <Flex position={"relative"}>
           <input
             ref={locationRef}
             required
@@ -63,12 +69,19 @@ export default function WhereAreYou({
             type="text"
             value={townSearch}
           />
-          {isLoading && (
-            <div className="absolute right-2 top-2">
+
+          <div className="absolute right-2 top-2">
+            {isLoading ? (
               <Spinner />
-            </div>
-          )}
-        </div>
+            ) : (
+              <SearchIcon
+                // TODO fix
+                onClick={() => {}}
+                style={{ cursor: "pointer" }}
+              />
+            )}
+          </div>
+        </Flex>
         <ConditionalPresenter
           data={data}
           error={error}
@@ -103,7 +116,7 @@ export default function WhereAreYou({
             );
           }}
         />
-      </div>
+      </Flex>
     </section>
   );
 }
