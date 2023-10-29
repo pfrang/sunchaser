@@ -67,7 +67,7 @@ export const Footer = () => {
           flexDirection: "column",
           alignItems: "center",
           zIndex: 999,
-          backgroundColor: `${theme.color.blues[4]}`,
+          backgroundColor: theme.color.blues[4],
         }}
       >
         <Flex

@@ -8,8 +8,8 @@ import "swiper/css/bundle";
 import {
   AzureFunctionCoordinatesMappedItems,
   UserLocation,
-} from "../../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Flex } from "../../../../../ui-kit/flex";
+} from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Flex } from "../../../../ui-kit/flex";
 
 import { Card } from "./card";
 

@@ -10,7 +10,7 @@ import { useDisplayDrawer } from "../../states/drawer";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
 import { Calendar } from "./calendar";
-import WhereAreYou from "./where-are-you";
+import { WhereAreYou } from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
 
 const Button = styled.button<{ disabled?: boolean }>`
@@ -114,13 +114,8 @@ export default function UserForm({
   return (
     <>
       <FormStyle onSubmit={onSubmit}>
-        {!isHomePage && (
-          <WhereAreYou setTownId={setTownId} locationRef={locationRef} />
-        )}
-        <Calendar
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
-        />
+        {!isHomePage && <WhereAreYou />}
+        <Calendar />
         {/* <DatePicker
           selected={selectedDate}
           isDateBlocked={(date) => date < startOfToday()}
@@ -129,10 +124,7 @@ export default function UserForm({
           label="When do you want to travel?"
         /> */}
         {/* <CircularMap mapBoxKey={mapBoxKey} /> */}
-        <ChooseTravelDistance
-          travelDistanceRef={travelDistanceRef}
-          mapBoxKey={mapBoxKey}
-        />
+        <ChooseTravelDistance mapBoxKey={mapBoxKey} />
         {/* <ChooseTransportationMethod
         highlightedTransport={highlightedTransport}
         setHighlightedTransport={setHighlightedTransport}

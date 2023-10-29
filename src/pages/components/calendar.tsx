@@ -1,8 +1,9 @@
 import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
-import { differenceInCalendarDays } from "date-fns";
+import { differenceInCalendarDays, endOfDay } from "date-fns";
 import nb from "date-fns/locale/nb";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useUpdateUrl } from "pages/hooks/use-update-url";
 
 import { Spacer } from "../../ui-kit/spacer/spacer";
 import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
@@ -10,11 +11,12 @@ import { Text } from "../../ui-kit/text";
 import { Flex } from "../../ui-kit/flex";
 import { theme } from "../../ui-kit/theme";
 
-export const Calendar = ({ selectedDate, setSelectedDate }) => {
-  const popperRef = useRef<HTMLDivElement>(null);
+export const Calendar = () => {
   const router = useRouter();
   const [isPopperOpen, setIsPopperOpen] = useState(false);
   const [locale, setLocale] = useState("en-US");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const updateUrl = useUpdateUrl();
 
   useEffect(() => {
     setSelectedDate(
@@ -38,8 +40,6 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
   }
 
   function afterTwoWeeks(date: Date) {
-    // console.log("--", date, differenceInCalendarDays(date, new Date()) >= 14);
-
     return differenceInCalendarDays(date, new Date()) >= 14;
   }
 
@@ -55,6 +55,7 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
   const Submit = (e: Date) => {
     setIsPopperOpen(false);
     e && setSelectedDate(e);
+    updateUrl({ date: endOfDay(e).toISOString().split("T")[0] });
   };
 
   type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -62,7 +63,6 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
   return (
     <section id="calendar w-full relative">
       <div className="flex flex-col items-center gap-1">
-        <Text variant="caption-large">When do you want to travel?</Text>
         <Spacer vertical={2} />
         <Flex
           border={2}
@@ -83,7 +83,6 @@ export const Calendar = ({ selectedDate, setSelectedDate }) => {
             tabIndex={0}
             className={`cursor-pointer absolute right-1
             ${isPopperOpen && "bg-gray-300"} hover:bg-gray-300 rounded-lg`}
-            ref={popperRef}
             onClick={() => setIsPopperOpen(!isPopperOpen)}
           >
             <CalendarIcon />

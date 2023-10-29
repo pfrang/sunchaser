@@ -1,9 +1,9 @@
-import { Flex } from "../../../../../ui-kit/flex";
-import { WeatherIconList } from "../../../../../ui-kit/weather-svg-ref/weather-icon-list";
-import { Times } from "../../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Text } from "../../../../../ui-kit/text";
-import { Temperature } from "../../../../utils/temperature";
-import { plus2HoursOnTime } from "../../../../utils/sorting-and-filtering-functions";
+import { Flex } from "../../../../ui-kit/flex";
+import { WeatherIconList } from "../../../../ui-kit/weather-svg-ref/weather-icon-list";
+import { Times } from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Text } from "../../../../ui-kit/text";
+import { Temperature } from "../../../utils/temperature";
+import { plus2HoursOnTime } from "../../../utils/sorting-and-filtering-functions";
 
 import { GridItem } from "./highlighted-card";
 

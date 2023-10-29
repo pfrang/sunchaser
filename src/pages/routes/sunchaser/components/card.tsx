@@ -2,15 +2,15 @@ import { useSwiper } from "swiper/react";
 import { useMemo } from "react";
 import { Swiper } from "swiper/types";
 
-import { Angel } from "../../../../../ui-kit/angel/angel";
-import { Flex } from "../../../../../ui-kit/flex";
-import { theme } from "../../../../../ui-kit/theme";
-import { WeatherIconList } from "../../../../../ui-kit/weather-svg-ref/weather-icon-list";
+import { Angel } from "../../../../ui-kit/angel/angel";
+import { Flex } from "../../../../ui-kit/flex";
+import { theme } from "../../../../ui-kit/theme";
+import { WeatherIconList } from "../../../../ui-kit/weather-svg-ref/weather-icon-list";
 import {
   AzureFunctionCoordinatesMappedItems,
   UserLocation,
-} from "../../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { Text } from "../../../../../ui-kit/text";
+} from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { Text } from "../../../../ui-kit/text";
 
 import { HighlightedCard } from "./highlighted-card";
 

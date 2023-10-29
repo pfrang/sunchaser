@@ -4,12 +4,15 @@ import { useState } from "react";
 import styled from "styled-components";
 import Swiper from "swiper";
 
-import { ConditionalPresenter } from "../../../../ui-kit/conditional-presenter/conditional-presenter";
-import { Flex } from "../../../../ui-kit/flex";
-import { SearchLoader } from "../../../../ui-kit/search-loader/search-loader";
-import { AzureFunctionCoordinatesMappedItems } from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { useCoordinates } from "../../../hooks/use-coordinates";
-import { MapBoxHelper, StartAndEndCoordinates } from "../../mapbox-settings";
+import { ConditionalPresenter } from "../../../ui-kit/conditional-presenter/conditional-presenter";
+import { Flex } from "../../../ui-kit/flex";
+import { SearchLoader } from "../../../ui-kit/search-loader/search-loader";
+import { AzureFunctionCoordinatesMappedItems } from "../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { useCoordinates } from "../../hooks/use-coordinates";
+import {
+  MapBoxHelper,
+  StartAndEndCoordinates,
+} from "../../utils/mapbox-settings";
 
 import { Carousell } from "./components/carousell";
 import { Map } from "./components/map";

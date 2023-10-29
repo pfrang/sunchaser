@@ -1,4 +1,4 @@
-Add multiple flags in result map. Makes the user be more aware of distnace between locations.
+wAdd multiple flags in result map. Makes the user be more aware of distnace between locations.
 
 Clean python scripts with subfolders
 

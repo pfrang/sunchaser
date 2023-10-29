@@ -11,8 +11,8 @@ import { useRouter } from "next/router";
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
 
-import HeaderComponent from "./header";
 import { Footer } from "./footer";
+import { Header } from "./header";
 
 const Wrapper = styled.div`
   height: 100dvh; /* new browsers */
@@ -35,8 +35,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const router = useRouter();
 
-  const isHomePage = router.pathname === "/";
-
   return (
     <>
       {/* @ts-ignore*/}
@@ -50,10 +48,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         {/* @ts-ignore*/}
         <GlobalStyle />
         <Wrapper>
-          <HeaderComponent />
+          <Header />
+          <Spacer height={[8]} width={"100%"} />
           <Component {...pageProps} />
-          <Spacer height={[32, 64]} width={"100%"} paddingBottom={"64px"} />
-          {!isHomePage && <Footer />}
+          <Spacer height={[48, 64]} width={"100%"} />
+          <Footer />
         </Wrapper>
       </ThemeProvider>
       <Analytics />

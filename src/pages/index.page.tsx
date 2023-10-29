@@ -1,56 +1,81 @@
-import type { InferGetStaticPropsType, NextPage } from "next";
-import { useState } from "react";
+import { AppConfig } from "app-config";
+import { InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useDisplayFooter, useDisplayFooterSubItems } from "states/footer";
+import { Flex } from "ui-kit/flex";
 
-import { theme } from "../ui-kit/theme";
-import { Text } from "../ui-kit/text";
-import { Flex } from "../ui-kit/flex";
-import { Spacer } from "../ui-kit/spacer/spacer";
-import { AppConfig } from "../app-config";
+import { ChooseTravelDistance } from "./components/choose-travel-distance";
+import { Forecast } from "./routes/forecast";
+import { Sunchaser } from "./routes/sunchaser";
+import { Calendar } from "./components/calendar";
+import { useUserLocation } from "./hooks/use-user-location";
+import { useCoordinates } from "./hooks/use-coordinates";
 
-import {
-  WeatherCarousell,
-  WeatherOptions,
-} from "./components/weather-carousell";
-import UserForm from "./components/search-criterias";
-
-const Home: NextPage = ({
+const Home = ({
   mapBoxKey,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const [weather, setWeather] = useState<WeatherOptions>("Sun");
+}: InferGetServerSidePropsType<typeof getStaticProps>) => {
+  return Router({ mapBoxKey });
+};
 
-  return (
-    <>
-      <Flex
-        height={["150px", "250px"]}
-        // overflow={"hidden"}
-        flexDirection={"column"}
-      >
-        <div className="absolute flex justify-center z-10 w-full">
-          <Text variant="subtitle-large">Choose weather</Text>
-        </div>
+const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
+  const { footerItem, setFooterItem } = useDisplayFooter();
+  const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
 
-        <WeatherCarousell weather={weather} setWeather={setWeather} />
-      </Flex>
-      <Spacer height={[16, 32]} />
-      <Flex flexDirection={"column"} paddingX={[4, 6]} flexGrow={1}>
-        <section id="form" className="grow">
-          <div
-            className="border-2 rounded-xl h-full shadow-2xl"
-            style={{
-              backgroundColor: theme.colors.whiteSmoke,
-              borderColor: theme.color.green[1],
-            }}
-          >
-            <UserForm weatherSelected={weather} mapBoxKey={mapBoxKey} />
-          </div>
-        </section>
-      </Flex>
-    </>
+  const router = useRouter();
+  const { userLocation } = useUserLocation();
+
+  const { data, isLoading, error } = useCoordinates(
+    {
+      method: "POST",
+      params: router.query,
+      data: router.query,
+    },
+    router.isReady && Boolean(router.query.lat)
   );
+
+  useEffect(() => {
+    if (!userLocation) return;
+    router.push({
+      pathname: "/",
+      query: {
+        distance: 50,
+        lat: userLocation.latitude,
+        lon: userLocation.longitude,
+        date: new Date().toISOString().split("T")[0],
+      },
+    });
+  }, [userLocation]);
+
+  switch (footerItem) {
+    case "forecast":
+      switch (footerSubItem) {
+        case "map":
+          return <Flex height={"100%"}>coming</Flex>;
+        case "date":
+          return <Flex height={"100%"}>coming</Flex>;
+        case "profile":
+          return <Flex height={"100%"}>coming</Flex>;
+        default:
+          return <Forecast />;
+      }
+    default:
+      switch (footerSubItem) {
+        case "date":
+          return <Calendar />;
+        case "location":
+          return <ChooseTravelDistance mapBoxKey={mapBoxKey} />;
+        case "profile":
+          return <Flex height={"100%"}>coming</Flex>;
+        default:
+          return <Sunchaser mapBoxKey={mapBoxKey} />;
+      }
+  }
 };
 
 export const getStaticProps = async () => {
   const mapBoxKey = new AppConfig().mapBox.key;
+
   return {
     props: {
       mapBoxKey,

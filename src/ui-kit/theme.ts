@@ -91,9 +91,17 @@ const greys = [
   0,
   "rgba(255,250,250, 0.42)",
   "rgba(136, 139, 154, 0.20)",
+  "#6F7383",
 ] as const;
 
-const blues = [0, "#00446A", "#004871", "#3C4566", "#323A55"] as const;
+const blues = [
+  0,
+  "#00446A",
+  "#004871",
+  "#3C4566",
+  "#323A55",
+  "#262C42",
+] as const;
 
 const space1 = 4;
 const space2 = 8;

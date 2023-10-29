@@ -2,31 +2,29 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
-import Button from "@mui/material/Button";
 
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
-import { Drawer } from "../ui-kit/drawer/drawer";
-import { useDisplayDrawer } from "../states/drawer";
 
-import UserForm from "./components/search-criterias";
+import { WhereAreYou } from "./components/where-are-you";
 
-export default function HeaderComponent() {
-  const { drawerIsOpen, setOpenDrawer } = useDisplayDrawer();
-
+export const Header = () => {
   const router = useRouter();
-
-  const isHomePage = router.pathname === "/";
-
+  const { query } = router;
   return (
     <Flex
-      bg={theme.colors.green}
+      bg={theme.color.blues[5]}
       height={60}
       paddingX={[2, 14]}
       justifyContent={"space-between"}
     >
-      <Flex paddingY={1} position={"relative"} justifyContent={"flex-start"}>
-        <Link href="/" tabIndex={0}>
+      <Flex
+        width={"auto"}
+        paddingY={1}
+        position={"relative"}
+        justifyContent={"flex-start"}
+      >
+        <Link href={{ pathname: "/", query }} tabIndex={0}>
           <Image
             width={56}
             height={56}
@@ -36,45 +34,29 @@ export default function HeaderComponent() {
             src={"/logo.svg"}
           />
         </Link>
-        {/* <Text variant="body-large-bold">Sunchaser</Text> */}
       </Flex>
-      {/* <dialog className="p-0 rounded-md" ref={modal}>
-        <div
-          className={`h-[500px] w-[300px]`}
-          style={{
-            backgroundColor: theme.colors.whiteSmoke,
-            borderColor: theme.color.white,
-          }}
+
+      <Flex justifyContent={"center"} alignContent={"center"}>
+        <WhereAreYou />
+      </Flex>
+      {/* <Flex paddingY={2} justifyContent={"flex-end"}>
+        <Button
+          style={{ height: "100%" }}
+          onClick={() => setOpenDrawer(!drawerIsOpen)}
         >
-          <UserForm header={modal} />
-          <span
-            onClick={() => modal.current.close()}
-            className="absolute right-0 top-0 cursor-pointer border-l-2 border-b-2 border-black w-6 text-center hover:bg-gray-600 hover:border-none  transition-all duration-300 ease-in-out "
-          >
-            <Text variant="subtitle-small">X</Text>
-          </span>
-        </div>
-      </dialog> */}
-      {!isHomePage && (
-        <Flex paddingY={2} justifyContent={"flex-end"}>
-          <Button
-            style={{ height: "100%" }}
-            onClick={() => setOpenDrawer(!drawerIsOpen)}
-          >
-            <Image
-              alt="Menu"
-              fill
-              tabIndex={0}
-              className="cursor-pointer"
-              src="/icons/black/svg/menu.svg"
-              style={{ objectFit: "contain" }}
-            />
-          </Button>
-          <Drawer anchor={"left"}>
-            <UserForm />
-          </Drawer>
-        </Flex>
-      )}
+          <Image
+            alt="Menu"
+            fill
+            tabIndex={0}
+            className="cursor-pointer"
+            src="/icons/black/svg/menu.svg"
+            style={{ objectFit: "contain" }}
+          />
+        </Button>
+        <Drawer anchor={"left"}>
+          <UserForm />
+        </Drawer>
+      </Flex> */}
     </Flex>
   );
-}
+};
