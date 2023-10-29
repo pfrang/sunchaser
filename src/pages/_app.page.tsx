@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
+import { Flex } from "../ui-kit/flex";
 
 import { Footer } from "./footer";
 import { Header } from "./header";
@@ -23,6 +24,7 @@ const Wrapper = styled.div`
   /* min-height: fill-available; */
   display: flex;
   flex-direction: column;
+  background-color: #173755;
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {

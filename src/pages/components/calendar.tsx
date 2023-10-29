@@ -61,7 +61,7 @@ export const Calendar = () => {
   type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
   return (
-    <section id="calendar w-full relative">
+    <>
       <div className="flex flex-col items-center gap-1">
         <Spacer vertical={2} />
         <Flex
@@ -126,6 +126,6 @@ export const Calendar = () => {
           />
         </Flex>
       )}
-    </section>
+    </>
   );
 };

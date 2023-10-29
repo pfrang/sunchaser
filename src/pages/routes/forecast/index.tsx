@@ -5,6 +5,8 @@ import { Flex } from "ui-kit/flex";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { Spinner } from "ui-kit/spinner/spinner";
 
+import { Spacer } from "../../../ui-kit/spacer/spacer";
+
 import { ForecastTableContainer } from "./components/table-container";
 
 export const Forecast = () => {
@@ -21,6 +23,7 @@ export const Forecast = () => {
 
   return (
     <Flex height={"100%"} flexDirection={"column"} gap={4}>
+      <Spacer height={8} />
       <ConditionalPresenter
         isLoading={isLoading}
         renderLoading={() => (

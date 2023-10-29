@@ -11,6 +11,7 @@ import { Sunchaser } from "./routes/sunchaser";
 import { Calendar } from "./components/calendar";
 import { useUserLocation } from "./hooks/use-user-location";
 import { useCoordinates } from "./hooks/use-coordinates";
+import { CalendarWrapper } from "./components/calendar-wrapper";
 
 const Home = ({
   mapBoxKey,
@@ -62,7 +63,7 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
     default:
       switch (footerSubItem) {
         case "date":
-          return <Calendar />;
+          return <CalendarWrapper />;
         case "location":
           return <ChooseTravelDistance mapBoxKey={mapBoxKey} />;
         case "profile":
