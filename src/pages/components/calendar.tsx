@@ -62,7 +62,7 @@ export const Calendar = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center gap-1">
+      {/* <div className="flex flex-col items-center gap-1">
         <Spacer vertical={2} />
         <Flex
           border={2}
@@ -89,43 +89,86 @@ export const Calendar = () => {
           </div>
         </Flex>
       </div>
-      {isPopperOpen && (
-        <Flex justifyContent={"center"}>
-          <DayPicker
-            classNames={{
-              day_selected: "daypicker-selected-date",
-              day_today: "daypicker-today-date",
-            }}
-            weekStartsOn={new Date().getDay() as WeekDayNumb}
-            disabled={disabledDays}
-            components={{ Row: OnlyFutureRow }}
-            locale={nb}
-            disableNavigation
-            mode="single"
-            selected={selectedDate}
-            onSelect={Submit}
-            showOutsideDays
-            fixedWeeks
-            style={{
-              borderRadius: "4px",
-              backgroundColor: `${theme.colors.green}`,
-              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
-              padding: "10px",
-              position: "absolute",
-              zIndex: 99,
-            }}
-            styles={{
-              caption: { display: "none" },
-              head: {
-                fontSize: "1rem",
-                fontWeight: "bold",
-                padding: "0.5rem 0.5rem",
-                color: "black",
-              },
-            }}
-          />
-        </Flex>
-      )}
+      {isPopperOpen && ( */}
+      <Flex justifyContent={"center"} width={"100%"}>
+        <DayPicker
+          classNames={{
+            day_selected: "daypicker-selected-date",
+            day_today: "daypicker-today-date",
+            months: "daypicker-months",
+          }}
+          weekStartsOn={new Date().getDay() as WeekDayNumb}
+          disabled={disabledDays}
+          defaultMonth={new Date()}
+          components={{ Row: OnlyFutureRow }}
+          locale={nb}
+          disableNavigation
+          mode="single"
+          selected={selectedDate}
+          onSelect={Submit}
+          showOutsideDays
+          fixedWeeks
+          style={
+            {
+              // backgroundColor: `${theme.colors.green}`,
+              // padding: "10px",
+              // position: "absolute",
+              // zIndex: 99,
+              // boxShadow: "0 0 0 1px #6B93AA",
+              // borderCollapse: "collapse",
+              // tableLayout: "fixed",
+              // width: "100%",
+              // borderStyle: "hidden" /* hide standard table (collapsed) border */,
+            }
+          }
+          styles={{
+            caption: {
+              textAlign: "unset",
+              display: "flex",
+              backgroundColor: `${theme.color.blues[6]}`,
+              borderWidth: "2px",
+              borderColor: `${theme.color.blues[7]}`,
+              // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+              borderRadius: "16px",
+              justifyContent: "center",
+              padding: "0.5rem 0.5rem",
+              color: "white",
+            },
+            head: {
+              fontSize: "1rem",
+              fontWeight: "bold",
+              color: "white",
+            },
+            table: {
+              marginTop: "5rem",
+              width: "100%",
+              display: "table",
+
+              // borderWidth: "2px",
+              // borderColor: `${theme.color.blues[7]}`,
+              boxShadow: "0 0 0 1px #6B93AA",
+              // borderWidth: "2px",
+              // border: "2px solid black",
+              // borderWidth: "4px",
+              borderStyle: "solid",
+              maxWidth: "calc(var(--rdp-cell-size) * 8)",
+
+              // backgroundColor: `${theme.color.blues[6]}`,
+              // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+              borderRadius: "16px",
+              padding: "20px",
+              color: "white",
+            },
+            day: {
+              width: "100%",
+              fontSize: "1.2rem",
+              color: "white",
+              padding: "25px",
+            },
+          }}
+        />
+      </Flex>
+      {/* )} */}
     </>
   );
 };

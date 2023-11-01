@@ -20,6 +20,9 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
   }
 
+
+
+
   h3 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
@@ -33,6 +36,7 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: inherit;
   }
 
+
   .rdp-button_reset.rdp-button.rdp-day.daypicker-selected-date {
     font-weight: bold !important;
     background-color: var(--rdp-background-color);
@@ -40,6 +44,8 @@ export const GlobalStyle = createGlobalStyle`
 
   .datepicker-today-date {
   }
+
+
 
   dialog {
     pointer-events: none;
