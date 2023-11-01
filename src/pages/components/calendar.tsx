@@ -1,13 +1,11 @@
 import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
-import { differenceInCalendarDays, endOfDay } from "date-fns";
+import { differenceInCalendarDays, endOfDay, format } from "date-fns";
 import nb from "date-fns/locale/nb";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useUpdateUrl } from "pages/hooks/use-update-url";
+import { capitalize } from "lodash";
 
-import { Spacer } from "../../ui-kit/spacer/spacer";
-import { CalendarIcon } from "../../ui-kit/calendar-icon/calendar-icon";
-import { Text } from "../../ui-kit/text";
 import { Flex } from "../../ui-kit/flex";
 import { theme } from "../../ui-kit/theme";
 
@@ -121,18 +119,35 @@ export const Calendar = () => {
               // borderStyle: "hidden" /* hide standard table (collapsed) border */,
             }
           }
+          formatters={{
+            formatCaption: (date, options) => {
+              // Format the date as you wish
+              const formattedDateMonth = capitalize(
+                format(date, "MMMM", options)
+              );
+              const formattedDateYear = capitalize(
+                format(date, "yyyy", options)
+              );
+              return (
+                <Flex
+                  backgroundColor={theme.color.blues[5]}
+                  borderWidth={"2px"}
+                  borderColor={theme.color.blues[7]}
+                  borderRadius={"16px"}
+                  justifyContent={"space-between"}
+                  padding={"1rem"}
+                  color={"white"}
+                  width={"100%"}
+                >
+                  <p>{formattedDateMonth}</p>
+                  <p>{formattedDateYear}</p>
+                </Flex>
+              );
+            },
+          }}
           styles={{
-            caption: {
-              textAlign: "unset",
-              display: "flex",
-              backgroundColor: `${theme.color.blues[6]}`,
-              borderWidth: "2px",
-              borderColor: `${theme.color.blues[7]}`,
-              // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
-              borderRadius: "16px",
-              justifyContent: "center",
-              padding: "0.5rem 0.5rem",
-              color: "white",
+            caption_label: {
+              width: "100%",
             },
             head: {
               fontSize: "1rem",
@@ -140,12 +155,14 @@ export const Calendar = () => {
               color: "white",
             },
             table: {
-              marginTop: "5rem",
+              marginTop: "7rem",
               width: "100%",
               display: "table",
+              borderCollapse: "separate",
 
               // borderWidth: "2px",
               // borderColor: `${theme.color.blues[7]}`,
+              backgroundColor: `${theme.color.blues[5]}`,
               boxShadow: "0 0 0 1px #6B93AA",
               // borderWidth: "2px",
               // border: "2px solid black",
@@ -156,14 +173,14 @@ export const Calendar = () => {
               // backgroundColor: `${theme.color.blues[6]}`,
               // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
               borderRadius: "16px",
-              padding: "20px",
+              padding: "15px",
               color: "white",
             },
             day: {
               width: "100%",
               fontSize: "1.2rem",
               color: "white",
-              padding: "25px",
+              padding: "20px",
             },
           }}
         />
