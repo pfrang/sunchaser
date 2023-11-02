@@ -14,16 +14,13 @@ export const Header = () => {
   return (
     <Flex
       bg={theme.color.blues[5]}
-      height={60}
-      paddingX={[2, 14]}
+      height={80}
+      // paddingX={[2, 14]}
+      // paddingTop={10}
       justifyContent={"space-between"}
+      alignItems={"center"}
     >
-      <Flex
-        width={"auto"}
-        paddingY={1}
-        position={"relative"}
-        justifyContent={"flex-start"}
-      >
+      <Flex width={"auto"} top={0}>
         <Link href={{ pathname: "/", query }} tabIndex={0}>
           <Image
             width={56}
