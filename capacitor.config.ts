@@ -1,12 +1,14 @@
 import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.example.app",
-  appName: "sunchaser",
+  appId: "com.solruten.app",
+  appName: "solruten",
   webDir: "out",
   server: {
     // androidScheme: "https",
-    url: "http://172.18.68.11:3000/",
+    // url: "http://172.18.68.11:3000/",
+    //anders jobb
+    url: "http://172.20.86.158:3000/",
     // url: "http://172.20.80.1:3000/",
     cleartext: true,
   },
