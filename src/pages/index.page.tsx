@@ -1,14 +1,13 @@
 import { AppConfig } from "app-config";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDisplayFooter, useDisplayFooterSubItems } from "states/footer";
 import { Flex } from "ui-kit/flex";
 
 import { ChooseTravelDistance } from "./components/choose-travel-distance";
 import { Forecast } from "./routes/forecast";
 import { Sunchaser } from "./routes/sunchaser";
-import { Calendar } from "./components/calendar";
 import { useUserLocation } from "./hooks/use-user-location";
 import { useCoordinates } from "./hooks/use-coordinates";
 import { CalendarWrapper } from "./components/calendar-wrapper";
