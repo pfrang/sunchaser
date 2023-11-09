@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
-import { Spacer } from "../../ui-kit/spacer/spacer";
-import { fetchTownDetails } from "../hooks/fetch-town-details";
-import { useUserLocation } from "../hooks/use-user-location";
-import { createPayloadParams } from "../utils/create-payload-params";
-import { useDisplayDrawer } from "../../states/drawer";
+import { useDisplayDrawer } from "../../../../states/drawer";
+import { useUserLocation } from "../../../hooks/use-user-location";
+import { fetchTownDetails } from "../../../hooks/fetch-town-details";
+import { createPayloadParams } from "../../../utils/create-payload-params";
+import { Spacer } from "../../../../ui-kit/spacer/spacer";
+import { Calendar } from "../../sunchaser/components/calendar";
 
 import { ChooseTravelDistance } from "./choose-travel-distance";
-import { Calendar } from "./calendar";
 import { WhereAreYou } from "./where-are-you";
 import { WeatherOptions } from "./weather-carousell";
 

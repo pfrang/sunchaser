@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
 
-import { WhereAreYou } from "./components/where-are-you";
+import { WhereAreYou } from "./routes/_shared/components/where-are-you";
 
 export const Header = () => {
   const router = useRouter();

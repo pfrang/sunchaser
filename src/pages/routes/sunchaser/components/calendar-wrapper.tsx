@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
-import { Flex } from "../../ui-kit/flex";
-import { Text } from "../../ui-kit/text";
-import { Spacer } from "../../ui-kit/spacer/spacer";
+import { Flex } from "../../../../ui-kit/flex";
+import { Spacer } from "../../../../ui-kit/spacer/spacer";
 
 import { Calendar } from "./calendar";
 

@@ -1,17 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as turf from "@turf/turf";
 import ReactMapGL, { Layer, MapRef, Marker, Source } from "react-map-gl";
+import { useRouter } from "next/router";
 
-import { useUserLocation } from "../hooks/use-user-location";
-import { Flex } from "../../ui-kit/flex";
+import { useUserLocation } from "../../../hooks/use-user-location";
+import { Flex } from "../../../../ui-kit/flex";
 import {
   getBoundingBox,
   getBoundingBoxLngLatLike,
-} from "../utils/get-boundaries-lng-lat";
+} from "../../../utils/get-boundaries-lng-lat";
+import { sanitizeNextQuery } from "../../../utils/sanitize-next-query";
 
 export const CircularMap = ({ mapBoxKey, kilometers }) => {
   const { userLocation } = useUserLocation();
   const mapRef = useRef<MapRef>();
+
+  const router = useRouter();
+
+  const { lat, lon } = sanitizeNextQuery(router.query);
 
   const [polygon, setPolygon] = useState<null | turf.helpers.Feature<
     turf.helpers.Polygon,
@@ -20,29 +26,33 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
     }
   >>(null);
 
+  const currentLatLocation = React.useMemo(() => {
+    return { latitude: Number(lat), longitude: Number(lon) } || userLocation;
+  }, [lat, lon, userLocation]);
+
   useEffect(() => {
-    if (userLocation) {
-      const { sw, ne } = getBoundingBox(userLocation, kilometers);
+    if (!currentLatLocation) return;
 
-      setPolygon(
-        turf.circle(
-          [userLocation.longitude, userLocation.latitude],
-          kilometers,
-          {
-            units: "kilometers",
-          }
-        )
-      );
+    const { sw, ne } = getBoundingBox(currentLatLocation, kilometers);
 
-      mapRef.current?.fitBounds(
-        [
-          [sw.longitude, sw.latitude],
-          [ne.longitude, ne.latitude],
-        ],
-        { padding: 20, duration: 1000 }
-      );
-    }
-  }, [kilometers, userLocation]);
+    setPolygon(
+      turf.circle(
+        [currentLatLocation.longitude, currentLatLocation.latitude],
+        kilometers,
+        {
+          units: "kilometers",
+        }
+      )
+    );
+
+    mapRef.current?.fitBounds(
+      [
+        [sw.longitude, sw.latitude],
+        [ne.longitude, ne.latitude],
+      ],
+      { padding: 20, duration: 1000 }
+    );
+  }, [kilometers, currentLatLocation]);
 
   const disableInteractivitySettings = {
     dragPan: false,
@@ -62,7 +72,7 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
           initialViewState={{
             longitude: userLocation.longitude,
             latitude: userLocation.latitude,
-            bounds: getBoundingBoxLngLatLike(userLocation, kilometers),
+            bounds: getBoundingBoxLngLatLike(currentLatLocation, kilometers),
             fitBoundsOptions: {
               padding: 20,
             },
@@ -76,8 +86,8 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
           }}
         >
           <Marker
-            latitude={userLocation.latitude}
-            longitude={userLocation.longitude}
+            latitude={currentLatLocation.latitude}
+            longitude={currentLatLocation.longitude}
           >
             <div
               style={{

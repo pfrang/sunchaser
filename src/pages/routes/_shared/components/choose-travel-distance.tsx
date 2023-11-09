@@ -5,12 +5,12 @@ import { styled } from "@mui/material/styles";
 import { debounce } from "lodash";
 import { Flex } from "ui-kit/flex";
 
-import { Text } from "../../ui-kit/text";
-import { Spacer } from "../../ui-kit/spacer/spacer";
+import { Spacer } from "../../../../ui-kit/spacer/spacer";
 import {
   distanceArray,
   getCounterValue,
-} from "../utils/travel-distance-settings";
+} from "../../../utils/travel-distance-settings";
+import { Text } from "../../../../ui-kit/text";
 
 import { CircularMap } from "./circular-map";
 
