@@ -12,9 +12,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/bundle";
-import { Text } from "../../ui-kit/text";
 
 export type WeatherOptions = "Sun" | "Rain" | "Snow";
+import { Text } from "../../../../ui-kit/text";
 
 interface WeatherCarousellProps {
   setWeather: (weather: WeatherOptions) => void;

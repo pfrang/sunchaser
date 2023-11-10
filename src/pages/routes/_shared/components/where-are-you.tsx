@@ -7,11 +7,11 @@ import { fetchTownDetails } from "pages/hooks/fetch-town-details";
 import { useUserLocation } from "pages/hooks/use-user-location";
 import { theme } from "ui-kit/theme";
 
-import { Spinner } from "../../ui-kit/spinner/spinner";
-import { GoogleMapsAutoSearchMappedData } from "../api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
-import { useFetchGoogleMapsSearches } from "../hooks/use-google-maps-auto-search";
-import { ConditionalPresenter } from "../../ui-kit/conditional-presenter/conditional-presenter";
-import { Flex } from "../../ui-kit/flex";
+import { ConditionalPresenter } from "../../../../ui-kit/conditional-presenter/conditional-presenter";
+import { Flex } from "../../../../ui-kit/flex";
+import { Spinner } from "../../../../ui-kit/spinner/spinner";
+import { GoogleMapsAutoSearchMappedData } from "../../../api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
+import { useFetchGoogleMapsSearches } from "../../../hooks/use-google-maps-auto-search";
 
 export const WhereAreYou = () => {
   const [townSearch, setTownSearch] = useState("");

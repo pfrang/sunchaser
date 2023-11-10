@@ -6,8 +6,8 @@ import { useRouter } from "next/router";
 import { useUpdateUrl } from "pages/hooks/use-update-url";
 import { capitalize } from "lodash";
 
-import { Flex } from "../../ui-kit/flex";
-import { theme } from "../../ui-kit/theme";
+import { Flex } from "../../../../ui-kit/flex";
+import { theme } from "../../../../ui-kit/theme";
 
 export const Calendar = () => {
   const router = useRouter();
