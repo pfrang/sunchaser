@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "static": "next build && next export",
     "export": "next export",
-    "cap-on-android": "run-cap-on-android -id com.example.app",
+    "cap-on-android": "run-cap-on-android -id com.sunchaser.app",
     "build-android": "npx cap add android",
     "build-ios": "npx cap add ios"
   },
