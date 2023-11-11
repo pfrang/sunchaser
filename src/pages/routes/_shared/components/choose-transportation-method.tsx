@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { Spacer } from "../../ui-kit/spacer/spacer";
+import { Spacer } from "../../../../ui-kit/spacer/spacer";
 
 const DivItem = styled.div`
   position: relative;
