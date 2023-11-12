@@ -106,7 +106,7 @@ export const WhereAreYou = () => {
         position={"absolute"}
         top={0}
         borderColor={theme.color.blues[2]}
-        padding={2}
+        padding={[1, 2]}
         borderRadius={36}
         borderWidth={2}
         backgroundColor={theme.color.blues[8]}
@@ -170,14 +170,17 @@ export const WhereAreYou = () => {
                   backgroundColor={theme.color.blues[2]}
                   borderColor={theme.color.blues[10]}
                   borderWidth={1}
-                  px={4}
+                  px={[2, 4]}
+                  py={3}
                   onClick={onUseDeviceLocation}
                   alignItems={"center"}
                   gap={2}
                 >
                   <NavigationIcon style={{ transform: "rotate(90deg)" }} />
                   {/* TODO filter for unique places */}
-                  <Text color="white">Use device location</Text>
+                  <Text variant="poppins" color="white">
+                    Use device location
+                  </Text>
                 </Flex>
                 {items &&
                   !isLocationChosen &&
@@ -192,6 +195,7 @@ export const WhereAreYou = () => {
                         borderColor={theme.color.blues[10]}
                         borderWidth={1}
                         px={4}
+                        py={3}
                         onClick={(e) =>
                           setLocationAndClearList({
                             value: item.place,
@@ -200,7 +204,9 @@ export const WhereAreYou = () => {
                         }
                       >
                         {/* TODO filter for unique places */}
-                        <Text color="white">{itemForUi(item)}</Text>
+                        <Text variant="poppins" color="white">
+                          {itemForUi(item)}
+                        </Text>
                       </Flex>
                     );
                   })}

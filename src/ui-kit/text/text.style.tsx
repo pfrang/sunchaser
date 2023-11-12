@@ -74,6 +74,12 @@ export const TextWrapper = styled.p<{
         fontSize: "16px",
         lineHeight: "24px",
       },
+      poppins: {
+        fontFamily: "Poppins",
+        // fontWeight: "600",
+        fontSize: ["18px", "20px", "22px"],
+        lineHeight: ["28px", "30px", "32px"],
+      },
       search: {
         fontFamily: "SpaceMono",
         fontWeight: "400",

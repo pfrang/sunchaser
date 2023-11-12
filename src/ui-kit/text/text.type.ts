@@ -12,4 +12,5 @@ export type TextVariant =
   | "caption"
   | "caption-large"
   | "overline"
-  | "regular";
+  | "regular"
+  | "poppins";
