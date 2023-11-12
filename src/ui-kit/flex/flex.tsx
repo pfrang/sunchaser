@@ -23,15 +23,15 @@ export interface FlexProps
   children: ReactNode;
   gap?: number | number[];
   css?: CSSProperties;
-  as?: "span" | "div" | "form";
   isHighlighted?: boolean;
+  as?: keyof JSX.IntrinsicElements; // Add this line
 }
 
-export const Flex = ({ gap = 0, children, as, ...props }: FlexProps) => {
+export const Flex = ({ gap = 0, children, ...props }: FlexProps) => {
   //SHOULD BE Record<string, uknown> = props
   const wrapperProps: Record<any, any> = props;
   return (
-    <s.Wrapper as={as} gap={gap} {...wrapperProps}>
+    <s.Wrapper gap={gap} {...wrapperProps}>
       {children}
     </s.Wrapper>
   );

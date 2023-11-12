@@ -1,4 +1,4 @@
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Scrollbar, Mousewheel, Keyboard, FreeMode } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";

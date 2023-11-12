@@ -60,29 +60,6 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (data && data.ranks.length > 0 && !isLoading) {
-  //     const longitudes = data.ranks.map((item) => item.longitude);
-  //     const latitudes = data.ranks.map((item) => item.latitude);
-  //     const userLocation = data.userLocation;
-  //     const mapInitializer = new MapBoxHelper(
-  //       longitudes,
-  //       latitudes,
-  //       userLocation.longitude,
-  //       userLocation.latitude
-  //     );
-
-  //     const primaryMap = mapInitializer.initializeMap("map");
-
-  //     primaryMap.on("load", () => {
-  //       primaryMap.resize();
-  //       primaryMap.addControl(new mapboxgl.NavigationControl());
-  //       setMapInstance(mapInitializer);
-  //       setMap(primaryMap);
-  //     });
-  //   }
-  // }, [data, isLoading]);
-
   const onClickCard = (
     item: AzureFunctionCoordinatesMappedItems,
     swiper: Swiper
@@ -173,7 +150,7 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
                 data={data}
                 setMapInstance={setMapInstance}
                 setMap={setMap}
-                map={map}
+                setHighlightedCard={setHighlightedCard}
               />
               <Flex flexDirection={"column"} paddingX={[40, 50]}>
                 <section id="section-carousell" className="h-full">

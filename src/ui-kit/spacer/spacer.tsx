@@ -4,6 +4,7 @@ import {
   LayoutProps,
   SpaceProps,
   ShadowProps,
+  ColorProps,
 } from "styled-system";
 
 import { Wrapper } from "./spacer.style";

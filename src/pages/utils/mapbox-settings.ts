@@ -45,9 +45,18 @@ export class MapBoxHelper {
 
   private setMarkers(map: mapboxgl.Map) {
     const marker = this.longitudes.forEach((lon, index) => {
-      new mapboxgl.Marker()
+      const markerElement = new mapboxgl.Marker()
         .setLngLat([this.longitudes[index], this.latitudes[index]])
-        .addTo(map);
+        .addTo(map)
+        .getElement();
+
+      markerElement.addEventListener("mouseenter", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+
+      markerElement.addEventListener("mouseleave", () => {
+        map.getCanvas().style.cursor = "";
+      });
     });
 
     const centerMarker = new mapboxgl.Marker({ color: "red" })

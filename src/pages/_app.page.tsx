@@ -51,7 +51,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <GlobalStyle />
         <Wrapper>
           <Header />
-          <Spacer height={[8]} width={"100%"} />
+          {/* <Spacer height={[8]} width={"100%"} /> */}
           <Component {...pageProps} />
           <Spacer height={[48, 64]} width={"100%"} />
           <Footer />

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
+import { Spacer } from "ui-kit/spacer/spacer";
 
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
@@ -12,37 +13,39 @@ export const Header = () => {
   const router = useRouter();
   const { query } = router;
   return (
-    <Flex
-      bg={theme.color.blues[5]}
-      height={80}
-      // paddingX={[2, 14]}
-      // paddingTop={10}
-      justifyContent={"space-between"}
-      alignItems={"center"}
-    >
-      <Flex width={"auto"} top={0}>
-        <Link href={{ pathname: "/", query }} tabIndex={0}>
-          <Image
-            width={56}
-            height={56}
-            // sizes="(max-width: 800px) 100px, 50px"
-            // fill
-            alt="Logo"
-            src={"/logo.svg"}
-          />
-        </Link>
-      </Flex>
+    <Flex bg={theme.color.blues[5]} flexDirection={"column"} py={[2, 3]}>
+      <Flex
+        height={80}
+        // as="header"
+        // paddingX={[2, 14]}
+        // paddingTop={10}
+        // alignItems={"center"}
+      >
+        <Flex position={"absolute"} left={1} width={"auto"}>
+          <Link href={{ pathname: "/", query }} tabIndex={0}>
+            <Image
+              width={56}
+              height={56}
+              // sizes="(max-width: 800px) 100px, 50px"
+              // fill
+              alt="Logo"
+              src={"/logo.svg"}
+            />
+          </Link>
+        </Flex>
 
-      <Flex justifyContent={"center"} alignContent={"center"}>
-        <WhereAreYou />
-      </Flex>
-      {/* <Flex paddingY={2} justifyContent={"flex-end"}>
+        <Flex height={"64px"} flexDirection={"column"}>
+          <Spacer height={"8px"} />
+          <WhereAreYou />
+        </Flex>
+
+        {/* <Flex paddingY={2} justifyContent={"flex-end"}>
         <Button
-          style={{ height: "100%" }}
+        style={{ height: "100%" }}
           onClick={() => setOpenDrawer(!drawerIsOpen)}
         >
           <Image
-            alt="Menu"
+          alt="Menu"
             fill
             tabIndex={0}
             className="cursor-pointer"
@@ -54,6 +57,7 @@ export const Header = () => {
           <UserForm />
         </Drawer>
       </Flex> */}
+      </Flex>
     </Flex>
   );
 };
