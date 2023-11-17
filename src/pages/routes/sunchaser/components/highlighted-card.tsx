@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState, useMemo, MutableRefObject } from "react";
 import Image from "next/image";
 
 import { Text } from "../../../../ui-kit/text";
@@ -16,14 +16,6 @@ import {
 import { Temperature } from "../../../utils/temperature";
 
 import { TimeSeries } from "./time-series";
-
-const TwoHorizontalGrid = styled.div`
-  display: grid;
-  grid-template-rows: 2fr 3fr;
-  width: 100%;
-  background-color: white;
-  cursor: auto;
-`;
 
 const FourHorizontalGrid = styled.div<{ borderRight?: boolean }>`
   display: grid;
@@ -61,7 +53,7 @@ interface CardProps {
   latitude: number;
   sunriseTime: string;
   sunsetTime: string;
-  times: Times[];
+  times: Times[] | [];
 }
 
 export const HighlightedCard = ({
@@ -73,7 +65,7 @@ export const HighlightedCard = ({
   sunsetTime,
   times,
 }: CardProps) => {
-  const svgContainerRef = useRef(null);
+  const svgContainerRef = useRef<HTMLDivElement | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
 
   const modifiedDate = useMemo(() => {
@@ -91,6 +83,7 @@ export const HighlightedCard = ({
   };
 
   useEffect(() => {
+    if (!svgContainerRef.current) return;
     const svgContainer = svgContainerRef.current;
     const hasScroll = svgContainer.scrollWidth > svgContainer.clientWidth;
 
@@ -114,12 +107,13 @@ export const HighlightedCard = ({
   const minTemperatureToday = getSortedTemperatureFromArrOfTimes(times, "asc");
 
   return (
-    <TwoHorizontalGrid>
+    <Flex flexDirection={"column"} backgroundColor={"white"} height={"100%"}>
       <Flex
         alignItems={"center"}
         position={"relative"}
         flexDirection={"column"}
         paddingX={4}
+        flex={"1"}
       >
         <Flex width={"100%"} justifyContent={"space-between"}>
           <Text>{`${modifiedDate}`}</Text>
@@ -158,87 +152,91 @@ export const HighlightedCard = ({
           </Flex>
         </Flex>
         <Flex width={"100%"} justifyContent={"space-between"}>
-          <Text variant="body-small">{`Max ${new Temperature(
-            maxTemperatureToday.temperature
-          ).toString()} at ${plus2HoursOnTime(
-            maxTemperatureToday.time
-          )}`}</Text>
-          <Text variant="body-small">{`Min ${new Temperature(
-            minTemperatureToday.temperature
-          ).toString()} at ${plus2HoursOnTime(
-            minTemperatureToday.time
-          )}`}</Text>
+          {maxTemperatureToday?.temperature && (
+            <Text variant="body-small">{`Max ${
+              new Temperature(maxTemperatureToday?.temperature).toString() || ""
+            } at ${plus2HoursOnTime(maxTemperatureToday?.time || "")}`}</Text>
+          )}
+          {minTemperatureToday?.temperature && (
+            <Text variant="body-small">{`Min ${new Temperature(
+              minTemperatureToday?.temperature
+            ).toString()} at ${plus2HoursOnTime(
+              minTemperatureToday?.time
+            )}`}</Text>
+          )}
         </Flex>
       </Flex>
-
-      <div
-        ref={svgContainerRef}
-        className="relative flex overflow-x-auto overflow-y-hidden color-black-600 z-10 "
-      >
-        <span
-          id="bouncingArrow"
-          style={{
-            animationName: "bounce",
-          }}
-          className={`absolute m-r-12 right-4 bottom-1/2 z-10 ${
-            isScrolling && "hidden"
-          }`}
+      {times.length > 0 && (
+        <div
+          ref={svgContainerRef}
+          className="relative flex overflow-x-auto overflow-y-hidden color-black-600 z-10 "
         >
-          <svg viewBox="0 0 24 24" height={"20px"} width={"24px"}>
-            <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
-          </svg>
-        </span>
-        <FourHorizontalGrid
-          borderRight
-          className="sticky bg-white -mb-1 left-0 z-10"
-        >
-          <GridItem className="relative">
-            <Flex
-              alignItems={"center"}
-              justifyContent={"center"}
-              height={"100%"}
-              width={[gridWidth.mobile, gridWidth.pc]}
-            >
-              <Text>Time</Text>
-            </Flex>
-          </GridItem>
-          <GridItem className="relative">
-            <Flex
-              height={"100%"}
-              alignItems={"center"}
-              justifyContent={"center"}
-              width={[gridWidth.mobile, gridWidth.pc]}
-            >
-              <Text>Weather</Text>
-            </Flex>
-          </GridItem>
-          <GridItem className="relative">
-            <Flex
-              height={"100%"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              width={[gridWidth.mobile, gridWidth.pc]}
-            >
-              <Text>Temperature</Text>
-            </Flex>
-          </GridItem>
-          <Flex
-            justifyContent={"center"}
-            alignItems={"center"}
-            flex={"1 1 auto"}
-            width={[gridWidth.mobile, gridWidth.pc]}
+          <span
+            id="bouncingArrow"
+            style={{
+              animationName: "bounce",
+            }}
+            className={`absolute m-r-12 right-4 bottom-1/2 z-10 ${
+              isScrolling && "hidden"
+            }`}
           >
-            <Text>Wind m/s</Text>
-          </Flex>
-        </FourHorizontalGrid>
-        {times.map((time, idx) => {
-          return (
-            <FourHorizontalGrid key={idx}>
-              <TimeSeries key={`time-${idx}`} {...time} />{" "}
-            </FourHorizontalGrid>
-          );
-        })}
-      </div>
-    </TwoHorizontalGrid>
+            <svg viewBox="0 0 24 24" height={"20px"} width={"24px"}>
+              <path d="M4 23.245l14.374-11.245L4 0.781l0.619-0.781 15.381 12-15.391 12-0.609-0.755z" />
+            </svg>
+          </span>
+          <FourHorizontalGrid
+            borderRight
+            className="sticky bg-white -mb-1 left-0 z-10"
+          >
+            <GridItem className="relative">
+              <Flex
+                alignItems={"center"}
+                justifyContent={"center"}
+                height={"100%"}
+                width={[gridWidth.mobile, gridWidth.pc]}
+              >
+                <Text>Time</Text>
+              </Flex>
+            </GridItem>
+            <GridItem className="relative">
+              <Flex
+                height={"100%"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                width={[gridWidth.mobile, gridWidth.pc]}
+              >
+                <Text>Weather</Text>
+              </Flex>
+            </GridItem>
+            <GridItem className="relative">
+              <Flex
+                height={"100%"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                width={[gridWidth.mobile, gridWidth.pc]}
+              >
+                <Text>Temperature</Text>
+              </Flex>
+            </GridItem>
+            <Flex
+              justifyContent={"center"}
+              alignItems={"center"}
+              flex={"1 1 auto"}
+              width={[gridWidth.mobile, gridWidth.pc]}
+            >
+              <Text>Wind m/s</Text>
+            </Flex>
+          </FourHorizontalGrid>
+
+          {times.map((time, idx) => {
+            return (
+              <FourHorizontalGrid key={idx}>
+                <TimeSeries key={`time-${idx}`} {...time} />{" "}
+              </FourHorizontalGrid>
+            );
+          })}
+        </div>
+      )}
+    </Flex>
   );
 };

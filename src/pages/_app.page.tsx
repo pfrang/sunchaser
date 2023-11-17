@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
+import { useDisplayFooter, useDisplayFooterSubItems } from "../states/footer";
 
 import { Footer } from "./footer";
 import { Header } from "./header";

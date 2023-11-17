@@ -25,13 +25,19 @@ export interface FlexProps
   css?: CSSProperties;
   isHighlighted?: boolean;
   as?: keyof JSX.IntrinsicElements; // Add this line
+  clickable?: boolean;
 }
 
-export const Flex = ({ gap = 0, children, ...props }: FlexProps) => {
+export const Flex = ({
+  gap = 0,
+  clickable = false,
+  children,
+  ...props
+}: FlexProps) => {
   //SHOULD BE Record<string, uknown> = props
   const wrapperProps: Record<any, any> = props;
   return (
-    <s.Wrapper gap={gap} {...wrapperProps}>
+    <s.Wrapper gap={gap} clickable={clickable} {...wrapperProps}>
       {children}
     </s.Wrapper>
   );

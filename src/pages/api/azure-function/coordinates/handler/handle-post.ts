@@ -23,12 +23,13 @@ export const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const response = await new CoordinatesAPiClient().post(payLoad);
 
-    if (Object.keys(response.data).length === 0)
+    if (Object.keys(response.data).length === 0) {
       return res.status(200).json({
         metadata: {},
         userLocation: {},
         ranks: [],
       });
+    }
 
     const mappedResponse = new CoordinatesMapper(response).getProps();
 

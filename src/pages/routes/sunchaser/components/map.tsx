@@ -2,24 +2,22 @@ import { useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import { MapBoxHelper } from "pages/utils/mapbox-settings";
 
+import { useMap, useMapInstance } from "../../../../states/sunchaser-result";
+
 interface SunchaserResultMapProps {
   data: any;
-  setMapInstance: any;
-  setMap: any;
-  setHighlightedCard: any;
 }
 
-export const Map = ({
-  data,
-  setMapInstance,
-  setMap,
-  setHighlightedCard,
-}: SunchaserResultMapProps) => {
+export const Map = ({ data }: SunchaserResultMapProps) => {
+  const { mapObject, setMap } = useMap();
+  const { mapInstance, setMapInstance } = useMapInstance();
+
   useEffect(() => {
     if (document.getElementById("map")) {
       const longitudes = data.ranks.map((item) => item.longitude);
       const latitudes = data.ranks.map((item) => item.latitude);
       const userLocation = data.userLocation;
+
       const mapInitializer = new MapBoxHelper(
         longitudes,
         latitudes,
@@ -84,7 +82,8 @@ export const Map = ({
 
             if (card) {
               // Call the onClickCard function
-              setHighlightedCard(card);
+              // eslint-disable-next-line no-console
+              console.log(card);
             }
           }
         });
@@ -93,7 +92,7 @@ export const Map = ({
   }, []);
 
   return (
-    <section id="section-map">
+    <section id="section-map" className="h-full">
       <div className="flex items-center h-full justify-center sticky top-0">
         <div id="map" className="w-full h-full m-auto "></div>
         <div id="original-map" className="w-full h-full m-auto hidden"></div>

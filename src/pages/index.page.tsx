@@ -11,6 +11,7 @@ import { useUserLocation } from "./hooks/use-user-location";
 import { useCoordinates } from "./hooks/use-coordinates";
 import { CalendarWrapper } from "./routes/sunchaser/components/calendar-wrapper";
 import { ChooseTravelDistance } from "./routes/_shared/components/choose-travel-distance";
+import { sanitizeNextQuery } from "./utils/sanitize-next-query";
 
 const Home = ({
   mapBoxKey,
@@ -24,6 +25,8 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
 
   const router = useRouter();
   const { userLocation } = useUserLocation();
+
+  const query = sanitizeNextQuery(router.query);
 
   const { data, isLoading, error } = useCoordinates(
     {
@@ -39,10 +42,10 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
     router.push({
       pathname: "/",
       query: {
-        distance: 50,
-        lat: userLocation.latitude,
-        lon: userLocation.longitude,
-        date: new Date().toISOString().split("T")[0],
+        distance: query.distance ?? 50,
+        lat: query.latitude ?? userLocation.latitude,
+        lon: query.longitude ?? userLocation.longitude,
+        date: query.date ?? new Date().toISOString().split("T")[0],
       },
     });
   }, [userLocation]);

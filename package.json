@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "tsc --project tsconfig.json && next start",
     "lint": "eslint .",
     "static": "next build && next export",
     "export": "next export",

@@ -19,11 +19,19 @@ import {
 import { Text } from "../ui-kit/text";
 import { Flex } from "../ui-kit/flex";
 
-export const Footer = () => {
+import { Carousell } from "./routes/sunchaser/components/carousell";
+import { SunchaserListWrapper } from "./routes/sunchaser/components/carousell-wrapper";
+
+export const Footer = ({ children }: { children?: JSX.Element }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { footerItem, setFooterItem } = useDisplayFooter();
   const [boxPosition, setBoxPosition] = useState("sticky");
   const boxRef = useRef(null);
+
+  const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
+
+  const isOnSunChaserResult =
+    footerItem === "sunchaser" && footerSubItem === "result";
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
@@ -66,63 +74,66 @@ export const Footer = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          zIndex: 999,
+          zIndex: 9,
           backgroundColor: theme.color.blues[4],
         }}
       >
-        <Flex
-          borderRadius={"36px 36px 0px 0px"}
-          backgroundColor={theme.color.blues[2]}
-        >
-          <Button fullWidth onClick={handleToggle}>
-            {isExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-          </Button>
-        </Flex>
+        {isOnSunChaserResult && <SunchaserListWrapper />}
+        <>
+          <Flex
+            borderRadius={"36px 36px 0px 0px"}
+            backgroundColor={theme.color.blues[2]}
+          >
+            <Button fullWidth onClick={handleToggle}>
+              {isExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+            </Button>
+          </Flex>
 
-        <Collapse
-          style={{
-            width: "100%",
-          }}
-          in={isExpanded}
-        >
-          <Spacer
-            height={8}
-            borderTop={"2px"}
-            borderTopStyle={"solid"}
-            borderColor={theme.color.grey[1]}
-          />
+          <Collapse
+            style={{
+              width: "100%",
+            }}
+            in={isExpanded}
+          >
+            <Spacer
+              height={8}
+              borderTop={"2px"}
+              borderTopStyle={"solid"}
+              borderColor={theme.color.grey[1]}
+            />
 
-          <Flex flexDirection={"column"}>
-            <Spacer height={4} />
+            <Flex flexDirection={"column"}>
+              <Spacer height={4} />
 
-            <Flex flexDirection={"column"} paddingX={[4, 8]}>
-              <Flex justifyContent={"space-between"} gap={4}>
-                <FooterButton text="forecast" />
-                <FooterButton text="sunchaser" />
-              </Flex>
+              <Flex flexDirection={"column"} paddingX={[4, 8]}>
+                <Flex justifyContent={"space-between"} gap={4}>
+                  <FooterButton text="forecast" />
+                  <FooterButton text="sunchaser" />
+                </Flex>
 
-              <Spacer height={8} />
+                <Spacer height={8} />
 
-              <Spacer
-                borderRadius={8}
-                borderColor={`${theme.color.blues[2]}`}
-                style={{ backgroundColor: theme.color.blues[2] }}
-                height={14}
-                boxShadow={"inset 0em 6px rgba(0, 0, 0, 0.25)"}
-              />
+                <Spacer
+                  borderRadius={8}
+                  borderColor={`${theme.color.blues[2]}`}
+                  style={{ backgroundColor: theme.color.blues[2] }}
+                  height={14}
+                  boxShadow={"inset 0em 6px rgba(0, 0, 0, 0.25)"}
+                />
 
-              <Flex justifyContent={"space-between"} height={"100%"}>
-                {subFooterItems.map((item, index) => {
-                  return (
-                    <React.Fragment key={item + index}>
-                      {createFooterSubItems(item)}
-                    </React.Fragment>
-                  );
-                })}
+                <Flex justifyContent={"space-between"} height={"100%"}>
+                  {subFooterItems.map((item, index) => {
+                    return (
+                      <React.Fragment key={item + index}>
+                        {createFooterSubItems(item)}
+                      </React.Fragment>
+                    );
+                  })}
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
-        </Collapse>
+          </Collapse>
+        </>
       </Box>
     </>
   );
@@ -148,7 +159,7 @@ const FooterButton = ({ text }: { text: FooterItems }) => {
     >
       <button onClick={handleClick} style={{ padding: 0, width: "100%" }}>
         <Flex
-          className={text !== footerItem ? "hover:opacity-5" : ""}
+          clickable
           flexDirection={"column"}
           alignItems={"center"}
           justifyContent={"center"}
@@ -171,7 +182,7 @@ export const createFooterSubItems = (item: FooterSubItems) => {
       fullWidth
       onClick={() => setFooterSubItem(item)}
     >
-      <Flex flexDirection={"column"} alignItems={"center"}>
+      <Flex flexDirection={"column"} alignItems={"center"} clickable>
         <Image
           alt="partlySunny"
           src={

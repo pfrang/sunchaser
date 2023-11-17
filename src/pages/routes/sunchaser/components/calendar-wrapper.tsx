@@ -12,6 +12,7 @@ const Div23 = styled.p`
   color: white;
   text-align: center;
 `;
+
 export const CalendarWrapper = () => {
   return (
     <>

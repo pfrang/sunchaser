@@ -10,8 +10,8 @@ export const getSortedTemperatureFromArrOfTimes = (
 
   try {
     return arr
-      .filter((item: any) => item.date === earliestDay)
-      .sort((a: any, b: any) =>
+      .filter((item) => item.date === earliestDay)
+      .sort((a, b) =>
         sort === "desc"
           ? b.temperature - a.temperature
           : a.temperature - b.temperature
