@@ -12,11 +12,17 @@ import {
 import { theme } from "../../../../ui-kit/theme";
 import { WeatherIconList } from "../../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Spacer } from "../../../../ui-kit/spacer/spacer";
-import { useMap, useMapInstance } from "../../../../states/sunchaser-result";
+import {
+  useHighlightedCard,
+  useMap,
+  useMapInstance,
+} from "../../../../states/sunchaser-result";
 import {
   MapBoxHelper,
   StartAndEndCoordinates,
 } from "../../../utils/mapbox-settings";
+
+import { Carousell2 } from "./carousell2";
 
 export const ResultList = ({
   items,
@@ -26,9 +32,8 @@ export const ResultList = ({
   userLocation: UserLocation;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [highlightedCard, setHighlightedCard] = useState<
-    undefined | AzureFunctionCoordinatesMappedItems
-  >(undefined);
+
+  const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
   const { mapObject } = useMap();
   const { mapInstance } = useMapInstance();
@@ -66,7 +71,7 @@ export const ResultList = ({
 
       MapBoxHelper.drawLine(mapObject, coordinates);
 
-      setHighlightedCard(item);
+      return setHighlightedCard(item);
 
       // return setTimeout(() => {
       //   swiper.update();
@@ -84,7 +89,7 @@ export const ResultList = ({
     <Flex borderRadius={"inherit"} flexDirection={"column"} gap={2} padding={2}>
       <Flex width={"100%"} justifyContent={"center"}>
         <Flex
-          width={["150px", "350px"]}
+          width={["150px", "300px", "450px"]}
           onClick={() => setIsExpanded(!isExpanded)}
           style={{ cursor: "pointer" }}
         >
@@ -103,26 +108,45 @@ export const ResultList = ({
       >
         <Flex
           flexDirection={"column"}
-          gap={2}
           maxHeight={"400px"}
           overflowY={"auto"}
           paddingX={[2, 4]}
+          gap={2}
         >
           {items.map((item) => (
-            <Flex
-              borderColor={theme.color.blues[2]}
-              padding={[1, 2]}
-              borderRadius={36}
-              borderWidth={2}
-              key={item.index}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-              boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
-              clickable
-            >
-              <Text color={"white"}>{item.index + 1}</Text>
-              <Text color={"white"}>{item.primaryName}</Text>
-              {Icon(item.times)}
+            <Flex>
+              <Collapse
+                style={{
+                  width: "100%",
+                }}
+                easing={"ease-in-out"}
+                in={!highlightedCard || highlightedCard?.index === item.index}
+              >
+                <Flex
+                  borderColor={theme.color.blues[2]}
+                  padding={[1, 2]}
+                  borderRadius={36}
+                  borderWidth={2}
+                  key={item.index}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                  boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
+                  clickable
+                  onClick={() => onClickCard(item)}
+                >
+                  <Text color={"white"}>{item.index + 1}</Text>
+                  <Text color={"white"}>{item.primaryName}</Text>
+                  {Icon(item.times)}
+                </Flex>
+                <Collapse
+                  style={{
+                    width: "100%",
+                  }}
+                  in={highlightedCard?.index === item.index}
+                >
+                  <Carousell2 item={item} />
+                </Collapse>
+              </Collapse>
             </Flex>
           ))}
         </Flex>
@@ -132,7 +156,7 @@ export const ResultList = ({
 };
 
 const Icon = (times: Times[]) => {
-  const icon = useMemo(() => {
+  const icon = () => {
     const filterTimes = times.filter((time) => {
       const timeDateStartOfDay = formatISO(startOfDay(new Date(time.date)));
       const currentDateStartOfDay = formatISO(startOfDay(new Date()));
@@ -149,7 +173,7 @@ const Icon = (times: Times[]) => {
     return WeatherIconList[
       highestRank.symbol.charAt(0).toUpperCase() + highestRank.symbol.slice(1)
     ];
-  }, []);
+  };
 
   return (
     <>
@@ -160,8 +184,8 @@ const Icon = (times: Times[]) => {
         height={[24, 48]}
         width={[24, 48]}
       >
-        {icon && (
-          <img className="object-contain" src={`/icons/black/svg/${icon}`} />
+        {icon() && (
+          <img className="object-contain" src={`/icons/white/svg/${icon()}`} />
         )}
       </Flex>
     </>

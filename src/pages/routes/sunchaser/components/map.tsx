@@ -2,15 +2,22 @@ import { useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import { MapBoxHelper } from "pages/utils/mapbox-settings";
 
-import { useMap, useMapInstance } from "../../../../states/sunchaser-result";
+import {
+  useHighlightedCard,
+  useMap,
+  useMapInstance,
+} from "../../../../states/sunchaser-result";
+import { CoordinatesNextApiResponse } from "../../../api/azure-function/coordinates/index.endpoint";
 
 interface SunchaserResultMapProps {
-  data: any;
+  data: CoordinatesNextApiResponse;
 }
 
 export const Map = ({ data }: SunchaserResultMapProps) => {
   const { mapObject, setMap } = useMap();
   const { mapInstance, setMapInstance } = useMapInstance();
+
+  // console.log(highlightedCard);
 
   useEffect(() => {
     if (document.getElementById("map")) {
@@ -42,6 +49,7 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
                 type: "Point",
                 coordinates: [lon, latitudes[index]],
               },
+              properties: {}, // Add an empty properties object
             })),
           },
         });
@@ -56,37 +64,37 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
           },
         });
 
-        primaryMap.on("click", (e) => {
-          // Get features at clicked point
-          var features = primaryMap.queryRenderedFeatures(e.point, {
-            layers: ["tiles"],
-          });
+        // primaryMap.on("click", (e) => {
+        //   // Get features at clicked point
+        //   var features = primaryMap.queryRenderedFeatures(e.point, {
+        //     layers: ["tiles"],
+        //   });
 
-          primaryMap.on("mouseenter", "tiles", () => {
-            primaryMap.getCanvas().style.cursor = "pointer";
-          });
+        //   primaryMap.on("mouseenter", "tiles", () => {
+        //     primaryMap.getCanvas().style.cursor = "pointer";
+        //   });
 
-          if (features.length > 0) {
-            // Get the unique identifier of the clicked feature
-            const id = features[0].properties.id;
+        //   if (features.length > 0) {
+        //     // Get the unique identifier of the clicked feature
+        //     const id = features[0].properties.primaryName;
 
-            // Set the `clicked` state of the feature to true
-            primaryMap.setFeatureState(
-              { source: "tiles", id },
-              { clicked: true }
-            );
+        //     // Set the `clicked` state of the feature to true
+        //     primaryMap.setFeatureState(
+        //       { source: "tiles", id },
+        //       { clicked: true }
+        //     );
 
-            // Find the corresponding card in your data
+        //     // Find the corresponding card in your data
 
-            const card = data.ranks.find((item) => item.id === id);
+        //     const card = data.ranks.find((item) => item.primaryName === id);
 
-            if (card) {
-              // Call the onClickCard function
-              // eslint-disable-next-line no-console
-              console.log(card);
-            }
-          }
-        });
+        //     if (card) {
+        //       // Call the onClickCard function
+        //       // eslint-disable-next-line no-console
+        //       console.log(card);
+        //     }
+        //   }
+        // });
       });
     }
   }, []);

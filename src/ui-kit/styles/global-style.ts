@@ -21,8 +21,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
-
-
   h3 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
@@ -35,7 +33,6 @@ export const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
     box-sizing: inherit;
   }
-
 
   .rdp-button_reset.rdp-button.rdp-day.daypicker-selected-date {
     font-weight: bold !important;
@@ -57,7 +54,6 @@ export const GlobalStyle = createGlobalStyle`
   }
 
 
-
   dialog {
     pointer-events: none;
     opacity: 0;
@@ -71,33 +67,6 @@ export const GlobalStyle = createGlobalStyle`
     opacity: 1;
     pointer-events: inherit;
     transform: translateY(-50%, 0);
-  }
-
-  .mySwiper {
-    position: static !important;
-    display: flex;
-    justify-content: space-between;
-    justify-items: center;
-  }
-
-
-  .swiper-slide {
-    text-align: center;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    cursor: pointer;
-    /* Center slide text vertically */
-    /* display: -webkit-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center; */
   }
 
   .range-thumb {
