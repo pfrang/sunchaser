@@ -31,7 +31,7 @@ export const ResultList = ({
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
@@ -108,10 +108,10 @@ export const ResultList = ({
       >
         <Flex
           flexDirection={"column"}
-          maxHeight={"400px"}
+          maxHeight={"300px"}
           overflowY={"auto"}
           paddingX={[2, 4]}
-          gap={2}
+          gap={highlightedCard ? 0 : 2}
         >
           {items.map((item) => (
             <Flex>

@@ -14,7 +14,6 @@ import {
 } from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { theme } from "../../../../ui-kit/theme";
 import { Flex } from "../../../../ui-kit/flex";
-import { WeatherIconList } from "../../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Text } from "../../../../ui-kit/text";
 
 import { Carousell2Details } from "./carousell2-details";
@@ -32,12 +31,6 @@ export const Carousell2 = ({
     acc[date].push(item); // Add the item to the array
     return acc;
   }, {});
-
-  // Object.keys(days).map((key) => {
-  //   days[key].sort((a, b) => {
-  //     console.log(key);
-  //   });
-  // });
 
   return (
     <>
@@ -67,17 +60,11 @@ export const Carousell2 = ({
         //   onlyInViewport: false,
         // }}
         // mousewheel
-        // direction="horizontal"
+        direction="horizontal"
         // slidesPerView="auto"
         // spaceBetween={30}
-        pagination={{ clickable: true }}
+        pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
         style={{ width: "100%" }}
-        // scrollbar={{
-        //   enabled: true,
-        //   draggable: true,
-        //   dragSize: 98,
-        //   hide: false,
-        // }}
         allowTouchMove
         // onClick={(e) => {
         //   console.log(e.el);
@@ -120,6 +107,9 @@ export const Carousell2 = ({
               );
             })}
           </>
+        </Flex>
+        <Flex paddingTop={4} alignItems={"center"} justifyContent={"center"}>
+          <div className="flex justify-center swiper-pagination-custom"></div>
         </Flex>
       </Swiper>
     </>

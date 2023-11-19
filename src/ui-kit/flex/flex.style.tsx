@@ -57,9 +57,9 @@ const Wrapper = styled.div<{ gap: number | number[]; clickable: boolean }>`
     500ms ease;
 
   /* Add hover color effect */
-  &:hover {
+  /* &:hover {
     opacity: ${(props) => props.clickable && "0.4"};
-  }
+  } */
 `;
 
 export const FlexStyle = {
