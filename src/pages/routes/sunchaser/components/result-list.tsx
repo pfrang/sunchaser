@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { formatISO, startOfDay } from "date-fns";
+import { addHours, formatISO, startOfDay } from "date-fns";
 import { Collapse } from "@mui/material";
+import Image from "next/image";
 
 import { Flex } from "../../../../ui-kit/flex";
 import { Text } from "../../../../ui-kit/text";
@@ -134,8 +135,17 @@ export const ResultList = ({
                   clickable
                   onClick={() => onClickCard(item)}
                 >
-                  <Text color={"white"}>{item.index + 1}</Text>
-                  <Text color={"white"}>{item.primaryName}</Text>
+                  <Text
+                    textAlign={"start"}
+                    variant="poppins"
+                    fontWeight={"bold"}
+                    color={"white"}
+                  >
+                    {`#${item.index + 1}`}
+                  </Text>
+                  <Text textAlign={"center"} color={"white"}>
+                    {item.primaryName}
+                  </Text>
                   {Icon(item.times)}
                 </Flex>
                 <Collapse
@@ -156,23 +166,26 @@ export const ResultList = ({
 };
 
 const Icon = (times: Times[]) => {
-  const icon = () => {
-    const filterTimes = times.filter((time) => {
-      const timeDateStartOfDay = formatISO(startOfDay(new Date(time.date)));
-      const currentDateStartOfDay = formatISO(startOfDay(new Date()));
-      return timeDateStartOfDay === currentDateStartOfDay;
-    });
+  const filterTimes = times.filter((time) => {
+    const timeDateStartOfDay = formatISO(startOfDay(new Date(time.date)));
+    const currentDateStartOfDay = formatISO(
+      startOfDay(addHours(new Date(), 1))
+    );
+    return timeDateStartOfDay === currentDateStartOfDay;
+  });
 
-    // TODO investigate why this can happen
-    if (!filterTimes.length) return;
+  if (!filterTimes.length) return;
 
-    const highestRank = filterTimes.reduce((prev, current) => {
-      return prev.rank > current.rank ? prev : current;
-    });
+  const nightIcon = getInterval(filterTimes, 0, 5);
+  const morningIcon = getInterval(filterTimes, 6, 11);
+  const afternoonIcon = getInterval(filterTimes, 12, 17);
+  const eveningIcon = getInterval(filterTimes, 18, 23);
 
-    return WeatherIconList[
-      highestRank.symbol.charAt(0).toUpperCase() + highestRank.symbol.slice(1)
-    ];
+  const icons = {
+    "00-06": getIcon(nightIcon),
+    "06-12": getIcon(morningIcon),
+    "12-18": getIcon(afternoonIcon),
+    "18-23": getIcon(eveningIcon),
   };
 
   return (
@@ -180,14 +193,53 @@ const Icon = (times: Times[]) => {
       <Flex
         // flexDirection={["column", "row"]}
         alignItems={"center"}
-        justifyContent={"center"}
+        // justifyContent={"center"}
+        // justifyContent={"end"}
+        alignSelf={"flex-end"}
         height={[24, 48]}
-        width={[24, 48]}
+        width={"auto"}
+        gap={2}
+
+        // flexGrow={1}
       >
-        {icon() && (
-          <img className="object-contain" src={`/icons/white/svg/${icon()}`} />
-        )}
+        {Object.keys(icons).map((key) => {
+          if (icons[key]) {
+            return (
+              <Flex flexDirection={"column"}>
+                <Text variant="body-small" color="white">
+                  {key}
+                </Text>
+                <Image
+                  height={28}
+                  width={28}
+                  src={`/icons/white/svg/${icons[key]}`}
+                  alt={icons[key]}
+                />
+              </Flex>
+            );
+          }
+        })}
       </Flex>
     </>
   );
 };
+
+function getInterval(times: Times[], startHour: number, endHour: number) {
+  const betweenInterval = times.filter((time) => {
+    const hour = parseInt(time.time.split(":")[0]);
+    return hour >= startHour && hour <= endHour;
+  });
+
+  return betweenInterval ?? undefined;
+}
+
+function getIcon(times?: Times[]) {
+  if (!times.length) return;
+  const highestRank = times.reduce((prev, current) => {
+    return prev.rank > current.rank ? prev : current;
+  });
+
+  return WeatherIconList[
+    highestRank.symbol.charAt(0).toUpperCase() + highestRank.symbol.slice(1)
+  ];
+}
