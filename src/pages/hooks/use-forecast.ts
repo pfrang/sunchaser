@@ -11,7 +11,7 @@ import { NextApiRequest } from "./common-types";
 
 export const useForecast = (
   requestConfig: Pick<NextApiRequest, "params">,
-  isReady?: boolean
+  isReady?: boolean,
 ) => {
   const {
     data,
@@ -22,7 +22,7 @@ export const useForecast = (
       url: yrUrl,
       params: requestConfig.params,
     },
-    isReady
+    isReady,
   );
 
   return { data, error, isLoading };

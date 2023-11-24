@@ -34,7 +34,7 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
       params: router.query,
       data: router.query,
     },
-    router.isReady && Boolean(router.query.lat)
+    router.isReady && Boolean(router.query.lat),
   );
 
   useEffect(() => {

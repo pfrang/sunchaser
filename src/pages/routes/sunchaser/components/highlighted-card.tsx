@@ -73,7 +73,7 @@ export const HighlightedCard = ({
       "default",
       {
         month: "short",
-      }
+      },
     )}`;
   }, []);
 
@@ -159,9 +159,9 @@ export const HighlightedCard = ({
           )}
           {minTemperatureToday?.temperature && (
             <Text variant="body-small">{`Min ${new Temperature(
-              minTemperatureToday?.temperature
+              minTemperatureToday?.temperature,
             ).toString()} at ${plus2HoursOnTime(
-              minTemperatureToday?.time
+              minTemperatureToday?.time,
             )}`}</Text>
           )}
         </Flex>

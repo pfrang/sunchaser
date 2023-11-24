@@ -169,7 +169,7 @@ const Icon = (times: Times[]) => {
   const filterTimes = times.filter((time) => {
     const timeDateStartOfDay = formatISO(startOfDay(new Date(time.date)));
     const currentDateStartOfDay = formatISO(
-      startOfDay(addHours(new Date(), 1))
+      startOfDay(addHours(new Date(), 1)),
     );
     return timeDateStartOfDay === currentDateStartOfDay;
   });

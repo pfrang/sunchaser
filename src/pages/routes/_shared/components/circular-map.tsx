@@ -41,8 +41,8 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
         kilometers,
         {
           units: "kilometers",
-        }
-      )
+        },
+      ),
     );
 
     mapRef.current?.fitBounds(
@@ -50,7 +50,7 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
         [sw.longitude, sw.latitude],
         [ne.longitude, ne.latitude],
       ],
-      { padding: 20, duration: 1000 }
+      { padding: 20, duration: 1000 },
     );
   }, [kilometers, currentLatLocation]);
 

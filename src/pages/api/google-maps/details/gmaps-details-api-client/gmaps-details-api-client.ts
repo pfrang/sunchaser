@@ -8,7 +8,7 @@ export class GoogleMapsDetailsApiClient extends NextApiClient {
   readonly url = url;
 
   get = async (
-    input: string
+    input: string,
   ): Promise<{ data: GetGoogleMapsDetailsSLApiResponse }> => {
     const params = {
       place_id: input,
@@ -19,7 +19,7 @@ export class GoogleMapsDetailsApiClient extends NextApiClient {
         this.url,
         {
           params,
-        }
+        },
       );
 
     return { data: response.data };

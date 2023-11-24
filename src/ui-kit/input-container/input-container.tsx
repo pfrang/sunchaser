@@ -66,8 +66,8 @@ export const InputContainer: FC<InputContainerProps> = ({
               disabled
                 ? "graniteMedium"
                 : errored
-                ? "redText"
-                : "graniteMediumDark"
+                  ? "redText"
+                  : "graniteMediumDark"
             }
           />
         </s.TextRow>

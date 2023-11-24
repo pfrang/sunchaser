@@ -21,7 +21,7 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
       params: router.query,
       data: router.query,
     },
-    router.isReady
+    router.isReady,
   );
 
   return (

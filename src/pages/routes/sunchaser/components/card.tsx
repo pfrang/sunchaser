@@ -21,7 +21,7 @@ interface SmallCardProps {
   index: number;
   onClickCard: (
     item: AzureFunctionCoordinatesMappedItems,
-    swiper: Swiper
+    swiper: Swiper,
   ) => void;
 }
 

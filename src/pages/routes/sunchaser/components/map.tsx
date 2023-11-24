@@ -29,7 +29,7 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
         longitudes,
         latitudes,
         userLocation.longitude,
-        userLocation.latitude
+        userLocation.latitude,
       );
 
       const primaryMap = mapInitializer.initializeMap("map");

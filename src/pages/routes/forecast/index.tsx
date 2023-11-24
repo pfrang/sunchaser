@@ -18,7 +18,7 @@ export const Forecast = () => {
     {
       params: router.query,
     },
-    router.isReady && Boolean(router.query.lat)
+    router.isReady && Boolean(router.query.lat),
   );
 
   return (

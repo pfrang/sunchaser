@@ -36,5 +36,5 @@ export const useDisplayFooterSubItems = create<DisplayDrawerSubItemsStates>(
     footerSubItem: "result",
     setFooterSubItem: (input: FooterSubItems) =>
       set(() => ({ footerSubItem: input })),
-  })
+  }),
 );

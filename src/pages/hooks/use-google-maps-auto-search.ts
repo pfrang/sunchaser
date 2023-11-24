@@ -22,7 +22,7 @@ export const useFetchGoogleMapsSearches = (townSearch: string) => {
 
   let { data, error, mutate } = useSWR(
     townSearch ? urlWithParams : null,
-    townSearch ? () => fetcherFactory(fetcherRequest) : null
+    townSearch ? () => fetcherFactory(fetcherRequest) : null,
   );
 
   const isLoading = !data && !error && townSearch;
@@ -31,7 +31,7 @@ export const useFetchGoogleMapsSearches = (townSearch: string) => {
 };
 
 export const fetcherFactory = async (
-  requestConfig: NextApiRequest
+  requestConfig: NextApiRequest,
 ): Promise<GoogleMapsAutoSearchNextApiResponse> => {
   const response = await axios({ ...requestConfig, baseURL: "/api/" });
   return response.data;

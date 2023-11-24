@@ -18,7 +18,7 @@ export const SunchaserListWrapper = () => {
       params: router.query,
       data: router.query,
     },
-    router.isReady
+    router.isReady,
   );
 
   const [highlightedCard, setHighlightedCard] = useState<
@@ -47,7 +47,7 @@ export const SunchaserListWrapper = () => {
                 ...rank,
                 times: rank.times.filter((time) => {
                   const nowPlusOneHour = new Date().setHours(
-                    new Date().getHours() + 1
+                    new Date().getHours() + 1,
                   );
 
                   const dateTimeString =
@@ -58,7 +58,7 @@ export const SunchaserListWrapper = () => {
                   return new Date(dateTimeString) >= new Date();
                 }),
               };
-            }
+            },
           );
 
           return (

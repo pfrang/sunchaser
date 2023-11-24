@@ -17,7 +17,7 @@ export const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     await new GoogleMapsAutoSearchApiClient().get(input as string);
 
   const placesAutoSearchMappedData = new GoogleMapsAutoSearchMapper(
-    placesAutoSearchResponse
+    placesAutoSearchResponse,
   ).getProps();
 
   return res.status(200).json({

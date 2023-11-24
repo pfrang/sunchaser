@@ -13,7 +13,7 @@ import { ResponseDTO } from "../../../next-api.client";
 
 export const handleGet = async (
   req: NextApiRequest,
-  res: NextApiResponse<ResponseDTO<GoogleMapsDetailsResponse>>
+  res: NextApiResponse<ResponseDTO<GoogleMapsDetailsResponse>>,
 ) => {
   const { place_id } = req.query;
   if (!place_id) {
@@ -21,11 +21,11 @@ export const handleGet = async (
   }
 
   const placesDetailsResponse = await new GoogleMapsDetailsApiClient().get(
-    place_id as string
+    place_id as string,
   );
 
   const placesDetailsMappedData = new GoogleMapsDetailsMapper(
-    placesDetailsResponse
+    placesDetailsResponse,
   ).getProps();
 
   const response: ResponseDTO<GoogleMapsDetailsResponse> = {

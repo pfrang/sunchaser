@@ -26,7 +26,7 @@ export class NextApiClient {
           console.error(error.response.data);
           return Promise.reject(error);
         }
-      }
+      },
     );
   }
 }

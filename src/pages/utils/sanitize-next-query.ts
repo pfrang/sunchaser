@@ -5,7 +5,7 @@ export const sanitizeNextQuery = (queryParams: {
     Object.entries(queryParams).map(([key, value]) => [
       key,
       value ? flattenString(value) : "",
-    ])
+    ]),
   );
 };
 

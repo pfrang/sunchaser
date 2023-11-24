@@ -11,7 +11,7 @@ export interface UseNextApiRequestResponse<Data> {
 
 export const useNextApiRequest = (
   requestConfig: Pick<NextApiRequest, "data" | "params" | "url" | "method">,
-  isReady?: boolean
+  isReady?: boolean,
 ) => {
   const params = requestConfig.params
     ? Object.entries(requestConfig.params)
@@ -37,7 +37,7 @@ export const useNextApiRequest = (
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       revalidateIfStale: false,
-    }
+    },
   );
 
   const isLoading = !data && !error;

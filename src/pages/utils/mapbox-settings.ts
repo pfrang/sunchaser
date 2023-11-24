@@ -22,7 +22,7 @@ export class MapBoxHelper {
     longitudes?: number[],
     latitudes?: number[],
     centerLon?: number,
-    centerLat?: number
+    centerLat?: number,
   ) {
     this.longitudes = longitudes;
     this.latitudes = latitudes;
@@ -85,14 +85,14 @@ export class MapBoxHelper {
     map: mapboxgl.Map,
     coordinates: StartAndEndCoordinates,
     padding?: number,
-    duration?: number
+    duration?: number,
   ) {
     map.fitBounds(
       [
         [coordinates.start.longitude, coordinates.start.latitude],
         [coordinates.end.longitude, coordinates.end.latitude],
       ],
-      { padding, duration }
+      { padding, duration },
     );
   }
 

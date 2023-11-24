@@ -25,7 +25,7 @@ export const distanceArray = ({
 
 export const getCounterValue = (
   range: Range[],
-  label: string
+  label: string,
 ): number | undefined => {
   const match = range.find((item) => item.label === label);
 

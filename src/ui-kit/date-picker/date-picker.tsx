@@ -51,7 +51,7 @@ export const DatePicker = ({
   const datePickerProps = { shouldCloseOnSelect };
 
   const [datePickerValue, setDatePickerValue] = React.useState<Date | null>(
-    new Date()
+    new Date(),
   );
   const [rawInputValue, setRawInputValue] = React.useState<string>("");
 
@@ -198,7 +198,7 @@ export const DatePicker = ({
           return (
             <s.Header>
               <Text paddingX={3} variant="subtitle-small-bold">{`${capitalize(
-                month
+                month,
               )} ${year}`}</Text>
             </s.Header>
           );

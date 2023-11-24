@@ -4,7 +4,7 @@ export type SortType = "asc" | "desc";
 
 export const getSortedTemperatureFromArrOfTimes = (
   arr: Times[],
-  sort: SortType
+  sort: SortType,
 ) => {
   const earliestDay = getEarliestDay(arr);
 
@@ -14,7 +14,7 @@ export const getSortedTemperatureFromArrOfTimes = (
       .sort((a, b) =>
         sort === "desc"
           ? b.temperature - a.temperature
-          : a.temperature - b.temperature
+          : a.temperature - b.temperature,
       )[0];
   } catch (e) {
     throw new Error("Error in getTodayFromArrayOfObjects" + e);

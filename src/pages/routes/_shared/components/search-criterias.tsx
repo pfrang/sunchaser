@@ -55,7 +55,7 @@ export default function UserForm({
   const isHomePage = router.pathname === "/";
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
+    new Date(),
   );
 
   const [error, setError] = useState(false);
@@ -71,7 +71,7 @@ export default function UserForm({
     let latitudeInput;
     const travelDistance = Number(
       travelDistanceRef?.current?.querySelector(".MuiSlider-valueLabelLabel")
-        .innerHTML
+        .innerHTML,
     );
 
     if (isHomePage) {

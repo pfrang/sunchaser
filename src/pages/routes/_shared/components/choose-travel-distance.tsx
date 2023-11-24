@@ -68,12 +68,12 @@ export const ChooseTravelDistance = ({
   });
 
   const [kilometers, setKilometers] = useState(
-    Number(router.query.distance) || 50
+    Number(router.query.distance) || 50,
   );
 
   const [index, setIndex] = useState(
     getCounterValue(valuesForSlider, router.query?.distance as string) ||
-      valuesForSlider.length / 2
+      valuesForSlider.length / 2,
   );
 
   let sliderChanged = false;

@@ -15,7 +15,7 @@ export class CoordinatesAPiClient extends AzureFunctionApiClient {
       const response =
         await this.axiosInstance.post<AzureFunctionCoordinatesData>(
           this.url,
-          body
+          body,
         );
 
       return { data: response.data };

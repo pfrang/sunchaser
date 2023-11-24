@@ -18,7 +18,7 @@ export const Calendar = () => {
 
   useEffect(() => {
     setSelectedDate(
-      router.query?.date ? new Date(router.query?.date as string) : new Date()
+      router.query?.date ? new Date(router.query?.date as string) : new Date(),
     );
   }, [router.query]);
 
@@ -123,10 +123,10 @@ export const Calendar = () => {
             formatCaption: (date, options) => {
               // Format the date as you wish
               const formattedDateMonth = capitalize(
-                format(date, "MMMM", options)
+                format(date, "MMMM", options),
               );
               const formattedDateYear = capitalize(
-                format(date, "yyyy", options)
+                format(date, "yyyy", options),
               );
               return (
                 <Flex

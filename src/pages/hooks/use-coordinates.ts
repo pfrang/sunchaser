@@ -14,7 +14,7 @@ interface UseNextApiRequestResponse<Data> {
 
 export const useCoordinates = (
   requestConfig: Pick<NextApiRequest, "data" | "params" | "method">,
-  isReady?: boolean
+  isReady?: boolean,
 ) => {
   const {
     data,
@@ -27,7 +27,7 @@ export const useCoordinates = (
       method: requestConfig.method,
       data: requestConfig.data,
     },
-    isReady
+    isReady,
   );
 
   return { data, error, isLoading };

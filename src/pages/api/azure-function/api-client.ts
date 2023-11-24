@@ -21,7 +21,7 @@ export class AzureFunctionApiClient {
           console.error(error.response.data);
           return Promise.reject(error);
         }
-      }
+      },
     );
   }
 }

@@ -84,12 +84,12 @@ export class ForecastResponseMapper {
         ...acc[date].overview,
         summarizedWind: Number(
           (acc[date].overview.summarizedWind +=
-            item.data.instant.details.wind_speed).toFixed(2)
+            item.data.instant.details.wind_speed).toFixed(2),
         ),
         averageWind: Number(
           (acc[date].overview.summarizedWind / acc[date].times.length).toFixed(
-            2
-          )
+            2,
+          ),
         ),
         maxTemp:
           acc[date].overview.maxTemp < item.data.instant.details.air_temperature
@@ -103,9 +103,9 @@ export class ForecastResponseMapper {
           ? (acc[date].overview.summarizedRain +=
               item.data.next_1_hours.details.precipitation_amount)
           : item.data.next_6_hours?.details?.precipitation_amount
-          ? (acc[date].overview.summarizedRain +=
-              item.data.next_6_hours.details.precipitation_amount)
-          : acc[date].overview.summarizedRain,
+            ? (acc[date].overview.summarizedRain +=
+                item.data.next_6_hours.details.precipitation_amount)
+            : acc[date].overview.summarizedRain,
       };
 
       return acc;

@@ -17,7 +17,7 @@ export const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const mappedYrApiResponse = new ForecastResponseMapper(
-      yrApiResponse
+      yrApiResponse,
     ).getProps();
 
     return res.status(200).json({

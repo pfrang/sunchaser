@@ -11,6 +11,6 @@ const formatMonth = (date: Date) => {
 
 export const formatDate = (date: Date) => {
   return `${new Date(date).getFullYear()}-${formatMonth(date)}-${new Date(
-    date
+    date,
   ).getDate()}`;
 };
