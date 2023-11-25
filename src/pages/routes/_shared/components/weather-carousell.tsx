@@ -6,7 +6,7 @@ import {
   Scrollbar,
   Mousewheel,
   Keyboard,
-} from "swiper";
+} from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";

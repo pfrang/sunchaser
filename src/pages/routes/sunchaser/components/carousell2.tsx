@@ -6,7 +6,7 @@ import {
   Keyboard,
   FreeMode,
   Pagination,
-} from "swiper";
+} from "swiper/modules";
 
 import {
   AzureFunctionCoordinatesMappedItems,

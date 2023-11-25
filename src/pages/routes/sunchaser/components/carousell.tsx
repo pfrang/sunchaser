@@ -1,5 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Scrollbar, Mousewheel, Keyboard, FreeMode } from "swiper";
+import {
+  Navigation,
+  Scrollbar,
+  Mousewheel,
+  Keyboard,
+  FreeMode,
+} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
