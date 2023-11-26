@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import { getIcon, getInterval } from "pages/utils/times-helper";
@@ -35,6 +35,8 @@ export const ResultList = ({
   expandFooter: (input: boolean) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [hide, setHide] = useState(false);
+  const [clickedIndex, setClickedIndex] = useState(0);
 
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
@@ -51,6 +53,8 @@ export const ResultList = ({
       mapInstance.setFitBounds(mapObject);
     }
   };
+
+  useEffect(() => {}, [highlightedCard]);
 
   const onClickCard = (item: AzureFunctionCoordinatesMappedItems) => {
     if (item.index !== highlightedCard?.index && mapObject) {
@@ -109,6 +113,7 @@ export const ResultList = ({
         style={{
           width: "100%",
         }}
+        easing={"ease-in-out"}
         in={isExpanded}
       >
         <Flex
@@ -118,72 +123,89 @@ export const ResultList = ({
           paddingX={[2, 4]}
           gap={highlightedCard ? 0 : 2}
         >
-          {items.map((item) => (
-            <Flex position={"relative"}>
-              <Collapse
-                style={{
-                  width: "100%",
-                }}
-                easing={"ease-in-out"}
-                in={!highlightedCard || highlightedCard?.index === item.index}
+          {items.map((item) => {
+            const shouldBeExpanded =
+              !highlightedCard || highlightedCard?.index === item.index;
+            // const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
+
+            // useEffect(() => {
+            //   if (shouldBeExpanded) {
+            //     setTimeout(() => {
+            //       setIsDelayedExpanded(true);
+            //     }, 600);
+            //   }
+            // }, [shouldBeExpanded]);
+
+            return (
+              <Flex
+                position={"relative"}
+                // display={shouldBeExpanded ? "flex" : "none"}
               >
-                <Flex
-                  borderColor={theme.color.blues[2]}
-                  paddingY={[1, 2]}
-                  // paddingX={[3, 3]}
-                  borderRadius={36}
-                  borderWidth={2}
-                  key={item.index}
-                  // justifyContent={"space-between"}
-                  alignItems={"center"}
-                  boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
-                  clickable
-                  onClick={() => onClickCard(item)}
-                >
-                  <Flex paddingLeft={3} flexShrink={1}>
-                    <Text
-                      textAlign={"start"}
-                      variant="poppins"
-                      fontWeight={"bold"}
-                      color={"white"}
-                    >
-                      {`#${item.index + 1}`}
-                    </Text>
-                  </Flex>
-
-                  <Flex
-                    position={"absolute"}
-                    justifyContent={"center"}
-                    margin={"auto"}
-                    width={"100%"}
-                  >
-                    <Text textAlign={"center"} color={"white"}>
-                      {item.primaryName}
-                    </Text>
-                  </Flex>
-
-                  <Flex
-                    alignItems={"center"}
-                    width={"auto"}
-                    gap={3}
-                    paddingRight={4}
-
-                    // py={1}
-                  >
-                    {Icon(item.times)}
-                  </Flex>
-                </Flex>
                 <Collapse
                   style={{
                     width: "100%",
                   }}
-                  in={highlightedCard?.index === item.index}
+                  easing={"ease-in-out"}
+                  in={shouldBeExpanded}
                 >
-                  <Carousell2 item={item} />
+                  <Flex
+                    borderColor={theme.color.blues[2]}
+                    paddingY={[1, 2]}
+                    // paddingX={[3, 3]}
+                    borderRadius={36}
+                    borderWidth={2}
+                    key={item.index}
+                    // justifyContent={"space-between"}
+                    alignItems={"center"}
+                    boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
+                    clickable
+                    onClick={() => onClickCard(item)}
+                  >
+                    <Flex paddingLeft={3} flexShrink={1}>
+                      <Text
+                        textAlign={"start"}
+                        variant="poppins"
+                        fontWeight={"bold"}
+                        color={"white"}
+                      >
+                        {`#${item.index + 1}`}
+                      </Text>
+                    </Flex>
+
+                    <Flex
+                      position={"absolute"}
+                      justifyContent={"center"}
+                      margin={"auto"}
+                      width={"100%"}
+                    >
+                      <Text textAlign={"center"} color={"white"}>
+                        {shouldBeExpanded ? item.primaryName : ""}
+                      </Text>
+                    </Flex>
+
+                    <Flex
+                      alignItems={"center"}
+                      width={"auto"}
+                      gap={3}
+                      paddingRight={4}
+
+                      // py={1}
+                    >
+                      {Icon(item.times)}
+                    </Flex>
+                  </Flex>
+                  <Collapse
+                    style={{
+                      width: "100%",
+                    }}
+                    in={highlightedCard?.index === item.index}
+                  >
+                    <Carousell2 item={item} />
+                  </Collapse>
                 </Collapse>
-              </Collapse>
-            </Flex>
-          ))}
+              </Flex>
+            );
+          })}
         </Flex>
       </Collapse>
     </Flex>
@@ -191,7 +213,7 @@ export const ResultList = ({
 };
 
 const Icon = (times: Times[]) => {
-  const mediaQuery = useMediaQuery("(max-width: 800px)");
+  const mediaQuery = window && useMediaQuery("(max-width: 800px)");
 
   const nightIcon = getInterval(times, 0, 5);
   const morningIcon = getInterval(times, 6, 11);

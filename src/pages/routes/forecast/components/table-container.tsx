@@ -24,7 +24,7 @@ export const ForecastTableContainer = ({
   rows,
 }: ForecastTableContainerProps) => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = window && useMediaQuery(theme.breakpoints.down("sm"));
 
   const theme2 = createTheme({
     components: {

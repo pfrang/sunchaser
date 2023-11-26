@@ -51,10 +51,10 @@ const Wrapper = styled.div<{ gap: number | number[]; clickable: boolean }>`
     background: #642222;
   }
 
-  transition: ${({}) => {
-      return "height";
-    }}
-    500ms ease;
+  /* transition: ${({}) => {
+    return "height";
+  }}
+    500ms ease; */
 
   /* Add hover color effect */
   /* &:hover {
