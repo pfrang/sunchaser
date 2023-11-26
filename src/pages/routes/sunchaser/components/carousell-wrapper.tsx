@@ -9,7 +9,7 @@ import { useCoordinates } from "../../../hooks/use-coordinates";
 
 import { ResultList } from "./result-list";
 
-export const SunchaserListWrapper = () => {
+export const SunchaserListWrapper = ({ expandFooter }) => {
   const router = useRouter();
 
   const { data, isLoading, error } = useCoordinates(
@@ -64,7 +64,11 @@ export const SunchaserListWrapper = () => {
           return (
             <Flex flexDirection={"column"}>
               <section id="section-carousell" className="h-full">
-                <ResultList userLocation={userLocation} items={aheadOfNow} />
+                <ResultList
+                  expandFooter={expandFooter}
+                  userLocation={userLocation}
+                  items={ranks}
+                />
               </section>
             </Flex>
           );

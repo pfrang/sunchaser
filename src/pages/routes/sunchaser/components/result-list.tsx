@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { addHours, formatISO, startOfDay } from "date-fns";
-import { Collapse } from "@mui/material";
+import { useState } from "react";
+import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
+import { getIcon, getInterval } from "pages/utils/times-helper";
 
 import { Flex } from "../../../../ui-kit/flex";
 import { Text } from "../../../../ui-kit/text";
@@ -28,9 +28,11 @@ import { Carousell2 } from "./carousell2";
 export const ResultList = ({
   items,
   userLocation,
+  expandFooter,
 }: {
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
+  expandFooter: (input: boolean) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -56,6 +58,8 @@ export const ResultList = ({
         lat: item.latitude,
         lon: item.longitude,
       };
+
+      expandFooter(false);
 
       const coordinates: StartAndEndCoordinates = {
         start: {
@@ -110,12 +114,12 @@ export const ResultList = ({
         <Flex
           flexDirection={"column"}
           maxHeight={"300px"}
-          overflowY={"auto"}
+          overflowY={highlightedCard ? "hidden" : "auto"}
           paddingX={[2, 4]}
           gap={highlightedCard ? 0 : 2}
         >
           {items.map((item) => (
-            <Flex>
+            <Flex position={"relative"}>
               <Collapse
                 style={{
                   width: "100%",
@@ -125,28 +129,49 @@ export const ResultList = ({
               >
                 <Flex
                   borderColor={theme.color.blues[2]}
-                  padding={[1, 2]}
+                  paddingY={[1, 2]}
+                  // paddingX={[3, 3]}
                   borderRadius={36}
                   borderWidth={2}
                   key={item.index}
-                  justifyContent={"space-between"}
+                  // justifyContent={"space-between"}
                   alignItems={"center"}
                   boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
                   clickable
                   onClick={() => onClickCard(item)}
                 >
-                  <Text
-                    textAlign={"start"}
-                    variant="poppins"
-                    fontWeight={"bold"}
-                    color={"white"}
+                  <Flex paddingLeft={3} flexShrink={1}>
+                    <Text
+                      textAlign={"start"}
+                      variant="poppins"
+                      fontWeight={"bold"}
+                      color={"white"}
+                    >
+                      {`#${item.index + 1}`}
+                    </Text>
+                  </Flex>
+
+                  <Flex
+                    position={"absolute"}
+                    justifyContent={"center"}
+                    margin={"auto"}
+                    width={"100%"}
                   >
-                    {`#${item.index + 1}`}
-                  </Text>
-                  <Text textAlign={"center"} color={"white"}>
-                    {item.primaryName}
-                  </Text>
-                  {Icon(item.times)}
+                    <Text textAlign={"center"} color={"white"}>
+                      {item.primaryName}
+                    </Text>
+                  </Flex>
+
+                  <Flex
+                    alignItems={"center"}
+                    width={"auto"}
+                    gap={3}
+                    paddingRight={4}
+
+                    // py={1}
+                  >
+                    {Icon(item.times)}
+                  </Flex>
                 </Flex>
                 <Collapse
                   style={{
@@ -166,49 +191,56 @@ export const ResultList = ({
 };
 
 const Icon = (times: Times[]) => {
-  const filterTimes = times.filter((time) => {
-    const timeDateStartOfDay = formatISO(startOfDay(new Date(time.date)));
-    const currentDateStartOfDay = formatISO(
-      startOfDay(addHours(new Date(), 1)),
-    );
-    return timeDateStartOfDay === currentDateStartOfDay;
-  });
+  const mediaQuery = useMediaQuery("(max-width: 800px)");
 
-  if (!filterTimes.length) return;
+  const nightIcon = getInterval(times, 0, 5);
+  const morningIcon = getInterval(times, 6, 11);
+  const afternoonIcon = getInterval(times, 12, 17);
+  const eveningIcon = getInterval(times, 18, 23);
 
-  const nightIcon = getInterval(filterTimes, 0, 5);
-  const morningIcon = getInterval(filterTimes, 6, 11);
-  const afternoonIcon = getInterval(filterTimes, 12, 17);
-  const eveningIcon = getInterval(filterTimes, 18, 23);
-
-  const icons = {
-    "00-06": getIcon(nightIcon),
-    "06-12": getIcon(morningIcon),
-    "12-18": getIcon(afternoonIcon),
-    "18-23": getIcon(eveningIcon),
-  };
+  const icons = mediaQuery
+    ? {
+        morgen: getIcon(getInterval(times, 0, 12)),
+        kveld: getIcon(getInterval(times, 13, 23)),
+      }
+    : {
+        natt: getIcon(nightIcon),
+        morgen: getIcon(morningIcon),
+        ettermiddag: getIcon(afternoonIcon),
+        kveld: getIcon(eveningIcon),
+      };
 
   return (
     <>
-      <Flex
-        // flexDirection={["column", "row"]}
-        alignItems={"center"}
-        // justifyContent={"center"}
-        // justifyContent={"end"}
-        alignSelf={"flex-end"}
-        height={[24, 48]}
-        width={"auto"}
-        gap={2}
-
-        // flexGrow={1}
-      >
-        {Object.keys(icons).map((key) => {
-          if (icons[key]) {
-            return (
-              <Flex flexDirection={"column"}>
-                <Text variant="body-small" color="white">
-                  {key}
-                </Text>
+      {Object.keys(icons).map((key) => {
+        if (icons[key]) {
+          return (
+            <Flex
+              justifyContent={"space-between"}
+              flexDirection={"column"}
+              height={["38px", "52px"]}
+            >
+              <Text
+                width={"100%"}
+                marginTop={["-3px", "-8px"]}
+                textAlign={"center"}
+                variant="poppins-small"
+                color="white"
+              >
+                {key === "ettermiddag" ? (
+                  <>
+                    etter-
+                    <br />
+                    middag
+                  </>
+                ) : (
+                  key
+                )}
+              </Text>
+              <Flex
+                // justifyItems={"flex-end"}
+                justifyContent={"center"}
+              >
                 <Image
                   height={28}
                   width={28}
@@ -216,30 +248,10 @@ const Icon = (times: Times[]) => {
                   alt={icons[key]}
                 />
               </Flex>
-            );
-          }
-        })}
-      </Flex>
+            </Flex>
+          );
+        }
+      })}
     </>
   );
 };
-
-function getInterval(times: Times[], startHour: number, endHour: number) {
-  const betweenInterval = times.filter((time) => {
-    const hour = parseInt(time.time.split(":")[0]);
-    return hour >= startHour && hour <= endHour;
-  });
-
-  return betweenInterval ?? undefined;
-}
-
-function getIcon(times?: Times[]) {
-  if (!times.length) return;
-  const highestRank = times.reduce((prev, current) => {
-    return prev.rank > current.rank ? prev : current;
-  });
-
-  return WeatherIconList[
-    highestRank.symbol.charAt(0).toUpperCase() + highestRank.symbol.slice(1)
-  ];
-}

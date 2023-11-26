@@ -1,3 +1,5 @@
+import { getIcon, getInterval } from "pages/utils/times-helper";
+
 import { Flex } from "../../../../ui-kit/flex";
 import { Text } from "../../../../ui-kit/text";
 import { WeatherIconList } from "../../../../ui-kit/weather-svg-ref/weather-icon-list";
@@ -5,14 +7,20 @@ import { Times } from "../../../api/azure-function/coordinates/coordinates-api-c
 import { Temperature } from "../../../utils/temperature";
 
 export const Carousell2Details = ({ times }: { times: Times[] }) => {
-  const icon =
-    WeatherIconList[
-      times[0].symbol?.charAt(0).toUpperCase() + times[0].symbol?.slice(1)
-    ];
+  const timeIntervals = {
+    "00-06": getInterval(times, 0, 6),
+    "06-12": getInterval(times, 6, 12),
+    "12-18": getInterval(times, 12, 18),
+    "18-23": getInterval(times, 18, 23),
+  };
 
   return (
     <Flex gap={0.5}>
-      {times.slice(0, 4).map((time) => {
+      {Object.keys(timeIntervals).map((time) => {
+        const times = timeIntervals[time] as Times[];
+        if (times.length === 0) return null;
+
+        const icon = getIcon(timeIntervals[time]);
         return (
           <Flex
             padding={[1, 2]}
@@ -23,7 +31,7 @@ export const Carousell2Details = ({ times }: { times: Times[] }) => {
             flexDirection={"column"}
             alignItems={"center"}
           >
-            <Text color="white">{time.time}</Text>
+            <Text color="white">{time}</Text>
             <Flex
               // flexDirection={["column", "row"]}
               alignItems={"center"}
@@ -38,7 +46,8 @@ export const Carousell2Details = ({ times }: { times: Times[] }) => {
               />
             </Flex>
             <Text color="white">
-              {new Temperature(time.temperature).toString()}
+              {/* // TODO shouldnt be 0 indexed */}
+              {new Temperature(timeIntervals[time][0].temperature).toString()}
             </Text>
           </Flex>
         );

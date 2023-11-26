@@ -2,11 +2,7 @@ import { useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import { MapBoxHelper } from "pages/utils/mapbox-settings";
 
-import {
-  useHighlightedCard,
-  useMap,
-  useMapInstance,
-} from "../../../../states/sunchaser-result";
+import { useMap, useMapInstance } from "../../../../states/sunchaser-result";
 import { CoordinatesNextApiResponse } from "../../../api/azure-function/coordinates/index.endpoint";
 
 interface SunchaserResultMapProps {

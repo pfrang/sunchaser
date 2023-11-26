@@ -80,6 +80,12 @@ export const TextWrapper = styled.p<{
         fontSize: ["18px", "20px", "22px"],
         lineHeight: ["28px", "30px", "32px"],
       },
+      ["poppins-small"]: {
+        fontFamily: "Poppins",
+        // fontWeight: "600",
+        fontSize: ["12px", "12px", "14px"],
+        lineHeight: ["10px", "12px", "14px"],
+      },
       search: {
         fontFamily: "SpaceMono",
         fontWeight: "400",

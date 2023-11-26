@@ -78,7 +78,9 @@ export const Footer = ({ children }: { children?: JSX.Element }) => {
           backgroundColor: theme.color.blues[4],
         }}
       >
-        {isOnSunChaserResult && <SunchaserListWrapper />}
+        {isOnSunChaserResult && (
+          <SunchaserListWrapper expandFooter={setIsExpanded} />
+        )}
         <>
           <Flex
             borderRadius={"36px 36px 0px 0px"}

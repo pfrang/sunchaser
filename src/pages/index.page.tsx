@@ -39,12 +39,13 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
 
   useEffect(() => {
     if (!userLocation) return;
+
     router.push({
       pathname: "/",
       query: {
         distance: query.distance ?? 50,
-        lat: query.latitude ?? userLocation.latitude,
-        lon: query.longitude ?? userLocation.longitude,
+        lat: query.lat ?? userLocation.latitude,
+        lon: query.lon ?? userLocation.longitude,
         date: query.date ?? new Date().toISOString().split("T")[0],
       },
     });

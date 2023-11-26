@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
 
   img[width], img[height] {
     max-width: none;
-    height: 100%;
+    /* height: 100%; */
   }
 
 

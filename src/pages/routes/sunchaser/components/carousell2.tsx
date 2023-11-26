@@ -89,7 +89,7 @@ export const Carousell2 = ({
 
               return (
                 <SwiperSlide key={day + index}>
-                  <Flex width={"100%"} justifyContent={"center"}>
+                  <Flex justifyContent={"center"}>
                     <Text color="white">{day}</Text>
                   </Flex>
                   <Flex
@@ -97,7 +97,7 @@ export const Carousell2 = ({
                     alignItems={"center"}
                     width={"100%"}
                     borderColor={theme.color.blues[2]}
-                    padding={[1, 2]}
+                    padding={[2]}
                     borderRadius={36}
                     borderWidth={2}
                   >
@@ -108,7 +108,7 @@ export const Carousell2 = ({
             })}
           </>
         </Flex>
-        <Flex paddingTop={4} alignItems={"center"} justifyContent={"center"}>
+        <Flex paddingTop={2} alignItems={"center"} justifyContent={"center"}>
           <div className="flex justify-center swiper-pagination-custom"></div>
         </Flex>
       </Swiper>
