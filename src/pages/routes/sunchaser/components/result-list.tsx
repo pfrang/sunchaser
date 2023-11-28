@@ -102,6 +102,7 @@ export const ResultList = ({
     }
   }, [highlightedCard]);
 
+  // TODO doesnt work
   const handlers = useSwipeable({
     onSwipedUp: () => setIsExpanded(true),
     onSwipedDown: () => setIsExpanded(false),
