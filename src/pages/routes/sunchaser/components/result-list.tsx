@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import { getIcon, getInterval } from "pages/utils/times-helper";
+import { useSwipeable } from "react-swipeable";
 
 import { Flex } from "../../../../ui-kit/flex";
 import { Text } from "../../../../ui-kit/text";
@@ -11,7 +12,6 @@ import {
   UserLocation,
 } from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { theme } from "../../../../ui-kit/theme";
-import { WeatherIconList } from "../../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Spacer } from "../../../../ui-kit/spacer/spacer";
 import {
   useHighlightedCard,
@@ -35,8 +35,6 @@ export const ResultList = ({
   expandFooter: (input: boolean) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [hide, setHide] = useState(false);
-  const [clickedIndex, setClickedIndex] = useState(0);
 
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
@@ -54,14 +52,13 @@ export const ResultList = ({
     }
   };
 
-  useEffect(() => {}, [highlightedCard]);
-
   const onClickCard = (item: AzureFunctionCoordinatesMappedItems) => {
     if (item.index !== highlightedCard?.index && mapObject) {
       const { lat, lon } = {
         lat: item.latitude,
         lon: item.longitude,
       };
+      setScrollY(flexRef.current.scrollTop);
 
       expandFooter(false);
 
@@ -94,6 +91,23 @@ export const ResultList = ({
     // }, 500);
   };
 
+  const [scrollY, setScrollY] = useState(0);
+  const flexRef = useRef(null);
+
+  useEffect(() => {
+    if (highlightedCard?.date) {
+      setScrollY(flexRef.current.scrollTop);
+    } else {
+      flexRef.current.scrollTop = scrollY;
+    }
+  }, [highlightedCard]);
+
+  const handlers = useSwipeable({
+    onSwipedUp: () => setIsExpanded(true),
+    onSwipedDown: () => setIsExpanded(false),
+    trackMouse: true,
+  });
+
   return (
     <Flex borderRadius={"inherit"} flexDirection={"column"} gap={2} padding={2}>
       <Flex width={"100%"} justifyContent={"center"}>
@@ -115,8 +129,10 @@ export const ResultList = ({
         }}
         easing={"ease-in-out"}
         in={isExpanded}
+        {...handlers}
       >
         <Flex
+          ref={flexRef}
           flexDirection={"column"}
           maxHeight={"300px"}
           overflowY={highlightedCard ? "hidden" : "auto"}

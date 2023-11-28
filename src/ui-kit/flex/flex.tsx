@@ -1,4 +1,9 @@
-import React, { ReactNode, CSSProperties, HTMLAttributes } from "react";
+import React, {
+  ReactNode,
+  CSSProperties,
+  HTMLAttributes,
+  forwardRef,
+} from "react";
 import {
   SpaceProps,
   FlexboxProps,
@@ -28,17 +33,14 @@ export interface FlexProps
   clickable?: boolean;
 }
 
-export const Flex = ({
-  gap = 0,
-  clickable = false,
-  children,
-  ...props
-}: FlexProps) => {
-  //SHOULD BE Record<string, uknown> = props
-  const wrapperProps: Record<any, any> = props;
-  return (
-    <s.Wrapper gap={gap} clickable={clickable} {...wrapperProps}>
-      {children}
-    </s.Wrapper>
-  );
-};
+export const Flex = forwardRef<HTMLDivElement, FlexProps>(
+  ({ gap = 0, clickable = false, children, ...props }, ref) => {
+    //SHOULD BE Record<string, uknown> = props
+    const wrapperProps: Record<any, any> = props;
+    return (
+      <s.Wrapper ref={ref} gap={gap} clickable={clickable} {...wrapperProps}>
+        {children}
+      </s.Wrapper>
+    );
+  },
+);
