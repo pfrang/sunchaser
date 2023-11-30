@@ -135,7 +135,7 @@ export const ResultList = ({
         <Flex
           ref={flexRef}
           flexDirection={"column"}
-          maxHeight={"300px"}
+          maxHeight={["150px", "300px"]}
           overflowY={highlightedCard ? "hidden" : "auto"}
           paddingX={[2, 4]}
           gap={highlightedCard ? 0 : 2}

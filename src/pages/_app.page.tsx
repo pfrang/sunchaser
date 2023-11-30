@@ -18,6 +18,7 @@ import { theme } from "../ui-kit/theme";
 
 import { Footer } from "./footer";
 import { Header } from "./header";
+import { Header2 } from "./header2";
 
 const Wrapper = styled.div`
   height: 100dvh; /* new browsers */
@@ -54,7 +55,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         {/* @ts-ignore*/}
         <GlobalStyle />
         <Wrapper>
-          <Header />
+          {/* <Header /> */}
+          <Header2 />
           {/* <Spacer height={[8]} width={"100%"} /> */}
           <Component {...pageProps} />
           <Spacer height={[48, 64]} width={"100%"} />

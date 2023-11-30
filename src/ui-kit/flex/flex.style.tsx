@@ -12,7 +12,11 @@ import {
 
 import { theme } from "../theme";
 
-const Wrapper = styled.div<{ gap: number | number[]; clickable: boolean }>`
+const Wrapper = styled.div<{
+  gap: number | number[];
+  clickable: boolean;
+  transition?: string;
+}>`
   ${flexbox}
   ${space}
   ${color}
@@ -21,6 +25,8 @@ const Wrapper = styled.div<{ gap: number | number[]; clickable: boolean }>`
   ${shadow}
 
   /* transition: all 500ms ease; */
+
+  transition: ${(props) => props.transition}; // Use transition prop
 
   ${(props) =>
     sscss({

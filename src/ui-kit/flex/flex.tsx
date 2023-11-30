@@ -31,10 +31,11 @@ export interface FlexProps
   isHighlighted?: boolean;
   as?: keyof JSX.IntrinsicElements; // Add this line
   clickable?: boolean;
+  transition?: string; // Add this line
 }
 
 export const Flex = forwardRef<HTMLDivElement, FlexProps>(
-  ({ gap = 0, clickable = false, children, ...props }, ref) => {
+  ({ gap = 0, clickable = false, transition, children, ...props }, ref) => {
     //SHOULD BE Record<string, uknown> = props
     const wrapperProps: Record<any, any> = props;
     return (
