@@ -60,9 +60,10 @@ export const Carousell2 = ({
         //   onlyInViewport: false,
         // }}
         // mousewheel // Requires Mousewheel to be added to module
-        // direction="horizontal"
-        // slidesPerView="auto"
-        // spaceBetween={30}
+        // slidesPerView={1}
+        direction="horizontal"
+        slidesPerView="auto"
+        spaceBetween={30}
         // touchStartPreventDefault={false} // To allow horizontal scroll on iOS
         pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
         style={{ width: "100%" }}

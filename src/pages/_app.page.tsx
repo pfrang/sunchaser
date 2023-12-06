@@ -1,10 +1,10 @@
+import "swiper/css";
+import "swiper/css/pagination";
 import "react-day-picker/dist/style.css";
 import "../styles/globals.css";
 import "mapbox-gl/dist/mapbox-gl.css";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/bundle";
+// import "swiper/css/navigation";
+// import "swiper/css/bundle";
 
 import type { AppProps } from "next/app";
 import Head from "next/head";

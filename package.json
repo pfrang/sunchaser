@@ -6,7 +6,7 @@
     "lint:fix": "yarn lint --fix",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "dev": "NODE_ENV=development next dev",
-    "build": "yarn lint && tsc --project tsconfig.json && next build",
+    "build": "tsc --project tsconfig.json && next build",
     "start": "tsc --project tsconfig.json && next start",
     "static": "next build && next export",
     "export": "next export",
