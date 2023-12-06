@@ -55,24 +55,25 @@ export const Carousell2 = ({
         //   sensitivity: 10,
 
         // }}
-        // keyboard={{
+        // keyboard={{ // Requires Keyboard to be added to module
         //   enabled: true,
         //   onlyInViewport: false,
         // }}
-        // mousewheel
-        direction="horizontal"
+        // mousewheel // Requires Mousewheel to be added to module
+        // direction="horizontal"
         // slidesPerView="auto"
         // spaceBetween={30}
+        touchStartPreventDefault={false} // To allow horizontal scroll on iOS
         pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
         style={{ width: "100%" }}
-        allowTouchMove
+        // allowTouchMove
         // onClick={(e) => {
         //   console.log(e.el);
         // }}
         // slidesPerGroup={3}
         // loop={true}
-        // navigation={true}
-        modules={[Navigation, Mousewheel, Keyboard, Pagination]}
+        // navigation={true} // Requires Navigation to be added to module
+        modules={[Pagination]}
       >
         <Flex
           borderColor={theme.color.blues[2]}
