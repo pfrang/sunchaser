@@ -63,7 +63,7 @@ export const Carousell2 = ({
         // direction="horizontal"
         // slidesPerView="auto"
         // spaceBetween={30}
-        touchStartPreventDefault={false} // To allow horizontal scroll on iOS
+        // touchStartPreventDefault={false} // To allow horizontal scroll on iOS
         pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
         style={{ width: "100%" }}
         // allowTouchMove

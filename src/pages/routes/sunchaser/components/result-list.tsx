@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import { getIcon, getInterval } from "pages/utils/times-helper";
-import { useSwipeable } from "react-swipeable";
 import React from "react";
 
 import { Flex } from "../../../../ui-kit/flex";
@@ -103,13 +102,6 @@ export const ResultList = ({
     }
   }, [highlightedCard]);
 
-  // TODO doesnt work
-  const handlers = useSwipeable({
-    onSwipedUp: () => setIsExpanded(true),
-    onSwipedDown: () => setIsExpanded(false),
-    trackMouse: true,
-  });
-
   return (
     <Flex borderRadius={"inherit"} flexDirection={"column"} gap={2} padding={2}>
       <Flex width={"100%"} justifyContent={"center"}>
@@ -131,7 +123,6 @@ export const ResultList = ({
         }}
         easing={"ease-in-out"}
         in={isExpanded}
-        {...handlers}
       >
         <Flex
           ref={flexRef}
@@ -196,6 +187,7 @@ export const ResultList = ({
                         justifyContent={"center"}
                         margin={"auto"}
                         width={"100%"}
+                        clickable
                       >
                         <Text textAlign={"center"} color={"white"}>
                           {shouldBeExpanded ? item.primaryName : ""}
