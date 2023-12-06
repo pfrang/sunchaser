@@ -2,7 +2,6 @@ import { getIcon, getInterval } from "pages/utils/times-helper";
 
 import { Flex } from "../../../../ui-kit/flex";
 import { Text } from "../../../../ui-kit/text";
-import { WeatherIconList } from "../../../../ui-kit/weather-svg-ref/weather-icon-list";
 import { Times } from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { Temperature } from "../../../utils/temperature";
 
@@ -30,6 +29,7 @@ export const Carousell2Details = ({ times }: { times: Times[] }) => {
             boxShadow={"0px 4px 4px rgba(0, 0, 0, 0.25)"}
             flexDirection={"column"}
             alignItems={"center"}
+            key={time}
           >
             <Text color="white">{time}</Text>
             <Flex

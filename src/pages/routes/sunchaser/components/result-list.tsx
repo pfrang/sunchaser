@@ -3,6 +3,7 @@ import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import { getIcon, getInterval } from "pages/utils/times-helper";
 import { useSwipeable } from "react-swipeable";
+import React from "react";
 
 import { Flex } from "../../../../ui-kit/flex";
 import { Text } from "../../../../ui-kit/text";
@@ -135,7 +136,7 @@ export const ResultList = ({
         <Flex
           ref={flexRef}
           flexDirection={"column"}
-          maxHeight={["150px", "300px"]}
+          maxHeight={["300px"]}
           overflowY={highlightedCard ? "hidden" : "auto"}
           paddingX={[2, 4]}
           gap={highlightedCard ? 0 : 2}
@@ -154,73 +155,76 @@ export const ResultList = ({
             // }, [shouldBeExpanded]);
 
             return (
-              <Flex
-                position={"relative"}
-                // display={shouldBeExpanded ? "flex" : "none"}
-              >
-                <Collapse
-                  style={{
-                    width: "100%",
-                  }}
-                  easing={"ease-in-out"}
-                  in={shouldBeExpanded}
+              <React.Fragment key={item.index}>
+                <Flex
+                  position={"relative"}
+                  // display={shouldBeExpanded ? "flex" : "none"}
                 >
-                  <Flex
-                    borderColor={theme.color.blues[2]}
-                    paddingY={[1, 2]}
-                    // paddingX={[3, 3]}
-                    borderRadius={36}
-                    borderWidth={2}
-                    key={item.index}
-                    // justifyContent={"space-between"}
-                    alignItems={"center"}
-                    boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
-                    clickable
-                    onClick={() => onClickCard(item)}
-                  >
-                    <Flex paddingLeft={3} flexShrink={1}>
-                      <Text
-                        textAlign={"start"}
-                        variant="poppins"
-                        fontWeight={"bold"}
-                        color={"white"}
-                      >
-                        {`#${item.index + 1}`}
-                      </Text>
-                    </Flex>
-
-                    <Flex
-                      position={"absolute"}
-                      justifyContent={"center"}
-                      margin={"auto"}
-                      width={"100%"}
-                    >
-                      <Text textAlign={"center"} color={"white"}>
-                        {shouldBeExpanded ? item.primaryName : ""}
-                      </Text>
-                    </Flex>
-
-                    <Flex
-                      alignItems={"center"}
-                      width={"auto"}
-                      gap={3}
-                      paddingRight={4}
-
-                      // py={1}
-                    >
-                      {Icon(item.times)}
-                    </Flex>
-                  </Flex>
                   <Collapse
                     style={{
                       width: "100%",
                     }}
-                    in={highlightedCard?.index === item.index}
+                    easing={"ease-in-out"}
+                    in={shouldBeExpanded}
                   >
-                    <Carousell2 item={item} />
+                    <Flex
+                      borderColor={theme.color.blues[2]}
+                      paddingY={[1, 2]}
+                      // paddingX={[3, 3]}
+                      borderRadius={36}
+                      borderWidth={2}
+                      key={item.index}
+                      // justifyContent={"space-between"}
+                      alignItems={"center"}
+                      boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
+                      clickable
+                      onClick={() => onClickCard(item)}
+                    >
+                      <Flex paddingLeft={3} flexShrink={1}>
+                        <Text
+                          textAlign={"start"}
+                          variant="poppins"
+                          fontWeight={"bold"}
+                          color={"white"}
+                        >
+                          {`#${item.index + 1}`}
+                        </Text>
+                      </Flex>
+
+                      <Flex
+                        position={"absolute"}
+                        justifyContent={"center"}
+                        margin={"auto"}
+                        width={"100%"}
+                      >
+                        <Text textAlign={"center"} color={"white"}>
+                          {shouldBeExpanded ? item.primaryName : ""}
+                        </Text>
+                      </Flex>
+
+                      <Flex
+                        alignItems={"center"}
+                        width={"auto"}
+                        gap={3}
+                        paddingRight={4}
+
+                        // py={1}
+                      >
+                        {Icon(item.times)}
+                      </Flex>
+                    </Flex>
+                    <Collapse
+                      style={{
+                        width: "100%",
+                      }}
+                      in={highlightedCard?.index === item.index}
+                      easing={"ease-in-out"}
+                    >
+                      <Carousell2 item={item} />
+                    </Collapse>
                   </Collapse>
-                </Collapse>
-              </Flex>
+                </Flex>
+              </React.Fragment>
             );
           })}
         </Flex>
@@ -254,40 +258,42 @@ const Icon = (times: Times[]) => {
       {Object.keys(icons).map((key) => {
         if (icons[key]) {
           return (
-            <Flex
-              justifyContent={"space-between"}
-              flexDirection={"column"}
-              height={["38px", "52px"]}
-            >
-              <Text
-                width={"100%"}
-                marginTop={["-3px", "-8px"]}
-                textAlign={"center"}
-                variant="poppins-small"
-                color="white"
-              >
-                {key === "ettermiddag" ? (
-                  <>
-                    etter-
-                    <br />
-                    middag
-                  </>
-                ) : (
-                  key
-                )}
-              </Text>
+            <React.Fragment key={key}>
               <Flex
-                // justifyItems={"flex-end"}
-                justifyContent={"center"}
+                justifyContent={"space-between"}
+                flexDirection={"column"}
+                height={["38px", "52px"]}
               >
-                <Image
-                  height={28}
-                  width={28}
-                  src={`/icons/white/svg/${icons[key]}`}
-                  alt={icons[key]}
-                />
+                <Text
+                  width={"100%"}
+                  marginTop={["-3px", "-8px"]}
+                  textAlign={"center"}
+                  variant="poppins-small"
+                  color="white"
+                >
+                  {key === "ettermiddag" ? (
+                    <>
+                      etter-
+                      <br />
+                      middag
+                    </>
+                  ) : (
+                    key
+                  )}
+                </Text>
+                <Flex
+                  // justifyItems={"flex-end"}
+                  justifyContent={"center"}
+                >
+                  <Image
+                    height={28}
+                    width={28}
+                    src={`/icons/white/svg/${icons[key]}`}
+                    alt={icons[key]}
+                  />
+                </Flex>
               </Flex>
-            </Flex>
+            </React.Fragment>
           );
         }
       })}

@@ -21,10 +21,6 @@ export const SunchaserListWrapper = ({ expandFooter }) => {
     router.isReady,
   );
 
-  const [highlightedCard, setHighlightedCard] = useState<
-    undefined | AzureFunctionCoordinatesMappedItems
-  >(undefined);
-
   return (
     <Flex height={"100%"}>
       <ConditionalPresenter
@@ -63,7 +59,7 @@ export const SunchaserListWrapper = ({ expandFooter }) => {
 
           return (
             <Flex flexDirection={"column"}>
-              <section id="section-carousell" className="h-full">
+              <section id="section-carousell">
                 <ResultList
                   expandFooter={expandFooter}
                   userLocation={userLocation}
