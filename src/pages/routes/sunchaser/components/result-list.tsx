@@ -233,24 +233,24 @@ const Icon = (times: Times[]) => {
   const afternoonIcon = getInterval(times, 12, 17);
   const eveningIcon = getInterval(times, 18, 23);
 
-  const icons = mediaQuery
-    ? {
-        morgen: getIcon(getInterval(times, 0, 12)),
-        kveld: getIcon(getInterval(times, 13, 23)),
-      }
-    : {
-        natt: getIcon(nightIcon),
-        morgen: getIcon(morningIcon),
-        ettermiddag: getIcon(afternoonIcon),
-        kveld: getIcon(eveningIcon),
-      };
+  // const icons = mediaQuery
+  //   ? {
+  //       morgen: getIcon(getInterval(times, 0, 12)),
+  //       kveld: getIcon(getInterval(times, 13, 23)),
+  //     }
+  //   : {
+  //       natt: getIcon(nightIcon),
+  //       morgen: getIcon(morningIcon),
+  //       ettermiddag: getIcon(afternoonIcon),
+  //       kveld: getIcon(eveningIcon),
+  //     };
 
-  // const icons = {
-  //   natt: getIcon(nightIcon),
-  //   morgen: getIcon(morningIcon),
-  //   ettermiddag: getIcon(afternoonIcon),
-  //   kveld: getIcon(eveningIcon),
-  // };
+  const icons = {
+    natt: getIcon(nightIcon),
+    morgen: getIcon(morningIcon),
+    ettermiddag: getIcon(afternoonIcon),
+    kveld: getIcon(eveningIcon),
+  };
 
   return (
     <>
