@@ -233,24 +233,24 @@ const Icon = (times: Times[]) => {
   const afternoonIcon = getInterval(times, 12, 17);
   const eveningIcon = getInterval(times, 18, 23);
 
-  // const icons = mediaQuery
-  //   ? {
-  //       morgen: getIcon(getInterval(times, 0, 12)),
-  //       kveld: getIcon(getInterval(times, 13, 23)),
-  //     }
-  //   : {
-  //       natt: getIcon(nightIcon),
-  //       morgen: getIcon(morningIcon),
-  //       ettermiddag: getIcon(afternoonIcon),
-  //       kveld: getIcon(eveningIcon),
-  //     };
+  const icons = mediaQuery
+    ? {
+        morgen: getIcon(getInterval(times, 0, 12)),
+        kveld: getIcon(getInterval(times, 13, 23)),
+      }
+    : {
+        natt: getIcon(nightIcon),
+        morgen: getIcon(morningIcon),
+        ettermiddag: getIcon(afternoonIcon),
+        kveld: getIcon(eveningIcon),
+      };
 
-  const icons = {
-    natt: getIcon(nightIcon),
-    morgen: getIcon(morningIcon),
-    ettermiddag: getIcon(afternoonIcon),
-    kveld: getIcon(eveningIcon),
-  };
+  // const icons = {
+  //   natt: getIcon(nightIcon),
+  //   morgen: getIcon(morningIcon),
+  //   ettermiddag: getIcon(afternoonIcon),
+  //   kveld: getIcon(eveningIcon),
+  // };
 
   return (
     <>
@@ -261,9 +261,10 @@ const Icon = (times: Times[]) => {
               <Flex
                 justifyContent={"space-between"}
                 flexDirection={"column"}
-                height={["38px", "52px"]}
+                // height={["38px", "52px"]}
+                alignItems={"center"}
               >
-                <Text
+                {/* <Text
                   width={"100%"}
                   marginTop={["-3px", "-8px"]}
                   textAlign={"center"}
@@ -279,10 +280,11 @@ const Icon = (times: Times[]) => {
                   ) : (
                     key
                   )}
-                </Text>
+                </Text> */}
                 <Flex
                   // justifyItems={"flex-end"}
                   justifyContent={"center"}
+                  alignItems={"center"}
                 >
                   <Image
                     height={28}
