@@ -19,7 +19,7 @@ export const Header2 = () => {
       top={20}
       // left={"200px"}
     >
-      <Flex position={"absolute"} justifyContent={"space-between"}>
+      <Flex px={[2, 3]} position={"absolute"} justifyContent={"space-between"}>
         <Flex
           zIndex={99}
           // top={-10}
@@ -39,7 +39,7 @@ export const Header2 = () => {
           </Link>
         </Flex>
 
-        <Flex mr={50} justifyContent={"flex-end"}>
+        <Flex justifyContent={"flex-end"} alignItems={"center"}>
           <WhereAreYou2 />
         </Flex>
       </Flex>

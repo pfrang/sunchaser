@@ -103,27 +103,28 @@ export const WhereAreYou2 = () => {
       // paddingRight={2}
       // mx={"auto"}
       position={"relative"}
-      maxWidth={`${isExpanded ? ["250px", "500px"] : "65px"}`}
-      transition="maxWidth ease-in-out 1s" // Specify the CSS property
+      maxWidth={isExpanded ? ["250px", "500px"] : ["55px"]}
+      transition="max-width ease-in-out 0.25s"
+      // padding={[1, 2]}
       // px={2}
     >
       <Flex
         zIndex={99}
         flexDirection={"column"}
-        position={"absolute"}
-        top={0}
+        // position={"absolute"}
+        // top={0}
         borderColor={theme.color.blues[2]}
-        padding={[1, 2]}
         borderRadius={36}
         borderWidth={2}
-        backgroundColor={theme.color.blues[8]}
+        // backgroundColor={theme.color.blues[8]}
       >
         <Flex
           position={"relative"}
-          backgroundColor={theme.color.blues[4]}
+          backgroundColor={isExpanded ? theme.color.blues[4] : "transparent"}
           // boxShadow={`0 0 0 2px #000000`}
           // borderColor={theme.color.blues[0]}
           borderWidth={1}
+          alignItems={"center"}
           padding={1}
           borderColor={"rgba(0, 0, 0, 0.1)"}
           borderRadius={"inherit"}
@@ -151,7 +152,7 @@ export const WhereAreYou2 = () => {
                 onClick={onMagnifyingGlassClick}
                 style={{
                   cursor: "pointer",
-                  color: "white",
+                  color: isExpanded ? "white" : "black",
                   transform: "rotate(90deg)",
                 }}
               />
@@ -183,7 +184,11 @@ export const WhereAreYou2 = () => {
                   alignItems={"center"}
                   gap={2}
                 >
-                  <NavigationIcon style={{ transform: "rotate(90deg)" }} />
+                  <NavigationIcon
+                    style={{
+                      transform: "rotate(90deg)",
+                    }}
+                  />
                   {/* TODO filter for unique places */}
                   <Text variant="poppins" color="white">
                     Use device location

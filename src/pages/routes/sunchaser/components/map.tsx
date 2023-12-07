@@ -32,7 +32,7 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
 
       primaryMap.on("load", () => {
         primaryMap.resize();
-        primaryMap.addControl(new mapboxgl.NavigationControl());
+        // primaryMap.addControl(new mapboxgl.NavigationControl());
         setMapInstance(mapInitializer);
         setMap(primaryMap);
         primaryMap.addSource("tiles", {

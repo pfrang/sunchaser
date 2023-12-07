@@ -39,7 +39,13 @@ export const Flex = forwardRef<HTMLDivElement, FlexProps>(
     //SHOULD BE Record<string, uknown> = props
     const wrapperProps: Record<any, any> = props;
     return (
-      <s.Wrapper ref={ref} gap={gap} clickable={clickable} {...wrapperProps}>
+      <s.Wrapper
+        ref={ref}
+        gap={gap}
+        transition={transition}
+        clickable={clickable}
+        {...wrapperProps}
+      >
         {children}
       </s.Wrapper>
     );
