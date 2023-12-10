@@ -1,6 +1,5 @@
-import axios from "axios";
 import useSWR, { SWRConfig } from "swr";
-import { Capacitor } from "@capacitor/core";
+import { fetcherFactory } from "pages/utils/fetcher-factory";
 
 import { NextApiRequest } from "./common-types";
 
@@ -44,13 +43,4 @@ export const useNextApiRequest = (
   const isLoading = !data && !error;
 
   return { data, isLoading, error, mutate };
-};
-
-export const fetcherFactory = async (requestConfig: NextApiRequest) => {
-  const baseUrl = Capacitor.isNativePlatform()
-    ? `https://sunchaser.vercel.app/api/`
-    : `/api/`;
-
-  const response = await axios({ ...requestConfig, baseURL: baseUrl });
-  return response.data;
 };
