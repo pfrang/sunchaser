@@ -5,7 +5,6 @@ import { styled } from "@mui/material/styles";
 import { debounce } from "lodash";
 import { Flex } from "ui-kit/flex";
 
-import { Spacer } from "../../../../ui-kit/spacer/spacer";
 import {
   distanceArray,
   getCounterValue,
@@ -50,6 +49,12 @@ const PrettoSlider = styled(Slider)({
     "& > *": {
       transform: "rotate(45deg)",
     },
+  },
+  "& .MuiSlider-markLabel": {
+    color: "white",
+  },
+  "& .MuiSlider-markActive": {
+    color: "white",
   },
 });
 
@@ -135,15 +140,13 @@ export const ChooseTravelDistance = ({
   return (
     <section id="distance_traveling" className="w-full grow">
       <div className="w-full flex justify-center items-center flex-col h-full">
-        {/* <Text noWrap variant="caption-large">
-          How far are you willing to travel?
-        </Text> */}
-        <Spacer height={2} />
-        {/* // Remove component here for old */}
-
         <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
 
-        <Text noWrap variant="body-large">{`${valueToDisplay}km`}</Text>
+        <Text
+          color="white"
+          noWrap
+          variant="body-large"
+        >{`${valueToDisplay}km`}</Text>
         <Flex justifyContent={"center"} marginX={20}>
           <PrettoSlider
             style={{ width: "85%" }}
