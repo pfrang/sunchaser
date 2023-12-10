@@ -47,7 +47,7 @@ export const useNextApiRequest = (
 };
 
 export const fetcherFactory = async (requestConfig: NextApiRequest) => {
-  const baseUrl = !Capacitor.isNativePlatform()
+  const baseUrl = Capacitor.isNativePlatform()
     ? `https://sunchaser.vercel.app/api/`
     : `/api/`;
 
