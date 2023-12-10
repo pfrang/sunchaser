@@ -1,5 +1,6 @@
 import axios from "axios";
 import useSWR from "swr";
+import { Capacitor } from "@capacitor/core";
 
 import {
   GoogleMapsAutoSearchNextApiResponse,
@@ -33,6 +34,10 @@ export const useFetchGoogleMapsSearches = (townSearch: string) => {
 export const fetcherFactory = async (
   requestConfig: NextApiRequest,
 ): Promise<GoogleMapsAutoSearchNextApiResponse> => {
-  const response = await axios({ ...requestConfig, baseURL: "/api/" });
+  const baseUrl = Capacitor.isNativePlatform()
+    ? `https://sunchaser.vercel.app/api/`
+    : `/api/`;
+
+  const response = await axios({ ...requestConfig, baseURL: baseUrl });
   return response.data;
 };

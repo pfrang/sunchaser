@@ -1,5 +1,6 @@
 import axios from "axios";
 import useSWR, { SWRConfig } from "swr";
+import { Capacitor } from "@capacitor/core";
 
 import { NextApiRequest } from "./common-types";
 
@@ -46,6 +47,10 @@ export const useNextApiRequest = (
 };
 
 export const fetcherFactory = async (requestConfig: NextApiRequest) => {
-  const response = await axios({ ...requestConfig, baseURL: "/api/" });
+  const baseUrl = !Capacitor.isNativePlatform()
+    ? `https://sunchaser.vercel.app/api/`
+    : `/api/`;
+
+  const response = await axios({ ...requestConfig, baseURL: baseUrl });
   return response.data;
 };

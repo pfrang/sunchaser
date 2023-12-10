@@ -27,7 +27,7 @@ export interface DisplayDrawerSubItemsStates {
 }
 
 export const useDisplayFooter = create<DisplayDrawerStates>((set) => ({
-  footerItem: "sunchaser",
+  footerItem: "forecast",
   setFooterItem: (input: FooterItems) => set(() => ({ footerItem: input })),
 }));
 
