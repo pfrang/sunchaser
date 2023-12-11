@@ -5,7 +5,7 @@ import "../styles/globals.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 // import "swiper/css/navigation";
 // import "swiper/css/bundle";
-
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
@@ -63,6 +63,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Footer />
         </Wrapper>
       </ThemeProvider>
+      <SpeedInsights />
       <Analytics />
     </>
   );
