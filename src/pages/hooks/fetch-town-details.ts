@@ -1,8 +1,6 @@
-import axios from "axios";
+import { fetcherFactory } from "pages/utils/fetcher-factory";
 
 import { gmapsDetailsUrl } from "../api/google-maps/details/index.endpoint";
-
-import { NextApiRequest } from "./common-types";
 
 export const fetchTownDetails = async (townId) => {
   try {
@@ -24,9 +22,4 @@ export const fetchTownDetails = async (townId) => {
   } catch (e) {
     throw new Error("Error fetching town details");
   }
-};
-
-export const fetcherFactory = async (requestConfig: NextApiRequest) => {
-  const response = await axios({ ...requestConfig, baseURL: "/api/" });
-  return response.data;
 };

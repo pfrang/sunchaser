@@ -81,9 +81,6 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
           mapboxAccessToken={mapBoxKey}
           // onMove={(evt) => setViewState(evt.viewState)}
           {...disableInteractivitySettings}
-          style={{
-            borderRadius: "5%",
-          }}
         >
           <Marker
             latitude={currentLatLocation.latitude}

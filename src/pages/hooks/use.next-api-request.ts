@@ -1,5 +1,5 @@
-import axios from "axios";
 import useSWR, { SWRConfig } from "swr";
+import { fetcherFactory } from "pages/utils/fetcher-factory";
 
 import { NextApiRequest } from "./common-types";
 
@@ -43,9 +43,4 @@ export const useNextApiRequest = (
   const isLoading = !data && !error;
 
   return { data, isLoading, error, mutate };
-};
-
-export const fetcherFactory = async (requestConfig: NextApiRequest) => {
-  const response = await axios({ ...requestConfig, baseURL: "/api/" });
-  return response.data;
 };
