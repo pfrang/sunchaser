@@ -91,6 +91,6 @@
     "swiper"
   ],
   "engines": {
-    "node": ">=20.9"
+    "node": ">=20"
   }
 }
