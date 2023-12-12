@@ -89,5 +89,8 @@
   },
   "tags": [
     "swiper"
-  ]
+  ],
+  "engines": {
+    "node": ">=20.9"
+  }
 }
