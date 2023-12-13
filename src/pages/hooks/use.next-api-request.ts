@@ -32,7 +32,7 @@ export const useNextApiRequest = (
 
   let { data, error, mutate } = useSWR(
     isReady ? urlWithParams : null,
-    isReady ? () => fetcherFactory(fetcherRequest) : null,
+    () => fetcherFactory(fetcherRequest),
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
@@ -40,7 +40,7 @@ export const useNextApiRequest = (
     },
   );
 
-  const isLoading = !data && !error;
+  const isLoading = !data && !error && !isReady;
 
   return { data, isLoading, error, mutate };
 };

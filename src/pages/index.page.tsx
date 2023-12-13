@@ -28,17 +28,14 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
 
   const query = sanitizeNextQuery(router.query);
 
-  const { data, isLoading, error } = useCoordinates(
-    {
-      method: "POST",
-      params: router.query,
-      data: router.query,
-    },
-    router.isReady && Boolean(router.query.lat),
-  );
+  const { data, isLoading, error } = useCoordinates({
+    method: "POST",
+    params: router.query,
+    data: router.query,
+  });
 
   useEffect(() => {
-    if (!userLocation) return;
+    if (query.lat || !userLocation) return;
 
     router.push({
       pathname: "/",

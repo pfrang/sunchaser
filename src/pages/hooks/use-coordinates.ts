@@ -1,3 +1,5 @@
+import { useRouter } from "next/router";
+
 import {
   CoordinatesNextApiResponse,
   azureFuncGetCoordinatesEndPoint,
@@ -14,8 +16,9 @@ interface UseNextApiRequestResponse<Data> {
 
 export const useCoordinates = (
   requestConfig: Pick<NextApiRequest, "data" | "params" | "method">,
-  isReady?: boolean,
 ) => {
+  const router = useRouter();
+
   const {
     data,
     error,
@@ -27,7 +30,7 @@ export const useCoordinates = (
       method: requestConfig.method,
       data: requestConfig.data,
     },
-    isReady,
+    router.isReady && Boolean(router.query.lat && router.query.lon),
   );
 
   return { data, error, isLoading };

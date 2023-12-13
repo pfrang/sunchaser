@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 import { ConditionalPresenter } from "../../../../ui-kit/conditional-presenter/conditional-presenter";
 import { Flex } from "../../../../ui-kit/flex";
@@ -12,14 +11,11 @@ import { ResultList } from "./result-list";
 export const SunchaserListWrapper = ({ expandFooter }) => {
   const router = useRouter();
 
-  const { data, isLoading, error } = useCoordinates(
-    {
-      method: "POST",
-      params: router.query,
-      data: router.query,
-    },
-    router.isReady,
-  );
+  const { data, isLoading, error } = useCoordinates({
+    method: "POST",
+    params: router.query,
+    data: router.query,
+  });
 
   return (
     <Flex height={"100%"}>
@@ -37,25 +33,25 @@ export const SunchaserListWrapper = ({ expandFooter }) => {
             return <></>;
           }
 
-          const aheadOfNow: AzureFunctionCoordinatesMappedItems[] = ranks.map(
-            (rank) => {
-              return {
-                ...rank,
-                times: rank.times.filter((time) => {
-                  const nowPlusOneHour = new Date().setHours(
-                    new Date().getHours() + 1,
-                  );
+          // const aheadOfNow: AzureFunctionCoordinatesMappedItems[] = ranks.map(
+          //   (rank) => {
+          //     return {
+          //       ...rank,
+          //       times: rank.times.filter((time) => {
+          //         const nowPlusOneHour = new Date().setHours(
+          //           new Date().getHours() + 1,
+          //         );
 
-                  const dateTimeString =
-                    time.date.toString().slice(0, 11) +
-                    time.time +
-                    time.date.toString().slice(-1);
+          //         const dateTimeString =
+          //           time.date.toString().slice(0, 11) +
+          //           time.time +
+          //           time.date.toString().slice(-1);
 
-                  return new Date(dateTimeString) >= new Date();
-                }),
-              };
-            },
-          );
+          //         return new Date(dateTimeString) >= new Date();
+          //       }),
+          //     };
+          //   },
+          // );
 
           return (
             <Flex flexDirection={"column"}>

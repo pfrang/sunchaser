@@ -15,14 +15,11 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
 
   mapboxgl.accessToken = mapBoxKey;
 
-  const { data, isLoading, error } = useCoordinates(
-    {
-      method: "POST",
-      params: router.query,
-      data: router.query,
-    },
-    router.isReady,
-  );
+  const { data, isLoading, error } = useCoordinates({
+    method: "POST",
+    params: router.query,
+    data: router.query,
+  });
 
   return (
     <Flex height={"100%"}>
