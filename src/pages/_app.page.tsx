@@ -51,6 +51,19 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="description" content="Sunchaser" />
           <meta name="viewport" content="initial-scale=1, width=device-width" />
           <link rel="icon" href="/favicon.ico" />
+          {/* <{!-- Google tag (gtag.js) -->} */}
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-NN9D9GF44W"
+          ></script>
+          <script>
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-NN9D9GF44W');
+            `}
+          </script>
         </Head>
         {/* @ts-ignore*/}
         <GlobalStyle />
