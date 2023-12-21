@@ -1,0 +1,41 @@
+{
+  "name": "Sunchaser App",
+  "short_name": "Sunchaser",
+  "icons": [
+    {
+
+      "src": "/pwa/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "id": "sunchaser.app",
+  "display": "standalone",
+  "orientation": "portrait",
+  "screenshots": [
+    {
+      "src": "/pwa/result.png",
+      "sizes": "500x999",
+      "type": "image/gif",
+      "form_factor": "narrow",
+      "label": "Label one"
+    },
+    {
+      "src": "/pwa/location.png",
+      "sizes": "500x835",
+      "type": "image/gif",
+      "form_factor": "wide",
+      "label": "Label two"
+    }
+  ],
+  "description": "You can now install Sunchaser App !"
+}

@@ -11,7 +11,7 @@ import Head from "next/head";
 import styled, { ThemeProvider } from "styled-components";
 import { Analytics } from "@vercel/analytics/react";
 import { GlobalStyle } from "ui-kit/styles/global-style";
-import { useRouter } from "next/router";
+import { IosInstallPrompt } from "pwa/ios-install-prompt";
 
 import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
@@ -20,7 +20,7 @@ import { Footer } from "./footer";
 import { Header } from "./header";
 import { Header2 } from "./header2";
 
-const Wrapper = styled.div`
+const Layout = styled.div`
   height: 100dvh; /* new browsers */
   /* overflow-y: hidden; */
   /* min-height: 100vh; */
@@ -40,8 +40,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   //   document.documentElement.style.setProperty("--vh", `${vh}px`);
   // }, []);
 
-  const router = useRouter();
-
   return (
     <>
       {/* @ts-ignore*/}
@@ -49,19 +47,23 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>Sunchaser</title>
           <meta name="description" content="Sunchaser" />
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
+          {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
           <link rel="icon" href="/favicon.ico" />
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <meta name="theme-color" content="#ffffff" />
+          <link rel="manifest" href="/manifest.json" />
         </Head>
         {/* @ts-ignore*/}
         <GlobalStyle />
-        <Wrapper>
+        <Layout>
           {/* <Header /> */}
           <Header2 />
           {/* <Spacer height={[8]} width={"100%"} /> */}
           <Component {...pageProps} />
           <Spacer height={[48, 64]} width={"100%"} />
           <Footer />
-        </Wrapper>
+          <IosInstallPrompt />
+        </Layout>
       </ThemeProvider>
       <SpeedInsights />
       <Analytics />

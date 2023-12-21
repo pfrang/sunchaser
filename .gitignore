@@ -33,6 +33,15 @@ yarn-error.log*
 azure-function/local.settings.json
 azure-function/host.json
 
+# PWA files
+/public/sw.js
+/public/workbox*.js
+/public/workbox*.js.map
+/public/workbox.
+/public/sw.js.map
+/public/fallback*.js
+/public/precache.*.*.js
+
 # vercel
 .vercel
 

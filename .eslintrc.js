@@ -25,7 +25,13 @@ module.exports = {
     "unicorn",
     "folders",
   ],
-  ignorePatterns: ["/.next", "/ui-kit/dist", "/docs"],
+  ignorePatterns: [
+    "/.next",
+    "/ui-kit/dist",
+    "/docs",
+    "/public/sw.js",
+    "/public/workbox*",
+  ],
   extends: ["prettier", "prettier/prettier", "plugin:prettier/recommended"],
   rules: {
     "import/order": [
