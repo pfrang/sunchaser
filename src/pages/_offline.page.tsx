@@ -8,8 +8,20 @@ export default function OfflinePage() {
       <Head>
         <title>You are offline</title>
       </Head>
-      <Flex alignContent={"center"} justifyItems={"center"}>
-        <Text variant="body-small">You are offline</Text>
+      <Flex
+        position={"absolute"}
+        height={"100%"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        flexDirection={"column"}
+      >
+        <Text color="white" variant="body-small">
+          You are offline
+        </Text>
+        <br />
+        <Text color="white" variant="body-small">
+          Please check your internet connection
+        </Text>
       </Flex>
     </>
   );
