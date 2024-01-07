@@ -207,7 +207,7 @@ export const WhereAreYou2 = () => {
                         borderWidth={1}
                         px={4}
                         py={3}
-                        onClick={(e) =>
+                        onClick={() =>
                           setLocationAndClearList({
                             value: item.place,
                             id: item.place_id,

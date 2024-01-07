@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Flex } from "ui-kit/flex";
 
-export default function Error(props) {
+export default function Error() {
   return (
     <>
       <Head>
@@ -18,16 +18,3 @@ export default function Error(props) {
     </>
   );
 }
-
-// export const getStaticProps = async () => {
-//   const h = {
-//     hei: "du",
-//   };
-
-//   return {
-//     props: {
-//       h,
-//     },
-//     revalidate: true,
-//   };
-// };

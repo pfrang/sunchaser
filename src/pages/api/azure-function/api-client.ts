@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 
 import { AppConfig } from "../../../app-config";
-import { ErrorLogger } from "../utils/error-logger";
 
 export class AzureFunctionApiClient {
   baseUrl: string;

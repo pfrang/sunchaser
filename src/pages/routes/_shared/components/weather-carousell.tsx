@@ -1,12 +1,6 @@
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Pagination,
-  Navigation,
-  Scrollbar,
-  Mousewheel,
-  Keyboard,
-} from "swiper/modules";
+import { Pagination, Navigation, Scrollbar, Keyboard } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";

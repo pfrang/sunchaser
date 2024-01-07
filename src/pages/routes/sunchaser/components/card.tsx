@@ -35,9 +35,6 @@ export const Card = ({
   const {
     date,
     primaryName,
-    secondaryName,
-    tertiaryName,
-    quaternaryName,
     times,
     sunriseTime,
     sunsetTime,

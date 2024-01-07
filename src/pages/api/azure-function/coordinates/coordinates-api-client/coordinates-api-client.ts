@@ -1,10 +1,7 @@
 import { AzureFunctionApiClient } from "../../api-client";
 
 import { AzureFunctionCoordinatesData } from "./coordinates-api-response-schema";
-import {
-  AzureFunctionPostPayloadParams,
-  PayloadParams,
-} from "./coordinates-api.post-schema";
+import { AzureFunctionPostPayloadParams } from "./coordinates-api.post-schema";
 
 export class CoordinatesAPiClient extends AzureFunctionApiClient {
   readonly endpointUrl = `/WeatherResult`;

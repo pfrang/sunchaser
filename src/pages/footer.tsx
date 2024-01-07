@@ -24,11 +24,12 @@ import { SunchaserListWrapper } from "./routes/sunchaser/components/carousell-wr
 
 export const Footer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { footerItem, setFooterItem } = useDisplayFooter();
-  const [boxPosition, setBoxPosition] = useState("sticky");
+  const { footerItem } = useDisplayFooter();
+  // how to only destruct setBoxPosition from useState?
+  const [, setBoxPosition] = useState("sticky");
   const boxRef = useRef(null);
 
-  const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
+  const { footerSubItem } = useDisplayFooterSubItems();
 
   const isOnSunChaserResult =
     footerItem === "sunchaser" && footerSubItem === "result";
@@ -150,7 +151,7 @@ export const Footer = () => {
 
 const FooterButton = ({ text }: { text: FooterItems }) => {
   const { footerItem, setFooterItem } = useDisplayFooter();
-  const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
+  const { setFooterSubItem } = useDisplayFooterSubItems();
 
   const handleClick = () => {
     setFooterItem(text);

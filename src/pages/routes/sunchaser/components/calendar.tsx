@@ -11,8 +11,8 @@ import { theme } from "../../../../ui-kit/theme";
 
 export const Calendar = () => {
   const router = useRouter();
-  const [isPopperOpen, setIsPopperOpen] = useState(false);
-  const [locale, setLocale] = useState("en-US");
+  const [, setIsPopperOpen] = useState(false);
+  const [, setLocale] = useState("en-US");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const updateUrl = useUpdateUrl();
 
@@ -60,34 +60,6 @@ export const Calendar = () => {
 
   return (
     <>
-      {/* <div className="flex flex-col items-center gap-1">
-        <Spacer vertical={2} />
-        <Flex
-          border={2}
-          backgroundColor={"white"}
-          padding={1}
-          paddingX={6}
-          borderRadius={10}
-          justifyContent={"center"}
-          alignItems={"center"}
-          position={"relative"}
-          width={["200px"]}
-        >
-          <Text variant="body-large">
-            {selectedDate.toLocaleDateString(locale)}
-          </Text>
-          <div
-            id="calendar-icon"
-            tabIndex={0}
-            className={`cursor-pointer absolute right-1
-            ${isPopperOpen && "bg-gray-300"} hover:bg-gray-300 rounded-lg`}
-            onClick={() => setIsPopperOpen(!isPopperOpen)}
-          >
-            <CalendarIcon />
-          </div>
-        </Flex>
-      </div>
-      {isPopperOpen && ( */}
       <Flex justifyContent={"center"} width={"100%"}>
         <DayPicker
           classNames={{

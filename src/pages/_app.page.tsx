@@ -17,7 +17,6 @@ import { Spacer } from "../ui-kit/spacer/spacer";
 import { theme } from "../ui-kit/theme";
 
 import { Footer } from "./footer";
-import { Header } from "./header";
 import { Header2 } from "./header2";
 
 const Layout = styled.div`

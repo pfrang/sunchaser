@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import mapboxgl from "mapbox-gl";
 import { MapBoxHelper } from "pages/utils/mapbox-settings";
 
 import { useMap, useMapInstance } from "../../../../states/sunchaser-result";
@@ -10,8 +9,8 @@ interface SunchaserResultMapProps {
 }
 
 export const Map = ({ data }: SunchaserResultMapProps) => {
-  const { mapObject, setMap } = useMap();
-  const { mapInstance, setMapInstance } = useMapInstance();
+  const { setMap } = useMap();
+  const { setMapInstance } = useMapInstance();
 
   // console.log(highlightedCard);
 

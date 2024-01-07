@@ -1,8 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { IconButton } from "@mui/material";
 
 import { useDisplayDrawer } from "../../states/drawer";
 

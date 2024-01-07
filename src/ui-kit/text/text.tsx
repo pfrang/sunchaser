@@ -35,7 +35,6 @@ export const Text: FC<TextProps> = ({
   color = "black",
   children,
   noWrap,
-  fontSize,
   ...props
 }) => {
   return (

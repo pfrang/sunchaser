@@ -44,7 +44,7 @@ export class MapBoxHelper {
   }
 
   private setMarkers(map: mapboxgl.Map) {
-    const marker = this.longitudes.forEach((lon, index) => {
+    this.longitudes.forEach((lon, index) => {
       const markerElement = new mapboxgl.Marker()
         .setLngLat([this.longitudes[index], this.latitudes[index]])
         .addTo(map)
@@ -59,7 +59,7 @@ export class MapBoxHelper {
       });
     });
 
-    const centerMarker = new mapboxgl.Marker({ color: "red" })
+    new mapboxgl.Marker({ color: "red" })
       .setLngLat([this.centerLon, this.centerLat])
       .addTo(map);
   }

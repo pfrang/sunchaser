@@ -22,8 +22,6 @@ const HighlightedDivItem = styled.div`
   cursor: pointer;
 `;
 
-interface ChooseTransportationMethodProps {}
-
 export default function ChooseTransportationMethod({
   highlightedTransport,
   setHighlightedTransport,
@@ -50,7 +48,7 @@ export default function ChooseTransportationMethod({
               />
             </HighlightedDivItem>
           ) : (
-            <DivItem key={i} onClick={(e) => setHighlightedTransport(item)}>
+            <DivItem key={i} onClick={() => setHighlightedTransport(item)}>
               <Image
                 src={`/transportation/${item}.png`}
                 fill

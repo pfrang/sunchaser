@@ -85,6 +85,16 @@ module.exports = {
         ignore: [/\[(.*?)\]/],
       },
     ],
+    "no-unused-vars": "error",
+    // "import/no-unused-modules": [
+    //   "error",
+    //   {
+    //     unusedExports: true,
+    //     missingExports: true,
+    //     ignoreExports: ["**/*.endpoint.ts"],
+    //   },
+    // ],
+
     // "folders/match-regex": [2, "^([a-z0-9_][a-z0-9]*)(-[a-z0-9]+)*$", "/src/"],
   },
 };

@@ -3,10 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { GoogleMapsAutoSearchApiClient } from "../gmaps-auto-seach-api-client/gmaps-auto-seach-api-client";
 import { GoogleMapsAutoSearchMapper } from "../mapper/gmaps-auto-search-mapper";
 
-async function voidWait(timeToDelay: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, timeToDelay));
-}
-
 export const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   const { input } = req.query;
   if (!input) {

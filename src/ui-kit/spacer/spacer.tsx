@@ -4,7 +4,6 @@ import {
   LayoutProps,
   SpaceProps,
   ShadowProps,
-  ColorProps,
 } from "styled-system";
 
 import { Wrapper } from "./spacer.style";
@@ -21,12 +20,6 @@ export interface SpacerProps
   line?: boolean;
 }
 
-export const Spacer: FC<SpacerProps> = ({
-  vertical = 0,
-  horizontal = 0,
-  debug = false,
-  line,
-  ...props
-}) => {
+export const Spacer: FC<SpacerProps> = ({ line, ...props }) => {
   return <Wrapper line={line} {...props} />;
 };

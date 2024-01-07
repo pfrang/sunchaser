@@ -11,7 +11,6 @@ interface TimeSeriesProps extends Times {}
 
 export const TimeSeries = ({
   time,
-  rank,
   symbol,
   temperature,
   wind,

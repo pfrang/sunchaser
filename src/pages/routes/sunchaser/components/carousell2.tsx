@@ -1,12 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Scrollbar,
-  Mousewheel,
-  Keyboard,
-  FreeMode,
-  Pagination,
-} from "swiper/modules";
+import { Pagination } from "swiper/modules";
 
 import {
   AzureFunctionCoordinatesMappedItems,

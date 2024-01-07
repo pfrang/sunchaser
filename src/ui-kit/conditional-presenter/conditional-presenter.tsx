@@ -1,6 +1,5 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { isEmpty as _isEmpty } from "lodash";
-import { render } from "react-dom";
 
 interface ConditionalPresenterProps<Data, Error> {
   isLoading: boolean;

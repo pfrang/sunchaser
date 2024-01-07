@@ -20,15 +20,15 @@ const Home = ({
 };
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
-  const { footerItem, setFooterItem } = useDisplayFooter();
-  const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
+  const { footerItem } = useDisplayFooter();
+  const { footerSubItem } = useDisplayFooterSubItems();
 
   const router = useRouter();
   const { userLocation } = useUserLocation();
 
   const query = sanitizeNextQuery(router.query);
 
-  const { data, isLoading, error } = useCoordinates({
+  useCoordinates({
     method: "POST",
     params: router.query,
     data: router.query,

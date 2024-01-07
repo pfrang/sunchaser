@@ -1,4 +1,4 @@
-import useSWR, { SWRConfig } from "swr";
+import useSWR from "swr";
 import { fetcherFactory } from "pages/utils/fetcher-factory";
 
 import { NextApiRequest } from "./common-types";

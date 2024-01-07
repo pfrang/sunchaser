@@ -8,7 +8,6 @@ import { fetchTownDetails } from "pages/hooks/fetch-town-details";
 import { useUserLocation } from "pages/hooks/use-user-location";
 import { theme } from "ui-kit/theme";
 import { Text } from "ui-kit/text";
-import { GoogleMapsAutoSearchNextApiResponse } from "pages/api/google-maps/auto-search/index.endpoint";
 
 import { ConditionalPresenter } from "../../../../ui-kit/conditional-presenter/conditional-presenter";
 import { Flex } from "../../../../ui-kit/flex";
@@ -196,7 +195,7 @@ export const WhereAreYou = () => {
                         borderWidth={1}
                         px={4}
                         py={3}
-                        onClick={(e) =>
+                        onClick={() =>
                           setLocationAndClearList({
                             value: item.place,
                             id: item.place_id,

@@ -1,12 +1,10 @@
 import mapboxgl from "mapbox-gl";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import { ConditionalPresenter } from "../../../ui-kit/conditional-presenter/conditional-presenter";
 import { Flex } from "../../../ui-kit/flex";
 import { SearchLoader } from "../../../ui-kit/search-loader/search-loader";
 import { useCoordinates } from "../../hooks/use-coordinates";
-import { useMap, useMapInstance } from "../../../states/sunchaser-result";
 
 import { Map } from "./components/map";
 
@@ -36,7 +34,7 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
           );
         }}
         renderData={(data) => {
-          const { userLocation, ranks } = data;
+          const { ranks } = data;
           if (ranks.length === 0) {
             return (
               <Flex justifyContent={"center"}>

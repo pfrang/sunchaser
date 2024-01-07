@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef, useEffect, useState, useMemo, MutableRefObject } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 
 import { Text } from "../../../../ui-kit/text";

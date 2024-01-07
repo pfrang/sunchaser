@@ -16,7 +16,7 @@ interface Direction extends SpacerProps {
 
 export type DirectionChoice = "left" | "down" | "right";
 
-export const Angel: FC<Direction> = ({ direction, ...props }: Direction) => {
+export const Angel: FC<Direction> = ({ direction }: Direction) => {
   switch (direction) {
     case "left":
       return (

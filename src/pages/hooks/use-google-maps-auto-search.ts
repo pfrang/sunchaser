@@ -24,5 +24,5 @@ export const useFetchGoogleMapsSearches = (townSearch: string) => {
 
   const isLoading = !data && !error && townSearch;
 
-  return { data, error, isLoading };
+  return { data, error, mutate, isLoading };
 };

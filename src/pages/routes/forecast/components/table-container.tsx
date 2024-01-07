@@ -7,12 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { ForecastDaysMappedData } from "pages/api/forecast/mapper/forecast-mapper";
-import {
-  useMediaQuery,
-  useTheme,
-  createTheme,
-  ThemeProvider,
-} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 import { ForecastTableRow } from "./forecast-row";
 
@@ -23,9 +18,6 @@ interface ForecastTableContainerProps {
 export const ForecastTableContainer = ({
   rows,
 }: ForecastTableContainerProps) => {
-  const theme = useTheme();
-  const isSmallScreen = window && useMediaQuery(theme.breakpoints.down("sm"));
-
   const theme2 = createTheme({
     components: {
       MuiTableCell: {

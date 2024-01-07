@@ -1,5 +1,3 @@
-import { format } from "path";
-
 const formatMonth = (date: Date) => {
   const month = date.getMonth();
 

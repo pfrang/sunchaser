@@ -3,10 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { CommonMetaData } from "../../common-proprties";
 
 import { handlePost } from "./handler/handle-post";
-import {
-  AzureFunctionCoordinatesData,
-  AzureFunctionCoordinatesMappedData,
-} from "./coordinates-api-client/coordinates-api-response-schema";
+import { AzureFunctionCoordinatesMappedData } from "./coordinates-api-client/coordinates-api-response-schema";
 
 export const azureFuncGetCoordinatesEndPoint = "azure-function/coordinates";
 

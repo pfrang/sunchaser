@@ -14,7 +14,7 @@ const ArrowStyle = styled.svg`
   cursor: pointer;
 `;
 
-export const Arrow: FC<Direction> = ({ direction, ...props }: Direction) => {
+export const Arrow: FC<Direction> = ({ direction }: Direction) => {
   switch (direction) {
     case "right":
       return (

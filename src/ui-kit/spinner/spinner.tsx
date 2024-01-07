@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 const StyledSpinner = styled.svg`
   animation: rotate 2s linear infinite;

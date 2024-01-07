@@ -10,8 +10,6 @@ import {
   shadow,
 } from "styled-system";
 
-import { theme } from "../theme";
-
 const Wrapper = styled.div<{
   gap: number | number[];
   clickable: boolean;

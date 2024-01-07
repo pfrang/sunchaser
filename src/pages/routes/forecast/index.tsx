@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useForecast } from "pages/hooks/use-forecast";
-import { sanitizeNextQuery } from "pages/utils/sanitize-next-query";
 import { Flex } from "ui-kit/flex";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { Spinner } from "ui-kit/spinner/spinner";
