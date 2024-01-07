@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
-import * as pwa from "@ducanh2912/next-pwa";
-
-const pwaSettings = pwa.default({
+const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   cacheStartUrl: true,
   disable: ![
@@ -80,4 +78,4 @@ const nextConfig = {
   },
 };
 
-module.exports = pwaSettings({ ...nextConfig });
+module.exports = withPWA({ ...nextConfig });
