@@ -12,8 +12,6 @@ import { ForecastTableContainer } from "./components/table-container";
 export const Forecast = () => {
   const router = useRouter();
 
-  const query = sanitizeNextQuery(router.query);
-
   const { data, isLoading, error } = useForecast(
     {
       params: router.query,
@@ -23,7 +21,7 @@ export const Forecast = () => {
 
   return (
     <Flex height={"100%"} flexDirection={"column"} gap={4}>
-      <Spacer height={8} />
+      <Spacer height={80} />
       <ConditionalPresenter
         isLoading={isLoading}
         renderLoading={() => (

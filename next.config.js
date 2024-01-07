@@ -3,11 +3,9 @@
 const withPWA = require("@ducanh2912/next-pwa").default({
   dest: "public",
   cacheStartUrl: true,
-  // disable: ![
-  //   // "http://localhost:3000/",
-  //   "https://sio-t-app-newsiono.azurewebsites.net/",
-  // ].includes(process.env.NEXT_PUBLIC_HOST),
+  disable: process.env.NODE_ENV === "development",
   reloadOnOnline: true,
+  mode: "production",
 });
 
 const nextConfig = {
