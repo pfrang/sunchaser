@@ -2,15 +2,12 @@ import styled from "styled-components";
 import sscss from "@styled-system/css";
 import { theme } from "ui-kit/theme";
 
-const PromptWrapper = styled.div<{ isVisible: boolean }>`
+const PromptWrapper = styled.div`
   width: 100%;
   z-index: 100;
   position: fixed;
   bottom: 0;
-  ${({ isVisible }) =>
-    sscss({
-      display: isVisible ? "block" : "none",
-    })}
+  display: "block";
 `;
 
 const Prompt = styled.div`

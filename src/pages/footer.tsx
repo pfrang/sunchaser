@@ -19,10 +19,9 @@ import {
 import { Text } from "../ui-kit/text";
 import { Flex } from "../ui-kit/flex";
 
-import { Carousell } from "./routes/sunchaser/components/carousell";
 import { SunchaserListWrapper } from "./routes/sunchaser/components/carousell-wrapper";
 
-export const Footer = ({ children }: { children?: JSX.Element }) => {
+export const Footer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { footerItem, setFooterItem } = useDisplayFooter();
   const [boxPosition, setBoxPosition] = useState("sticky");

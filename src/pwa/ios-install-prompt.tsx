@@ -12,14 +12,18 @@ export const IosInstallPrompt = () => {
   }, []);
 
   return (
-    <s.PromptWrapper isVisible={displayPrompt}>
-      <s.Prompt>
-        Install this webapp on your iPhone: tap <IosShareIcon />
-        and then Add to home-screen{" "}
-        <button onClick={() => setDisplayPrompt(false)}>[close]</button>
-      </s.Prompt>
-      <s.ArrowDown />
-    </s.PromptWrapper>
+    <>
+      {displayPrompt && (
+        <s.PromptWrapper>
+          <s.Prompt>
+            Install this webapp on your iPhone: tap <IosShareIcon />
+            and then Add to home-screen{" "}
+            <button onClick={() => setDisplayPrompt(false)}>[close]</button>
+          </s.Prompt>
+          <s.ArrowDown />
+        </s.PromptWrapper>
+      )}
+    </>
   );
   // TODO: nice styling of course
   // TODO: remember state of closed prompt on page change

@@ -2,12 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
-import { Spacer } from "ui-kit/spacer/spacer";
 
-import { theme } from "../ui-kit/theme";
 import { Flex } from "../ui-kit/flex";
 
-import { WhereAreYou } from "./routes/_shared/components/where-are-you";
 import { WhereAreYou2 } from "./routes/_shared/components/where-are-you2";
 
 export const Header2 = () => {
