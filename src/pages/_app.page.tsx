@@ -46,11 +46,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <Head>
           <title>Sunchaser</title>
-          <meta name="description" content="Sunchaser" />
           {/* <meta name="viewport" content="initial-scale=1, width=device-width" /> */}
-          <link rel="icon" href="/favicon.ico" />
           <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <meta name="description" content="Sunchaser" />
+          <link rel="icon" href="/favicon.ico" />
           <meta name="theme-color" content="#ffffff" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon-iphone.png" />
           <link rel="manifest" href="/manifest.json" />
           {/* <{!-- Google tag (gtag.js) -->} */}
           <script
