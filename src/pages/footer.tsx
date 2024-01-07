@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useSwipeable } from "react-swipeable";
 import { capitalize } from "lodash";
 import React, { useEffect, useRef } from "react";
 import { Spacer } from "ui-kit/spacer/spacer";
@@ -56,9 +57,16 @@ export const Footer = () => {
     };
   }, [isExpanded]);
 
+  const handlers = useSwipeable({
+    onSwipedUp: () => setIsExpanded(true),
+    onSwipedDown: () => setIsExpanded(false),
+    trackMouse: true,
+  });
+
   return (
     <>
       <Box
+        {...handlers}
         ref={boxRef}
         sx={{
           // position: isExpanded ? "sticky" : "fixed",
