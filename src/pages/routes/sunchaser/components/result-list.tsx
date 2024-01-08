@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
-import { getIcon, getInterval } from "pages/utils/times-helper";
+import { getWeatherIconFromTimes, getInterval } from "pages/utils/times-helper";
 import React from "react";
 
 import { Flex } from "../../../../ui-kit/flex";
@@ -13,11 +13,7 @@ import {
 } from "../../../api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { theme } from "../../../../ui-kit/theme";
 import { Spacer } from "../../../../ui-kit/spacer/spacer";
-import {
-  useHighlightedCard,
-  useMap,
-  useMapInstance,
-} from "../../../../states/sunchaser-result";
+import { StateHelper } from "../../../../states/sunchaser-result";
 import {
   MapBoxHelper,
   StartAndEndCoordinates,
@@ -36,10 +32,10 @@ export const ResultList = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const { highlightedCard, setHighlightedCard } = useHighlightedCard();
+  const { highlightedCard, setHighlightedCard } = StateHelper.highlightedCard();
 
-  const { mapObject } = useMap();
-  const { mapInstance } = useMapInstance();
+  const { mapObject } = StateHelper.mapObject();
+  const { mapInstance } = StateHelper.mapInstance();
 
   const resetMap = () => {
     if (mapObject) {
@@ -235,14 +231,14 @@ const Icon = (times: Times[]) => {
 
   const icons = mediaQuery
     ? {
-        morgen: getIcon(getInterval(times, 0, 12)),
-        kveld: getIcon(getInterval(times, 13, 23)),
+        morgen: getWeatherIconFromTimes(getInterval(times, 0, 12)),
+        kveld: getWeatherIconFromTimes(getInterval(times, 13, 23)),
       }
     : {
-        natt: getIcon(nightIcon),
-        morgen: getIcon(morningIcon),
-        ettermiddag: getIcon(afternoonIcon),
-        kveld: getIcon(eveningIcon),
+        natt: getWeatherIconFromTimes(nightIcon),
+        morgen: getWeatherIconFromTimes(morningIcon),
+        ettermiddag: getWeatherIconFromTimes(afternoonIcon),
+        kveld: getWeatherIconFromTimes(eveningIcon),
       };
 
   // const icons = {

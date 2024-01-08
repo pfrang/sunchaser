@@ -5,10 +5,7 @@ import { useRouter } from "next/router";
 
 import { useUserLocation } from "../../../hooks/use-user-location";
 import { Flex } from "../../../../ui-kit/flex";
-import {
-  getBoundingBox,
-  getBoundingBoxLngLatLike,
-} from "../../../utils/get-boundaries-lng-lat";
+import { MapboxBoundariesHelper } from "../../../utils/get-boundaries-lng-lat";
 import { sanitizeNextQuery } from "../../../utils/sanitize-next-query";
 
 export const CircularMap = ({ mapBoxKey, kilometers }) => {
@@ -33,7 +30,12 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
   useEffect(() => {
     if (!currentLatLocation) return;
 
-    const { sw, ne } = getBoundingBox(currentLatLocation, kilometers);
+    const getBoundingboHelper = new MapboxBoundariesHelper(
+      currentLatLocation,
+      kilometers,
+    );
+
+    const { sw, ne } = getBoundingboHelper.getBoundingBox();
 
     setPolygon(
       turf.circle(
@@ -72,7 +74,10 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
           initialViewState={{
             longitude: userLocation.longitude,
             latitude: userLocation.latitude,
-            bounds: getBoundingBoxLngLatLike(currentLatLocation, kilometers),
+            bounds: new MapboxBoundariesHelper(
+              currentLatLocation,
+              kilometers,
+            ).getBoundingBoxLngLatLike(),
             fitBoundsOptions: {
               padding: 20,
             },

@@ -38,25 +38,6 @@ export const Header = () => {
           <Spacer height={"8px"} />
           <WhereAreYou />
         </Flex>
-
-        {/* <Flex paddingY={2} justifyContent={"flex-end"}>
-        <Button
-        style={{ height: "100%" }}
-          onClick={() => setOpenDrawer(!drawerIsOpen)}
-        >
-          <Image
-          alt="Menu"
-            fill
-            tabIndex={0}
-            className="cursor-pointer"
-            src="/icons/black/svg/menu.svg"
-            style={{ objectFit: "contain" }}
-          />
-        </Button>
-        <Drawer anchor={"left"}>
-          <UserForm />
-        </Drawer>
-      </Flex> */}
       </Flex>
     </Flex>
   );

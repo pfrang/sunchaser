@@ -27,7 +27,7 @@ export function getInterval(
   return betweenInterval ?? undefined;
 }
 
-export function getIcon(times?: Times[]) {
+export function getWeatherIconFromTimes(times?: Times[]) {
   if (!times.length) return;
   const highestRank = times.reduce((prev, current) => {
     return prev.rank > current.rank ? prev : current;

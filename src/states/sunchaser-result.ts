@@ -18,18 +18,53 @@ export interface HighlightedCard {
   setHighlightedCard: (input: AzureFunctionCoordinatesMappedItems) => void;
 }
 
-export const useMap = create<DisplayMap>((set) => ({
+const useMap = create<DisplayMap>((set) => ({
   mapObject: undefined,
   setMap: (input: mapboxgl.Map) => set(() => ({ mapObject: input })),
 }));
 
-export const useMapInstance = create<DisplayMapInstance>((set) => ({
+const useMapInstance = create<DisplayMapInstance>((set) => ({
   mapInstance: undefined,
   setMapInstance: (input: MapBoxHelper) => set(() => ({ mapInstance: input })),
 }));
 
-export const useHighlightedCard = create<HighlightedCard>((set) => ({
+const useHighlightedCard = create<HighlightedCard>((set) => ({
   highlightedCard: undefined,
   setHighlightedCard: (input: AzureFunctionCoordinatesMappedItems) =>
     set(() => ({ highlightedCard: input })),
 }));
+
+export abstract class StateHelper {
+  static useMap = useMap;
+  static useMapInstance = useMapInstance;
+  static useHighlightedCard = useHighlightedCard;
+
+  static mapObject = () => {
+    return {
+      mapObject: StateHelper.useMap.getState().mapObject,
+      setMapObject: (input: mapboxgl.Map) =>
+        StateHelper.useMap.setState({ mapObject: input }),
+    };
+  };
+
+  static mapInstance = () => {
+    return {
+      mapInstance: StateHelper.useMapInstance.getState().mapInstance,
+      setMapInstance: (input: MapBoxHelper) =>
+        StateHelper.useMapInstance.setState({
+          mapInstance: input,
+        }),
+    };
+  };
+
+  static highlightedCard = () => {
+    return {
+      highlightedCard:
+        StateHelper.useHighlightedCard.getState().highlightedCard,
+      setHighlightedCard: (input: AzureFunctionCoordinatesMappedItems) =>
+        StateHelper.useHighlightedCard.setState({
+          highlightedCard: input,
+        }),
+    };
+  };
+}

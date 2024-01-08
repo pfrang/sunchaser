@@ -1,4 +1,4 @@
-import { getIcon, getInterval } from "pages/utils/times-helper";
+import { getWeatherIconFromTimes, getInterval } from "pages/utils/times-helper";
 
 import { Flex } from "../../../../ui-kit/flex";
 import { Text } from "../../../../ui-kit/text";
@@ -19,7 +19,7 @@ export const Carousell2Details = ({ times }: { times: Times[] }) => {
         const times = timeIntervals[time] as Times[];
         if (times.length === 0) return null;
 
-        const icon = getIcon(timeIntervals[time]);
+        const icon = getWeatherIconFromTimes(timeIntervals[time]);
         return (
           <Flex
             padding={[1, 2]}
