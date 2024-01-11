@@ -1,4 +1,3 @@
-import sscss from "@styled-system/css";
 import styled from "styled-components";
 import {
   SpaceProps,
@@ -13,23 +12,21 @@ import {
 import { theme } from "ui-kit/theme";
 
 const Grid = styled.div<SpaceProps & ColorProps & BorderProps & GridProps>`
-  /* ${sscss({
-    gridTemplateColumns: [
-      "repeat(4, 1fr)",
-      "repeat(8, 1fr)",
-      "repeat(12, 1fr)",
-    ],
-    columnGap: [4, 5],
-    rowGap: 5,
-    paddingX: [4, 5, 10],
-  })} */
-  /*
-  overflow-y: hidden; */
+  padding-left: 4px;
+
+  column-gap: 4px;
+  row-gap: 5px;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  /* [ "repeat(4, 1fr)",
+    "repeat(8, 1fr)",
+    "repeat(12, 1fr)"]; */
 
   /* height: 100%; */
 
   width: 100%;
-  margin: 0 auto;
+  margin: "0 auto";
   max-width: ${theme.maxContentWidth}px;
   display: grid;
 

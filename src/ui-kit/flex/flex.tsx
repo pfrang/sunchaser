@@ -43,7 +43,7 @@ export const Flex = forwardRef<HTMLDivElement, FlexProps>(
         ref={ref}
         gap={gap}
         transition={transition}
-        clickable={clickable}
+        $clickable={clickable}
         {...wrapperProps}
       >
         {children}

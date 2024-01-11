@@ -1,7 +1,8 @@
+"use client";
 import { create } from "zustand";
+import { MapBoxHelper } from "app/utils/mapbox-settings";
 
-import { MapBoxHelper } from "../pages/utils/mapbox-settings";
-import { AzureFunctionCoordinatesMappedItems } from "../pages/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { AzureFunctionCoordinatesMappedItems } from "../app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
 export interface DisplayMap {
   mapObject: undefined | mapboxgl.Map;
@@ -61,7 +62,9 @@ export abstract class StateHelper {
     return {
       highlightedCard:
         StateHelper.useHighlightedCard.getState().highlightedCard,
-      setHighlightedCard: (input: AzureFunctionCoordinatesMappedItems) =>
+      setHighlightedCard: (
+        input: AzureFunctionCoordinatesMappedItems | undefined,
+      ) =>
         StateHelper.useHighlightedCard.setState({
           highlightedCard: input,
         }),

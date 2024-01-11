@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import sscss from "@styled-system/css";
 import { theme } from "ui-kit/theme";
 
 const PromptWrapper = styled.div`
@@ -12,7 +11,8 @@ const PromptWrapper = styled.div`
 
 const Prompt = styled.div`
   background-color: ${theme.color.green[4]};
-  ${sscss({ p: 4, borderRadius: "xl" })};
+  padding: 4px;
+  border-radius: "16px";
   font-weight: bold;
   color: black;
   font-size: 16px;

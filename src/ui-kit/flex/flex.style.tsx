@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import sscss from "@styled-system/css";
 import {
   space,
   flexbox,
@@ -12,7 +11,7 @@ import {
 
 const Wrapper = styled.div<{
   gap: number | number[];
-  clickable: boolean;
+  $clickable: boolean;
   transition?: string;
 }>`
   ${flexbox}
@@ -26,13 +25,10 @@ const Wrapper = styled.div<{
 
   transition: ${(props) => props.transition}; // Use transition prop
 
-  ${(props) =>
-    sscss({
-      width: "100%",
-      display: "flex",
-      gap: props.gap,
-      cursor: props.clickable ? "pointer" : "default",
-    })}
+  width: 100%;
+  display: flex;
+  gap: ${(props) => props.gap};
+  cursor: ${(props) => (props.$clickable ? "pointer" : "default")};
 
   ${layout}
 
@@ -62,7 +58,7 @@ const Wrapper = styled.div<{
 
   /* Add hover color effect */
   /* &:hover {
-    opacity: ${(props) => props.clickable && "0.4"};
+    opacity: ${(props) => props.$clickable && "0.4"};
   } */
 `;
 

@@ -8,7 +8,7 @@ import { TextVariant } from "./text.type";
 export const TextWrapper = styled.p<{
   color?: Color;
   variant: TextVariant;
-  noWrap: boolean;
+  noWrap?: boolean;
 }>`
   text-decoration: inherit;
   ${color}

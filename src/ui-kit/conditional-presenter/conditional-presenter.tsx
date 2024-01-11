@@ -5,7 +5,7 @@ interface ConditionalPresenterProps<Data, Error> {
   isLoading: boolean;
   error: Error;
   data: Data;
-  renderData: (data: Data) => JSX.Element;
+  renderData: (data: NonNullable<Data>) => JSX.Element;
   renderLoading?: () => JSX.Element;
   renderError?: () => JSX.Element;
 }
@@ -31,21 +31,22 @@ export const ConditionalPresenter = <Data, Error>({
     Boolean(error) && setState(StateStage.Error);
     isLoading && setState(StateStage.Loading);
 
-    data !== undefined &&
-      data !== null &&
-      !isLoading &&
+    if (data !== undefined && data !== null && !isLoading) {
       setState(StateStage.Loaded);
+    }
   }, [isLoading, error, data]);
 
   switch (state) {
     case StateStage.Initial:
-      return isLoading ? renderLoading() : <></>;
+      return isLoading && renderLoading ? renderLoading() : <></>;
     case StateStage.Error:
       return typeof renderError === "function" ? renderError() : <></>;
     case StateStage.Loading:
       return typeof renderLoading === "function" ? renderLoading() : <></>;
     case StateStage.Loaded:
-      return <>{_isEmpty(data) ? <></> : renderData(data)}</>;
+      return (
+        <>{_isEmpty(data) ? <></> : renderData(data as NonNullable<Data>)}</>
+      );
     default:
       throw new Error("Illegal state!");
   }

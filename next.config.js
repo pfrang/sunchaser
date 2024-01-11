@@ -14,7 +14,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  pageExtensions: ["page.tsx", "endpoint.ts"],
+  // pageExtensions: ["page.tsx", "endpoint.ts"],
   eslint: {
     ignoreDuringBuilds: true,
   },
