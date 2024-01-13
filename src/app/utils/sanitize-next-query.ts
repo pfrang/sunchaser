@@ -1,3 +1,5 @@
+import { ReadonlyURLSearchParams } from "next/navigation";
+
 export const sanitizeNextQuery = (queryParams: {
   [key: string]: string | string[] | undefined;
 }) => {
@@ -9,7 +11,10 @@ export const sanitizeNextQuery = (queryParams: {
   );
 };
 
-export const searchParamsToObject = (searchParams: URLSearchParams) => {
+export const searchParamsToObject = (
+  searchParams: ReadonlyURLSearchParams | null,
+) => {
+  if (!searchParams) return null;
   return Object.fromEntries(
     Array.from(searchParams.entries()).map(([key, value]) => [
       key,

@@ -1,6 +1,6 @@
+import "./global.css";
 import { Metadata } from "next";
-
-import StyledComponentsRegistry from "./lib/registry";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Sunchaser",
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
+      <Head>
         <link
           href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css"
           rel="stylesheet"
@@ -38,10 +38,10 @@ export default function RootLayout({ children }) {
               gtag('config', 'G-NN9D9GF44W');
             `}
         </script> */}
-      </head>
+      </Head>
       <body>
         {/* @ts-ignore*/}
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        {children}
       </body>
     </html>
   );

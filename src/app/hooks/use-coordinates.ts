@@ -27,7 +27,7 @@ export const useCoordinates = (
       method: requestConfig.method,
       data: requestConfig.data,
     },
-    Boolean(searchParams.lat && searchParams.lon),
+    Boolean(searchParams?.lat && searchParams?.lon),
   );
 
   return { data, error, isLoading };

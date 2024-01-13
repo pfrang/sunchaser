@@ -1,20 +1,34 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { color, typography, variant, space, layout } from "styled-system";
 
 import { Color } from "../theme";
 
 import { TextVariant } from "./text.type";
 
+// const variants = {
+//   regular: css`
+//     font-family: "SpaceMono";
+//     font-weight: "400";
+//     font-size:
+//       [ "12px",
+//       "16px",
+//       "20px"];
+//     line-height:
+//       [ "28px",
+//       "40px"];
+//   `,
+// };
+
 export const TextWrapper = styled.p<{
   color?: Color;
   variant: TextVariant;
-  noWrap?: boolean;
+  $noWrap?: boolean;
 }>`
   text-decoration: inherit;
   ${color}
   margin: 0;
   overflow-wrap: break-word;
-  white-space: ${(props) => (props.noWrap ? "nowrap" : "normal")};
+  white-space: ${(props) => (props.$noWrap ? "nowrap" : "normal")};
 
   ${space};
 

@@ -3,33 +3,27 @@ import { AppConfig } from "app-config";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { IosInstallPrompt } from "pwa/ios-install-prompt";
-import { ThemeProvider } from "styled-components";
-import { Flex } from "ui-kit/flex";
-import { Spacer } from "ui-kit/spacer/spacer";
-import { GlobalStyle } from "ui-kit/styles/global-style";
-import { theme } from "ui-kit/theme";
 
 import Router from "./router";
 import { Footer } from "./footer";
+import { Header } from "./header";
 
 export default function Page() {
   const mapBoxKey = new AppConfig().mapBox.key;
+
   return (
     <>
-      <ThemeProvider theme={theme}>
-        {/* @ts-ignore*/}
-        <GlobalStyle />
-        <Flex
-          height={"100dvh"}
-          flexDirection={"column"}
-          backgroundColor={"#173755"}
-        >
+      <div className=" flex h-dvh w-[100%] flex-col  bg-[#173755]">
+        <Header />
+        <div style={{ height: "calc(100% - 68px)" }}>
           <Router mapBoxKey={mapBoxKey} />
-          <Spacer height={[48, 64]} width={"100%"} />
-          <Footer />
-          <IosInstallPrompt />
-        </Flex>
-      </ThemeProvider>
+        </div>
+        {/* <Spacer height={[48, 64]} width={"100%"} /> */}
+
+        <Footer />
+        <IosInstallPrompt />
+      </div>
+
       <SpeedInsights />
       <Analytics />
     </>

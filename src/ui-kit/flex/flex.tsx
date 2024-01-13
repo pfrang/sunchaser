@@ -14,6 +14,8 @@ import {
   ShadowProps,
 } from "styled-system";
 
+import { JSToCSS } from "../utils/js-to-css";
+
 import { FlexStyle as s } from "./flex.style";
 
 export interface FlexProps
@@ -37,12 +39,13 @@ export interface FlexProps
 export const Flex = forwardRef<HTMLDivElement, FlexProps>(
   ({ gap = 0, clickable = false, transition, children, ...props }, ref) => {
     //SHOULD BE Record<string, uknown> = props
-    const wrapperProps: Record<any, any> = props;
+    const wrapperProps: Record<any, any> = JSToCSS(props);
+
     return (
       <s.Wrapper
         ref={ref}
-        gap={gap}
-        transition={transition}
+        $gap={gap}
+        $transition={transition}
         $clickable={clickable}
         {...wrapperProps}
       >

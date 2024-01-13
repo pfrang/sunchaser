@@ -29,18 +29,18 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   });
 
   useEffect(() => {
-    if (searchParams.lat || !userLocation) return;
+    if (searchParams?.lat || !userLocation) return;
 
     const params = {
-      distance: searchParams.distance ?? 50,
-      lat: searchParams.lat ?? userLocation.latitude,
-      lon: searchParams.lon ?? userLocation.longitude,
-      date: searchParams.date ?? new Date().toISOString().split("T")[0],
+      distance: searchParams?.distance ?? 50,
+      lat: searchParams?.lat ?? userLocation.latitude,
+      lon: searchParams?.lon ?? userLocation.longitude,
+      date: searchParams?.date ?? new Date().toISOString().split("T")[0],
     };
 
     const urlParams = sanitizeNextParams(params);
 
-    router.push(`/${urlParams}`);
+    router.push(`/?${urlParams}`);
   }, [userLocation]);
 
   switch (footerItem) {

@@ -78,11 +78,11 @@ export const ChooseTravelDistance = ({
   });
 
   const [kilometers, setKilometers] = useState(
-    Number(searchParams.distance) || 50,
+    Number(searchParams?.distance) || 50,
   );
 
   const [index, setIndex] = useState(
-    getCounterValue(valuesForSlider, searchParams.distance as string) ||
+    getCounterValue(valuesForSlider, searchParams?.distance as string) ||
       valuesForSlider.length / 2,
   );
 

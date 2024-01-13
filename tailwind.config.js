@@ -1,21 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-
 module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  mode: "jit",
   theme: {
     extend: {
       screens: {
-        phone: "480px",
-        tablet: "800px",
-        tabletbig: "1100px",
-      },
-      keyframes: {
-        jumpInfinite: {
-          "0%": { marginRight: "0" },
-          "50%": { marginRight: "20px" },
-          "100%": { marginRight: "0" },
-        },
+        sm: "480px",
+        md: "800px",
+        lg: "1024px",
+        xlg: "1280px",
       },
     },
   },
+  plugins: [],
 };

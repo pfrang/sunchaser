@@ -18,9 +18,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  compiler: {
-    styledComponents: true,
-  },
   poweredByHeader: false,
 
   // typescript: {

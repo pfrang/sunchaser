@@ -13,7 +13,7 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
 
   const searchParams = useSearchParamsToObject();
 
-  const { lat, lon } = searchParams;
+  const params = searchParams;
 
   const [polygon, setPolygon] = useState<null | turf.helpers.Feature<
     turf.helpers.Polygon,
@@ -23,8 +23,11 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
   >>(null);
 
   const currentLatLocation = React.useMemo(() => {
-    return { latitude: Number(lat), longitude: Number(lon) } || userLocation;
-  }, [lat, lon, userLocation]);
+    return (
+      { latitude: Number(params?.lat), longitude: Number(params?.lon) } ||
+      userLocation
+    );
+  }, [params, userLocation]);
 
   useEffect(() => {
     if (!currentLatLocation) return;

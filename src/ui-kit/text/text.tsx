@@ -44,7 +44,7 @@ export const Text: FC<TextProps> = ({
       className={className}
       as={tag}
       variant={variant}
-      noWrap={noWrap}
+      $noWrap={noWrap}
     >
       {content}
       {children}

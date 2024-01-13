@@ -5,8 +5,6 @@ import { Spinner } from "ui-kit/spinner/spinner";
 import { useForecast } from "app/hooks/use-forecast";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
-import { Spacer } from "../../../ui-kit/spacer/spacer";
-
 import { ForecastTableContainer } from "./components/table-container";
 
 export const Forecast = () => {
@@ -16,12 +14,11 @@ export const Forecast = () => {
     {
       params: searchParams,
     },
-    Boolean(searchParams.lat),
+    Boolean(searchParams?.lat),
   );
 
   return (
     <Flex height={"100%"} flexDirection={"column"} gap={4}>
-      <Spacer height={80} />
       <ConditionalPresenter
         isLoading={isLoading}
         renderLoading={() => (

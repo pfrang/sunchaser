@@ -66,7 +66,7 @@ export const Footer = () => {
   });
 
   return (
-    <>
+    <footer>
       <Box
         {...handlers}
         ref={boxRef}
@@ -146,7 +146,7 @@ export const Footer = () => {
           </Collapse>
         </>
       </Box>
-    </>
+    </footer>
   );
 };
 

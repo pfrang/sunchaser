@@ -6,6 +6,8 @@ import {
   ShadowProps,
 } from "styled-system";
 
+import { JSToCSS } from "../utils/js-to-css";
+
 import { Wrapper } from "./spacer.style";
 
 export interface SpacerProps
@@ -21,5 +23,7 @@ export interface SpacerProps
 }
 
 export const Spacer: FC<SpacerProps> = ({ line, ...props }) => {
-  return <Wrapper line={line} {...props} />;
+  const wrapperProps: Record<any, any> = JSToCSS(props);
+
+  return <Wrapper $line={line} {...wrapperProps} />;
 };

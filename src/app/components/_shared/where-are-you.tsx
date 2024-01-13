@@ -95,29 +95,22 @@ export const WhereAreYou = () => {
       lon: userLocation.longitude,
       location: "",
     });
-    router.push(`/${urlParams}`);
+    router.push(`/?${urlParams}`);
   };
 
   return (
     <Flex
       flexDirection={"column"}
-      // paddingRight={2}
-      // mx={"auto"}
       position={"relative"}
       maxWidth={isExpanded ? ["250px", "500px"] : ["55px"]}
       transition="max-width ease-in-out 0.25s"
-      // padding={[1, 2]}
-      // px={2}
     >
       <Flex
         zIndex={99}
         flexDirection={"column"}
-        // position={"absolute"}
-        // top={0}
         borderColor={theme.color.blues[2]}
         borderRadius={36}
         borderWidth={2}
-        // backgroundColor={theme.color.blues[8]}
       >
         <Flex
           position={"relative"}
@@ -133,7 +126,7 @@ export const WhereAreYou = () => {
           <input
             ref={locationRef}
             required
-            className={`pl-6 h-10 w-full text-2xl bg-inherit text-white`}
+            className={`h-10 w-full bg-inherit pl-6 text-2xl text-white`}
             placeholder={isExpanded ? "Location" : ""}
             key={"inputBox"}
             onChange={(e) => onSearchChange(e.target.value)}
