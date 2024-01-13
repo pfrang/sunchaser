@@ -99,18 +99,13 @@ export const WhereAreYou = () => {
   };
 
   return (
-    <Flex
-      flexDirection={"column"}
-      position={"relative"}
-      maxWidth={isExpanded ? ["250px", "500px"] : ["55px"]}
-      transition="max-width ease-in-out 0.25s"
+    <div
+      className={`transition-width duration-250 relative flex flex-col ease-in-out ${
+        isExpanded ? "max-w-[250px] md:max-w-[500px]" : "max-w-[55px]"
+      }`}
     >
-      <Flex
-        zIndex={99}
-        flexDirection={"column"}
-        borderColor={theme.color.blues[2]}
-        borderRadius={36}
-        borderWidth={2}
+      <div
+        className={`z-99 flex flex-col rounded-[36px] border-2 border-[${theme.color.blues[2]}]`}
       >
         <Flex
           position={"relative"}
@@ -123,6 +118,11 @@ export const WhereAreYou = () => {
           borderColor={"rgba(0, 0, 0, 0.1)"}
           borderRadius={"inherit"}
         >
+          <div
+            className={`relative ${
+              isExpanded ? `bg-[${theme.color.blues[4]}]` : "bg-transparent"
+            }] border-1 border-color vewf p-1  `}
+          ></div>
           <input
             ref={locationRef}
             required
@@ -220,8 +220,8 @@ export const WhereAreYou = () => {
             );
           }}
         />
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };
 
