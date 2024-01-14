@@ -11,7 +11,6 @@ import { GoogleMapsAutoSearchMappedData } from "app/api/google-maps/auto-search/
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { Flex } from "ui-kit/flex";
 import { Spacer } from "ui-kit/spacer/spacer";
-import { Spinner } from "ui-kit/spinner/spinner";
 import { theme } from "ui-kit/theme";
 import { Text } from "ui-kit/text";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
@@ -100,33 +99,22 @@ export const WhereAreYou = () => {
 
   return (
     <div
-      className={`transition-width duration-250 relative flex flex-col ease-in-out ${
+      className={`relative flex flex-col transition-transform duration-200 ease-in-out ${
         isExpanded ? "max-w-[250px] md:max-w-[500px]" : "max-w-[55px]"
       }`}
     >
       <div
-        className={`z-99 flex flex-col rounded-[36px] border-2 border-[${theme.color.blues[2]}]`}
+        className={`z-50 flex flex-col rounded-[36px] border-2 border-blues-200 px-6 py-2`}
       >
-        <Flex
-          position={"relative"}
-          backgroundColor={isExpanded ? theme.color.blues[4] : "transparent"}
-          // boxShadow={`0 0 0 2px #000000`}
-          // borderColor={theme.color.blues[0]}
-          borderWidth={1}
-          alignItems={"center"}
-          padding={1}
-          borderColor={"rgba(0, 0, 0, 0.1)"}
-          borderRadius={"inherit"}
+        <div
+          className={`relative ${
+            isExpanded ? `bg-blues-400` : `bg-transparent`
+          } items-center rounded-[36px] border-2 border-opacity-10 p-1`}
         >
-          <div
-            className={`relative ${
-              isExpanded ? `bg-[${theme.color.blues[4]}]` : "bg-transparent"
-            }] border-1 border-color vewf p-1  `}
-          ></div>
           <input
             ref={locationRef}
             required
-            className={`h-10 w-full bg-inherit pl-6 text-2xl text-white`}
+            className={`bg-inherit text-white h-10 w-full pl-6 text-2xl`}
             placeholder={isExpanded ? "Location" : ""}
             key={"inputBox"}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -138,7 +126,7 @@ export const WhereAreYou = () => {
 
           <div className="absolute right-2 top-2">
             {isLoading ? (
-              <Spinner />
+              <div className="animate-spin"></div>
             ) : (
               <SearchIcon
                 // TODO fix
@@ -152,7 +140,7 @@ export const WhereAreYou = () => {
               />
             )}
           </div>
-        </Flex>
+        </div>
 
         <ConditionalPresenter
           data={data}
@@ -240,7 +228,9 @@ const ExpandedFlex = ({ children }) => {
         gap={2}
         boxShadow={"inset 0px 6px 10px rgba(0, 0, 0, 0.2)"}
       >
-        {children}
+        <div className="mt-2 flex flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 py-5 shadow-lg">
+          {children}
+        </div>
       </Flex>
       <Spacer height={12} />
       <Flex width={"100%"} justifyContent={"center"} px="100px">

@@ -39,7 +39,9 @@ module.exports = {
     "plugin:prettier/recommended",
     "plugin:tailwindcss/recommended",
   ],
+
   rules: {
+    "tailwindcss/migration-from-tailwind-2": "off",
     "import/order": [
       "error",
       {

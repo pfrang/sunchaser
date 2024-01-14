@@ -96,9 +96,9 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
 
   return (
     <section id="section-map" className="h-full">
-      <div className="flex items-center h-full justify-center sticky top-0">
-        <div id="map" className="w-full h-full m-auto "></div>
-        <div id="original-map" className="w-full h-full m-auto hidden"></div>
+      <div className="sticky top-0 flex h-full items-center justify-center">
+        <div id="map" className="m-auto h-full w-full "></div>
+        <div id="original-map" className="m-auto hidden h-full w-full"></div>
       </div>
     </section>
   );
