@@ -9,9 +9,6 @@ import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { GoogleMapsAutoSearchMappedData } from "app/api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
-import { Flex } from "ui-kit/flex";
-import { Spacer } from "ui-kit/spacer/spacer";
-import { theme } from "ui-kit/theme";
 import { Text } from "ui-kit/text";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
@@ -98,19 +95,19 @@ export const WhereAreYou = () => {
     router.push(`/?${urlParams}`);
   };
 
-
-
   return (
     <div
-      className={`relative top-2 h-[48px] content-center flex flex-col transition-all duration-300 ease-in-out z-50 w-full rounded-[36px] border-2 border-blues-200
-        ${isExpanded ? "max-w-[250px] md:max-w-[500px]" : "w-[55px]"}
+      className={`relative top-2 z-50 flex h-[48px] flex-col content-center rounded-[36px] border-2 border-blues-200 transition-width duration-300 ease-in-out
+        ${isExpanded ? "w-[250px] md:w-[500px]" : "w-[55px]"}
       `}
     >
       <input
         ref={locationRef}
         required
         disabled={!isExpanded}
-        className={`bg-inherit text-white ${isExpanded ? '' : 'hidden'} h-full pl-4 items-center text-2xl`}
+        className={`bg-inherit text-white ${
+          isExpanded ? "" : "hidden"
+        } h-full items-center pl-4 text-2xl`}
         placeholder={isExpanded ? "Location" : ""}
         onChange={(e) => onSearchChange(e.target.value)}
         onFocus={() => setLocationChosen(false)}
@@ -136,7 +133,6 @@ export const WhereAreYou = () => {
         )}
       </div>
 
-
       <ConditionalPresenter
         data={data}
         error={error}
@@ -148,18 +144,9 @@ export const WhereAreYou = () => {
 
           return (
             <ExpandedFlex>
-              <Flex
-                borderRadius={"inherit"}
-                color={"white"}
-                style={{ cursor: "pointer" }}
-                backgroundColor={theme.color.blues[2]}
-                borderColor={theme.color.blues[10]}
-                borderWidth={1}
-                px={[2, 4]}
-                py={3}
+              <div
+                className="flex w-full cursor-pointer content-center gap-2 rounded-[36px] border-2 border-blues-1000 bg-blues-200 py-3 text-white"
                 onClick={onUseDeviceLocation}
-                alignItems={"center"}
-                gap={2}
               >
                 <NavigationIcon
                   style={{
@@ -170,21 +157,15 @@ export const WhereAreYou = () => {
                 <Text variant="poppins" color="white">
                   Use device location
                 </Text>
-              </Flex>
+              </div>
+
               {items &&
                 !isLocationChosen &&
                 items.map((item: GoogleMapsAutoSearchMappedData, index) => {
                   return (
-                    <Flex
-                      borderRadius={"inherit"}
-                      color={"white"}
+                    <div
+                      className={`flex cursor-pointer items-center rounded-[36px] border-2 border-blues-1000 bg-blues-400 px-4 py-3 text-white`}
                       key={item.place + index}
-                      style={{ cursor: "pointer" }}
-                      backgroundColor={theme.color.blues[4]}
-                      borderColor={theme.color.blues[10]}
-                      borderWidth={1}
-                      px={4}
-                      py={3}
                       onClick={() =>
                         setLocationAndClearList({
                           value: item.place,
@@ -192,11 +173,12 @@ export const WhereAreYou = () => {
                         })
                       }
                     >
-                      {/* TODO filter for unique places */}
-                      <Text variant="poppins" color="white">
-                        {itemForUi(item)}
-                      </Text>
-                    </Flex>
+                      {
+                        <Text variant="poppins" color="white">
+                          {itemForUi(item)}
+                        </Text>
+                      }
+                    </div>
                   );
                 })}
             </ExpandedFlex>
@@ -204,37 +186,19 @@ export const WhereAreYou = () => {
         }}
       />
     </div>
-
   );
 };
 
 const ExpandedFlex = ({ children }) => {
   return (
     <>
-      <Flex
-        marginTop={2}
-        flexDirection={"column"}
-        // zIndex={99}
-        padding={3}
-        borderRadius={"inherit"}
-        borderColor={theme.color.blues[9]}
-        backgroundColor={theme.color.blues[5]}
-        borderWidth={2}
-        gap={2}
-        boxShadow={"inset 0px 6px 10px rgba(0, 0, 0, 0.2)"}
-      >
-        <div className="mt-2 flex flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 py-5 shadow-lg">
-          {children}
+      <div className="my-6 flex flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg">
+        {children}
+        <span className="h-1"></span>
+        <div className="flex justify-center px-28">
+          <span className="h-1 w-1/2 bg-blues-200"></span>
         </div>
-      </Flex>
-      <Spacer height={12} />
-      <Flex width={"100%"} justifyContent={"center"} px="100px">
-        <Spacer
-          height={"18px"}
-          boxShadow={"inset 0px 8px 6px rgba(0, 0, 0, 0.2)"}
-          style={{ backgroundColor: "#004871" }}
-        />
-      </Flex>
+      </div>
     </>
   );
 };

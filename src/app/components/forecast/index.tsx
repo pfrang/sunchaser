@@ -18,13 +18,13 @@ export const Forecast = () => {
   );
 
   return (
-    <Flex height={"100%"} flexDirection={"column"} gap={4}>
+    <div className="flex h-full w-full flex-col gap-4">
       <ConditionalPresenter
         isLoading={isLoading}
         renderLoading={() => (
-          <Flex position={"absolute"} bottom={"50%"} left={"50%"}>
+          <div className="absolute bottom-1/2 left-1/2">
             <Spinner />
-          </Flex>
+          </div>
         )}
         error={error}
         data={data}
@@ -34,6 +34,6 @@ export const Forecast = () => {
           return <ForecastTableContainer rows={days} />;
         }}
       />
-    </Flex>
+    </div>
   );
 };

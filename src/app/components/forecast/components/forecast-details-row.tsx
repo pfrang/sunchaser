@@ -25,7 +25,7 @@ export const ForecastRowDetails = ({
         {time}
       </TableCell>
       <TableCell align="center" scope="row">
-        <Flex justifyContent={"center"} width={"100%"}>
+        <div className="flex w-full justify-center">
           {icon ? (
             <Image
               alt="partlySunny"
@@ -36,7 +36,7 @@ export const ForecastRowDetails = ({
           ) : (
             <></>
           )}
-        </Flex>
+        </div>
       </TableCell>
       <TableCell align="center">{temperature}</TableCell>
       <TableCell align="center">{rain}</TableCell>

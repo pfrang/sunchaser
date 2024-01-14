@@ -23,9 +23,7 @@ export const Header = () => {
           />
         </Link>
 
-
         <WhereAreYou />
-
       </div>
     </div>
   );

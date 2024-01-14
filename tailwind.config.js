@@ -10,6 +10,7 @@ module.exports = {
         400: "#323A55",
         500: "#262C42",
         900: "#3B4566",
+        1000: "#252B40",
       },
       white: "#FFFFFF",
     },
@@ -19,6 +20,9 @@ module.exports = {
         md: "800px",
         lg: "1024px",
         xlg: "1280px",
+      },
+      transitionProperty: {
+        width: "width",
       },
     },
   },
