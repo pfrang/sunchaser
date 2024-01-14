@@ -10,13 +10,8 @@ export const Header = () => {
   const searchParams = useSearchParamsToObject();
 
   return (
-    <div className="flex h-[68px] w-[100%] flex-wrap justify-between">
-      {/* <Flex
-          px={[2, 3]}
-          position={"absolute"}
-          justifyContent={"space-between"}
-        > */}
-      <div className="flex h-full w-full justify-between px-3">
+    <div className="flex h-[68px]">
+      <div className="flex h-full w-full justify-between px-2">
         <Link href={{ pathname: "/", query: searchParams }} tabIndex={0}>
           <Image
             width={56}
@@ -28,7 +23,9 @@ export const Header = () => {
           />
         </Link>
 
+
         <WhereAreYou />
+
       </div>
     </div>
   );

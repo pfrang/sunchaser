@@ -15,6 +15,7 @@ import { theme } from "ui-kit/theme";
 import { Text } from "ui-kit/text";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
+import { Spinner } from "ui-kit/spinner/spinner";
 
 export const WhereAreYou = () => {
   const [townSearch, setTownSearch] = useState("");
@@ -32,11 +33,11 @@ export const WhereAreYou = () => {
   const updateUrl = useUpdateUrl();
 
   useEffect(() => {
-    if (searchParams?.distance) {
+    if (searchParams?.location) {
       setTownSearch((searchParams.location as string) || "");
       setLocationChosen(true);
     }
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     if (!townId) return;
@@ -97,119 +98,113 @@ export const WhereAreYou = () => {
     router.push(`/?${urlParams}`);
   };
 
+
+
   return (
     <div
-      className={`relative flex flex-col transition-transform duration-200 ease-in-out ${
-        isExpanded ? "max-w-[250px] md:max-w-[500px]" : "max-w-[55px]"
-      }`}
+      className={`relative top-2 h-[48px] content-center flex flex-col transition-all duration-300 ease-in-out z-50 w-full rounded-[36px] border-2 border-blues-200
+        ${isExpanded ? "max-w-[250px] md:max-w-[500px]" : "w-[55px]"}
+      `}
     >
-      <div
-        className={`z-50 flex flex-col rounded-[36px] border-2 border-blues-200 px-6 py-2`}
-      >
-        <div
-          className={`relative ${
-            isExpanded ? `bg-blues-400` : `bg-transparent`
-          } items-center rounded-[36px] border-2 border-opacity-10 p-1`}
-        >
-          <input
-            ref={locationRef}
-            required
-            className={`bg-inherit text-white h-10 w-full pl-6 text-2xl`}
-            placeholder={isExpanded ? "Location" : ""}
-            key={"inputBox"}
-            onChange={(e) => onSearchChange(e.target.value)}
-            onFocus={() => setLocationChosen(false)}
-            type="text"
-            value={isExpanded ? townSearch : ""}
-            style={{ outline: "none", borderRadius: "inherit" }}
+      <input
+        ref={locationRef}
+        required
+        disabled={!isExpanded}
+        className={`bg-inherit text-white ${isExpanded ? '' : 'hidden'} h-full pl-4 items-center text-2xl`}
+        placeholder={isExpanded ? "Location" : ""}
+        onChange={(e) => onSearchChange(e.target.value)}
+        onFocus={() => setLocationChosen(false)}
+        type="text"
+        value={isExpanded ? townSearch : ""}
+        style={{ outline: "none", borderRadius: "inherit" }}
+      />
+
+      <div className="absolute right-3 top-2">
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <SearchIcon
+            // TODO fix
+            fontSize="large"
+            onClick={onMagnifyingGlassClick}
+            style={{
+              cursor: "pointer",
+              color: isExpanded ? "white" : "black",
+              transform: "rotate(90deg)",
+            }}
           />
-
-          <div className="absolute right-2 top-2">
-            {isLoading ? (
-              <div className="animate-spin"></div>
-            ) : (
-              <SearchIcon
-                // TODO fix
-                fontSize="large"
-                onClick={onMagnifyingGlassClick}
-                style={{
-                  cursor: "pointer",
-                  color: isExpanded ? "white" : "black",
-                  transform: "rotate(90deg)",
-                }}
-              />
-            )}
-          </div>
-        </div>
-
-        <ConditionalPresenter
-          data={data}
-          error={error}
-          isLoading={false}
-          renderData={(data) => {
-            const { items } = data;
-
-            if (isLocationChosen || !isExpanded) return <></>;
-
-            return (
-              <ExpandedFlex>
-                <Flex
-                  borderRadius={"inherit"}
-                  color={"white"}
-                  style={{ cursor: "pointer" }}
-                  backgroundColor={theme.color.blues[2]}
-                  borderColor={theme.color.blues[10]}
-                  borderWidth={1}
-                  px={[2, 4]}
-                  py={3}
-                  onClick={onUseDeviceLocation}
-                  alignItems={"center"}
-                  gap={2}
-                >
-                  <NavigationIcon
-                    style={{
-                      transform: "rotate(90deg)",
-                    }}
-                  />
-                  {/* TODO filter for unique places */}
-                  <Text variant="poppins" color="white">
-                    Use device location
-                  </Text>
-                </Flex>
-                {items &&
-                  !isLocationChosen &&
-                  items.map((item: GoogleMapsAutoSearchMappedData, index) => {
-                    return (
-                      <Flex
-                        borderRadius={"inherit"}
-                        color={"white"}
-                        key={item.place + index}
-                        style={{ cursor: "pointer" }}
-                        backgroundColor={theme.color.blues[4]}
-                        borderColor={theme.color.blues[10]}
-                        borderWidth={1}
-                        px={4}
-                        py={3}
-                        onClick={() =>
-                          setLocationAndClearList({
-                            value: item.place,
-                            id: item.place_id,
-                          })
-                        }
-                      >
-                        {/* TODO filter for unique places */}
-                        <Text variant="poppins" color="white">
-                          {itemForUi(item)}
-                        </Text>
-                      </Flex>
-                    );
-                  })}
-              </ExpandedFlex>
-            );
-          }}
-        />
+        )}
       </div>
+
+
+      <ConditionalPresenter
+        data={data}
+        error={error}
+        isLoading={false}
+        renderData={(data) => {
+          const { items } = data;
+
+          if (isLocationChosen || !isExpanded) return <></>;
+
+          return (
+            <ExpandedFlex>
+              <Flex
+                borderRadius={"inherit"}
+                color={"white"}
+                style={{ cursor: "pointer" }}
+                backgroundColor={theme.color.blues[2]}
+                borderColor={theme.color.blues[10]}
+                borderWidth={1}
+                px={[2, 4]}
+                py={3}
+                onClick={onUseDeviceLocation}
+                alignItems={"center"}
+                gap={2}
+              >
+                <NavigationIcon
+                  style={{
+                    transform: "rotate(90deg)",
+                  }}
+                />
+                {/* TODO filter for unique places */}
+                <Text variant="poppins" color="white">
+                  Use device location
+                </Text>
+              </Flex>
+              {items &&
+                !isLocationChosen &&
+                items.map((item: GoogleMapsAutoSearchMappedData, index) => {
+                  return (
+                    <Flex
+                      borderRadius={"inherit"}
+                      color={"white"}
+                      key={item.place + index}
+                      style={{ cursor: "pointer" }}
+                      backgroundColor={theme.color.blues[4]}
+                      borderColor={theme.color.blues[10]}
+                      borderWidth={1}
+                      px={4}
+                      py={3}
+                      onClick={() =>
+                        setLocationAndClearList({
+                          value: item.place,
+                          id: item.place_id,
+                        })
+                      }
+                    >
+                      {/* TODO filter for unique places */}
+                      <Text variant="poppins" color="white">
+                        {itemForUi(item)}
+                      </Text>
+                    </Flex>
+                  );
+                })}
+            </ExpandedFlex>
+          );
+        }}
+      />
     </div>
+
   );
 };
 

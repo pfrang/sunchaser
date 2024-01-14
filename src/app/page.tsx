@@ -12,7 +12,6 @@ export default function Page() {
 
   return (
     <>
-      <div className="bg-opacity-50">hei</div>
       <div className=" flex h-dvh w-[100%] flex-col bg-[#173755]">
         <Header />
         <div style={{ height: "calc(100% - 68px)" }}>
