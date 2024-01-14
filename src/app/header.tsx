@@ -16,7 +16,7 @@ export const Header = () => {
           position={"absolute"}
           justifyContent={"space-between"}
         > */}
-      <div className="align-center flex h-full w-full justify-between px-6">
+      <div className="flex h-full w-full justify-between px-6">
         <Link href={{ pathname: "/", query: searchParams }} tabIndex={0}>
           <Image
             width={56}

@@ -24,6 +24,7 @@ module.exports = {
     "prettier",
     "unicorn",
     "folders",
+    "tailwindcss", //
   ],
   ignorePatterns: [
     "/.next",
@@ -32,7 +33,12 @@ module.exports = {
     "/public/sw.js",
     "/public/workbox*",
   ],
-  extends: ["prettier", "prettier/prettier", "plugin:prettier/recommended"],
+  extends: [
+    "prettier",
+    "prettier/prettier",
+    "plugin:prettier/recommended",
+    "plugin:tailwindcss/recommended",
+  ],
   rules: {
     "import/order": [
       "error",

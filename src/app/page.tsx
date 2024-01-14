@@ -1,4 +1,3 @@
-"use client";
 import { AppConfig } from "app-config";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -13,7 +12,7 @@ export default function Page() {
 
   return (
     <>
-      <div className=" flex h-dvh w-[100%] flex-col  bg-[#173755]">
+      <div className=" flex h-dvh w-[100%] flex-col bg-[#173755]">
         <Header />
         <div style={{ height: "calc(100% - 68px)" }}>
           <Router mapBoxKey={mapBoxKey} />
