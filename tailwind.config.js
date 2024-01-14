@@ -13,8 +13,16 @@ module.exports = {
         1000: "#252B40",
       },
       white: "#FFFFFF",
+      black: "#000000",
+      greys: {
+        100: "rgba(255,250,250, 0.42)",
+        200: "rgba(136, 139, 154, 0.20)",
+      },
     },
     extend: {
+      borderRadius: {
+        custom: "36px 36px 0px 0px",
+      },
       screens: {
         sm: "480px",
         md: "800px",

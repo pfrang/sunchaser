@@ -19,7 +19,7 @@ export const SunchaserListWrapper = ({ expandFooter }) => {
   });
 
   return (
-    <Flex height={"100%"}>
+    <div className="flex h-full w-full">
       <ConditionalPresenter
         isLoading={isLoading}
         error={error}
@@ -67,6 +67,6 @@ export const SunchaserListWrapper = ({ expandFooter }) => {
           );
         }}
       />
-    </Flex>
+    </div>
   );
 };

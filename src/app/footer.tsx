@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useSwipeable } from "react-swipeable";
 import { capitalize } from "lodash";
 import React, { useEffect, useRef } from "react";
-import { Spacer } from "ui-kit/spacer/spacer";
 import { useState } from "react";
 import { Box, Button, Collapse } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -18,8 +17,6 @@ import {
   useDisplayFooter,
   useDisplayFooterSubItems,
 } from "../states/footer";
-import { Text } from "../ui-kit/text";
-import { Flex } from "../ui-kit/flex";
 
 import { SunchaserListWrapper } from "./components/sunchaser/components/carousell-wrapper";
 
@@ -91,14 +88,11 @@ export const Footer = () => {
           <SunchaserListWrapper expandFooter={setIsExpanded} />
         )}
         <>
-          <Flex
-            borderRadius={"36px 36px 0px 0px"}
-            backgroundColor={theme.color.blues[2]}
-          >
+          <div className="w-full rounded-custom bg-blues-200">
             <Button fullWidth onClick={handleToggle}>
               {isExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
             </Button>
-          </Flex>
+          </div>
 
           <Collapse
             style={{
@@ -106,33 +100,24 @@ export const Footer = () => {
             }}
             in={isExpanded}
           >
-            <Spacer
-              height={8}
-              borderTop={"2px"}
-              borderTopStyle={"solid"}
-              borderColor={theme.color.grey[1]}
-            />
+            <span className="block h-2 w-full border-t-2 border-greys-100"></span>
 
-            <Flex flexDirection={"column"}>
-              <Spacer height={4} />
+            <div className="flex w-full flex-col">
+              <span className="h-4 w-full"></span>
 
-              <Flex flexDirection={"column"} paddingX={[4, 8]}>
-                <Flex justifyContent={"space-between"} gap={4}>
+              <div className=" flex w-full flex-col">
+                <div className="flex w-full justify-between gap-4 px-2">
                   <FooterButton text="forecast" />
                   <FooterButton text="sunchaser" />
-                </Flex>
+                </div>
 
-                <Spacer height={8} />
+                <span className="h-2 w-full"></span>
 
-                <Spacer
-                  borderRadius={8}
-                  borderColor={`${theme.color.blues[2]}`}
-                  style={{ backgroundColor: theme.color.blues[2] }}
-                  height={14}
-                  boxShadow={"inset 0em 6px rgba(0, 0, 0, 0.25)"}
-                />
+                <span className="h-1 w-full rounded-md bg-blues-200 shadow-inner"></span>
 
-                <Flex justifyContent={"space-between"} height={"100%"}>
+                <span className="h-2"></span>
+
+                <div className="flex h-full w-full justify-between">
                   {subFooterItems.map((item, index) => {
                     return (
                       <React.Fragment key={item + index}>
@@ -140,9 +125,9 @@ export const Footer = () => {
                       </React.Fragment>
                     );
                   })}
-                </Flex>
-              </Flex>
-            </Flex>
+                </div>
+              </div>
+            </div>
           </Collapse>
         </>
       </Box>
@@ -160,27 +145,19 @@ const FooterButton = ({ text }: { text: FooterItems }) => {
   };
 
   return (
-    <Flex
-      height={"100%"}
-      borderRadius={"48px"}
-      backgroundColor={text === footerItem ? theme.color.blues[2] : "inherit"}
-      borderColor={theme.color.grey[2]}
-      borderWidth={"2px"}
-      boxShadow={"inset 2px 2px 2px 2px rgba(0, 0, 0, 0.25)"}
+    <div
+      className={`flex h-full w-full rounded-3xl border-2 border-greys-200 shadow-inner ${
+        text === footerItem ? "bg-blues-200" : "bg-inherit"
+      }`}
     >
-      <button onClick={handleClick} style={{ padding: 0, width: "100%" }}>
-        <Flex
-          clickable
-          flexDirection={"column"}
-          alignItems={"center"}
-          justifyContent={"center"}
-        >
-          <Text color={"white"} noWrap>
+      <button className="w-full p-0" onClick={handleClick}>
+        <div className="flex w-full cursor-pointer flex-col items-center justify-center">
+          <p className="text-variant-base text-variant-regular whitespace-nowrap text-white">
             {capitalize(text)}
-          </Text>
-        </Flex>
+          </p>
+        </div>
       </button>
-    </Flex>
+    </div>
   );
 };
 
@@ -193,7 +170,7 @@ export const createFooterSubItems = (item: FooterSubItems) => {
       fullWidth
       onClick={() => setFooterSubItem(item)}
     >
-      <Flex flexDirection={"column"} alignItems={"center"} clickable>
+      <div className="flex flex-col items-center hover:backdrop-brightness-100">
         <Image
           alt="partlySunny"
           src={
@@ -204,10 +181,14 @@ export const createFooterSubItems = (item: FooterSubItems) => {
           width={64}
           height={64}
         />
-        <Text color={footerSubItem === item ? "white" : "black"} noWrap>
+        <p
+          className={`text-variant-base text-variant-regular whitespace-nowrap text-white
+            ${footerSubItem === item ? "text-white" : "text-black"}
+            `}
+        >
           {capitalize(item)}
-        </Text>
-      </Flex>
+        </p>
+      </div>
     </Button>
   );
 };
