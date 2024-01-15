@@ -3,7 +3,6 @@
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
 import { ConditionalPresenter } from "../../../../ui-kit/conditional-presenter/conditional-presenter";
-import { Flex } from "../../../../ui-kit/flex";
 import { SearchLoader } from "../../../../ui-kit/search-loader/search-loader";
 import { useCoordinates } from "../../../hooks/use-coordinates";
 
@@ -55,15 +54,15 @@ export const SunchaserListWrapper = ({ expandFooter }) => {
           // );
 
           return (
-            <Flex flexDirection={"column"}>
-              <section id="section-carousell">
+            <div className="w-full">
+              <section id="section-carousell w-full">
                 <ResultList
                   expandFooter={expandFooter}
                   userLocation={userLocation}
                   items={ranks}
                 />
               </section>
-            </Flex>
+            </div>
           );
         }}
       />

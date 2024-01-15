@@ -100,22 +100,20 @@ export const Footer = () => {
             }}
             in={isExpanded}
           >
-            <span className="block h-2 w-full border-t-2 border-greys-100"></span>
+            <span className="block h-4 w-full border-t-2 border-greys-100"></span>
 
-            <div className="flex w-full flex-col">
-              <span className="h-4 w-full"></span>
+            <div className="w-full">
+              <span className="h-2 w-full"></span>
 
-              <div className=" flex w-full flex-col">
-                <div className="flex w-full justify-between gap-4 px-2">
+              <div className="w-full px-4">
+                <div className="flex w-full justify-between gap-4">
                   <FooterButton text="forecast" />
                   <FooterButton text="sunchaser" />
                 </div>
 
-                <span className="h-2 w-full"></span>
+                <span className="block h-3 w-full" />
 
-                <span className="h-1 w-full rounded-md bg-blues-200 shadow-inner"></span>
-
-                <span className="h-2"></span>
+                <span className="block h-3 w-full rounded-md bg-blues-200 shadow-custom-inner"></span>
 
                 <div className="flex h-full w-full justify-between">
                   {subFooterItems.map((item, index) => {
@@ -146,13 +144,13 @@ const FooterButton = ({ text }: { text: FooterItems }) => {
 
   return (
     <div
-      className={`flex h-full w-full rounded-3xl border-2 border-greys-200 shadow-inner ${
+      className={`flex h-full w-full rounded-3xl border-2 border-greys-200 shadow-custom-inner ${
         text === footerItem ? "bg-blues-200" : "bg-inherit"
       }`}
     >
       <button className="w-full p-0" onClick={handleClick}>
         <div className="flex w-full cursor-pointer flex-col items-center justify-center">
-          <p className="text-variant-base text-variant-regular whitespace-nowrap text-white">
+          <p className="text-variant-regular whitespace-nowrap text-white">
             {capitalize(text)}
           </p>
         </div>
@@ -161,7 +159,7 @@ const FooterButton = ({ text }: { text: FooterItems }) => {
   );
 };
 
-export const createFooterSubItems = (item: FooterSubItems) => {
+const createFooterSubItems = (item: FooterSubItems) => {
   const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
 
   return (

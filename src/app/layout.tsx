@@ -1,6 +1,5 @@
 import "./global.css";
 import { Metadata } from "next";
-import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Sunchaser",
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link
           href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css"
           rel="stylesheet"
@@ -19,12 +18,10 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <meta name="description" content="Sunchaser" />
         <link rel="icon" href="/favicon.ico" />
-        <meta name="theme-color" content="#ffffff" />
         <link rel="apple-touch-icon" href="/apple-touch-icon-iphone.png" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ffffff" />
         {/* <{!-- Google tag (gtag.js) -->} */}
         {/* <script
           async
@@ -38,7 +35,7 @@ export default function RootLayout({ children }) {
               gtag('config', 'G-NN9D9GF44W');
             `}
         </script> */}
-      </Head>
+      </head>
       <body>
         {/* @ts-ignore*/}
         {children}

@@ -22,6 +22,10 @@ module.exports = {
     extend: {
       borderRadius: {
         custom: "36px 36px 0px 0px",
+        inherit: "inherit",
+      },
+      boxShadow: {
+        "custom-inner": "inset 0em 6px rgba(0, 0, 0, 0.25)",
       },
       screens: {
         sm: "480px",

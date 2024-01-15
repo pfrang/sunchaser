@@ -11,9 +11,6 @@ import {
 import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
 
 import { Flex } from "../../../../ui-kit/flex";
-import { Text } from "../../../../ui-kit/text";
-import { theme } from "../../../../ui-kit/theme";
-import { Spacer } from "../../../../ui-kit/spacer/spacer";
 import { StateHelper } from "../../../../states/sunchaser-result";
 import {
   MapBoxHelper,
@@ -102,20 +99,16 @@ export const ResultList = ({
   }, [highlightedCard]);
 
   return (
-    <Flex borderRadius={"inherit"} flexDirection={"column"} gap={2} padding={2}>
-      <Flex width={"100%"} justifyContent={"center"}>
-        <Flex
-          width={["150px", "300px", "450px"]}
+    <div className="w-full gap-2 rounded-inherit p-2">
+      <div className="flex w-full justify-center">
+        <div
+          className="w-[150px] cursor-pointer md:w-[300px] lg:w-[450px]"
           onClick={() => setIsExpanded(!isExpanded)}
-          style={{ cursor: "pointer" }}
         >
-          <Spacer
-            height={"10px"}
-            boxShadow={"inset 0px 8px 6px rgba(0, 0, 0, 0.2)"}
-            style={{ backgroundColor: "#004871" }}
-          />
-        </Flex>
-      </Flex>
+          <span className="block h-2 bg-blues-200 shadow-custom-inner"></span>
+        </div>
+      </div>
+
       <Collapse
         style={{
           width: "100%",
@@ -123,13 +116,13 @@ export const ResultList = ({
         easing={"ease-in-out"}
         in={isExpanded}
       >
-        <Flex
+        <div
           ref={flexRef}
-          flexDirection={"column"}
-          maxHeight={["300px"]}
-          overflowY={highlightedCard ? "hidden" : "auto"}
-          paddingX={[2, 4]}
-          gap={highlightedCard ? 0 : 2}
+          className={`${
+            highlightedCard
+              ? "gap-0 overflow-y-hidden"
+              : "gap-2 overflow-y-auto"
+          } max-h-[300px] w-full px-2 md:px-4`}
         >
           {items.map((item) => {
             const shouldBeExpanded =
@@ -146,10 +139,7 @@ export const ResultList = ({
 
             return (
               <React.Fragment key={item.index}>
-                <Flex
-                  position={"relative"}
-                  // display={shouldBeExpanded ? "flex" : "none"}
-                >
+                <div className="relative flex w-full">
                   <Collapse
                     style={{
                       width: "100%",
@@ -157,53 +147,26 @@ export const ResultList = ({
                     easing={"ease-in-out"}
                     in={shouldBeExpanded}
                   >
-                    <Flex
-                      borderColor={theme.color.blues[2]}
-                      paddingY={[1, 2]}
-                      // paddingX={[3, 3]}
-                      borderRadius={36}
-                      borderWidth={2}
+                    <div
                       key={item.index}
-                      // justifyContent={"space-between"}
-                      alignItems={"center"}
-                      boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
-                      clickable
+                      className={`flex cursor-pointer items-center rounded-[36px] border-2 border-blues-200 shadow-custom-inner`}
                       onClick={() => onClickCard(item)}
                     >
-                      <Flex paddingLeft={3} flexShrink={1}>
-                        <Text
-                          textAlign={"start"}
-                          variant="poppins"
-                          fontWeight={"bold"}
-                          color={"white"}
-                        >
+                      <div className="flex flex-shrink pl-3">
+                        <p className="text-variant-poppins text-start font-bold text-white">
                           {`#${item.index + 1}`}
-                        </Text>
-                      </Flex>
-
-                      <Flex
-                        position={"absolute"}
-                        justifyContent={"center"}
-                        margin={"auto"}
-                        width={"100%"}
-                        clickable
-                      >
-                        <Text textAlign={"center"} color={"white"}>
+                        </p>
+                      </div>
+                      <div className="absolute m-auto flex w-full cursor-pointer justify-center">
+                        <p className="text-variant-regular text-center text-white ">
                           {shouldBeExpanded ? item.primaryName : ""}
-                        </Text>
-                      </Flex>
+                        </p>
+                      </div>
 
-                      <Flex
-                        alignItems={"center"}
-                        width={"auto"}
-                        gap={3}
-                        paddingRight={4}
-
-                        // py={1}
-                      >
+                      <div className="flex w-auto content-center gap-3 pr-4">
                         {Icon(item.times)}
-                      </Flex>
-                    </Flex>
+                      </div>
+                    </div>
                     <Collapse
                       style={{
                         width: "100%",
@@ -214,13 +177,13 @@ export const ResultList = ({
                       <Carousell item={item} />
                     </Collapse>
                   </Collapse>
-                </Flex>
+                </div>
               </React.Fragment>
             );
           })}
-        </Flex>
+        </div>
       </Collapse>
-    </Flex>
+    </div>
   );
 };
 
@@ -263,23 +226,6 @@ const Icon = (times: Times[]) => {
                 // height={["38px", "52px"]}
                 alignItems={"center"}
               >
-                {/* <Text
-                  width={"100%"}
-                  marginTop={["-3px", "-8px"]}
-                  textAlign={"center"}
-                  variant="poppins-small"
-                  color="white"
-                >
-                  {key === "ettermiddag" ? (
-                    <>
-                      etter-
-                      <br />
-                      middag
-                    </>
-                  ) : (
-                    key
-                  )}
-                </Text> */}
                 <Flex
                   // justifyItems={"flex-end"}
                   justifyContent={"center"}

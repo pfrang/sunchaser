@@ -1,5 +1,5 @@
 "use client";
-import { Flex } from "ui-kit/flex";
+
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { useForecast } from "app/hooks/use-forecast";
@@ -18,7 +18,7 @@ export const Forecast = () => {
   );
 
   return (
-    <div className="flex h-full w-full flex-col gap-4">
+    <div className="flex h-full w-full flex-col gap-4 pt-[68px]">
       <ConditionalPresenter
         isLoading={isLoading}
         renderLoading={() => (

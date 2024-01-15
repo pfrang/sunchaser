@@ -97,8 +97,8 @@ export const WhereAreYou = () => {
 
   return (
     <div
-      className={`relative top-2 z-50 flex h-[48px] flex-col content-center rounded-[36px] border-2 border-blues-200 transition-width duration-300 ease-in-out
-        ${isExpanded ? "w-[250px] md:w-[500px]" : "w-[55px]"}
+      className={`relative top-2 z-50 flex h-[52px] flex-col content-center rounded-[36px] border-2 border-blues-200  transition-width duration-300 ease-in-out
+        ${isExpanded ? "w-[250px] bg-blues-400 md:w-[500px]" : "w-[52px]"}
       `}
     >
       <input
@@ -116,7 +116,7 @@ export const WhereAreYou = () => {
         style={{ outline: "none", borderRadius: "inherit" }}
       />
 
-      <div className="absolute right-3 top-2">
+      <div className="absolute right-2 top-[8px]">
         {isLoading ? (
           <Spinner />
         ) : (
@@ -145,7 +145,7 @@ export const WhereAreYou = () => {
           return (
             <ExpandedFlex>
               <div
-                className="flex w-full cursor-pointer content-center gap-2 rounded-[36px] border-2 border-blues-1000 bg-blues-200 py-3 text-white"
+                className="flex w-full cursor-pointer content-center gap-2 border-2 border-blues-1000 bg-blues-200 py-3 text-white"
                 onClick={onUseDeviceLocation}
               >
                 <NavigationIcon

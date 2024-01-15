@@ -21,7 +21,7 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
   });
 
   return (
-    <Flex height={"100%"}>
+    <div className="flex h-full">
       <ConditionalPresenter
         isLoading={isLoading}
         error={error}
@@ -56,6 +56,6 @@ export const Sunchaser = ({ mapBoxKey }: { mapBoxKey: string }) => {
           );
         }}
       />
-    </Flex>
+    </div>
   );
 };
