@@ -10,7 +10,6 @@ import {
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
 
-import { Flex } from "../../../../ui-kit/flex";
 import { StateHelper } from "../../../../states/sunchaser-result";
 import {
   MapBoxHelper,
@@ -30,10 +29,11 @@ export const ResultList = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const { highlightedCard, setHighlightedCard } = StateHelper.highlightedCard();
+  const { highlightedCard, setHighlightedCard } =
+    StateHelper.useHighlightedCard();
 
-  const { mapObject } = StateHelper.mapObject();
-  const { mapInstance } = StateHelper.mapInstance();
+  const { mapObject } = StateHelper.useMap();
+  const { mapInstance } = StateHelper.useMapInstance();
 
   const resetMap = () => {
     if (mapObject) {
@@ -99,7 +99,7 @@ export const ResultList = ({
   }, [highlightedCard]);
 
   return (
-    <div className="w-full gap-2 rounded-inherit p-2">
+    <div className="flex w-full flex-col gap-2 rounded-inherit p-3">
       <div className="flex w-full justify-center">
         <div
           className="w-[150px] cursor-pointer md:w-[300px] lg:w-[450px]"
@@ -122,7 +122,7 @@ export const ResultList = ({
             highlightedCard
               ? "gap-0 overflow-y-hidden"
               : "gap-2 overflow-y-auto"
-          } max-h-[300px] w-full px-2 md:px-4`}
+          } custom-scrollbar flex max-h-[300px] w-full flex-col px-2 md:px-4`}
         >
           {items.map((item) => {
             const shouldBeExpanded =
@@ -149,7 +149,7 @@ export const ResultList = ({
                   >
                     <div
                       key={item.index}
-                      className={`flex cursor-pointer items-center rounded-[36px] border-2 border-blues-200 shadow-custom-inner`}
+                      className={`flex cursor-pointer items-center rounded-[36px] border-2 border-blues-200 py-1 shadow-custom-minor md:py-2`}
                       onClick={() => onClickCard(item)}
                     >
                       <div className="flex flex-shrink pl-3">
@@ -163,7 +163,7 @@ export const ResultList = ({
                         </p>
                       </div>
 
-                      <div className="flex w-auto content-center gap-3 pr-4">
+                      <div className="flex w-full justify-end gap-2 pr-2 md:gap-4 md:pr-4">
                         {Icon(item.times)}
                       </div>
                     </div>
@@ -220,25 +220,16 @@ const Icon = (times: Times[]) => {
         if (icons[key]) {
           return (
             <React.Fragment key={key}>
-              <Flex
-                justifyContent={"space-between"}
-                flexDirection={"column"}
-                // height={["38px", "52px"]}
-                alignItems={"center"}
-              >
-                <Flex
-                  // justifyItems={"flex-end"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                >
+              <div className="flex flex-col items-center justify-between">
+                <div className="flex items-center justify-center">
                   <Image
                     height={28}
                     width={28}
                     src={`/icons/white/svg/${icons[key]}`}
                     alt={icons[key]}
                   />
-                </Flex>
-              </Flex>
+                </div>
+              </div>
             </React.Fragment>
           );
         }

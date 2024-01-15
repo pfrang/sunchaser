@@ -16,7 +16,9 @@ export interface DisplayMapInstance {
 
 export interface HighlightedCard {
   highlightedCard: undefined | AzureFunctionCoordinatesMappedItems;
-  setHighlightedCard: (input: AzureFunctionCoordinatesMappedItems) => void;
+  setHighlightedCard: (
+    input: AzureFunctionCoordinatesMappedItems | undefined,
+  ) => void;
 }
 
 const useMap = create<DisplayMap>((set) => ({

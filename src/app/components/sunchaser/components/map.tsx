@@ -34,6 +34,7 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
         // primaryMap.addControl(new mapboxgl.NavigationControl());
         setMapInstance(mapInitializer);
         setMapObject(primaryMap);
+
         primaryMap.addSource("tiles", {
           type: "geojson",
           data: {

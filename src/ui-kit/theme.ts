@@ -107,6 +107,7 @@ const blues = [
   "#272E45",
   "#3B4566",
   "#252B40",
+  "#242A3F",
 ] as const;
 
 const space1 = 4;

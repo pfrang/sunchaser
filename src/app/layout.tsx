@@ -1,3 +1,5 @@
+import "swiper/css";
+import "swiper/css/pagination";
 import "./global.css";
 import { Metadata } from "next";
 

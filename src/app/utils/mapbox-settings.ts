@@ -84,8 +84,8 @@ export class MapBoxHelper {
   static fitBounds(
     map: mapboxgl.Map,
     coordinates: StartAndEndCoordinates,
-    padding?: number,
-    duration?: number,
+    padding: number = 4,
+    duration: number = 4,
   ) {
     map.fitBounds(
       [

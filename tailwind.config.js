@@ -11,6 +11,7 @@ module.exports = {
         500: "#262C42",
         900: "#3B4566",
         1000: "#252B40",
+        1100: "242A3F",
       },
       white: "#FFFFFF",
       black: "#000000",
@@ -26,6 +27,7 @@ module.exports = {
       },
       boxShadow: {
         "custom-inner": "inset 0em 6px rgba(0, 0, 0, 0.25)",
+        "custom-minor": "0px 4px 4px rgba(0, 0, 0, 0.25)",
       },
       screens: {
         sm: "480px",

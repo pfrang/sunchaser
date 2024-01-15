@@ -6,10 +6,6 @@ import {
   Times,
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 
-import { theme } from "../../../../ui-kit/theme";
-import { Flex } from "../../../../ui-kit/flex";
-import { Text } from "../../../../ui-kit/text";
-
 import { CarousellDetails } from "./carousell-details";
 
 export const Carousell = ({
@@ -70,14 +66,9 @@ export const Carousell = ({
         // navigation={true} // Requires Navigation to be added to module
         modules={[Pagination]}
       >
-        <Flex
-          borderColor={theme.color.blues[2]}
-          borderRadius={36}
-          borderWidth={2}
+        <div
           key={item.index}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          boxShadow={" 0px 6px 10px rgba(0, 0, 0, 0.2)"}
+          className="flex w-full items-center justify-between rounded-[36px] border-2 border-blues-200 shadow-custom-inner"
         >
           <>
             {Object.keys(days).map((day, index) => {
@@ -85,28 +76,23 @@ export const Carousell = ({
 
               return (
                 <SwiperSlide key={day + index}>
-                  <Flex justifyContent={"center"}>
-                    <Text color="white">{day}</Text>
-                  </Flex>
-                  <Flex
-                    justifyContent={"space-between"}
-                    alignItems={"center"}
-                    width={"100%"}
-                    borderColor={theme.color.blues[2]}
-                    padding={[2]}
-                    borderRadius={36}
-                    borderWidth={2}
-                  >
+                  <div className="w-full justify-center">
+                    <p className="text-variant-regular text-center text-white">
+                      {day}
+                    </p>
+                  </div>
+
+                  <div className="items-center justify-between rounded-[36px] border-2 border-blues-200 p-2">
                     <CarousellDetails times={times} />
-                  </Flex>
+                  </div>
                 </SwiperSlide>
               );
             })}
           </>
-        </Flex>
-        <Flex paddingTop={2} alignItems={"center"} justifyContent={"center"}>
-          <div className="flex justify-center swiper-pagination-custom"></div>
-        </Flex>
+        </div>
+        <div className="flex w-full items-center justify-center pt-2">
+          <div className="swiper-pagination-custom flex justify-center"></div>
+        </div>
       </Swiper>
     </>
   );
