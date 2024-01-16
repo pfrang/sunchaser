@@ -1,9 +1,6 @@
 "use client";
 import styled from "styled-components";
 
-import { Flex } from "../../../../ui-kit/flex";
-import { Spacer } from "../../../../ui-kit/spacer/spacer";
-
 import { Calendar } from "./calendar";
 
 const Div23 = styled.p`
@@ -18,12 +15,14 @@ export const CalendarWrapper = () => {
   return (
     <>
       <section id="calendar w-full relative">
-        <Flex height={"100%"} alignItems={"center"} flexDirection={"column"}>
-          <Spacer height={24} />
+        <span className="block h-20"></span>
+        <div className="flex h-full flex-col items-center">
           <Div23>On what day do you want to travel?</Div23>
-          <Spacer height={24} />
+
+          <span className="block h-4"></span>
+
           <Calendar />
-        </Flex>
+        </div>
       </section>
     </>
   );

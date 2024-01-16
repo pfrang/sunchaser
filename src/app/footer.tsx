@@ -18,7 +18,7 @@ import {
   useDisplayFooterSubItems,
 } from "../states/footer";
 
-import { SunchaserListWrapper } from "./components/sunchaser/components/carousell-wrapper";
+import { SunchaserListWrapper } from "./components/sunchaser/components/result-list-wrapper";
 
 export const Footer = () => {
   const [isExpanded, setIsExpanded] = useState(false);

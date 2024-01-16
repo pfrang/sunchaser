@@ -13,11 +13,13 @@ import { Text } from "ui-kit/text";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { Spinner } from "ui-kit/spinner/spinner";
+import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
 export const WhereAreYou = () => {
   const [townSearch, setTownSearch] = useState("");
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [dataFetched, setDatafetched] = useState(false);
+  const shouldHydrate = useShouldHydrate();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [townId, setTownId] = useState("");
@@ -63,6 +65,7 @@ export const WhereAreYou = () => {
     setTownSearch(value);
     setTownId(id);
     setLocationChosen(true);
+    setIsExpanded(false);
   };
 
   const onSearchChange = (e) => {
@@ -92,29 +95,36 @@ export const WhereAreYou = () => {
       lon: userLocation.longitude,
       location: "",
     });
+    setIsExpanded(false);
     router.push(`/?${urlParams}`);
   };
 
   return (
     <div
       className={`relative top-2 z-50 flex h-[52px] flex-col content-center rounded-[36px] border-2 border-blues-200  transition-width duration-300 ease-in-out
-        ${isExpanded ? "w-[250px] bg-blues-400 md:w-[500px]" : "w-[52px]"}
+        ${
+          isExpanded
+            ? "w-[250px] bg-blues-400 sm:w-[350px] md:w-[500px]"
+            : "w-[52px]"
+        }
       `}
     >
-      <input
-        ref={locationRef}
-        required
-        disabled={!isExpanded}
-        className={`bg-inherit text-white ${
-          isExpanded ? "" : "hidden"
-        } h-full items-center pl-4 text-2xl`}
-        placeholder={isExpanded ? "Location" : ""}
-        onChange={(e) => onSearchChange(e.target.value)}
-        onFocus={() => setLocationChosen(false)}
-        type="text"
-        value={isExpanded ? townSearch : ""}
-        style={{ outline: "none", borderRadius: "inherit" }}
-      />
+      {shouldHydrate && (
+        <input
+          ref={locationRef}
+          required
+          disabled={!isExpanded}
+          className={`bg-inherit text-white ${
+            isExpanded ? "" : "hidden"
+          } h-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl`}
+          placeholder={isExpanded ? "Location" : ""}
+          onChange={(e) => onSearchChange(e.target.value)}
+          onFocus={() => setLocationChosen(false)}
+          type="text"
+          value={isExpanded ? townSearch : ""}
+          style={{ outline: "none" }}
+        />
+      )}
 
       <div className="absolute right-2 top-[8px]">
         {isLoading ? (
@@ -145,12 +155,13 @@ export const WhereAreYou = () => {
           return (
             <ExpandedFlex>
               <div
-                className="flex w-full cursor-pointer content-center gap-2 border-2 border-blues-1000 bg-blues-200 py-3 text-white"
+                className="flex w-full cursor-pointer items-center rounded-inherit border-2 border-blues-1000 bg-blues-200 px-2 py-3 text-white"
                 onClick={onUseDeviceLocation}
               >
                 <NavigationIcon
                   style={{
                     transform: "rotate(90deg)",
+                    justifyContent: "center",
                   }}
                 />
                 {/* TODO filter for unique places */}
@@ -192,7 +203,7 @@ export const WhereAreYou = () => {
 const ExpandedFlex = ({ children }) => {
   return (
     <>
-      <div className="my-6 flex flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg">
+      <div className="absolute top-14 flex w-full flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg">
         {children}
         <span className="h-1"></span>
         <div className="flex justify-center px-28">

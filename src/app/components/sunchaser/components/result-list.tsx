@@ -105,7 +105,7 @@ export const ResultList = ({
           className="w-[150px] cursor-pointer md:w-[300px] lg:w-[450px]"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <span className="block h-2 bg-blues-200 shadow-custom-inner"></span>
+          <span className="block h-3 rounded-sm bg-blues-200 shadow-custom-inner"></span>
         </div>
       </div>
 

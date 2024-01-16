@@ -4,7 +4,6 @@ import * as turf from "@turf/turf";
 import ReactMapGL, { Layer, MapRef, Marker, Source } from "react-map-gl";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { MapboxBoundariesHelper } from "app/utils/get-boundaries-lng-lat";
-import { Flex } from "ui-kit/flex";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
 export const CircularMap = ({ mapBoxKey, kilometers }) => {
@@ -27,7 +26,7 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
       { latitude: Number(params?.lat), longitude: Number(params?.lon) } ||
       userLocation
     );
-  }, [params, userLocation]);
+  }, [searchParams, userLocation]);
 
   useEffect(() => {
     if (!currentLatLocation) return;
@@ -69,7 +68,7 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
   };
 
   return (
-    <Flex justifyContent={"center"} alignItems={"center"} height={"100%"}>
+    <div className="flex h-full w-full items-center justify-center">
       {userLocation && (
         <ReactMapGL
           ref={mapRef}
@@ -129,6 +128,6 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
           )}
         </ReactMapGL>
       )}
-    </Flex>
+    </div>
   );
 };

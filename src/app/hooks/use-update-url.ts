@@ -23,7 +23,7 @@ export const useUpdateUrl = () => {
 
     const paramsToString = sanitizeNextParams(params);
 
-    router.push(`/${paramsToString}`);
+    router.push(`/?${paramsToString}`);
   };
 
   return updateUrl;

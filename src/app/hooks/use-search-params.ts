@@ -1,9 +1,10 @@
 "use client";
 import { searchParamsToObject } from "app/utils/sanitize-next-query";
 import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 
 export const useSearchParamsToObject = () => {
   const searchParams = useSearchParams();
 
-  return searchParamsToObject(searchParams);
+  return useMemo(() => searchParamsToObject(searchParams), [searchParams]);
 };

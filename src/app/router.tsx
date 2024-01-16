@@ -36,6 +36,7 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
       lat: searchParams?.lat ?? userLocation.latitude,
       lon: searchParams?.lon ?? userLocation.longitude,
       date: searchParams?.date ?? new Date().toISOString().split("T")[0],
+      location: searchParams?.location ?? "",
     };
 
     const urlParams = sanitizeNextParams(params);

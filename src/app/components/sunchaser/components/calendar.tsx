@@ -7,7 +7,6 @@ import { capitalize } from "lodash";
 import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
-import { Flex } from "../../../../ui-kit/flex";
 import { theme } from "../../../../ui-kit/theme";
 
 export const Calendar = () => {
@@ -53,16 +52,19 @@ export const Calendar = () => {
   }
 
   const Submit = (e: Date) => {
+    if (!e) return;
+
     setIsPopperOpen(false);
-    e && setSelectedDate(e);
+    setSelectedDate(e);
     updateUrl({ date: endOfDay(e).toISOString().split("T")[0] });
   };
 
   type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
+  // TODO FIX CALENDAR SPACING ON DAYS
   return (
     <>
-      <Flex justifyContent={"center"} width={"100%"}>
+      <div className="flex justify-center">
         <DayPicker
           classNames={{
             day_selected: "daypicker-selected-date",
@@ -103,19 +105,12 @@ export const Calendar = () => {
                 format(date, "yyyy", options),
               );
               return (
-                <Flex
-                  backgroundColor={theme.color.blues[5]}
-                  borderWidth={"2px"}
-                  borderColor={theme.color.blues[7]}
-                  borderRadius={"16px"}
-                  justifyContent={"space-between"}
-                  padding={"1rem"}
-                  color={"white"}
-                  width={"100%"}
-                >
-                  <p>{formattedDateMonth}</p>
-                  <p>{formattedDateYear}</p>
-                </Flex>
+                <div className="flex w-full justify-between rounded-[16px] border-2 border-blues-700 bg-blues-500 p-4 text-white">
+                  <p className="text-variant-poppins-lg">
+                    {formattedDateMonth}
+                  </p>
+                  <p className="text-variant-poppins-lg">{formattedDateYear}</p>
+                </div>
               );
             },
           }}
@@ -129,7 +124,7 @@ export const Calendar = () => {
               color: "white",
             },
             table: {
-              marginTop: "7rem",
+              marginTop: "6rem",
               width: "100%",
               display: "table",
               borderCollapse: "separate",
@@ -158,8 +153,7 @@ export const Calendar = () => {
             },
           }}
         />
-      </Flex>
-      {/* )} */}
+      </div>
     </>
   );
 };

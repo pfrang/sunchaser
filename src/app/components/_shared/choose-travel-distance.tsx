@@ -3,12 +3,10 @@ import { useRef, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { debounce } from "lodash";
-import { Flex } from "ui-kit/flex";
 import {
   distanceArray,
   getCounterValue,
 } from "app/utils/travel-distance-settings";
-import { Text } from "ui-kit/text";
 import { useRouter } from "next/navigation";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
@@ -101,7 +99,7 @@ export const ChooseTravelDistance = ({
         distance: kilometers,
       });
 
-      router.push(`/${urlParams}`);
+      router.push(`/?${urlParams}`);
     }
     sliderChanged = false;
   }, 2000);
@@ -142,16 +140,13 @@ export const ChooseTravelDistance = ({
   ];
 
   return (
-    <section id="distance_traveling" className="w-full grow">
-      <div className="w-full flex justify-center items-center flex-col h-full">
+    <section id="distance_traveling" className="h-full w-full grow">
+      <div className="flex h-full w-full flex-col items-center justify-center">
         <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
-
-        <Text
-          color="white"
-          noWrap
-          variant="body-large"
-        >{`${valueToDisplay}km`}</Text>
-        <Flex justifyContent={"center"} marginX={20}>
+        <p className="text-variant-poppins text-center text-white">
+          {`${valueToDisplay}km`}
+        </p>
+        <div className="mx-[20px] flex w-full justify-center">
           <PrettoSlider
             style={{ width: "85%" }}
             ref={travelDistanceRef}
@@ -167,7 +162,7 @@ export const ChooseTravelDistance = ({
             min={min}
             max={max}
           />
-        </Flex>
+        </div>
       </div>
     </section>
   );
