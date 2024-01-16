@@ -1,6 +1,8 @@
 import "swiper/css";
 import "swiper/css/pagination";
+import "react-day-picker/dist/style.css";
 import "./global.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

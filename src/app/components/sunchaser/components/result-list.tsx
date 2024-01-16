@@ -99,13 +99,15 @@ export const ResultList = ({
   }, [highlightedCard]);
 
   return (
-    <div className="flex w-full flex-col gap-2 rounded-inherit p-3">
+    <div className="flex w-full flex-col gap-2 rounded-inherit p-2">
       <div className="flex w-full justify-center">
         <div
           className="w-[150px] cursor-pointer md:w-[300px] lg:w-[450px]"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <span className="block h-3 rounded-sm bg-blues-200 shadow-custom-inner"></span>
+          <span className="block h-1"></span>
+          <span className="block h-1 rounded-sm bg-blues-200 shadow-custom-minor"></span>
+          <span className="block h-1"></span>
         </div>
       </div>
 
