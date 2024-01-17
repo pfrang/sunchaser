@@ -9,3 +9,8 @@ Geo permissions in mainfest file:
 android sutdio logs
 
 C:\Users\Peder\AppData\Local\Google\AndroidStudio2022.3\log
+
+
+
+// tailwind cheat sheet
+https://tailwindcomponents.com/cheatsheet/

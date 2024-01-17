@@ -1,43 +1,54 @@
 import styled from "styled-components";
-import sscss from "@styled-system/css";
-import {
-  space,
-  flexbox,
-  color,
-  layout,
-  border,
-  position,
-  shadow,
-} from "styled-system";
 
-const Wrapper = styled.div<{
-  gap: number | number[];
-  clickable: boolean;
-  transition?: string;
-}>`
-  ${flexbox}
-  ${space}
-  ${color}
-  ${border}
-  ${position}
-  ${shadow}
+import { BaseDiv } from "../base/base.style";
 
+const Wrapper = styled(BaseDiv)`
   /* transition: all 500ms ease; */
 
-  transition: ${(props) => props.transition}; // Use transition prop
+  width: 100%;
+  display: flex;
 
-  ${(props) =>
-    sscss({
-      width: "100%",
-      display: "flex",
-      gap: props.gap,
-      cursor: props.clickable ? "pointer" : "default",
-    })}
+  max-width: ${(props) => props.$maxWidth};
+  width: ${(props) => props.$width};
 
-  ${layout}
+  transition: ${(props) => props.$transition};
+  cursor: ${(props) => (props.$clickable ? "pointer" : "default")};
+  flex-direction: ${(props) => props.$flexDirection};
+  flex-wrap: ${(props) => props.$flexWrap};
+  flex-grow: ${(props) => props.$flexGrow};
+  flex-shrink: ${(props) => props.$flexShrink};
+  flex-basis: ${(props) => props.$flexBasis};
+  flex: ${(props) => props.$flex};
+  justify-content: ${(props) => props.$justifyContent};
+  align-items: ${(props) => props.$alignItems};
+  align-content: ${(props) => props.$alignContent};
+  order: ${(props) => props.$order};
+  align-self: ${(props) => props.$alignSelf};
+  justify-self: ${(props) => props.$justifySelf};
+  place-content: ${(props) => props.$placeContent};
+  place-items: ${(props) => props.$placeItems};
+  height: ${(props) => props.$height};
+  transition: ${(props) => props.$transition}; // Use transition prop
+  gap: ${(props) => props.$gap};
+
+  position: ${(props) => props.$position};
+  top: ${(props) => props.$top};
+  left: ${(props) => props.$left};
+  right: ${(props) => props.$right};
+  bottom: ${(props) => props.$bottom};
+
+  z-index: ${(props) => props.$zIndex};
+
+  border: ${(props) => props.$border};
+  border-radius: ${(props) => props.$borderRadius};
+  border-color: ${(props) => props.$borderColor};
+  border-width: ${(props) => props.$borderWidth};
+
+  color: ${(props) => props.$color};
+  background-color: ${(props) => props.$backgroundColor};
 
   /* Add scrollbar styles */
-    &::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 10px;
   }
 
@@ -54,16 +65,6 @@ const Wrapper = styled.div<{
   &::-webkit-scrollbar-thumb:hover {
     background: #642222;
   }
-
-  /* transition: ${({}) => {
-    return "height";
-  }}
-    500ms ease; */
-
-  /* Add hover color effect */
-  /* &:hover {
-    opacity: ${(props) => props.clickable && "0.4"};
-  } */
 `;
 
 export const FlexStyle = {

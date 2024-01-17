@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import IosShareIcon from "ui-kit/ios-share";
 

@@ -1,0 +1,191 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@fontsource/roboto/300.css';
+@fontsource/roboto/400.css';
+@fontsource/roboto/500.css';
+@fontsource/roboto/700.css';
+
+@layer components {
+
+  .text-variant-base {
+    text-decoration: inherit;
+    margin: 0;
+    padding: 0;
+    overflow-wrap: break-word;
+  }
+
+  .text-variant-regular {
+    @apply text-variant-base;
+    font-family: "SpaceMono";
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 28px;
+
+    @media (min-width: 768px) {
+      font-size: 16px;
+      line-height: 40px;
+    }
+
+    @media (min-width: 1024px) {
+      font-size: "18px";
+      line-height: "28px";
+    }
+  }
+
+  .text-variant-poppins {
+    @apply text-variant-base;
+    font-family: "Poppins";
+    font-weight: 400;
+    font-size: 18x;
+    line-height: 28px;
+
+    @media (min-width: 768px) {
+      font-size: 20px;
+      line-height: 30px;
+    }
+
+    @media (min-width: 1024px) {
+      font-size: 22px;
+      line-height: 32px;
+    }
+  }
+
+  .text-variant-poppins-lg {
+    @apply text-variant-base;
+    font-family: "Poppins";
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+
+    @media (min-width: 768px) {
+      font-size: 28px;
+      line-height: 20px;
+    }
+
+    @media (min-width: 1024px) {
+      font-size: 32px;
+      line-height: 30px;
+    }
+  }
+
+  .custom-scrollbar {
+      /* Add scrollbar styles */
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f157;
+        border-radius: 20px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #004871;
+        border-radius: 20px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: #642222;
+      }
+  }
+}
+
+@layer base {
+  html,
+  body {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    background-color: #CFD1DE;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+}
+
+img[width], img[height] {
+  max-width: none;
+  /* height: 100%; */
+}
+
+h3 {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+
+  .rdp-button_reset.rdp-button.rdp-day.daypicker-selected-date {
+    font-weight: bold !important;
+    /* background-color: var(--rdp-background-color); */
+    border: 2px solid red;
+  }
+
+  .rdp-button_reset:hover:not([disabled]) {
+    background-color: #6B93AA !important;
+  }
+
+
+  .rdp {
+    /* --rdp-background-color: inherit !important; */
+    /* --rdp-outline-selected: 3px solid red !important; */
+  }
+
+  .datepicker-today-date {
+  }
+
+
+.range-thumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  fill: #555;
+  pointer-events: none;
+  /* Allow interaction with the hidden thumb */
+  z-index: 2;
+}
+
+.range-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  background: #ddd;
+  outline: none;
+  opacity: 0;
+  /* Hide the default thumb */
+  position: relative;
+  z-index: 1;
+}
+
+#bouncingArrow {
+  margin-top: 100px;
+  right: 20px;
+  animation: 2s infinite bounce;
+}
+
+
+@keyframes bounce {
+  0% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(10px);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
+}
