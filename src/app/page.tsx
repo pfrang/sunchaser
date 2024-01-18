@@ -11,7 +11,6 @@ export default function Page() {
   return (
     <>
       <div className="flex h-dvh w-[100%] flex-col bg-[#173755]">
-        <p>test server</p>
         <Header />
         <div style={{ height: "calc(100% - 68px)" }}>
           <Router mapBoxKey={mapBoxKey} />
