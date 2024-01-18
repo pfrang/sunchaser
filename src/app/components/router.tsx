@@ -5,14 +5,15 @@ import { useDisplayFooter, useDisplayFooterSubItems } from "states/footer";
 import { Flex } from "ui-kit/flex";
 import { useRouter } from "next/navigation";
 
-import { ChooseTravelDistance } from "./components/_shared/choose-travel-distance";
-import { Forecast } from "./components/forecast";
-import { Sunchaser } from "./components/sunchaser";
-import { CalendarWrapper } from "./components/sunchaser/components/calendar-wrapper";
-import { useCoordinates } from "./hooks/use-coordinates";
-import { useUserLocation } from "./hooks/use-user-location";
-import { sanitizeNextParams } from "./utils/sanitize-next-query";
-import { useSearchParamsToObject } from "./hooks/use-search-params";
+import { useCoordinates } from "../hooks/use-coordinates";
+import { useUserLocation } from "../hooks/use-user-location";
+import { sanitizeNextParams } from "../utils/sanitize-next-query";
+import { useSearchParamsToObject } from "../hooks/use-search-params";
+
+import { ChooseTravelDistance } from "./_shared/choose-travel-distance";
+import { Forecast } from "./forecast";
+import { Sunchaser } from "./sunchaser";
+import { CalendarWrapper } from "./sunchaser/components/calendar-wrapper";
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const { footerItem } = useDisplayFooter();
