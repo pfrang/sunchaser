@@ -65,7 +65,6 @@ export const Footer = () => {
   return (
     <footer>
       <Box
-        {...handlers}
         ref={boxRef}
         sx={{
           // position: isExpanded ? "sticky" : "fixed",
@@ -89,7 +88,7 @@ export const Footer = () => {
         )}
         <>
           <div className="w-full rounded-custom bg-blues-200">
-            <Button fullWidth onClick={handleToggle}>
+            <Button fullWidth {...handlers} onClick={handleToggle}>
               {isExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
             </Button>
           </div>
