@@ -9,6 +9,7 @@ import {
   Times,
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
+import { useUseSwipeable } from "app/hooks/use-swipeable";
 
 import { StateHelper } from "../../../../states/sunchaser-result";
 import {
@@ -28,6 +29,11 @@ export const ResultList = ({
   expandFooter: (input: boolean) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+
+  const handlers = useUseSwipeable({
+    onSwipedUp: () => setIsExpanded(true),
+    onSwipedDown: () => setIsExpanded(false),
+  });
 
   const { highlightedCard, setHighlightedCard } =
     StateHelper.useHighlightedCard();
@@ -99,10 +105,10 @@ export const ResultList = ({
   }, [highlightedCard]);
 
   return (
-    <div className="flex w-full flex-col gap-2 rounded-inherit p-2">
-      <div className="flex w-full justify-center">
+    <div className="flex w-full flex-col rounded-inherit p-2">
+      <div className="flex w-full justify-center" {...handlers}>
         <div
-          className="w-[150px] cursor-pointer md:w-[300px] lg:w-[450px]"
+          className="w-[150px] cursor-pointer py-2 md:w-[300px] lg:w-[450px]"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <span className="block h-1"></span>

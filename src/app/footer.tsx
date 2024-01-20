@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useSwipeable } from "react-swipeable";
 import { capitalize } from "lodash";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
@@ -19,6 +18,7 @@ import {
 } from "../states/footer";
 
 import { SunchaserListWrapper } from "./components/sunchaser/components/result-list-wrapper";
+import { useUseSwipeable } from "./hooks/use-swipeable";
 
 export const Footer = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -56,10 +56,9 @@ export const Footer = () => {
     };
   }, [isExpanded]);
 
-  const handlers = useSwipeable({
+  const handlers = useUseSwipeable({
     onSwipedUp: () => setIsExpanded(true),
     onSwipedDown: () => setIsExpanded(false),
-    trackMouse: true,
   });
 
   return (

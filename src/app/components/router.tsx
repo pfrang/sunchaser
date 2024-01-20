@@ -16,6 +16,13 @@ import { Sunchaser } from "./sunchaser";
 import { CalendarWrapper } from "./sunchaser/components/calendar-wrapper";
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
+  useEffect(() => {
+    // Set a CSS variable to the height of the viewport
+    document.documentElement.style.setProperty(
+      "--vh",
+      `${window.innerHeight * 0.01}px`,
+    );
+  }, []);
   const { footerItem } = useDisplayFooter();
   const { footerSubItem } = useDisplayFooterSubItems();
 
