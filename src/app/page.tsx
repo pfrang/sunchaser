@@ -4,6 +4,7 @@ import { IosInstallPrompt } from "pwa/ios-install-prompt";
 import Router from "./components/router";
 import { Footer } from "./footer";
 import { Header } from "./header";
+import { LocationModal } from "./components/_shared/location-model";
 
 export default function Page() {
   const mapBoxKey = new AppConfig().mapBox.key;
@@ -11,6 +12,7 @@ export default function Page() {
   return (
     <>
       <div className="flex h-dvh w-[100%] flex-col bg-[#173755]">
+        <LocationModal />
         <Header />
         <div style={{ height: "calc(100% - 68px)" }}>
           <Router mapBoxKey={mapBoxKey} />
