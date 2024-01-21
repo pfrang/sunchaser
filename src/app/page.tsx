@@ -4,7 +4,7 @@ import { IosInstallPrompt } from "pwa/ios-install-prompt";
 import Router from "./components/router";
 import { Footer } from "./footer";
 import { Header } from "./header";
-import { LocationModal } from "./components/_shared/location-model";
+import { LocationModal } from "./components/_shared/location-modal";
 
 export default function Page() {
   const mapBoxKey = new AppConfig().mapBox.key;
