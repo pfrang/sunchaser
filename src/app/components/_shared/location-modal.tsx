@@ -1,22 +1,23 @@
 "use client";
-// import { useRef } from "react";
-// import { useUserLocation } from "app/hooks/use-user-location";
+import { useUserLocation } from "app/hooks/use-user-location";
+import { useEffect, useRef } from "react";
 
 export const LocationModal = () => {
-  // const modalRef = useRef<HTMLDialogElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
 
-  // const { userLocation } = useUserLocation();
+  const { userLocation } = useUserLocation();
 
-  // useEffect(() => {
-  //   if (!userLocation) {
-  //     return modalRef?.current?.showModal();
-  //   } else {
-  //     return modalRef?.current?.close();
-  //   }
-  // }, [userLocation]);
+  useEffect(() => {
+    if (!userLocation) {
+      modalRef?.current?.showModal();
+    } else {
+      modalRef?.current?.close();
+      modalRef?.current?.removeAttribute("open");
+    }
+  }, [userLocation]);
 
   return (
-    <dialog className="fixed inset-0 flex p-6 shadow-lg">
+    <dialog ref={modalRef} className="fixed inset-0 flex p-6 shadow-lg">
       <div className=" w-full rounded-lg bg-white p-5">
         <p className="mb-4 text-2xl font-bold">Welcome to Sunchaser</p>
         <p className="text-variant-regular mb-4 text-xl">

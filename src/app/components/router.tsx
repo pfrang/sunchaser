@@ -14,6 +14,7 @@ import { ChooseTravelDistance } from "./_shared/choose-travel-distance";
 import { Forecast } from "./forecast";
 import { Sunchaser } from "./sunchaser";
 import { CalendarWrapper } from "./sunchaser/components/calendar-wrapper";
+import { LocationModal } from "./_shared/location-modal";
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const { footerItem } = useDisplayFooter();
@@ -44,6 +45,8 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
 
     router.push(`/?${urlParams}`);
   }, [userLocation]);
+
+  if (!userLocation) return <LocationModal />;
 
   switch (footerItem) {
     case "forecast":
