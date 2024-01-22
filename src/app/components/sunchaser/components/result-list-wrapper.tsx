@@ -8,7 +8,7 @@ import { useCoordinates } from "../../../hooks/use-coordinates";
 
 import { ResultList } from "./result-list";
 
-export const SunchaserListWrapper = ({ expandFooter }) => {
+export const SunchaserListWrapper = () => {
   const searchParams = useSearchParamsToObject();
 
   const { data, isLoading, error } = useCoordinates({
@@ -56,11 +56,7 @@ export const SunchaserListWrapper = ({ expandFooter }) => {
           return (
             <div className="w-full">
               <section id="section-carousell w-full">
-                <ResultList
-                  expandFooter={expandFooter}
-                  userLocation={userLocation}
-                  items={ranks}
-                />
+                <ResultList userLocation={userLocation} items={ranks} />
               </section>
             </div>
           );

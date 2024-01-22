@@ -15,13 +15,13 @@ import {
   footerSubItemsSunchaser,
   useDisplayFooter,
   useDisplayFooterSubItems,
+  useDisplayIsFooterExpanded,
 } from "../states/footer";
 
 import { SunchaserListWrapper } from "./components/sunchaser/components/result-list-wrapper";
 import { useUseSwipeable } from "./hooks/use-swipeable";
 
 export const Footer = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const { footerItem } = useDisplayFooter();
   // how to only destruct setBoxPosition from useState?
   const [, setBoxPosition] = useState("sticky");
@@ -29,11 +29,14 @@ export const Footer = () => {
 
   const { footerSubItem } = useDisplayFooterSubItems();
 
+  const { isFooterExpanded, setIsFooterExpanded } =
+    useDisplayIsFooterExpanded();
+
   const isOnSunChaserResult =
     footerItem === "sunchaser" && footerSubItem === "result";
 
   const handleToggle = () => {
-    setIsExpanded(!isExpanded);
+    setIsFooterExpanded(!isFooterExpanded);
   };
 
   const subFooterItems =
@@ -43,7 +46,7 @@ export const Footer = () => {
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (isExpanded) {
+      if (isFooterExpanded) {
         setBoxPosition("sticky");
       } else {
         setBoxPosition("fixed");
@@ -54,11 +57,11 @@ export const Footer = () => {
     return () => {
       clearTimeout(timerId);
     };
-  }, [isExpanded]);
+  }, [isFooterExpanded]);
 
   const handlers = useUseSwipeable({
-    onSwipedUp: () => setIsExpanded(true),
-    onSwipedDown: () => setIsExpanded(false),
+    onSwipedUp: () => setIsFooterExpanded(true),
+    onSwipedDown: () => setIsFooterExpanded(false),
   });
 
   return (
@@ -82,13 +85,11 @@ export const Footer = () => {
           backgroundColor: theme.color.blues[4],
         }}
       >
-        {isOnSunChaserResult && (
-          <SunchaserListWrapper expandFooter={setIsExpanded} />
-        )}
+        {isOnSunChaserResult && <SunchaserListWrapper />}
         <>
           <div className="w-full rounded-custom bg-blues-200">
             <Button fullWidth {...handlers} onClick={handleToggle}>
-              {isExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+              {isFooterExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
             </Button>
           </div>
 
@@ -96,7 +97,7 @@ export const Footer = () => {
             style={{
               width: "100%",
             }}
-            in={isExpanded}
+            in={isFooterExpanded}
           >
             <span className="block h-4 w-full border-t-2 border-greys-100"></span>
 

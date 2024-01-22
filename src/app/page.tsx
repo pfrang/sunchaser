@@ -12,7 +12,7 @@ export default function Page() {
     <>
       <div className="flex h-dvh w-[100%] flex-col bg-[#173755]">
         <Header />
-        <main style={{ height: "calc(100% - 68px)" }}>
+        <main className="h-full">
           <Router mapBoxKey={mapBoxKey} />
         </main>
         {/* <Spacer height={[48, 64]} width={"100%"} /> */}

@@ -6,6 +6,11 @@ import { useUserLocation } from "app/hooks/use-user-location";
 import { MapboxBoundariesHelper } from "app/utils/get-boundaries-lng-lat";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
+import {
+  useDisplayFooterSubItems,
+  useDisplayIsFooterExpanded,
+} from "../../../states/footer";
+
 export const CircularMap = ({ mapBoxKey, kilometers }) => {
   const { userLocation } = useUserLocation();
   const mapRef = useRef<MapRef | null>(null);
@@ -67,10 +72,16 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
     doubleClickZoom: false,
   };
 
+  const { footerSubItem } = useDisplayFooterSubItems();
+  const { isFooterExpanded } = useDisplayIsFooterExpanded();
+
+  const shouldAdjustHeight = footerSubItem === "location" && isFooterExpanded;
+
   return (
     <div className="flex h-full w-full items-center justify-center">
       {userLocation && (
         <ReactMapGL
+          key={shouldAdjustHeight ? "adjusted" : "normal"}
           ref={mapRef}
           initialViewState={{
             longitude: userLocation.longitude,

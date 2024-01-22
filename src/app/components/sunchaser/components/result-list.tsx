@@ -16,19 +16,20 @@ import {
   MapBoxHelper,
   StartAndEndCoordinates,
 } from "../../../utils/mapbox-settings";
+import { useDisplayIsFooterExpanded } from "../../../../states/footer";
 
 import { Carousell } from "./carousell";
 
 export const ResultList = ({
   items,
   userLocation,
-  expandFooter,
 }: {
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
-  expandFooter: (input: boolean) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+
+  const { setIsFooterExpanded } = useDisplayIsFooterExpanded();
 
   const handlers = useUseSwipeable({
     onSwipedUp: () => setIsExpanded(true),
@@ -63,7 +64,7 @@ export const ResultList = ({
       };
       setScrollY(flexRef?.current?.scrollTop as number);
 
-      expandFooter(false);
+      setIsFooterExpanded(false);
 
       const coordinates: StartAndEndCoordinates = {
         start: {

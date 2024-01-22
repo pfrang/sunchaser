@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { useDisplayFooter, useDisplayFooterSubItems } from "states/footer";
+import {
+  useDisplayFooter,
+  useDisplayFooterSubItems,
+  useDisplayIsFooterExpanded,
+} from "states/footer";
 import { Flex } from "ui-kit/flex";
 import { useRouter } from "next/navigation";
 
@@ -15,6 +19,27 @@ import { Forecast } from "./forecast";
 import { Sunchaser } from "./sunchaser";
 import { CalendarWrapper } from "./sunchaser/components/calendar-wrapper";
 import { LocationModal } from "./_shared/location-modal";
+
+const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
+  const { footerSubItem } = useDisplayFooterSubItems();
+  const { isFooterExpanded } = useDisplayIsFooterExpanded();
+
+  const shouldAdjustHeight = footerSubItem === "location" && isFooterExpanded;
+
+  return (
+    <>
+      <div
+        style={{
+          height: `${
+            shouldAdjustHeight ? "calc(100% - 256px)" : "calc(100% - 64px)"
+          }`,
+        }}
+      >
+        <Router mapBoxKey={mapBoxKey} />
+      </div>
+    </>
+  );
+};
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const { footerItem } = useDisplayFooter();
@@ -74,4 +99,4 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   }
 };
 
-export default Router;
+export default RouterWrapper;
