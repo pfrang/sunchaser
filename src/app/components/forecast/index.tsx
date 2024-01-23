@@ -17,8 +17,13 @@ export const Forecast = () => {
     Boolean(searchParams?.lat),
   );
 
+  const handleClick = () => {
+    throw new Error("Simulated client-side error");
+  };
+
   return (
     <div className="flex h-full w-full flex-col gap-4 pt-[68px]">
+      <button onClick={handleClick}>Simulate error</button>
       <ConditionalPresenter
         isLoading={isLoading}
         renderLoading={() => (

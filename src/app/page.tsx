@@ -7,7 +7,7 @@ import { Header } from "./header";
 
 export default function Page() {
   const mapBoxKey = new AppConfig().mapBox.key;
-
+  // if (!session) throw new Error("Session not found");
   return (
     <>
       <div className="flex h-dvh w-[100%] flex-col bg-[#173755]">
