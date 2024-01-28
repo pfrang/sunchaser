@@ -5,7 +5,8 @@ import { AzureFunctionPostPayloadParams } from "./coordinates-api.post-schema";
 
 export class CoordinatesAPiClient extends AzureFunctionApiClient {
   readonly endpointUrl = `/WeatherResult`;
-  readonly url = this.baseUrl + this.endpointUrl + this.key;
+  readonly url = "https://api-sunchaser.azurewebsites.net/api" + this.endpointUrl + "?code=5A4h1SN2OZAWm25Z8mnLhuQBt-uWfQJhWjozGNiywS_RAzFuT3dUsw=="
+
 
   post = async (body: AzureFunctionPostPayloadParams) => {
     try {

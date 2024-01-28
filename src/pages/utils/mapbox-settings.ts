@@ -38,7 +38,7 @@ export class MapBoxHelper {
       zoom: 8,
     });
 
-    this.setMarkers(map);
+    // this.setMarkers(map);
 
     return this.setFitBounds(map);
   }
@@ -96,6 +96,13 @@ export class MapBoxHelper {
     );
   }
 
+  static activateCluster(map: mapboxgl.Map) {
+    // Add or update the cluster layer visibility
+    map.setLayoutProperty("clusters", "visibility", "visible");
+    map.setLayoutProperty("cluster-count", "visibility", "visible");
+  }
+
+
   static drawLine(map: mapboxgl.Map, coordinates: StartAndEndCoordinates) {
     if (map.getLayer("route")) {
       map.removeLayer("route");
@@ -104,6 +111,10 @@ export class MapBoxHelper {
     if (map.getSource("route")) {
       map.removeSource("route");
     }
+
+    map.setLayoutProperty("clusters", "visibility", "none");
+    map.setLayoutProperty("cluster-count", "visibility", "none");  
+
 
     map.addLayer({
       id: "route",

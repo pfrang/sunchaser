@@ -14,13 +14,13 @@ export const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
         error: "Body didnt have the necessary parameters",
       });
     }
-
+    
     const payLoad: AzureFunctionPostPayloadParams = {
       params: {
         ...req.body,
       },
     };
-
+    
     const response = await new CoordinatesAPiClient().post(payLoad);
 
     if (Object.keys(response.data).length === 0) {

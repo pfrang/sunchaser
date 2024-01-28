@@ -48,9 +48,11 @@ export const ResultList = ({
         center: [userLocation.longitude, userLocation.latitude],
         duration: 500,
       });
+      MapBoxHelper.activateCluster(mapObject);
       mapInstance.setFitBounds(mapObject);
     }
   };
+ 
 
   const onClickCard = (item: AzureFunctionCoordinatesMappedItems) => {
     if (item.index !== highlightedCard?.index && mapObject) {
