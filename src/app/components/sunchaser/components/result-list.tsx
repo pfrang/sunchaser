@@ -12,10 +12,7 @@ import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
 import { useUseSwipeable } from "app/hooks/use-swipeable";
 
 import { StateHelper } from "../../../../states/sunchaser-result";
-import {
-  MapBoxHelper,
-  StartAndEndCoordinates,
-} from "../../../utils/mapbox-settings";
+import { StartAndEndCoordinates } from "../../../utils/mapbox-settings";
 import { useDisplayIsFooterExpanded } from "../../../../states/footer";
 
 import { Carousell } from "./carousell";
@@ -49,7 +46,7 @@ export const ResultList = ({
         center: [userLocation.longitude, userLocation.latitude],
         duration: 500,
       });
-      mapInstance?.setFitBounds(mapObject);
+      mapInstance?.setFitBounds();
     }
   };
 
@@ -77,9 +74,15 @@ export const ResultList = ({
         },
       };
 
-      MapBoxHelper.fitBounds(mapObject, coordinates, 50, 1000);
+      mapObject.flyTo({
+        center: [item.longitude, item.latitude],
+        duration: 500,
+        zoom: 11,
+      });
 
-      MapBoxHelper.drawLine(mapObject, coordinates);
+      // mapInstance?.fitBounds(coordinates, 50, 1000);
+
+      mapInstance?.drawLine(coordinates);
 
       return setHighlightedCard(item);
 
