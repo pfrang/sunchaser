@@ -1,10 +1,11 @@
-import { handleGet } from "./handler/handle-get";
-import { GoogleMapsAutoSearchMappedData } from "./mapper/gmaps-auto-search-mapper";
+import {
+  GoogleMapsAutoSearchGetResponse,
+  handleGet,
+} from "./handler/handle-get";
 
-export interface GoogleMapsAutoSearchNextApiResponse {
-  metaData: {};
-  items: GoogleMapsAutoSearchMappedData[];
-}
+export type GoogleMapsAutoSearchResponse = GoogleMapsAutoSearchGetResponse;
+
+export const gmapsAutoSearchUrl = "google-maps/auto-search";
 
 export async function GET(req: Request) {
   return await handleGet(req);

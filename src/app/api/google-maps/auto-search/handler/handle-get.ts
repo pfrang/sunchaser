@@ -1,33 +1,41 @@
+import { NextResponse } from "next/server";
+
+import { HandleEndpoint } from "../../../handle-endpoint";
 import { GoogleMapsAutoSearchApiClient } from "../gmaps-auto-seach-api-client/gmaps-auto-seach-api-client";
-import { GoogleMapsAutoSearchMapper } from "../mapper/gmaps-auto-search-mapper";
-export const gmapsAutoSearchUrl = "google-maps/auto-search";
+import {
+  GoogleMapsAutoSearchMappedResponse,
+  GoogleMapsAutoSearchMapper,
+} from "../mapper/gmaps-auto-search-mapper";
+
+export type GoogleMapsAutoSearchGetResponse =
+  NextResponse<GoogleMapsAutoSearchMappedResponse>;
 
 export const handleGet = async (req: Request) => {
-  const input = new URL(req.url).searchParams.get("input");
-  if (!input) {
-    return Response.json(
-      {
-        error: "No input provided",
-      },
-      {
-        status: 400,
-      },
-    );
-  }
+  await HandleEndpoint.Open(async () => {
+    const input = new URL(req.url).searchParams.get("input");
+    if (!input) {
+      return Response.json(
+        {
+          error: "No input provided",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
 
-  const placesAutoSearchResponse =
-    await new GoogleMapsAutoSearchApiClient().get(input as string);
+    const placesAutoSearchResponse =
+      await new GoogleMapsAutoSearchApiClient().get(input as string);
 
-  const placesAutoSearchMappedData = new GoogleMapsAutoSearchMapper(
-    placesAutoSearchResponse,
-  ).getProps();
+    const placesAutoSearchMappedData = new GoogleMapsAutoSearchMapper(
+      placesAutoSearchResponse,
+    ).getProps();
 
-  return Response.json(
-    { metaData: {}, items: placesAutoSearchMappedData.data },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    },
-  );
+    const response =
+      HandleEndpoint.createResponse<GoogleMapsAutoSearchMappedResponse>(
+        placesAutoSearchMappedData,
+      );
+
+    return response;
+  });
 };

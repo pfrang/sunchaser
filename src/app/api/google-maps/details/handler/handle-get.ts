@@ -1,8 +1,8 @@
 import { GoogleMapsDetailsApiClient } from "../gmaps-details-api-client/gmaps-details-api-client";
 import {
-  GoogleMapsDetailsMapper,
   GoogleMapsDetailsResponse,
-} from "../mapper/gmaps-details-mapper";
+  dtoFromAPiResponseItem,
+} from "../dtos/gmaps-details.get-dto";
 import { ResponseDTO } from "../../../next-api.client";
 
 // async function voidWait(timeToDelay: number): Promise<void> {
@@ -28,9 +28,7 @@ export const handleGet = async (req: Request) => {
     place_id as string,
   );
 
-  const placesDetailsMappedData = new GoogleMapsDetailsMapper(
-    placesDetailsResponse,
-  ).getProps();
+  const placesDetailsMappedData = dtoFromAPiResponseItem(placesDetailsResponse);
 
   const response: ResponseDTO<GoogleMapsDetailsResponse> = {
     metadata: {},

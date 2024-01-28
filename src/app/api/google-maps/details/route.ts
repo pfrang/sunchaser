@@ -1,7 +1,7 @@
 import { ResponseDTO } from "app/api/next-api.client";
 
 import { handleGet } from "./handler/handle-get";
-import { GoogleMapsDetailsResponse } from "./mapper/gmaps-details-mapper";
+import { GoogleMapsDetailsResponse } from "./dtos/gmaps-details.get-dto";
 
 export type TownDetailsResponse = ResponseDTO<GoogleMapsDetailsResponse>;
 
