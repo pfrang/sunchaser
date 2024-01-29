@@ -8,9 +8,7 @@ export class GoogleMapsAutoSearchApiClient extends NextApiClient {
   readonly locations = ["no"];
   readonly apiKey = process.env.GOOGLE_API_KEY;
 
-  get = async (
-    input: string,
-  ): Promise<{ data: GetGoogleMapsAutoSearchSLApiResponse }> => {
+  get = async (input: string) => {
     const components = this.locations
       .map((location) => `country:${location}`)
       .join("|");
@@ -26,6 +24,6 @@ export class GoogleMapsAutoSearchApiClient extends NextApiClient {
         params,
       });
 
-    return { data: response.data };
+    return response.data;
   };
 }

@@ -54,9 +54,9 @@ export const WhereAreYou = () => {
   }, [townId]);
 
   useEffect(() => {
-    if (!dataFetched && data && isLocationChosen) {
+    if (!dataFetched && data?.items && isLocationChosen) {
       // Incase user does not change a selection on mount
-      setTownId(data?.items[0].place_id);
+      setTownId(data.items[0].place_id);
       setDatafetched(true);
     }
   }, [data, dataFetched, isLocationChosen]);
