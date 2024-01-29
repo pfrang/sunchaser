@@ -47,7 +47,7 @@
     "focus-trap-react": "^10.0.2",
     "geolib": "^3.3.4",
     "lodash": "^4.17.21",
-    "mapbox-gl": "^2.10.0",
+    "mapbox-gl": "^3.1.2",
     "next": "^14.0.4",
     "react": "^18.2.0",
     "react-datepicker": "^4.18.0",
@@ -68,7 +68,7 @@
   "devDependencies": {
     "@capacitor/cli": "^5.4.0",
     "@types/lodash": "^4.14.198",
-    "@types/mapbox-gl": "^2.7.7",
+    "@types/mapbox-gl": "^2.7.19",
     "@types/node": "^20.10.0",
     "@types/react": "18.0.17",
     "@types/react-calendar": "^4.1.0",
