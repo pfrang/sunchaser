@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchIcon from "@mui/icons-material/Search";
@@ -7,13 +8,13 @@ import { fetchTownDetails } from "app/hooks/fetch-town-details";
 import { useFetchGoogleMapsSearches } from "app/hooks/use-google-maps-auto-search";
 import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useUserLocation } from "app/hooks/use-user-location";
-import { GoogleMapsAutoSearchMappedData } from "app/api/google-maps/auto-search/mapper/gmaps-auto-search-mapper";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { Text } from "ui-kit/text";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
+import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
 
 export const WhereAreYou = () => {
   const [townSearch, setTownSearch] = useState("");
@@ -77,10 +78,10 @@ export const WhereAreYou = () => {
     return setIsExpanded(!isExpanded);
     if (isExpanded) {
       if (!data) return;
-      const search = locationRef?.current?.value;
-      const townId = data?.items[0].place_id;
-      setTownSearch(data?.items[0].place);
-      setLocationAndClearList({ value: search, id: townId });
+      // const search = locationRef?.current?.value;
+      // const townId = data?.items[0].place_id;
+      // setTownSearch(data?.items[0].place);
+      // setLocationAndClearList({ value: search, id: townId });
     } else {
       setIsExpanded(true);
     }
@@ -172,7 +173,7 @@ export const WhereAreYou = () => {
 
               {items &&
                 !isLocationChosen &&
-                items.map((item: GoogleMapsAutoSearchMappedData, index) => {
+                items.map((item, index) => {
                   return (
                     <div
                       className={`flex cursor-pointer items-center rounded-[36px] border-2 border-blues-1000 bg-blues-400 px-4 py-3 text-white`}
@@ -214,7 +215,7 @@ const ExpandedFlex = ({ children }) => {
   );
 };
 
-const itemForUi = (item: GoogleMapsAutoSearchMappedData) => {
+const itemForUi = (item: GoogleMapsAutoSearchDtoItem) => {
   const { place, country } = item;
 
   const city = country.split(",");

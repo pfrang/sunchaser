@@ -5,7 +5,15 @@ import {
   Prediction,
 } from "../gmaps-auto-seach-api-client/gmaps-sl-api-response-schema";
 
-export const assemblePredictions = (predictions: Prediction[] | null) => {
+export type GoogleMapsAutoSearchDtoItem = {
+  place: string;
+  place_id: string;
+  country: string;
+};
+
+export const assemblePredictions = (
+  predictions: Prediction[] | null,
+): GoogleMapsAutoSearchDtoItem[] | null => {
   if (!isArray(predictions)) return null;
   const response = predictions.map((item) => {
     return {

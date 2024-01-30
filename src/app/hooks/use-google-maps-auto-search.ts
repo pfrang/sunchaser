@@ -1,8 +1,10 @@
 import useSWR from "swr";
 import { fetcherFactory } from "app/utils/fetcher-factory";
-import { gmapsAutoSearchUrl } from "app/api/google-maps/auto-search/route";
 
-import { GoogleMapsAutoSearchGetResponse } from "../api/google-maps/auto-search/handler/handle-get";
+import {
+  GoogleMapsAutoSearchGetResponse,
+  gmapsAutoSearchUrl,
+} from "../api/google-maps/auto-search/handler/handle-get";
 
 import { NextApiRequest } from "./common-types";
 

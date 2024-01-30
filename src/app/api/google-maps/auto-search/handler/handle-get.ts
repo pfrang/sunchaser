@@ -5,6 +5,8 @@ import {
   dtoFromAPiResponseItem,
 } from "../dtos/google-auto-search.get-dto";
 
+export const gmapsAutoSearchUrl = "google-maps/auto-search";
+
 export type GoogleMapsAutoSearchGetResponse = GoogleMapsAutoSearchDto;
 
 export const handleGet = async (req: Request) =>
