@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import { fetcherFactory } from "app/utils/fetcher-factory";
+import { AxiosError } from "axios";
 
 import {
   GoogleMapsAutoSearchGetResponse,
@@ -20,12 +21,17 @@ export const useFetchGoogleMapsSearches = (townSearch: string) => {
     },
   };
 
-  let { data, error, mutate } = useSWR<GoogleMapsAutoSearchGetResponse>(
+  let { data, error, mutate } = useSWR<
+    GoogleMapsAutoSearchGetResponse,
+    AxiosError
+  >(
     townSearch ? urlWithParams : null,
     townSearch ? () => fetcherFactory(fetcherRequest) : null,
   );
 
   const isLoading = !data && !error && townSearch;
 
-  return { data, error, mutate, isLoading };
+  return data
+    ? { data, error, isLoading, mutate }
+    : { error, mutate, isLoading };
 };

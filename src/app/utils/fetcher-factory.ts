@@ -8,6 +8,5 @@ export const fetcherFactory = async (requestConfig: NextApiRequest) => {
     : `/api/`;
 
   const response = await axios({ ...requestConfig, baseURL: baseUrl });
-
   return response.data;
 };

@@ -3,13 +3,7 @@ import { fetcherFactory } from "app/utils/fetcher-factory";
 
 import { NextApiRequest } from "./common-types";
 
-export interface UseNextApiRequestResponse<Data> {
-  data?: Data;
-  error?: Error;
-  isLoading: boolean;
-}
-
-export const useNextApiRequest = (
+export const useNextApiRequest = <SWRDataResponse, SWRErrorResposne>(
   requestConfig: Pick<NextApiRequest, "data" | "params" | "url" | "method">,
   isReady?: boolean,
 ) => {
@@ -30,7 +24,7 @@ export const useNextApiRequest = (
     },
   };
 
-  const result = useSWR(
+  const result = useSWR<SWRDataResponse, SWRErrorResposne>(
     isReady ? urlWithParams : null,
     () => fetcherFactory(fetcherRequest),
     {
