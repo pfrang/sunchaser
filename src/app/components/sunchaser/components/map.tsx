@@ -31,9 +31,9 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
       primaryMap.on("load", () => {
         primaryMap.resize();
         mapInitializer.addSourceSettings();
-        // mapInitializer.addCluster();
-        mapInitializer.addHeatMap();
-        // mapInitializer.addClickHandlers();
+        mapInitializer.addCluster();
+        // mapInitializer.addHeatMap();
+        mapInitializer.addClickHandlers();
         // primaryMap.addControl(new mapboxgl.NavigationControl());
         setMapInstance(mapInitializer);
         setMapObject(primaryMap);

@@ -59,14 +59,14 @@ export class MapBoxHelper {
           },
           properties: {
             primaryName: this.ranks[index].primaryName,
-            rank: Number(this.ranks[index].rank),
+            rank: this.ranks[index].rank,
             // TODO add symbol
           },
         })),
       },
-      // cluster: true,
-      // clusterMaxZoom: 14,
-      // clusterRadius: 200,
+      cluster: true,
+      clusterMaxZoom: 13,
+      clusterRadius: 200,
     });
   }
 
