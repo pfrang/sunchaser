@@ -35,7 +35,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "driver": driver
         }
 
-        sql_df=Handler.Handler(config,float(params['lat']),float(params['lon']),params['date'],float(params['distance'])).recommendation_response_sql()
+        top = int(params['top'] or 10)
+
+        sql_df=Handler.Handler(config,float(params['lat']),float(params['lon']),params['date'],float(params['distance']), top).recommendation_response_sql()
         StartLocation = {
             "latitude": params['lat'],
             "longitude": params['lon']

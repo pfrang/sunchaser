@@ -3,7 +3,7 @@ import pandas as pd
 from src.python.coordinateGenerator import GetCoordinates
 
 class Handler:
-    def __init__(self,config,lat,lon,date,distance):
+    def __init__(self,config,lat,lon,date,distance, top = 10):
 
        self.input=config["db"]
        self.server=config["server"]
@@ -12,6 +12,7 @@ class Handler:
        self.password=config["password"]
        self.driver=config["driver"]
        self.date=date
+       self.top = top
        self.edgepoints=GetCoordinates([lat,lon],distance).retrieveEdgePoints()
 
     def recommendation_response_sql(self):
@@ -19,7 +20,6 @@ class Handler:
        lon_high=self.edgepoints['eastMid'][1]
        lat_low=self.edgepoints['southMid'][0]
        lon_low=self.edgepoints['westMid'][1]
-       date=self.date
 
        database=self.db
        driver=self.driver
@@ -56,7 +56,7 @@ class Handler:
        '''
 
        # HERE THE EXEUCTION HAPPENS, TIME LAG
-       cursor.execute(sql,10,date,lat_high,lat_low,lon_high,lon_low,date)
+       cursor.execute(sql,self.top,self.date,lat_high,lat_low,lon_high,lon_low,self.date)
        data = cursor.fetchall()
 
        df = pd.DataFrame(data)
