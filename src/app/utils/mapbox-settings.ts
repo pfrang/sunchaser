@@ -59,14 +59,14 @@ export class MapBoxHelper {
           },
           properties: {
             primaryName: this.ranks[index].primaryName,
-            rank: this.ranks[index].rank,
+            rank: Number(this.ranks[index].rank),
             // TODO add symbol
           },
         })),
       },
-      cluster: true,
-      clusterMaxZoom: 15,
-      clusterRadius: 200,
+      // cluster: true,
+      // clusterMaxZoom: 14,
+      // clusterRadius: 200,
     });
   }
 
@@ -112,6 +112,63 @@ export class MapBoxHelper {
         "circle-radius": 15,
         "circle-stroke-width": 1,
         "circle-stroke-color": "#fff",
+      },
+    });
+  }
+
+  addHeatMap() {
+    this.map.addLayer({
+      id: "heatmap",
+      type: "heatmap",
+      source: "tiles",
+      paint: {
+        // Increase the heatmap weight based on frequency and property magnitude
+        "heatmap-weight": {
+          property: "rank",
+          type: "exponential",
+          stops: [
+            [0, 0],
+            [1, 1],
+          ],
+        },
+        // Increase the heatmap color weight weight by zoom level
+        // heatmap-intensity is a multiplier on top of heatmap-weight
+        // "heatmap-intensity": {
+        //   stops: [
+        //     [11, 1],
+        //     [15, 3],
+        //   ],
+        // },
+        // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+        // Begin color ramp at 0-stop with a 0-transparancy color
+        // to create a blur-like effect.
+        "heatmap-color": [
+          "interpolate",
+          ["linear"],
+          ["heatmap-density"],
+          0,
+          "rgba(162,164,89,0)",
+          0.2,
+          "rgb(192,195,77)",
+          0.4,
+          "rgb(209,229,240)",
+          0.6,
+          "rgb(206,210,60)",
+          0.8,
+          "rgb(225,230,49)",
+          1,
+          "rgb(243,248,42)",
+        ],
+        // Adjust the heatmap radius by zoom level
+        "heatmap-radius": 100,
+        // Transition from heatmap to circle layer by zoom level
+        // "heatmap-opacity": {
+        //   default: 1,
+        //   stops: [
+        //     [14, 1],
+        //     [15, 0],
+        //   ],
+        // },
       },
     });
   }
@@ -172,20 +229,20 @@ export class MapBoxHelper {
   }
 
   private setMarkers() {
-    // this.longitudes.forEach((lon, index) => {
-    //   const markerElement = new mapboxgl.Marker()
-    //     .setLngLat([this.longitudes[index], this.latitudes[index]])
-    //     .addTo(this.map)
-    //     .getElement();
+    this.longitudes.forEach((lon, index) => {
+      const markerElement = new mapboxgl.Marker()
+        .setLngLat([this.longitudes[index], this.latitudes[index]])
+        .addTo(this.map)
+        .getElement();
 
-    //   markerElement.addEventListener("mouseenter", () => {
-    //     this.map.getCanvas().style.cursor = "pointer";
-    //   });
+      markerElement.addEventListener("mouseenter", () => {
+        this.map.getCanvas().style.cursor = "pointer";
+      });
 
-    //   markerElement.addEventListener("mouseleave", () => {
-    //     this.map.getCanvas().style.cursor = "";
-    //   });
-    // });
+      markerElement.addEventListener("mouseleave", () => {
+        this.map.getCanvas().style.cursor = "";
+      });
+    });
 
     // only sets user location
 
