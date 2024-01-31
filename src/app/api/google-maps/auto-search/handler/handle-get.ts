@@ -13,7 +13,7 @@ export const handleGet = async (req: Request) =>
   await HandleEndpoint.Open(async () => {
     const input = new URL(req.url).searchParams.get("input");
 
-    if (input) throw new Error("Missing input parameter");
+    if (!input) throw new Error("Missing input parameter");
 
     const placesAutoSearchResponse =
       await new GoogleMapsAutoSearchApiClient().get(input as string);
