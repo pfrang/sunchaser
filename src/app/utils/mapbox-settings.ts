@@ -229,20 +229,20 @@ export class MapBoxHelper {
   }
 
   private setMarkers() {
-    this.longitudes.forEach((lon, index) => {
-      const markerElement = new mapboxgl.Marker()
-        .setLngLat([this.longitudes[index], this.latitudes[index]])
-        .addTo(this.map)
-        .getElement();
+    // this.longitudes.forEach((lon, index) => {
+    //   const markerElement = new mapboxgl.Marker()
+    //     .setLngLat([this.longitudes[index], this.latitudes[index]])
+    //     .addTo(this.map)
+    //     .getElement();
 
-      markerElement.addEventListener("mouseenter", () => {
-        this.map.getCanvas().style.cursor = "pointer";
-      });
+    //   markerElement.addEventListener("mouseenter", () => {
+    //     this.map.getCanvas().style.cursor = "pointer";
+    //   });
 
-      markerElement.addEventListener("mouseleave", () => {
-        this.map.getCanvas().style.cursor = "";
-      });
-    });
+    //   markerElement.addEventListener("mouseleave", () => {
+    //     this.map.getCanvas().style.cursor = "";
+    //   });
+    // });
 
     // only sets user location
 
