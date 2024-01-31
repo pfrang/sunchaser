@@ -2,26 +2,26 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    colors: {
-      transparent: "transparent",
-      inherit: "inherit",
-      blues: {
-        200: "#004871",
-        400: "#323A55",
-        500: "#262C42",
-        700: "#6B93AA",
-        900: "#3B4566",
-        1000: "#252B40",
-        1100: "242A3F",
-      },
-      white: "#FFFFFF",
-      black: "#000000",
-      greys: {
-        100: "rgba(255,250,250, 0.42)",
-        200: "rgba(136, 139, 154, 0.20)",
-      },
-    },
     extend: {
+      colors: {
+        transparent: "transparent",
+        inherit: "inherit",
+        blues: {
+          200: "#004871",
+          400: "#323A55",
+          500: "#262C42",
+          700: "#6B93AA",
+          900: "#3B4566",
+          1000: "#252B40",
+          1100: "242A3F",
+        },
+        white: "#FFFFFF",
+        black: "#000000",
+        greys: {
+          100: "rgba(255,250,250, 0.42)",
+          200: "rgba(136, 139, 154, 0.20)",
+        },
+      },
       borderRadius: {
         custom: "36px 36px 0px 0px",
         inherit: "inherit",

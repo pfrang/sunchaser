@@ -4,6 +4,7 @@ export interface PayloadParams {
   date: string;
   distance: string;
   location?: string;
+  top?: number;
 }
 
 export interface AzureFunctionPostPayloadParams {
