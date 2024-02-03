@@ -67,7 +67,7 @@ function ErrorAlert(error) {
       <div
         className={`${
           message ? "block" : "hidden"
-        }fixed inset-x-4 bottom-16 z-auto flex items-center justify-between rounded-lg bg-red-500 p-4 text-white shadow-lg`}
+        } fixed inset-x-4 bottom-16 z-auto flex items-center justify-between rounded-lg bg-red-500 p-4 text-white shadow-lg`}
       >
         <div>
           <h2 className="font-bold">Error!</h2>
