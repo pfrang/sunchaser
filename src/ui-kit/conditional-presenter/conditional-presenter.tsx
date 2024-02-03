@@ -18,7 +18,7 @@ export enum StateStage {
   Error = "error",
 }
 
-export const ConditionalPresenter = <Data, Error extends AxiosError>({
+export const ConditionalPresenter = <Data, Error>({
   isLoading,
   error,
   data,
