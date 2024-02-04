@@ -102,7 +102,7 @@ export const WhereAreYou = () => {
 
   return (
     <div
-      className={`relative top-2 z-50 flex h-[52px] flex-col content-center rounded-[36px] border-2 border-blues-200  transition-width duration-300 ease-in-out
+      className={`relative top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg  transition-width duration-300 ease-in-out
         ${
           isExpanded
             ? "w-[250px] bg-blues-400 sm:w-[350px] md:w-[500px]"
@@ -115,7 +115,7 @@ export const WhereAreYou = () => {
           ref={locationRef}
           required
           disabled={!isExpanded}
-          className={`bg-inherit text-white ${
+          className={`bg-inherit ${
             isExpanded ? "" : "hidden"
           } h-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl`}
           placeholder={isExpanded ? "Location" : ""}
@@ -136,9 +136,10 @@ export const WhereAreYou = () => {
             fontSize="large"
             onClick={onMagnifyingGlassClick}
             style={{
+              fill: "#2C5C32",
               cursor: "pointer",
               color: isExpanded ? "white" : "black",
-              transform: "rotate(90deg)",
+              // transform: "rotate(90deg)",
             }}
           />
         )}
@@ -166,7 +167,7 @@ export const WhereAreYou = () => {
                   }}
                 />
                 {/* TODO filter for unique places */}
-                <Text variant="poppins" color="white">
+                <Text variant="poppins" color="black">
                   Use device location
                 </Text>
               </div>
