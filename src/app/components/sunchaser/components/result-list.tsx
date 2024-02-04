@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Collapse, useMediaQuery } from "@mui/material";
+import { Button, Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 import {
@@ -25,8 +25,6 @@ export const ResultList = ({
   userLocation: UserLocation;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
-
-  const { setIsFooterExpanded } = useDisplayIsFooterExpanded();
 
   const handlers = useUseSwipeable({
     onSwipedUp: () => setIsExpanded(true),
@@ -61,8 +59,6 @@ export const ResultList = ({
       };
       setScrollY(flexRef?.current?.scrollTop as number);
 
-      setIsFooterExpanded(false);
-
       const coordinates: StartAndEndCoordinates = {
         start: {
           longitude: lon,
@@ -84,12 +80,12 @@ export const ResultList = ({
 
       mapInstance?.drawLine(coordinates);
 
-      return setHighlightedCard(item);
+      setHighlightedCard(item);
 
-      // return setTimeout(() => {
-      //   swiper.update();
-      //   swiper.slideTo(item.index, 1000);
-      // }, 500);
+      return setTimeout(() => {
+        const element = document.getElementById(item.index.toString());
+        element?.scrollIntoView({ behavior: "smooth" });
+      }, 250);
     }
     setHighlightedCard(undefined);
     resetMap();
@@ -109,13 +105,12 @@ export const ResultList = ({
   }, [highlightedCard]);
 
   return (
-    <div className="flex w-full flex-col rounded-inherit p-2">
+    <div className="flex w-full flex-col rounded-inherit px-2">
       <div className="flex w-full justify-center" {...handlers}>
         <div
-          className="w-[150px] cursor-pointer py-2 md:w-[300px] lg:w-[450px]"
+          className="w-[25px] cursor-pointer pb-2 pt-1 sm:w-[40px]"
           onClick={() => setIsExpanded(!isExpanded)}
         >
-          <span className="block h-1"></span>
           <span className="block h-1 rounded-sm bg-blues-200 shadow-custom-minor"></span>
           <span className="block h-1"></span>
         </div>
@@ -130,64 +125,48 @@ export const ResultList = ({
       >
         <div
           ref={flexRef}
-          className={`${
-            highlightedCard
-              ? "gap-0 overflow-y-hidden"
-              : "gap-2 overflow-y-auto"
-          } custom-scrollbar flex max-h-[300px] w-full flex-col px-2 md:px-4`}
+          className={`flex max-h-[300px] w-full flex-col gap-2 px-2 md:px-4`}
         >
           {items.map((item) => {
-            const shouldBeExpanded =
-              !highlightedCard || highlightedCard?.index === item.index;
-            // const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
+            const shouldBeExpanded = highlightedCard?.index === item.index;
+            const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
 
-            // useEffect(() => {
-            //   if (shouldBeExpanded) {
-            //     setTimeout(() => {
-            //       setIsDelayedExpanded(true);
-            //     }, 600);
-            //   }
-            // }, [shouldBeExpanded]);
+            useEffect(() => {
+              if (shouldBeExpanded) {
+                setTimeout(() => {
+                  setIsDelayedExpanded(true);
+                }, 600);
+              }
+            }, [shouldBeExpanded]);
 
             return (
               <React.Fragment key={item.index}>
-                <div className="relative flex w-full">
-                  <Collapse
-                    style={{
-                      width: "100%",
-                    }}
-                    easing={"ease-in-out"}
-                    in={shouldBeExpanded}
+                <div
+                  id={item.index.toString()}
+                  className="relative flex w-full flex-col"
+                >
+                  <Button
+                    className={`cursor-pointer rounded-md bg-greens-300 py-1 shadow-custom-minor md:py-2`}
+                    onClick={() => onClickCard(item)}
+                    fullWidth
                   >
-                    <div
-                      key={item.index}
-                      className={`flex cursor-pointer items-center rounded-[36px] border-2 border-blues-200 py-1 shadow-custom-minor md:py-2`}
-                      onClick={() => onClickCard(item)}
-                    >
-                      <div className="flex flex-shrink pl-3">
-                        <p className="text-variant-poppins text-start font-bold text-white">
-                          {`#${item.index + 1}`}
-                        </p>
-                      </div>
-                      <div className="absolute m-auto flex w-full cursor-pointer justify-center">
-                        <p className="text-variant-regular text-center text-white ">
-                          {shouldBeExpanded ? item.primaryName : ""}
-                        </p>
-                      </div>
-
-                      <div className="flex w-full justify-end gap-2 pr-2 md:gap-4 md:pr-4">
-                        {Icon(item.times)}
-                      </div>
+                    <div className="flex flex-shrink pl-3">
+                      <p className="text-variant-poppins text-start font-bold">
+                        {`#${item.index + 1}`}
+                      </p>
                     </div>
-                    <Collapse
-                      style={{
-                        width: "100%",
-                      }}
-                      in={highlightedCard?.index === item.index}
-                      easing={"ease-in-out"}
-                    >
-                      <Carousell item={item} />
-                    </Collapse>
+                    <div className="absolute m-auto flex w-full cursor-pointer justify-center">
+                      <p className="text-variant-regular text-center ">
+                        {item.primaryName}
+                      </p>
+                    </div>
+
+                    <div className="flex w-full justify-end gap-2 pr-2 md:gap-4 md:pr-4">
+                      {Icon(item.times)}
+                    </div>
+                  </Button>
+                  <Collapse in={highlightedCard?.index === item.index}>
+                    <Carousell item={item} />
                   </Collapse>
                 </div>
               </React.Fragment>
@@ -237,7 +216,7 @@ const Icon = (times: Times[]) => {
                   <Image
                     height={28}
                     width={28}
-                    src={`/icons/white/svg/${icons[key]}`}
+                    src={`/icons/black/svg/${icons[key]}`}
                     alt={icons[key]}
                   />
                 </div>

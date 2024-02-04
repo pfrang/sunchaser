@@ -56,7 +56,7 @@ export const Carousell = ({
         spaceBetween={30}
         // touchStartPreventDefault={false} // To allow horizontal scroll on iOS
         pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "128px" }}
         // allowTouchMove
         // onClick={(e) => {
         //   console.log(e.el);
@@ -68,7 +68,7 @@ export const Carousell = ({
       >
         <div
           key={item.index}
-          className="flex w-full items-center justify-between rounded-[36px] border-2 border-blues-200 shadow-custom-inner"
+          className="flex w-full flex-shrink rounded-[36px] shadow-custom-inner"
         >
           <>
             {Object.keys(days).map((day, index) => {
@@ -76,15 +76,9 @@ export const Carousell = ({
 
               return (
                 <SwiperSlide key={day + index}>
-                  <div className="w-full justify-center">
-                    <p className="text-variant-regular text-center text-white">
-                      {day}
-                    </p>
-                  </div>
+                  <p className="text-center">{day}</p>
 
-                  <div className="items-center justify-between rounded-[36px] border-2 border-blues-200 p-2">
-                    <CarousellDetails times={times} />
-                  </div>
+                  <CarousellDetails times={times} />
                 </SwiperSlide>
               );
             })}

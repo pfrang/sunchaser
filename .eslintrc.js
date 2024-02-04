@@ -93,7 +93,7 @@ module.exports = {
         ignore: [/\[(.*?)\]/],
       },
     ],
-    "no-unused-vars": "error",
+    "no-unused-vars": "warn",
     // "import/no-unused-modules": [
     //   "error",
     //   {

@@ -13,7 +13,7 @@ export const CarousellDetails = ({ times }: { times: Times[] }) => {
   };
 
   return (
-    <div className="flex w-full gap-2">
+    <div className="flex w-full justify-between">
       {Object.keys(timeIntervals).map((time) => {
         const times = timeIntervals[time] as Times[];
         if (times.length === 0) return null;
@@ -22,21 +22,19 @@ export const CarousellDetails = ({ times }: { times: Times[] }) => {
         return (
           <div
             key={time}
-            className="w-full rounded-[18px] border-2 border-blues-1100 p-1 shadow-custom-minor md:p-2"
+            className="flex flex-col gap-2 rounded-[18px] px-3 shadow-custom-minor"
           >
-            <p className="text-variant-regular text-center text-white">
-              {time}
-            </p>
+            <p className="text-nowrap text-center">{time}</p>
 
-            <div className="flex h-[24px] content-center justify-center md:h-[48px]">
+            <div className="flex h-[24px] content-center justify-center">
               <img
-                src={`/icons/white/svg/${icon}`}
+                src={`/icons/black/svg/${icon}`}
                 className="object-contain"
                 alt={icon}
               />
             </div>
 
-            <p className="text-variant-regular text-center text-white">
+            <p className="text-center">
               {/* // TODO shouldnt be 0 indexed */}
               {new Temperature(timeIntervals[time][0].temperature).toString()}
             </p>

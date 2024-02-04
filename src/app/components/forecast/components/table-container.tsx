@@ -40,17 +40,6 @@ export const ForecastTableContainer = ({
             display: "flex",
             height: "100%",
             flexDirection: "column",
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              width: "8px",
-            },
-            "&::-webkit-scrollbar-track": {
-              background: "#f1f1f1",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "#888",
-              borderRadius: "10px",
-            },
           }}
         >
           <Table sx={{ height: "100%" }} aria-label="collapsible table">

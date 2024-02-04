@@ -17,6 +17,8 @@ module.exports = {
         },
         greens: {
           100: "#2C5C32",
+          200: "#3a6939",
+          300: "#f8fbf1",
         },
         white: "#FFFFFF",
         black: "#000000",
@@ -44,5 +46,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };

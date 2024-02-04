@@ -13,28 +13,20 @@ import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
 import { sanitizeNextParams } from "../utils/sanitize-next-query";
 import { useSearchParamsToObject } from "../hooks/use-search-params";
+import { useDisplayFooter2 } from "../../states/footer2";
 
 import { ChooseTravelDistance } from "./_shared/choose-travel-distance";
 import { Forecast } from "./forecast";
 import { Sunchaser } from "./sunchaser";
 import { CalendarWrapper } from "./sunchaser/components/calendar-wrapper";
 import { LocationModal } from "./_shared/location-modal";
+import { Map } from "./sunchaser/components/map";
+import { ForecastMap } from "./forecast/components/forecast-map";
 
 const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
-  const { footerSubItem } = useDisplayFooterSubItems();
-  const { isFooterExpanded } = useDisplayIsFooterExpanded();
-
-  const shouldAdjustHeight = footerSubItem === "location" && isFooterExpanded;
-
   return (
     <>
-      <div
-        style={{
-          height: `${
-            shouldAdjustHeight ? "calc(100% - 256px)" : "calc(100% - 64px)"
-          }`,
-        }}
-      >
+      <div className="h-full">
         <Router mapBoxKey={mapBoxKey} />
       </div>
     </>
@@ -42,8 +34,7 @@ const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
 };
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
-  const { footerItem } = useDisplayFooter();
-  const { footerSubItem } = useDisplayFooterSubItems();
+  const { footerItem } = useDisplayFooter2();
 
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
@@ -75,27 +66,9 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
 
   switch (footerItem) {
     case "forecast":
-      switch (footerSubItem) {
-        case "map":
-          return <Flex height={"100%"}>coming</Flex>;
-        case "date":
-          return <Flex height={"100%"}>coming</Flex>;
-        case "profile":
-          return <Flex height={"100%"}>coming</Flex>;
-        default:
-          return <Forecast />;
-      }
+      return <ForecastMap mapBoxKey={mapBoxKey} />;
     default:
-      switch (footerSubItem) {
-        case "date":
-          return <CalendarWrapper />;
-        case "location":
-          return <ChooseTravelDistance mapBoxKey={mapBoxKey} />;
-        case "profile":
-          return <Flex height={"100%"}>coming</Flex>;
-        default:
-          return <Sunchaser mapBoxKey={mapBoxKey} />;
-      }
+      return <Sunchaser mapBoxKey={mapBoxKey} />;
   }
 };
 
