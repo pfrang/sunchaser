@@ -7,6 +7,7 @@ import { Spinner } from "../ui-kit/spinner/spinner";
 import Router from "./components/map-renderer";
 import { Header } from "./header";
 import { Footer } from "./footer";
+import { SubfooterButtons } from "./components/subfooter-buttons";
 
 export default function Page() {
   const mapBoxKey = new AppConfig().mapBox.key;

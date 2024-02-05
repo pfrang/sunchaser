@@ -15,6 +15,8 @@ import { StateHelper } from "../../states/sunchaser-result";
 import { useShouldHydrate } from "../hooks/use-should-hydrate";
 
 import { LocationModal } from "./_shared/location-modal";
+import { SubfooterButtons } from "./subfooter-buttons";
+import { HeaderSlider } from "./header-slider";
 
 const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
   return (
@@ -94,7 +96,6 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   }, [data]);
 
   useEffect(() => {
-    if (footerItem === "calendar") return;
     if (mapInstance && userLocation) {
       if (footerItem === "sunchaser") {
         requestAnimationFrame(() => {
@@ -116,9 +117,10 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   }, [footerItem, mapInstance]);
 
   const shouldHydrate = useShouldHydrate();
-
   return (
     <>
+      <HeaderSlider />
+      <SubfooterButtons />
       {/* {shouldHydrate && !userLocation && <LocationModal />} */}
       <section id="section-map" className="h-full">
         <div className="sticky top-0 flex h-full items-center justify-center">

@@ -1,19 +1,14 @@
 import { Collapse } from "@mui/material";
 
 import { useDisplayIsFooterExpanded } from "../../../states/footer";
-import {
-  useDisplayFooter2,
-  useDisplayFooterSubItems2,
-} from "../../../states/footer2";
+import { useDisplayFooter2 } from "../../../states/footer2";
 import { useUseSwipeable } from "../../hooks/use-swipeable";
 
-export const FooterItemWrapper = ({ children, item }) => {
+export const ListWrapper = ({ children, item }) => {
   const { isFooterExpanded, setIsFooterExpanded } =
     useDisplayIsFooterExpanded();
   const { footerItem } = useDisplayFooter2();
-  const { footerSubItem } = useDisplayFooterSubItems2();
-  const shouldExpand =
-    (item === footerItem || item === footerSubItem) && isFooterExpanded;
+  const shouldExpand = item === footerItem && isFooterExpanded;
 
   const handlers = useUseSwipeable({
     onSwipedUp: () => setIsFooterExpanded(true),
