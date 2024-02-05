@@ -13,14 +13,12 @@ import { Text } from "ui-kit/text";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { Spinner } from "ui-kit/spinner/spinner";
-import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
 
 export const WhereAreYou = () => {
   const [townSearch, setTownSearch] = useState("");
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [dataFetched, setDatafetched] = useState(false);
-  const shouldHydrate = useShouldHydrate();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [townId, setTownId] = useState("");
@@ -102,7 +100,7 @@ export const WhereAreYou = () => {
 
   return (
     <div
-      className={`relative top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg  transition-width duration-300 ease-in-out
+      className={`relative top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg transition-width duration-300 ease-in-out
         ${
           isExpanded
             ? "w-[250px] bg-blues-400 sm:w-[350px] md:w-[500px]"
@@ -110,22 +108,20 @@ export const WhereAreYou = () => {
         }
       `}
     >
-      {shouldHydrate && (
-        <input
-          ref={locationRef}
-          required
-          disabled={!isExpanded}
-          className={`bg-inherit ${
-            isExpanded ? "" : "hidden"
-          } h-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl`}
-          placeholder={isExpanded ? "Location" : ""}
-          onChange={(e) => onSearchChange(e.target.value)}
-          onFocus={() => setLocationChosen(false)}
-          type="text"
-          value={isExpanded ? townSearch : ""}
-          style={{ outline: "none" }}
-        />
-      )}
+      <input
+        ref={locationRef}
+        required
+        disabled={!isExpanded}
+        className={`bg-inherit ${
+          isExpanded ? "" : "hidden"
+        } h-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl`}
+        placeholder={isExpanded ? "Location" : ""}
+        onChange={(e) => onSearchChange(e.target.value)}
+        onFocus={() => setLocationChosen(false)}
+        type="text"
+        value={isExpanded ? townSearch : ""}
+        style={{ outline: "none" }}
+      />
 
       <div className="absolute right-2 top-[8px]">
         {isLoading ? (

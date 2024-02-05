@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Button, Collapse, useMediaQuery } from "@mui/material";
+import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 import {
@@ -13,7 +13,6 @@ import { useUseSwipeable } from "app/hooks/use-swipeable";
 
 import { StateHelper } from "../../../../states/sunchaser-result";
 import { StartAndEndCoordinates } from "../../../utils/mapbox-settings";
-import { useDisplayIsFooterExpanded } from "../../../../states/footer";
 
 import { Carousell } from "./carousell";
 
@@ -25,11 +24,6 @@ export const ResultList = ({
   userLocation: UserLocation;
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
-
-  const handlers = useUseSwipeable({
-    onSwipedUp: () => setIsExpanded(true),
-    onSwipedDown: () => setIsExpanded(false),
-  });
 
   const { highlightedCard, setHighlightedCard } =
     StateHelper.useHighlightedCard();
@@ -48,7 +42,6 @@ export const ResultList = ({
     }
   };
 
-  const [scrollY, setScrollY] = useState(0);
   const flexRef = useRef<HTMLDivElement | null>(null);
 
   const onClickCard = (item: AzureFunctionCoordinatesMappedItems) => {
@@ -57,7 +50,6 @@ export const ResultList = ({
         lat: item.latitude,
         lon: item.longitude,
       };
-      setScrollY(flexRef?.current?.scrollTop as number);
 
       const coordinates: StartAndEndCoordinates = {
         start: {
@@ -94,28 +86,8 @@ export const ResultList = ({
     // }, 500);
   };
 
-  useEffect(() => {
-    if (highlightedCard?.date) {
-      setScrollY(flexRef?.current?.scrollTop as number);
-    } else {
-      if (flexRef?.current) {
-        flexRef.current.scrollTop = scrollY;
-      }
-    }
-  }, [highlightedCard]);
-
   return (
     <div className="flex w-full flex-col rounded-inherit px-2">
-      <div className="flex w-full justify-center" {...handlers}>
-        <div
-          className="w-[25px] cursor-pointer pb-2 pt-1 sm:w-[40px]"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <span className="block h-1 rounded-sm bg-blues-200 shadow-custom-minor"></span>
-          <span className="block h-1"></span>
-        </div>
-      </div>
-
       <Collapse
         style={{
           width: "100%",
@@ -123,21 +95,18 @@ export const ResultList = ({
         easing={"ease-in-out"}
         in={isExpanded}
       >
-        <div
-          ref={flexRef}
-          className={`flex max-h-[300px] w-full flex-col gap-2 px-2 md:px-4`}
-        >
+        <div ref={flexRef} className={`flex w-full flex-col gap-2 px-2`}>
           {items.map((item) => {
-            const shouldBeExpanded = highlightedCard?.index === item.index;
-            const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
+            // const shouldBeExpanded = highlightedCard?.index === item.index;
+            // const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
 
-            useEffect(() => {
-              if (shouldBeExpanded) {
-                setTimeout(() => {
-                  setIsDelayedExpanded(true);
-                }, 600);
-              }
-            }, [shouldBeExpanded]);
+            // useEffect(() => {
+            //   if (shouldBeExpanded) {
+            //     setTimeout(() => {
+            //       setIsDelayedExpanded(true);
+            //     }, 600);
+            //   }
+            // }, [shouldBeExpanded]);
 
             return (
               <React.Fragment key={item.index}>
@@ -145,26 +114,28 @@ export const ResultList = ({
                   id={item.index.toString()}
                   className="relative flex w-full flex-col"
                 >
-                  <Button
-                    className={`cursor-pointer rounded-md bg-greens-300 py-1 shadow-custom-minor md:py-2`}
+                  <button
                     onClick={() => onClickCard(item)}
-                    fullWidth
+                    className={`w-full cursor-pointer rounded-md bg-greens-300 py-1 shadow-custom-minor md:py-2`}
                   >
-                    <div className="flex flex-shrink pl-3">
-                      <p className="text-variant-poppins text-start font-bold">
-                        {`#${item.index + 1}`}
-                      </p>
-                    </div>
-                    <div className="absolute m-auto flex w-full cursor-pointer justify-center">
-                      <p className="text-variant-regular text-center ">
-                        {item.primaryName}
-                      </p>
-                    </div>
+                    <div className="flex">
+                      <div className="flex flex-shrink pl-3">
+                        <p className="text-variant-poppins text-start font-bold">
+                          {`#${item.index + 1}`}
+                        </p>
+                      </div>
+                      <div className="absolute m-auto flex w-full cursor-pointer justify-center">
+                        <p className="text-variant-regular text-center ">
+                          {item.primaryName}
+                        </p>
+                      </div>
 
-                    <div className="flex w-full justify-end gap-2 pr-2 md:gap-4 md:pr-4">
-                      {Icon(item.times)}
+                      <div className="flex w-full justify-end gap-2 pr-2 md:gap-4 md:pr-4">
+                        {Icon(item.times)}
+                      </div>
                     </div>
-                  </Button>
+                  </button>
+
                   <Collapse in={highlightedCard?.index === item.index}>
                     <Carousell item={item} />
                   </Collapse>

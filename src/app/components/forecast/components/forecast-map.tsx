@@ -13,8 +13,6 @@ export const ForecastMap = ({ mapBoxKey }) => {
 
   const searchParams = useSearchParamsToObject();
 
-  const params = searchParams;
-
   const [polygon, setPolygon] = useState<null | turf.helpers.Feature<
     turf.helpers.Polygon,
     {
@@ -24,13 +22,15 @@ export const ForecastMap = ({ mapBoxKey }) => {
 
   const currentLatLocation = React.useMemo(() => {
     return (
-      { latitude: Number(params?.lat), longitude: Number(params?.lon) } ||
-      userLocation
+      {
+        latitude: Number(searchParams?.lat),
+        longitude: Number(searchParams?.lon),
+      } || userLocation
     );
   }, [searchParams, userLocation]);
 
   useEffect(() => {
-    if (!currentLatLocation) return;
+    if (!currentLatLocation.latitude || !currentLatLocation.longitude) return;
 
     const getBoundingboHelper = new MapboxBoundariesHelper(
       currentLatLocation,
@@ -70,7 +70,7 @@ export const ForecastMap = ({ mapBoxKey }) => {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      {userLocation && (
+      {currentLatLocation.latitude && userLocation && (
         <ReactMapGL
           // key={shouldAdjustHeight ? "adjusted" : "normal"}
           ref={mapRef}

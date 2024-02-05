@@ -56,7 +56,7 @@ export const Carousell = ({
         spaceBetween={30}
         // touchStartPreventDefault={false} // To allow horizontal scroll on iOS
         pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
-        style={{ width: "100%", height: "128px" }}
+        style={{ width: "100%" }}
         // allowTouchMove
         // onClick={(e) => {
         //   console.log(e.el);
@@ -68,7 +68,7 @@ export const Carousell = ({
       >
         <div
           key={item.index}
-          className="flex w-full flex-shrink rounded-[36px] shadow-custom-inner"
+          className="flex w-full flex-shrink shadow-custom-inner"
         >
           <>
             {Object.keys(days).map((day, index) => {

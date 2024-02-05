@@ -14,6 +14,7 @@ import {
 
 import { SunchaserListWrapper } from "./components/sunchaser/components/result-list-wrapper";
 import { Forecast } from "./components/forecast";
+import { useUseSwipeable } from "./hooks/use-swipeable";
 
 export const Footer2 = () => {
   const { footerItem } = useDisplayFooter2();
@@ -49,21 +50,27 @@ const FooterItemWrapper = ({ children, item }) => {
   const { footerItem } = useDisplayFooter2();
   const shouldExpand = item === footerItem && isFooterExpanded;
 
-  const [scrollY, setScrollY] = useState(0);
-  // TODO remember scroll position
+  const handlers = useUseSwipeable({
+    onSwipedUp: () => setIsFooterExpanded(true),
+    onSwipedDown: () => setIsFooterExpanded(false),
+  });
 
   return (
     <div className="fixed bottom-0 z-50 w-full rounded-custom border-2 border-green-100 bg-white pr-1">
+      <div className="mt-2 flex w-full justify-center" {...handlers}>
+        <div
+          className="w-[25px] cursor-pointer pb-2 pt-1 sm:w-[40px]"
+          onClick={() => setIsFooterExpanded(!isFooterExpanded)}
+        >
+          <span className="block h-1 rounded-sm bg-blues-200 shadow-custom-minor"></span>
+        </div>
+      </div>
       <Collapse
         style={{
           width: "100%",
         }}
         in={shouldExpand}
       >
-        <div
-          onClick={() => setIsFooterExpanded(false)}
-          className="ml-auto mr-5 mt-2 h-2 w-6 cursor-pointer  border-2 border-black"
-        ></div>
         <div className="max-h-[250px] w-full overflow-y-scroll scrollbar-thin scrollbar-track-slate-50">
           {children}
         </div>
@@ -85,25 +92,15 @@ const createFooterSubItems = (item: FooterItemType) => {
   };
 
   return (
-    <div
-      className={`h-12 w-24 rounded-lg border-2 border-green-100 text-center shadow-lg ${
-        isSelected ? "bg-gray-400" : "bg-white"
-      }`}
+    <button
+      onClick={() => onClick()}
+      className={`h-12 w-24 rounded-lg border-2 border-green-100 bg-white text-center shadow-lg`}
     >
-      <Button
-        style={{
-          height: "100%",
-          width: "100%",
-        }}
-        fullWidth
-        onClick={() => onClick()}
-      >
-        <div className="flex flex-col items-center hover:backdrop-brightness-100">
-          <p className={`text-variant-base whitespace-nowrap text-green-200`}>
-            {capitalize(item)}
-          </p>
-        </div>
-      </Button>
-    </div>
+      <div className="flex flex-col items-center hover:backdrop-brightness-100">
+        <p className={`text-variant-base whitespace-nowrap text-green-200`}>
+          {capitalize(item)}
+        </p>
+      </div>
+    </button>
   );
 };

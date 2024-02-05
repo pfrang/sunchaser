@@ -22,7 +22,7 @@ export const CarousellDetails = ({ times }: { times: Times[] }) => {
         return (
           <div
             key={time}
-            className="flex flex-col gap-2 rounded-[18px] px-3 shadow-custom-minor"
+            className="flex flex-col gap-2 rounded-md bg-greens-300 px-3 py-1 shadow-custom-minor"
           >
             <p className="text-nowrap text-center">{time}</p>
 

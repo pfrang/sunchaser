@@ -1,5 +1,8 @@
 import { AppConfig } from "app-config";
 import { IosInstallPrompt } from "pwa/ios-install-prompt";
+import { Suspense } from "react";
+
+import { Spinner } from "../ui-kit/spinner/spinner";
 
 import Router from "./components/router";
 import { Footer } from "./footer";
@@ -12,15 +15,17 @@ export default function Page() {
   return (
     <>
       <div className="flex h-dvh w-[100%] flex-col ">
-        <Header />
-        <main className="h-full">
-          <Router mapBoxKey={mapBoxKey} />
-        </main>
-        {/* <Spacer height={[48, 64]} width={"100%"} /> */}
+        <Suspense fallback={<Spinner />}>
+          <Header />
+          <main className="h-full">
+            <Router mapBoxKey={mapBoxKey} />
+          </main>
+          {/* <Spacer height={[48, 64]} width={"100%"} /> */}
 
-        {/* <Footer /> */}
-        <Footer2 />
-        <IosInstallPrompt />
+          {/* <Footer /> */}
+          <Footer2 />
+          <IosInstallPrompt />
+        </Suspense>
       </div>
 
       {/* <SpeedInsights /> */}

@@ -5,6 +5,7 @@ import React from "react";
 
 import { WhereAreYou } from "./components/_shared/where-are-you";
 import { useSearchParamsToObject } from "./hooks/use-search-params";
+import { useShouldHydrate } from "./hooks/use-should-hydrate";
 
 export const Header = () => {
   const searchParams = useSearchParamsToObject();
