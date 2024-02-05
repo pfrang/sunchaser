@@ -16,12 +16,11 @@ import { FooterItemWrapper } from "./components/_shared/footer-item-wrapper";
 import { Calendar } from "./components/sunchaser/components/calendar";
 
 export const Footer = () => {
-
   return (
     <div className={`absolute`}>
       <FooterItemRouter />
 
-      <div className="fixed right-2 top-1/2 flex w-fit flex-col items-center gap-4">
+      <div className="fixed right-2 top-1/3 flex w-fit flex-col items-center gap-4">
         {footerItems.map((item, index) => {
           return (
             <React.Fragment key={item + index}>
