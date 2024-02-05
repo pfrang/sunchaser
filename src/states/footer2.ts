@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { Footer } from "react-day-picker";
 
-export const footerItems = ["sunchaser", "forecast"] as const;
+export const footerItems = ["sunchaser", "forecast", "calendar"] as const;
 export type FooterItemType = (typeof footerItems)[number];
 
 export interface DisplayDrawerStates {

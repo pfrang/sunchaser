@@ -31,7 +31,7 @@ export const useDisplayIsFooterExpanded = create<{
   isFooterExpanded: boolean;
   setIsFooterExpanded: (input: boolean) => void;
 }>((set) => ({
-  isFooterExpanded: false,
+  isFooterExpanded: true,
   setIsFooterExpanded: (input: boolean) =>
     set(() => ({ isFooterExpanded: input })),
 }));

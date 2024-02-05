@@ -64,7 +64,7 @@ export const Calendar = () => {
   // TODO FIX CALENDAR SPACING ON DAYS
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex h-full justify-center">
         <DayPicker
           classNames={{
             day_selected: "daypicker-selected-date",
@@ -82,19 +82,18 @@ export const Calendar = () => {
           onSelect={Submit}
           showOutsideDays
           fixedWeeks
-          style={
-            {
-              // backgroundColor: `${theme.colors.green}`,
-              // padding: "10px",
-              // position: "absolute",
-              // zIndex: 99,
-              // boxShadow: "0 0 0 1px #6B93AA",
-              // borderCollapse: "collapse",
-              // tableLayout: "fixed",
-              // width: "100%",
-              // borderStyle: "hidden" /* hide standard table (collapsed) border */,
-            }
-          }
+          style={{
+            margin: 0,
+            // backgroundColor: `${theme.colors.green}`,
+            // padding: "10px",
+            // position: "absolute",
+            // zIndex: 99,
+            // boxShadow: "0 0 0 1px #6B93AA",
+            // borderCollapse: "collapse",
+            // tableLayout: "fixed",
+            // width: "100%",
+            // borderStyle: "hidden" /* hide standard table (collapsed) border */,
+          }}
           formatters={{
             formatCaption: (date, options) => {
               // Format the date as you wish
@@ -106,10 +105,8 @@ export const Calendar = () => {
               );
               return (
                 <div className="flex w-full justify-between rounded-[16px] border-2 border-blues-700 bg-blues-500 p-4 text-white">
-                  <p className="text-variant-poppins-lg">
-                    {formattedDateMonth}
-                  </p>
-                  <p className="text-variant-poppins-lg">{formattedDateYear}</p>
+                  <p className="text-variant-poppins">{formattedDateMonth}</p>
+                  <p className="text-variant-poppins">{formattedDateYear}</p>
                 </div>
               );
             },
@@ -124,7 +121,7 @@ export const Calendar = () => {
               color: "white",
             },
             table: {
-              marginTop: "6rem",
+              marginTop: "1rem",
               width: "100%",
               display: "table",
               borderCollapse: "separate",

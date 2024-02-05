@@ -4,15 +4,11 @@ import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-p
 import { Spinner } from "ui-kit/spinner/spinner";
 import { useForecast } from "app/hooks/use-forecast";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import { Collapse } from "@mui/material";
-
-import { useDisplayFooter2 } from "../../../states/footer2";
 
 import { ForecastTableContainer } from "./components/table-container";
 
 export const Forecast = () => {
   const searchParams = useSearchParamsToObject();
-  const { footerItem } = useDisplayFooter2();
 
   const { data, isLoading, error } = useForecast({
     params: searchParams,

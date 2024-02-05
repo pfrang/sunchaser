@@ -4,10 +4,9 @@ import { Suspense } from "react";
 
 import { Spinner } from "../ui-kit/spinner/spinner";
 
-import Router from "./components/router";
-import { Footer } from "./footer";
+import Router from "./components/map-renderer";
 import { Header } from "./header";
-import { Footer2 } from "./footer2";
+import { Footer } from "./footer";
 
 export default function Page() {
   const mapBoxKey = new AppConfig().mapBox.key;
@@ -20,10 +19,8 @@ export default function Page() {
           <main className="h-full">
             <Router mapBoxKey={mapBoxKey} />
           </main>
-          {/* <Spacer height={[48, 64]} width={"100%"} /> */}
 
-          {/* <Footer /> */}
-          <Footer2 />
+          <Footer />
           <IosInstallPrompt />
         </Suspense>
       </div>

@@ -22,6 +22,7 @@ export class MapBoxHelper {
   centerLon: number;
   centerLat: number;
   ranks: AzureFunctionCoordinatesMappedItems[];
+  currentPopup: mapboxgl.Popup | null = null;
 
   constructor(
     centerLon: number,
@@ -58,6 +59,12 @@ export class MapBoxHelper {
     });
     // only remove if exist
 
+    // remove any popup
+    if (this.currentPopup) {
+      this.currentPopup.remove();
+      this.currentPopup = null;
+    }
+
     layers.forEach((layer) => {
       if (this.map.getLayer(layer)) {
         this.map.removeLayer(layer);
@@ -66,74 +73,89 @@ export class MapBoxHelper {
   }
 
   addSourceSettings() {
-    if (this.map.getSource("tiles")) return;
-    this.map.addSource("tiles", {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: this.longitudes.map((lon, index) => ({
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [lon, this.latitudes[index]],
-          },
-          properties: {
-            primaryName: this.ranks[index].primaryName,
-            rank: this.ranks[index].rank,
-            // TODO add symbol
-          },
-        })),
-      },
-      cluster: true,
-      clusterMaxZoom: 13,
-      clusterRadius: 200,
-    });
+    if (!this.map.getSource("tiles")) {
+      this.map.addSource("tiles", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: this.longitudes.map((lon, index) => ({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [lon, this.latitudes[index]],
+            },
+            properties: {
+              primaryName: this.ranks[index].primaryName,
+              rank: this.ranks[index].rank,
+              // TODO add symbol
+            },
+          })),
+        },
+        cluster: true,
+        clusterMaxZoom: 13,
+        clusterRadius: 200,
+      });
+    }
   }
 
   addCluster() {
-    this.map.addLayer({
-      id: "clusters",
-      type: "circle",
-      source: "tiles",
-      filter: ["has", "point_count"],
-      paint: {
-        "circle-color": [
-          "step",
-          ["get", "point_count"],
-          "#E7E621",
-          100, // when 100 different points / locations
-          "#f1f075",
-          750, // when 750 different points / locations
-          "#f28cb1",
-        ],
-        "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
-      },
-    });
+    if (!this.map.getLayer("clusters")) {
+      this.map.addLayer({
+        id: "clusters",
+        type: "circle",
+        source: "tiles",
+        filter: ["has", "point_count"],
+        paint: {
+          "circle-color": [
+            "step",
+            ["get", "point_count"],
+            "#E7E621",
+            100, // when 100 different points / locations
+            "#f1f075",
+            750, // when 750 different points / locations
+            "#f28cb1",
+          ],
+          "circle-radius": [
+            "step",
+            ["get", "point_count"],
+            20,
+            100,
+            30,
+            750,
+            40,
+          ],
+        },
+      });
+    }
 
-    this.map.addLayer({
-      id: "cluster-count",
-      type: "symbol",
-      source: "tiles",
-      filter: ["has", "point_count"],
-      layout: {
-        "text-field": ["get", "point_count_abbreviated"],
-        "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-        "text-size": 20,
-      },
-    });
+    if (!this.map.getLayer("cluster-count")) {
+      this.map.addLayer({
+        id: "cluster-count",
+        type: "symbol",
+        source: "tiles",
+        filter: ["has", "point_count"],
+        layout: {
+          "text-field": ["get", "point_count_abbreviated"],
+          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+          "text-size": 20,
+        },
+      });
+    }
 
-    this.map.addLayer({
-      id: "unclustered-point",
-      type: "circle",
-      source: "tiles",
-      filter: ["!", ["has", "point_count"]],
-      paint: {
-        "circle-color": "#E7E621",
-        "circle-radius": 15,
-        "circle-stroke-width": 1,
-        "circle-stroke-color": "#fff",
-      },
-    });
+    if (!this.map.getLayer("unclustered-point")) {
+      this.map.addLayer({
+        id: "unclustered-point",
+        type: "circle",
+        source: "tiles",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+          "circle-color": "#E7E621",
+          "circle-radius": 15,
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#fff",
+        },
+      });
+    }
   }
 
   addHeatMap() {
@@ -225,7 +247,7 @@ export class MapBoxHelper {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       }
 
-      new mapboxgl.Popup()
+      this.currentPopup = new mapboxgl.Popup()
         .setLngLat(coordinates)
         .setHTML(
           `Latitude: ${coordinates[1].toFixed(2)}<br>

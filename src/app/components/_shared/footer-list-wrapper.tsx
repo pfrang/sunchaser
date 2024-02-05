@@ -10,13 +10,10 @@ import {
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
 import { useUseSwipeable } from "app/hooks/use-swipeable";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-import { StateHelper } from "../../../../states/sunchaser-result";
-import { StartAndEndCoordinates } from "../../../utils/mapbox-settings";
-
-import { Carousell } from "./carousell";
+import { StateHelper } from "../../../states/sunchaser-result";
+import { StartAndEndCoordinates } from "../../utils/mapbox-settings";
+import { Carousell } from "../sunchaser/components/carousell";
 
 export const ResultList = ({
   items,
@@ -79,7 +76,7 @@ export const ResultList = ({
       return setTimeout(() => {
         const element = document.getElementById(item.index.toString());
         element?.scrollIntoView({ behavior: "smooth" });
-      }, 350);
+      }, 250);
     }
     setHighlightedCard(undefined);
     resetMap();
@@ -110,8 +107,6 @@ export const ResultList = ({
             //   }
             // }, [shouldBeExpanded]);
 
-            const isExpanded = highlightedCard?.index === item.index;
-
             return (
               <React.Fragment key={item.index}>
                 <div
@@ -122,29 +117,25 @@ export const ResultList = ({
                     onClick={() => onClickCard(item)}
                     className={`w-full cursor-pointer rounded-md bg-greens-300 py-1 shadow-custom-minor md:py-2`}
                   >
-                    <div className="flex items-center justify-between px-4">
-                      <div className="flex gap-4 font-bold ">
-                        <p className="text-variant-roboto flex items-center justify-center rounded-full border-2 border-black px-2">{`${
-                          item.index + 1
-                        }`}</p>
-
-                        <p className="text-variant-roboto">
+                    <div className="flex">
+                      <div className="flex flex-shrink pl-3">
+                        <p className="text-variant-poppins text-start font-bold">
+                          {`#${item.index + 1}`}
+                        </p>
+                      </div>
+                      <div className="absolute m-auto flex w-full cursor-pointer justify-center">
+                        <p className="text-variant-regular text-center ">
                           {item.primaryName}
                         </p>
                       </div>
 
-                      <div className="flex justify-end gap-4">
-                        <div className="flex">{Icon(item.times)}</div>
-                        {isExpanded ? (
-                          <KeyboardArrowDownIcon />
-                        ) : (
-                          <KeyboardArrowRightIcon />
-                        )}
+                      <div className="flex w-full justify-end gap-2 pr-2 md:gap-4 md:pr-4">
+                        {Icon(item.times)}
                       </div>
                     </div>
                   </button>
 
-                  <Collapse in={isExpanded}>
+                  <Collapse in={highlightedCard?.index === item.index}>
                     <Carousell item={item} />
                   </Collapse>
                 </div>

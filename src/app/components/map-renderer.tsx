@@ -12,6 +12,9 @@ import { useDisplayFooter2 } from "../../states/footer2";
 import { useForecast } from "../hooks/use-forecast";
 import { MapBoxHelper } from "../utils/mapbox-settings";
 import { StateHelper } from "../../states/sunchaser-result";
+import { useShouldHydrate } from "../hooks/use-should-hydrate";
+
+import { LocationModal } from "./_shared/location-modal";
 
 const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
   return (
@@ -66,10 +69,10 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const { setMapObject } = StateHelper.mapObject();
 
   useEffect(() => {
-    if (document.getElementById("map") && userLocation && data) {
+    if (document.getElementById("map") && data?.userLocation.latitude) {
       // const longitudes = data.ranks.map((item) => item.longitude);
       // const latitudes = data.ranks.map((item) => item.latitude);
-      const userLocation = data?.userLocation;
+      const userLocation = data.userLocation;
 
       const mapInitializer = new MapBoxHelper(
         userLocation.longitude,
@@ -88,29 +91,42 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
         setMapObject(primaryMap);
       });
     }
-  }, [userLocation, data]);
-
-  // if (!userLocation) return <LocationModal />;
+  }, [data]);
 
   useEffect(() => {
-    if (footerItem === "sunchaser" && mapInstance) {
-      mapInstance.addSourceSettings();
-      mapInstance.addCluster();
-      // mapInstance.addHeatMap();
-      mapInstance.addClickHandlers();
-      mapInstance.setFitBounds();
-    } else {
-      mapInstance?.resetMap();
+    if (footerItem === "calendar") return;
+    if (mapInstance && userLocation) {
+      if (footerItem === "sunchaser") {
+        requestAnimationFrame(() => {
+          mapInstance.addSourceSettings();
+          requestAnimationFrame(() => {
+            mapInstance.addCluster();
+            requestAnimationFrame(() => {
+              mapInstance.addClickHandlers();
+              requestAnimationFrame(() => {
+                mapInstance.setFitBounds();
+              });
+            });
+          });
+        });
+      } else if (footerItem === "forecast") {
+        mapInstance.resetMap();
+      }
     }
   }, [footerItem, mapInstance]);
 
+  const shouldHydrate = useShouldHydrate();
+
   return (
-    <section id="section-map" className="h-full">
-      <div className="sticky top-0 flex h-full items-center justify-center">
-        <div id="map" className="m-auto h-full w-full "></div>
-        <div id="original-map" className="m-auto hidden h-full w-full"></div>
-      </div>
-    </section>
+    <>
+      {/* {shouldHydrate && !userLocation && <LocationModal />} */}
+      <section id="section-map" className="h-full">
+        <div className="sticky top-0 flex h-full items-center justify-center">
+          <div id="map" className="m-auto h-full w-full "></div>
+          <div id="original-map" className="m-auto hidden h-full w-full"></div>
+        </div>
+      </section>
+    </>
   );
 };
 

@@ -1,191 +1,88 @@
 "use client";
-import Image from "next/image";
-import { capitalize } from "lodash";
-import React, { useEffect, useRef } from "react";
-import { useState } from "react";
-import { Box, Button, Collapse } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { theme } from "ui-kit/theme";
 
+import { capitalize } from "lodash";
+import React from "react";
+
+import { useDisplayIsFooterExpanded } from "../states/footer";
 import {
-  FooterItems,
-  FooterSubItems,
-  footerSubItemsForecast,
-  footerSubItemsSunchaser,
-  useDisplayFooter,
-  useDisplayFooterSubItems,
-  useDisplayIsFooterExpanded,
-} from "../states/footer";
+  useDisplayFooter2,
+  footerItems,
+  FooterItemType,
+} from "../states/footer2";
 
 import { SunchaserListWrapper } from "./components/sunchaser/components/result-list-wrapper";
-import { useUseSwipeable } from "./hooks/use-swipeable";
+import { Forecast } from "./components/forecast";
+import { FooterItemWrapper } from "./components/_shared/footer-item-wrapper";
+import { Calendar } from "./components/sunchaser/components/calendar";
 
 export const Footer = () => {
-  const { footerItem } = useDisplayFooter();
-  // how to only destruct setBoxPosition from useState?
-  const [, setBoxPosition] = useState("sticky");
-  const boxRef = useRef(null);
-
-  const { footerSubItem } = useDisplayFooterSubItems();
-
-  const { isFooterExpanded, setIsFooterExpanded } =
-    useDisplayIsFooterExpanded();
-
-  const isOnSunChaserResult =
-    footerItem === "sunchaser" && footerSubItem === "result";
-
-  const handleToggle = () => {
-    setIsFooterExpanded(!isFooterExpanded);
-  };
-
-  const subFooterItems =
-    footerItem === "sunchaser"
-      ? footerSubItemsSunchaser
-      : footerSubItemsForecast;
-
-  useEffect(() => {
-    const timerId = setTimeout(() => {
-      if (isFooterExpanded) {
-        setBoxPosition("sticky");
-      } else {
-        setBoxPosition("fixed");
-      }
-      // set position sticky to this useRef below
-    }, 500);
-
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [isFooterExpanded]);
-
-  const handlers = useUseSwipeable({
-    onSwipedUp: () => setIsFooterExpanded(true),
-    onSwipedDown: () => setIsFooterExpanded(false),
-  });
 
   return (
-    <footer>
-      <Box
-        ref={boxRef}
-        sx={{
-          // position: isExpanded ? "sticky" : "fixed",
-          position: "fixed",
-          // position: "sticky",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          borderRadius: "36px 36px 0px 0px",
-          // padding: "8px",
-          borderTop: "1px solid #ccc",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          zIndex: 9,
-          backgroundColor: theme.color.blues[4],
-        }}
-      >
-        {isOnSunChaserResult && <SunchaserListWrapper />}
-        <>
-          <div className="w-full rounded-custom bg-blues-200">
-            <Button fullWidth {...handlers} onClick={handleToggle}>
-              {isFooterExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-            </Button>
-          </div>
+    <div className={`absolute`}>
+      <FooterItemRouter />
 
-          <Collapse
-            style={{
-              width: "100%",
-            }}
-            in={isFooterExpanded}
-          >
-            <span className="block h-4 w-full border-t-2 border-greys-100"></span>
-
-            <div className="w-full">
-              <span className="h-2 w-full"></span>
-
-              <div className="w-full px-4">
-                <div className="flex w-full justify-between gap-4">
-                  <FooterButton text="forecast" />
-                  <FooterButton text="sunchaser" />
-                </div>
-
-                <span className="block h-3 w-full" />
-
-                <span className="block h-3 w-full rounded-md bg-blues-200 shadow-custom-inner"></span>
-
-                <div className="flex h-full w-full justify-between">
-                  {subFooterItems.map((item, index) => {
-                    return (
-                      <React.Fragment key={item + index}>
-                        {createFooterSubItems(item)}
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </Collapse>
-        </>
-      </Box>
-    </footer>
-  );
-};
-
-const FooterButton = ({ text }: { text: FooterItems }) => {
-  const { footerItem, setFooterItem } = useDisplayFooter();
-  const { setFooterSubItem } = useDisplayFooterSubItems();
-
-  const handleClick = () => {
-    setFooterItem(text);
-    setFooterSubItem("result");
-  };
-
-  return (
-    <div
-      className={`flex h-full w-full rounded-3xl border-2 border-greys-200 shadow-custom-inner ${
-        text === footerItem ? "bg-blues-200" : "bg-inherit"
-      }`}
-    >
-      <button className="w-full p-0" onClick={handleClick}>
-        <div className="flex w-full cursor-pointer flex-col items-center justify-center">
-          <p className="text-variant-regular whitespace-nowrap text-white">
-            {capitalize(text)}
-          </p>
-        </div>
-      </button>
+      <div className="fixed right-2 top-1/2 flex w-fit flex-col items-center gap-4">
+        {footerItems.map((item, index) => {
+          return (
+            <React.Fragment key={item + index}>
+              {createFooterSubItems(item)}
+            </React.Fragment>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
-const createFooterSubItems = (item: FooterSubItems) => {
-  const { footerSubItem, setFooterSubItem } = useDisplayFooterSubItems();
+const FooterItemRouter = () => {
+  const { footerItem } = useDisplayFooter2();
+
+  switch (footerItem) {
+    case "forecast":
+      return (
+        <FooterItemWrapper item="forecast">
+          <Forecast />
+        </FooterItemWrapper>
+      );
+    case "sunchaser":
+      return (
+        <FooterItemWrapper item="sunchaser">
+          <SunchaserListWrapper />
+        </FooterItemWrapper>
+      );
+    default:
+      return (
+        <FooterItemWrapper item="calendar">
+          <Calendar />
+        </FooterItemWrapper>
+      );
+  }
+};
+
+const createFooterSubItems = (item: FooterItemType) => {
+  const { footerItem, setFooterItem } = useDisplayFooter2();
+
+  const { setIsFooterExpanded } = useDisplayIsFooterExpanded();
+
+  const onClick = () => {
+    setFooterItem(item);
+    setIsFooterExpanded(true);
+  };
+
+  const isSelected = footerItem === item;
 
   return (
-    <Button
-      style={{ height: "100%" }}
-      fullWidth
-      onClick={() => setFooterSubItem(item)}
+    <button
+      onClick={() => onClick()}
+      className={`h-12 w-full rounded-lg border-2 border-green-100 p-2 text-center shadow-lg ${
+        isSelected ? "bg-gray-500" : "bg-white"
+      }`}
     >
       <div className="flex flex-col items-center hover:backdrop-brightness-100">
-        <Image
-          alt="partlySunny"
-          src={
-            footerSubItem === item
-              ? "/icons/white/svg/partlysunny.svg"
-              : "/icons/black/svg/partlysunny.svg"
-          }
-          width={64}
-          height={64}
-        />
-        <p
-          className={`text-variant-base text-variant-regular whitespace-nowrap text-white
-            ${footerSubItem === item ? "text-white" : "text-black"}
-            `}
-        >
+        <p className={`text-variant-base whitespace-nowrap text-green-200`}>
           {capitalize(item)}
         </p>
       </div>
-    </Button>
+    </button>
   );
 };

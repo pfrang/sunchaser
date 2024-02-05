@@ -1,10 +1,10 @@
 "use client";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+
 import {
   AzureFunctionCoordinatesMappedItems,
   Times,
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import React from "react";
 
 import { CarousellDetails } from "./carousell-details";
 
@@ -24,70 +24,29 @@ export const Carousell = ({
 
   return (
     <>
-      <Swiper
-        // onSwiper={(swiper) => (swiperRef.current = swiper)}
-        // breakpoints={{
-        //   480: {
-        //     width: 480,
-        //     slidesPerView: 2,
-        //     slidesPerGroup: 2,
-        //   },
-        //   1100: {
-        //     width: 1100,
-        //     slidesPerView: 3,
-        //     slidesPerGroup: 3,
-        //   },
-        // }}
+      <div key={item.index} className="flex w-full flex-shrink flex-col">
+        <>
+          {Object.keys(days).map((day, index) => {
+            const times: Times[] = days[day];
 
-        autoHeight
-        // freeMode={{ enabled: true, momentum: true }}
-        // mousewheel={{
-        //   sensitivity: 10,
+            const date = new Date(day);
 
-        // }}
-        // keyboard={{ // Requires Keyboard to be added to module
-        //   enabled: true,
-        //   onlyInViewport: false,
-        // }}
-        // mousewheel // Requires Mousewheel to be added to module
-        // slidesPerView={1}
-        direction="horizontal"
-        slidesPerView="auto"
-        spaceBetween={30}
-        // touchStartPreventDefault={false} // To allow horizontal scroll on iOS
-        pagination={{ clickable: true, el: ".swiper-pagination-custom" }}
-        style={{ width: "100%" }}
-        // allowTouchMove
-        // onClick={(e) => {
-        //   console.log(e.el);
-        // }}
-        // slidesPerGroup={3}
-        // loop={true}
-        // navigation={true} // Requires Navigation to be added to module
-        modules={[Pagination]}
-      >
-        <div
-          key={item.index}
-          className="flex w-full flex-shrink shadow-custom-inner"
-        >
-          <>
-            {Object.keys(days).map((day, index) => {
-              const times: Times[] = days[day];
+            return (
+              <React.Fragment key={day + index}>
+                <p className="py-2 text-center font-bold capitalize">
+                  {date.toLocaleDateString(navigator.language, {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
 
-              return (
-                <SwiperSlide key={day + index}>
-                  <p className="text-center">{day}</p>
-
-                  <CarousellDetails times={times} />
-                </SwiperSlide>
-              );
-            })}
-          </>
-        </div>
-        <div className="flex w-full items-center justify-center pt-2">
-          <div className="swiper-pagination-custom flex justify-center"></div>
-        </div>
-      </Swiper>
+                <CarousellDetails times={times} />
+              </React.Fragment>
+            );
+          })}
+        </>
+      </div>
     </>
   );
 };
