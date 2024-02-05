@@ -14,12 +14,9 @@ export const Forecast = () => {
   const searchParams = useSearchParamsToObject();
   const { footerItem } = useDisplayFooter2();
 
-  const { data, isLoading, error } = useForecast(
-    {
-      params: searchParams,
-    },
-    Boolean(searchParams?.lat),
-  );
+  const { data, isLoading, error } = useForecast({
+    params: searchParams,
+  });
 
   return (
     <div className="flex w-full flex-col gap-4">

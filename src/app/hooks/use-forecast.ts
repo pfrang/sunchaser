@@ -4,11 +4,10 @@ import { AxiosError } from "axios";
 
 import { useNextApiRequest } from "./use.next-api-request";
 import { NextApiRequest } from "./common-types";
+import { useSearchParamsToObject } from "./use-search-params";
 
-export const useForecast = (
-  requestConfig: Pick<NextApiRequest, "params">,
-  isReady?: boolean,
-) => {
+export const useForecast = (requestConfig: Pick<NextApiRequest, "params">) => {
+  const searchParams = useSearchParamsToObject();
   const { data, error, isLoading } = useNextApiRequest<
     ForecastNextApiResponse,
     AxiosError
@@ -17,7 +16,7 @@ export const useForecast = (
       url: yrUrl,
       params: requestConfig.params,
     },
-    isReady,
+    Boolean(searchParams?.lat && searchParams?.lon),
   );
 
   return { data, error, isLoading };

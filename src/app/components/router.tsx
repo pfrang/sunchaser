@@ -1,27 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-import {
-  useDisplayFooter,
-  useDisplayFooterSubItems,
-  useDisplayIsFooterExpanded,
-} from "states/footer";
-import { Flex } from "ui-kit/flex";
 import { useRouter } from "next/navigation";
+import mapboxgl from "mapbox-gl";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
 import { sanitizeNextParams } from "../utils/sanitize-next-query";
 import { useSearchParamsToObject } from "../hooks/use-search-params";
 import { useDisplayFooter2 } from "../../states/footer2";
-
-import { ChooseTravelDistance } from "./_shared/choose-travel-distance";
-import { Forecast } from "./forecast";
-import { Sunchaser } from "./sunchaser";
-import { CalendarWrapper } from "./sunchaser/components/calendar-wrapper";
-import { LocationModal } from "./_shared/location-modal";
-import { Map } from "./sunchaser/components/map";
-import { ForecastMap } from "./forecast/components/forecast-map";
+import { useForecast } from "../hooks/use-forecast";
+import { MapBoxHelper } from "../utils/mapbox-settings";
+import { StateHelper } from "../../states/sunchaser-result";
 
 const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
   return (
@@ -36,14 +26,24 @@ const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   const { footerItem } = useDisplayFooter2();
 
+  mapboxgl.accessToken = mapBoxKey;
+
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
   const { userLocation } = useUserLocation();
 
-  useCoordinates({
+  const { data, error, isLoading } = useCoordinates({
     method: "POST",
     params: searchParams,
     data: searchParams,
+  });
+
+  const {
+    data: yrData,
+    isLoading: yrLoading,
+    error: yrError,
+  } = useForecast({
+    params: searchParams,
   });
 
   useEffect(() => {
@@ -62,14 +62,56 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
     router.push(`/?${urlParams}`);
   }, [userLocation]);
 
-  if (!userLocation) return <LocationModal />;
+  const { mapInstance, setMapInstance } = StateHelper.mapInstance();
+  const { setMapObject } = StateHelper.mapObject();
 
-  switch (footerItem) {
-    case "forecast":
-      return <ForecastMap mapBoxKey={mapBoxKey} />;
-    default:
-      return <Sunchaser mapBoxKey={mapBoxKey} />;
-  }
+  useEffect(() => {
+    if (document.getElementById("map") && userLocation && data) {
+      // const longitudes = data.ranks.map((item) => item.longitude);
+      // const latitudes = data.ranks.map((item) => item.latitude);
+      const userLocation = data?.userLocation;
+
+      const mapInitializer = new MapBoxHelper(
+        userLocation.longitude,
+        userLocation.latitude,
+        data.ranks,
+      );
+
+      const primaryMap = mapInitializer.map;
+
+      mapInitializer.initializeMap();
+
+      primaryMap.on("load", () => {
+        primaryMap.resize();
+        // primaryMap.addControl(new mapboxgl.NavigationControl());
+        setMapInstance(mapInitializer);
+        setMapObject(primaryMap);
+      });
+    }
+  }, [userLocation, data]);
+
+  // if (!userLocation) return <LocationModal />;
+
+  useEffect(() => {
+    if (footerItem === "sunchaser" && mapInstance) {
+      mapInstance.addSourceSettings();
+      mapInstance.addCluster();
+      // mapInstance.addHeatMap();
+      mapInstance.addClickHandlers();
+      mapInstance.setFitBounds();
+    } else {
+      mapInstance?.resetMap();
+    }
+  }, [footerItem, mapInstance]);
+
+  return (
+    <section id="section-map" className="h-full">
+      <div className="sticky top-0 flex h-full items-center justify-center">
+        <div id="map" className="m-auto h-full w-full "></div>
+        <div id="original-map" className="m-auto hidden h-full w-full"></div>
+      </div>
+    </section>
+  );
 };
 
 export default RouterWrapper;

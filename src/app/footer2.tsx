@@ -31,7 +31,7 @@ export const Footer2 = () => {
         </FooterItemWrapper>
       )}
 
-      <div className="fixed bottom-12 left-1/2 grid -translate-x-1/2 transform grid-cols-2 gap-10">
+      <div className="fixed bottom-12 flex w-full justify-center gap-4">
         {footerItems.map((item, index) => {
           return (
             <React.Fragment key={item + index}>
@@ -84,8 +84,6 @@ const createFooterSubItems = (item: FooterItemType) => {
 
   const { setIsFooterExpanded } = useDisplayIsFooterExpanded();
 
-  const isSelected = item === footerItem;
-
   const onClick = () => {
     setFooterItem(item);
     setIsFooterExpanded(true);
@@ -94,7 +92,7 @@ const createFooterSubItems = (item: FooterItemType) => {
   return (
     <button
       onClick={() => onClick()}
-      className={`h-12 w-24 rounded-lg border-2 border-green-100 bg-white text-center shadow-lg`}
+      className={`h-12 w-fit rounded-lg border-2 border-green-100 bg-white p-2 text-center shadow-lg`}
     >
       <div className="flex flex-col items-center hover:backdrop-brightness-100">
         <p className={`text-variant-base whitespace-nowrap text-green-200`}>

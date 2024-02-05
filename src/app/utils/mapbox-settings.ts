@@ -6,6 +6,9 @@ interface Coordinates {
   latitude: number;
 }
 
+const layers = ["clusters", "cluster-count", "unclustered-point", "route"];
+const source = ["tiles"];
+
 export interface StartAndEndCoordinates {
   start: Coordinates;
   end: Coordinates;
@@ -43,10 +46,27 @@ export class MapBoxHelper {
   initializeMap() {
     this.setMarkers();
 
-    this.setFitBounds();
+    new mapboxgl.Marker({ color: "red" })
+      .setLngLat([this.centerLon, this.centerLat])
+      .addTo(this.map);
+  }
+
+  resetMap() {
+    this.map.flyTo({
+      center: [this.centerLon, this.centerLat],
+      zoom: 10,
+    });
+    // only remove if exist
+
+    layers.forEach((layer) => {
+      if (this.map.getLayer(layer)) {
+        this.map.removeLayer(layer);
+      }
+    });
   }
 
   addSourceSettings() {
+    if (this.map.getSource("tiles")) return;
     this.map.addSource("tiles", {
       type: "geojson",
       data: {
@@ -234,21 +254,13 @@ export class MapBoxHelper {
     //     .setLngLat([this.longitudes[index], this.latitudes[index]])
     //     .addTo(this.map)
     //     .getElement();
-
     //   markerElement.addEventListener("mouseenter", () => {
     //     this.map.getCanvas().style.cursor = "pointer";
     //   });
-
     //   markerElement.addEventListener("mouseleave", () => {
     //     this.map.getCanvas().style.cursor = "";
     //   });
     // });
-
-    // only sets user location
-
-    new mapboxgl.Marker({ color: "red" })
-      .setLngLat([this.centerLon, this.centerLat])
-      .addTo(this.map);
   }
 
   setFitBounds() {
