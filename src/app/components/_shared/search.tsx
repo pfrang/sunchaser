@@ -15,7 +15,7 @@ import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
 
-export const WhereAreYou = () => {
+export const Search = () => {
   const [townSearch, setTownSearch] = useState("");
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [dataFetched, setDatafetched] = useState(false);
@@ -100,7 +100,7 @@ export const WhereAreYou = () => {
 
   return (
     <div
-      className={`relative top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg transition-width duration-300 ease-in-out
+      className={`relative top-2 z-50 left-[6px] flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg transition-width duration-300 ease-in-out
         ${
           isExpanded
             ? "w-[250px] bg-blues-400 sm:w-[350px] md:w-[500px]"

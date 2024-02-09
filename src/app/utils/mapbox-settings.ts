@@ -44,12 +44,34 @@ export class MapBoxHelper {
     });
   }
 
+  adjustStyle(input: string) {
+    this.map.setStyle(input);
+    this.map.on("style.load", () => {
+      this.sourceAndLayerAfterLoad();
+    });
+  }
+
+  sourceAndLayerAfterLoad() {
+    this.addSourceSettings();
+    this.addCluster();
+    // mapInitializer.addHeatMap();
+    this.addClickHandlers();
+  }
+
   initializeMap() {
     this.setMarkers();
 
     new mapboxgl.Marker({ color: "red" })
       .setLngLat([this.centerLon, this.centerLat])
       .addTo(this.map);
+  }
+
+  flyToUserLocation() {
+    this.map.flyTo({
+      center: [this.centerLon, this.centerLat],
+      duration: 500,
+      zoom: 10,
+    });
   }
 
   resetMap() {

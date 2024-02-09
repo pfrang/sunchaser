@@ -1,50 +1,49 @@
 "use client";
 import { create } from "zustand";
 
-export type FooterItems = "sunchaser" | "forecast";
-export type FooterSubItems = "location" | "date" | "profile" | "map" | "result";
+export const footerItems = ["forecast", "sunchaser"] as const;
+export const subFooterItems = ["result", "calendar"] as const;
 
-export const footerSubItemsForecast = [
-  "result",
-  "map",
-  "date",
-  "profile",
-] as const;
-
-export const footerSubItemsSunchaser = [
-  "result",
-  "location",
-  "date",
-  "profile",
-] as const;
+export type FooterItemType = (typeof footerItems)[number];
+export type FooterSubItemType = (typeof subFooterItems)[number];
 
 export interface DisplayDrawerStates {
-  footerItem: FooterItems;
-  setFooterItem: (input: FooterItems) => void;
-}
-export interface DisplayDrawerSubItemsStates {
-  footerSubItem: FooterSubItems;
-  setFooterSubItem: (input: FooterSubItems) => void;
+  footerItem: FooterItemType;
+  setFooterItem: (input: FooterItemType) => void;
 }
 
 export const useDisplayIsFooterExpanded = create<{
   isFooterExpanded: boolean;
   setIsFooterExpanded: (input: boolean) => void;
 }>((set) => ({
-  isFooterExpanded: true,
+  isFooterExpanded: false,
   setIsFooterExpanded: (input: boolean) =>
     set(() => ({ isFooterExpanded: input })),
 }));
 
-export const useDisplayFooter = create<DisplayDrawerStates>((set) => ({
-  footerItem: "forecast",
-  setFooterItem: (input: FooterItems) => set(() => ({ footerItem: input })),
+export const useDisplayIsSettingsExpanded = create<{
+  isSettingsExpanded: boolean;
+  setIsSettingsExpanded: (input: boolean) => void;
+}>((set) => ({
+  isSettingsExpanded: false,
+  setIsSettingsExpanded: (input: boolean) =>
+    set(() => ({ isSettingsExpanded: input })),
 }));
+
+export const useDisplayFooter = create<DisplayDrawerStates>((set) => ({
+  footerItem: "sunchaser",
+  setFooterItem: (input: FooterItemType) => set(() => ({ footerItem: input })),
+}));
+
+export interface DisplayDrawerSubItemsStates {
+  footerSubItem: FooterSubItemType;
+  setFooterSubItem: (input: FooterSubItemType) => void;
+}
 
 export const useDisplayFooterSubItems = create<DisplayDrawerSubItemsStates>(
   (set) => ({
     footerSubItem: "result",
-    setFooterSubItem: (input: FooterSubItems) =>
+    setFooterSubItem: (input: FooterSubItemType) =>
       set(() => ({ footerSubItem: input })),
   }),
 );

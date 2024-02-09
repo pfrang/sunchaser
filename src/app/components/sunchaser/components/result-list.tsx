@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import React from "react";
@@ -9,7 +9,6 @@ import {
   Times,
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
-import { useUseSwipeable } from "app/hooks/use-swipeable";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
@@ -25,8 +24,6 @@ export const ResultList = ({
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
-
   const { highlightedCard, setHighlightedCard } =
     StateHelper.useHighlightedCard();
 
@@ -43,8 +40,6 @@ export const ResultList = ({
       mapInstance?.setFitBounds();
     }
   };
-
-  const flexRef = useRef<HTMLDivElement | null>(null);
 
   const onClickCard = (item: AzureFunctionCoordinatesMappedItems) => {
     if (item.index !== highlightedCard?.index && mapObject) {
@@ -90,69 +85,59 @@ export const ResultList = ({
 
   return (
     <div className="flex w-full flex-col rounded-inherit px-2">
-      <Collapse
-        style={{
-          width: "100%",
-        }}
-        easing={"ease-in-out"}
-        in={isExpanded}
-      >
-        <div ref={flexRef} className={`flex w-full flex-col gap-2 px-2`}>
-          {items.map((item) => {
-            // const shouldBeExpanded = highlightedCard?.index === item.index;
-            // const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
+      <div className={`flex w-full flex-col gap-2 px-2`}>
+        {items.map((item) => {
+          // const shouldBeExpanded = highlightedCard?.index === item.index;
+          // const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
 
-            // useEffect(() => {
-            //   if (shouldBeExpanded) {
-            //     setTimeout(() => {
-            //       setIsDelayedExpanded(true);
-            //     }, 600);
-            //   }
-            // }, [shouldBeExpanded]);
+          // useEffect(() => {
+          //   if (shouldBeExpanded) {
+          //     setTimeout(() => {
+          //       setIsDelayedExpanded(true);
+          //     }, 600);
+          //   }
+          // }, [shouldBeExpanded]);
 
-            const isExpanded = highlightedCard?.index === item.index;
+          const isExpanded = highlightedCard?.index === item.index;
 
-            return (
-              <React.Fragment key={item.index}>
-                <div
-                  id={item.index.toString()}
-                  className="relative flex w-full flex-col"
+          return (
+            <React.Fragment key={item.index}>
+              <div
+                id={item.index.toString()}
+                className="relative flex w-full flex-col"
+              >
+                <button
+                  onClick={() => onClickCard(item)}
+                  className={`w-full cursor-pointer rounded-md bg-greens-300 py-1 shadow-custom-minor md:py-2`}
                 >
-                  <button
-                    onClick={() => onClickCard(item)}
-                    className={`w-full cursor-pointer rounded-md bg-greens-300 py-1 shadow-custom-minor md:py-2`}
-                  >
-                    <div className="flex items-center justify-between px-4">
-                      <div className="flex gap-4 font-bold ">
-                        <p className="text-variant-roboto flex items-center justify-center rounded-full border-2 border-black px-2">{`${
-                          item.index + 1
-                        }`}</p>
+                  <div className="flex items-center justify-between px-4">
+                    <div className="flex gap-4 font-bold ">
+                      <p className="text-variant-roboto flex items-center justify-center rounded-full border-2 border-black px-2">{`${
+                        item.index + 1
+                      }`}</p>
 
-                        <p className="text-variant-roboto">
-                          {item.primaryName}
-                        </p>
-                      </div>
-
-                      <div className="flex justify-end gap-4">
-                        <div className="flex">{Icon(item.times)}</div>
-                        {isExpanded ? (
-                          <KeyboardArrowDownIcon />
-                        ) : (
-                          <KeyboardArrowRightIcon />
-                        )}
-                      </div>
+                      <p className="text-variant-roboto">{item.primaryName}</p>
                     </div>
-                  </button>
 
-                  <Collapse in={isExpanded}>
-                    <Carousell item={item} />
-                  </Collapse>
-                </div>
-              </React.Fragment>
-            );
-          })}
-        </div>
-      </Collapse>
+                    <div className="flex justify-end gap-4">
+                      <div className="flex">{Icon(item.times)}</div>
+                      {isExpanded ? (
+                        <KeyboardArrowDownIcon />
+                      ) : (
+                        <KeyboardArrowRightIcon />
+                      )}
+                    </div>
+                  </div>
+                </button>
+
+                <Collapse in={isExpanded}>
+                  <Carousell item={item} />
+                </Collapse>
+              </div>
+            </React.Fragment>
+          );
+        })}
+      </div>
     </div>
   );
 };

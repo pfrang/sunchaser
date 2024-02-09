@@ -19,7 +19,7 @@ export const Forecast = () => {
       <ConditionalPresenter
         isLoading={isLoading}
         renderLoading={() => (
-          <div className="absolute bottom-1/2 left-1/2">
+          <div className="flex justify-center mt-2 w-full">
             <Spinner />
           </div>
         )}

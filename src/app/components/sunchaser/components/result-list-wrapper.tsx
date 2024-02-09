@@ -1,9 +1,9 @@
 "use client";
 
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
+import { Spinner } from "ui-kit/spinner/spinner";
 
 import { ConditionalPresenter } from "../../../../ui-kit/conditional-presenter/conditional-presenter";
-import { SearchLoader } from "../../../../ui-kit/search-loader/search-loader";
 import { useCoordinates } from "../../../hooks/use-coordinates";
 
 import { ResultList } from "./result-list";
@@ -23,7 +23,11 @@ export const SunchaserListWrapper = () => {
         isLoading={isLoading}
         error={error}
         data={data}
-        renderLoading={() => <SearchLoader />}
+        renderLoading={() => (
+          <div className="w-full flex mt-2 justify-center">
+            <Spinner />
+          </div>
+        )}
         renderError={() => {
           return <></>;
         }}

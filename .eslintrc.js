@@ -24,7 +24,7 @@ module.exports = {
     "prettier",
     "unicorn",
     "folders",
-    "tailwindcss", //
+    // "tailwindcss", //
   ],
   ignorePatterns: [
     "/.next",
@@ -37,7 +37,7 @@ module.exports = {
     "prettier",
     "prettier/prettier",
     "plugin:prettier/recommended",
-    "plugin:tailwindcss/recommended",
+    // "plugin:tailwindcss/recommended",
   ],
 
   rules: {

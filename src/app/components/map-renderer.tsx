@@ -3,20 +3,19 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import mapboxgl from "mapbox-gl";
+import { Spinner } from "ui-kit/spinner/spinner";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
 import { sanitizeNextParams } from "../utils/sanitize-next-query";
 import { useSearchParamsToObject } from "../hooks/use-search-params";
-import { useDisplayFooter2 } from "../../states/footer2";
-import { useForecast } from "../hooks/use-forecast";
 import { MapBoxHelper } from "../utils/mapbox-settings";
 import { StateHelper } from "../../states/sunchaser-result";
-import { useShouldHydrate } from "../hooks/use-should-hydrate";
 
-import { LocationModal } from "./_shared/location-modal";
-import { SubfooterButtons } from "./subfooter-buttons";
-import { HeaderSlider } from "./header-slider";
+import { SettingsButton } from "./settings-button";
+import { UserLocationButton } from "./user-location-button";
+import { SettingsWrapper } from "./settings-wrapper";
+import { Search } from "./_shared/search";
 
 const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
   return (
@@ -29,8 +28,6 @@ const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
 };
 
 const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
-  const { footerItem } = useDisplayFooter2();
-
   mapboxgl.accessToken = mapBoxKey;
 
   const searchParams = useSearchParamsToObject();
@@ -41,14 +38,6 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
     method: "POST",
     params: searchParams,
     data: searchParams,
-  });
-
-  const {
-    data: yrData,
-    isLoading: yrLoading,
-    error: yrError,
-  } = useForecast({
-    params: searchParams,
   });
 
   useEffect(() => {
@@ -88,44 +77,40 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
 
       primaryMap.on("load", () => {
         primaryMap.resize();
-        // primaryMap.addControl(new mapboxgl.NavigationControl());
+        // primaryMap.addControl(new mapboxgl.NavigationControl());'
+        mapInitializer.addSourceSettings();
+        mapInitializer.setFitBounds();
+        mapInitializer.addCluster();
+        mapInitializer.addClickHandlers();
         setMapInstance(mapInitializer);
         setMapObject(primaryMap);
       });
     }
   }, [data]);
 
-  useEffect(() => {
-    if (mapInstance && userLocation) {
-      if (footerItem === "sunchaser") {
-        requestAnimationFrame(() => {
-          mapInstance.addSourceSettings();
-          requestAnimationFrame(() => {
-            mapInstance.addCluster();
-            requestAnimationFrame(() => {
-              mapInstance.addClickHandlers();
-              requestAnimationFrame(() => {
-                mapInstance.setFitBounds();
-              });
-            });
-          });
-        });
-      } else if (footerItem === "forecast") {
-        mapInstance.resetMap();
-      }
-    }
-  }, [footerItem, mapInstance]);
-
-  const shouldHydrate = useShouldHydrate();
   return (
     <>
-      <HeaderSlider />
-      <SubfooterButtons />
+      <SettingsWrapper>
+        <Search />
+        <SettingsButton />
+        <UserLocationButton />
+      </SettingsWrapper>
       {/* {shouldHydrate && !userLocation && <LocationModal />} */}
       <section id="section-map" className="h-full">
-        <div className="sticky top-0 flex h-full items-center justify-center">
-          <div id="map" className="m-auto h-full w-full "></div>
-          <div id="original-map" className="m-auto hidden h-full w-full"></div>
+        <div className="sticky top-0 flex h-full w-full items-center justify-center">
+          {isLoading ? (
+            <div className="z-50">
+              <Spinner />
+            </div>
+          ) : (
+            <>
+              <div id="map" className={`m-auto h-full w-full `}></div>
+              <div
+                id="original-map"
+                className="m-auto hidden h-full w-full"
+              ></div>
+            </>
+          )}
         </div>
       </section>
     </>
