@@ -6,7 +6,6 @@ import { useUseSwipeable } from "app/hooks/use-swipeable";
 import {
   FooterItemType,
   useDisplayFooter,
-  useDisplayFooterSubItems,
   useDisplayIsFooterExpanded,
 } from "states/footer";
 
@@ -17,8 +16,7 @@ import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 export const Footer = () => {
   const { isFooterExpanded, setIsFooterExpanded } =
     useDisplayIsFooterExpanded();
-  const { footerItem, setFooterItem } = useDisplayFooter();
-  const { footerSubItem } = useDisplayFooterSubItems();
+  const { footerItem } = useDisplayFooter();
 
   const handlers = useUseSwipeable({
     onSwipedUp: () => setIsFooterExpanded(true),
@@ -45,8 +43,8 @@ export const Footer = () => {
               <FooterButton item="sunchaser" />
               <FooterButton item="forecast" />
             </div>
-            <span className="block h-4"></span>
-            <div className="h-full w-full bg-white">
+            <div className="size-full bg-white shadow-top">
+              <span className="block h-4"></span>
               {footerItem === "forecast" && <Forecast />}
               {footerItem === "sunchaser" && <SunchaserListWrapper />}
             </div>
@@ -62,9 +60,9 @@ const FooterButton = ({ item }: { item: FooterItemType }) => {
   const isSunchaser = item === "sunchaser";
   return (
     <button
-      className={`w-full border-2 border-greens-300 p-2 shadow-lg ${
+      className={`w-full ${
         isSunchaser ? "rounded-tr-lg" : "rounded-tl-lg"
-      } ${isSelected ? "bg-inherit" : "bg-white"}`}
+      } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-inherit"}`}
       onClick={() => setFooterItem(item)}
     >
       {capitalize(item)}

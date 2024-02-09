@@ -34,6 +34,7 @@ module.exports = {
       boxShadow: {
         "custom-inner": "inset 0em 6px rgba(0, 0, 0, 0.25)",
         "custom-minor": "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        top: "0 -10px 10px -10px rgba(0, 0, 0, 0.1)",
       },
       screens: {
         sm: "480px",
