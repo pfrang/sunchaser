@@ -42,8 +42,8 @@ export const SettingsExpandable = () => {
             />
             <p className="text-variant-regular"> Maps</p>
             <MapChooser />
-            <p className="text-variant-regular"> Length</p>
-            <ChooseTravelDistance />
+            {/* <p className="text-variant-regular"> Length</p>
+            <ChooseTravelDistance /> */}
             <p className="text-variant-regular"> Calendar</p>
             <Calendar />
           </div>
