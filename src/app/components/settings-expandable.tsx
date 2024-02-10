@@ -35,11 +35,11 @@ export const SettingsExpandable = () => {
           }}
           in={isSettingsExpanded}
         >
+          <FooterExpandableLine
+            expandableSwipe={handlers}
+            expandableClick={() => deCollapseAll()}
+          />
           <div className="h-[400px] w-full overflow-y-auto pb-4 scrollbar-thin scrollbar-track-slate-50">
-            <FooterExpandableLine
-              expandableSwipe={handlers}
-              expandableClick={() => deCollapseAll()}
-            />
             <p className="text-variant-regular"> Maps</p>
             <MapChooser />
             <p className="text-variant-regular"> Length</p>

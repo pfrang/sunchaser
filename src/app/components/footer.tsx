@@ -8,6 +8,7 @@ import {
   useDisplayFooter,
   useDisplayIsFooterExpanded,
 } from "states/footer";
+import { useEffect, useState } from "react";
 
 import { Forecast } from "./forecast";
 import { SunchaserListWrapper } from "./sunchaser/components/result-list-wrapper";
@@ -22,6 +23,7 @@ export const Footer = () => {
     onSwipedUp: () => setIsFooterExpanded(true),
     onSwipedDown: () => setIsFooterExpanded(false),
   });
+
   return (
     <div className={`absolute`}>
       <div className="fixed bottom-0 z-40 w-full rounded-custom border-2 border-green-100 bg-gray-100 pr-1">
@@ -54,17 +56,23 @@ export const Footer = () => {
     </div>
   );
 };
+
 const FooterButton = ({ item }: { item: FooterItemType }) => {
   const { footerItem, setFooterItem } = useDisplayFooter();
-  const isSelected = footerItem === item;
-  const isSunchaser = item === "sunchaser";
-  return (
-    <button
-      className={`w-full ${
+  const [buttonClass, setButtonClass] = useState("");
+
+  useEffect(() => {
+    const isSelected = footerItem === item;
+    const isSunchaser = item === "sunchaser";
+    setButtonClass(
+      `w-full ${
         isSunchaser ? "rounded-tr-lg" : "rounded-tl-lg"
-      } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-inherit"}`}
-      onClick={() => setFooterItem(item)}
-    >
+      } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-inherit"}`,
+    );
+  }, [footerItem, item]);
+
+  return (
+    <button className={buttonClass} onClick={() => setFooterItem(item)}>
       {capitalize(item)}
     </button>
   );
