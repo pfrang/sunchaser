@@ -9,6 +9,7 @@ import {
 import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 import { Calendar } from "./sunchaser/components/calendar";
 import { MapChooser } from "./map-chooser";
+import { ChooseTravelDistance } from "./_shared/choose-travel-distance";
 
 export const SettingsExpandable = () => {
   const { isSettingsExpanded, setIsSettingsExpanded } =
@@ -41,6 +42,8 @@ export const SettingsExpandable = () => {
             />
             <p className="text-variant-regular"> Maps</p>
             <MapChooser />
+            <p className="text-variant-regular"> Length</p>
+            <ChooseTravelDistance />
             <p className="text-variant-regular"> Calendar</p>
             <Calendar />
           </div>
