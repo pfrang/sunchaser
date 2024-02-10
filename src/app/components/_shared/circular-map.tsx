@@ -10,9 +10,12 @@ import {
   useDisplayIsFooterExpanded,
 } from "states/footer";
 
-export const CircularMap = ({ mapBoxKey, kilometers }) => {
+import { AppConfig } from "../../../app-config";
+
+export const CircularMap = ({ kilometers }) => {
   const { userLocation } = useUserLocation();
   const mapRef = useRef<MapRef | null>(null);
+  const mapBoxKey = new AppConfig().mapBox.key;
 
   const searchParams = useSearchParamsToObject();
 
@@ -77,7 +80,7 @@ export const CircularMap = ({ mapBoxKey, kilometers }) => {
   const shouldAdjustHeight = footerSubItem === "result" && isFooterExpanded;
 
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex size-full items-center justify-center">
       {userLocation && (
         <ReactMapGL
           key={shouldAdjustHeight ? "adjusted" : "normal"}

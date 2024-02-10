@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import mapboxgl from "mapbox-gl";
 import { Spinner } from "ui-kit/spinner/spinner";
+import mapboxgl from "mapbox-gl";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
@@ -17,19 +17,8 @@ import { UserLocationButton } from "./user-location-button";
 import { SettingsWrapper } from "./settings-wrapper";
 import { Search } from "./_shared/search";
 
-const RouterWrapper = ({ mapBoxKey }: { mapBoxKey: string }) => {
-  return (
-    <>
-      <div className="h-full">
-        <Router mapBoxKey={mapBoxKey} />
-      </div>
-    </>
-  );
-};
-
-const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
-  mapboxgl.accessToken = mapBoxKey;
-
+const Router = ({ mapboxKey }) => {
+  mapboxgl.accessToken = mapboxKey;
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
   const { userLocation } = useUserLocation();
@@ -97,18 +86,15 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
       </SettingsWrapper>
       {/* {shouldHydrate && !userLocation && <LocationModal />} */}
       <section id="section-map" className="h-full">
-        <div className="sticky top-0 flex h-full w-full items-center justify-center">
+        <div className="sticky top-0 flex size-full items-center justify-center">
           {isLoading ? (
             <div className="z-50">
               <Spinner />
             </div>
           ) : (
             <>
-              <div id="map" className={`m-auto h-full w-full `}></div>
-              <div
-                id="original-map"
-                className="m-auto hidden h-full w-full"
-              ></div>
+              <div id="map" className={`m-auto size-full `}></div>
+              <div id="original-map" className="m-auto hidden size-full"></div>
             </>
           )}
         </div>
@@ -117,4 +103,4 @@ const Router = ({ mapBoxKey }: { mapBoxKey: string }) => {
   );
 };
 
-export default RouterWrapper;
+export default Router;

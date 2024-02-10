@@ -7,7 +7,7 @@ export const SettingsButton = () => {
   return (
     <button
       onClick={() => setIsSettingsExpanded(true)}
-      className="rounded-full static border-2 bg-white p-1"
+      className="static rounded-full border-2 bg-white p-1"
     >
       <SettingsIcon />
     </button>

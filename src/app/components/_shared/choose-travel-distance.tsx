@@ -11,8 +11,6 @@ import { useRouter } from "next/navigation";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
-import { AppConfig } from "../../../app-config";
-
 import { CircularMap } from "./circular-map";
 
 const PrettoSlider = styled(Slider)({
@@ -59,10 +57,6 @@ const PrettoSlider = styled(Slider)({
     color: "white",
   },
 });
-
-interface ChooseTravelDistanceProps {
-  mapBoxKey: string;
-}
 
 export const ChooseTravelDistance = () => {
   const searchParams = useSearchParamsToObject();
@@ -139,12 +133,10 @@ export const ChooseTravelDistance = () => {
     },
   ];
 
-  const mapBoxKey = new AppConfig().mapBox.key;
-
   return (
     <section id="distance_traveling" className="size-full grow">
       <div className="flex size-full flex-col items-center justify-center">
-        <CircularMap kilometers={kilometers} mapBoxKey={mapBoxKey} />
+        {searchParams?.lat && <CircularMap kilometers={kilometers} />}
         <p className="text-variant-poppins text-center text-white">
           {`${valueToDisplay}km`}
         </p>
