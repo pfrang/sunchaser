@@ -5,7 +5,7 @@ interface UseSwipeable extends SwipeableProps {}
 
 const defaultConfig: Partial<ConfigurationOptions> = {
   trackMouse: true,
-  preventScrollOnSwipe: true,
+  // preventScrollOnSwipe: true,
 };
 
 export const useUseSwipeable = (props: UseSwipeable) => {
