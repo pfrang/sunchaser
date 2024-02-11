@@ -5,7 +5,7 @@ from urllib.error import HTTPError
 import azure.functions as func
 import os
 import json
-from WeatherResult import Handler
+from GlobalRank.sub_script import Handler
 import pandas as pd
 
 
@@ -36,23 +36,20 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         }
 
         top = int(params.get('top') or 10)
-
-        sql_df=Handler.Handler(config,float(params['lat']),float(params['lon']),params['date'],float(params['distance']), top).recommendation_response_sql()
-        StartLocation = {
-            "latitude": params['lat'],
-            "longitude": params['lon']
-            }
+        # If date is not provided, use today's date
+        if 'date' not in params:
+            date = datetime.datetime.now().strftime('%Y-%m-%d')
+        else:
+            date = params['date']
+        
+        sql_df=Handler(config,date, top).bestLocations_response_sql()
 
         if sql_df.empty:
             return func.HttpResponse(status_code=204)
         
-        dfDict = sql_df.groupby(sql_df['group_rank'].astype(float), group_keys=True).apply(lambda x:x[['latitude','longitude','primary_name','secondary_name','tertiary_name','quaternary_name','date','symbol','temperature','time','wind','rank','sunrise_time','sunset_time']].to_dict(orient='records')).to_dict()
-        # order the dictionary by group_rank
-        dfDict = {k: v for k, v in sorted(dfDict.items(), key=lambda item: item[0], reverse=True)}
-
-        tmpDict = {'user_location':StartLocation,'ranks': dfDict}
-
-        response_stringified_json = json.dumps(tmpDict , indent=4,default=str)
+        dfDict = sql_df.to_dict(orient='records')
+        
+        response_stringified_json = json.dumps(dfDict , indent=4,default=str)
         initializer=response_stringified_json
         return func.HttpResponse(f'{initializer}',status_code=200)
     except Exception as e:
