@@ -14,7 +14,7 @@ import { StateHelper } from "../../states/sunchaser-result";
 
 import { SettingsButton } from "./settings-button";
 import { UserLocationButton } from "./user-location-button";
-import { SettingsWrapper } from "./settings-wrapper";
+import { MapButtonsWrapper } from "./map-buttons-wrapper";
 import { Search } from "./_shared/search";
 
 const Router = ({ mapboxKey }) => {
@@ -45,7 +45,7 @@ const Router = ({ mapboxKey }) => {
     router.push(`/?${urlParams}`);
   }, [userLocation]);
 
-  const { mapInstance, setMapInstance } = StateHelper.mapInstance();
+  const { setMapInstance } = StateHelper.mapInstance();
   const { setMapObject } = StateHelper.mapObject();
 
   useEffect(() => {
@@ -79,11 +79,11 @@ const Router = ({ mapboxKey }) => {
 
   return (
     <>
-      <SettingsWrapper>
+      <MapButtonsWrapper>
         <Search />
         <SettingsButton />
         <UserLocationButton />
-      </SettingsWrapper>
+      </MapButtonsWrapper>
       {/* {shouldHydrate && !userLocation && <LocationModal />} */}
       <section id="section-map" className="h-full">
         <div className="sticky top-0 flex size-full items-center justify-center">

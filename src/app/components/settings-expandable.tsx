@@ -1,10 +1,13 @@
 "use client";
-import { Collapse } from "@mui/material";
+
 import { useUseSwipeable } from "app/hooks/use-swipeable";
 import {
+  SettingsHeightBreakPoints,
+  settingsHeightBreakPoints,
   useDisplayIsFooterExpanded,
   useDisplayIsSettingsExpanded,
 } from "states/footer";
+import { useEffect, useState } from "react";
 
 import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 import { Calendar } from "./sunchaser/components/calendar";
@@ -12,34 +15,67 @@ import { MapChooser } from "./map-chooser";
 import { ChooseTravelDistance } from "./_shared/choose-travel-distance";
 
 export const SettingsExpandable = () => {
+  const [height, setHeight] = useState<SettingsHeightBreakPoints>(
+    settingsHeightBreakPoints[0],
+  );
+  const { setIsFooterExpanded } = useDisplayIsFooterExpanded();
   const { isSettingsExpanded, setIsSettingsExpanded } =
     useDisplayIsSettingsExpanded();
-  const { setIsFooterExpanded } = useDisplayIsFooterExpanded();
 
-  const handlers = useUseSwipeable({
-    onSwipedUp: () => {},
-    onSwipedDown: () => deCollapseAll(),
-  });
+  useEffect(() => {
+    if (isSettingsExpanded) {
+      setHeight(settingsHeightBreakPoints[1]);
+      setIsFooterExpanded(false);
+    } else {
+      setHeight(settingsHeightBreakPoints[0]);
+    }
+  }, [isSettingsExpanded]);
 
-  const deCollapseAll = () => {
-    setIsSettingsExpanded(false);
-    setIsFooterExpanded(false);
+  const onDelapse = (e) => {
+    const isHardSwipe = e.velocity > 1.3;
+
+    switch (height) {
+      case settingsHeightBreakPoints[2]:
+        if (isHardSwipe) {
+          setHeight(settingsHeightBreakPoints[0]);
+        } else {
+          setHeight(settingsHeightBreakPoints[1]);
+        }
+        break;
+      case settingsHeightBreakPoints[1]:
+        setHeight(settingsHeightBreakPoints[0]);
+        setIsSettingsExpanded(false);
+        break;
+      default:
+        break;
+    }
   };
 
+  const handlers = useUseSwipeable({
+    onSwipedUp: () => setHeight(settingsHeightBreakPoints[2]),
+    onSwipedDown: onDelapse,
+  });
+
   return (
-    <div className="absolute">
-      <div className="fixed bottom-0 z-50 w-full rounded-custom border-2 border-green-100 bg-white pr-1">
-        <Collapse
+    <div className={`absolute`}>
+      <div
+        className={`fixed bottom-0 z-50 w-full rounded-custom ${isSettingsExpanded && "border-t-2"} border-green-100 bg-white pr-1`}
+        {...handlers}
+      >
+        <div
           style={{
-            width: "100%",
+            // overflow: "hidden",
+            transition: "height 0.3s ease",
+            height: height,
           }}
-          in={isSettingsExpanded}
         >
           <FooterExpandableLine
-            expandableSwipe={handlers}
-            expandableClick={() => deCollapseAll()}
+            expandableClick={() => setIsSettingsExpanded(false)}
           />
-          <div className="h-[400px] w-full overflow-y-auto pb-4 scrollbar-thin scrollbar-track-slate-50">
+          <div
+            className="size-full overflow-y-auto pb-4 scrollbar-thin scrollbar-track-slate-50"
+            {...handlers}
+          >
             <p className="text-variant-regular"> Maps</p>
             <MapChooser />
             <p className="text-variant-regular"> Length</p>
@@ -47,7 +83,7 @@ export const SettingsExpandable = () => {
             <p className="text-variant-regular"> Calendar</p>
             <Calendar />
           </div>
-        </Collapse>
+        </div>
       </div>
     </div>
   );

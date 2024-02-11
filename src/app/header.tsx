@@ -9,8 +9,8 @@ export const Header = () => {
   const searchParams = useSearchParamsToObject();
 
   return (
-    <div className="absolute z-50 flex h-[68px] w-full">
-      <div className="flex h-full w-full justify-between px-2 md:px-4">
+    <div className="absolute z-30 flex h-[68px] w-full">
+      <div className="flex size-full justify-between px-2 md:px-4">
         <Link href={{ pathname: "/", query: searchParams }} tabIndex={0}>
           <Image
             width={56}

@@ -1,50 +1,115 @@
 "use client";
 
-import { Collapse } from "@mui/material";
 import { capitalize } from "lodash";
 import { useUseSwipeable } from "app/hooks/use-swipeable";
 import {
+  FooterHeightBreakPoints,
   FooterItemType,
+  footerHeightBreakPoints,
   useDisplayFooter,
   useDisplayIsFooterExpanded,
+  useDisplayIsSettingsExpanded,
 } from "states/footer";
+import { useEffect, useState } from "react";
 
 import { Forecast } from "./forecast";
 import { SunchaserListWrapper } from "./sunchaser/components/result-list-wrapper";
 import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 
 export const Footer = () => {
-  const { isFooterExpanded, setIsFooterExpanded } =
-    useDisplayIsFooterExpanded();
+  const { isSettingsExpanded } = useDisplayIsSettingsExpanded();
   const { footerItem } = useDisplayFooter();
+  const [height, setHeight] = useState<FooterHeightBreakPoints>(
+    footerHeightBreakPoints[0],
+  );
+
+  useEffect(() => {
+    if (isSettingsExpanded) {
+      setHeight(footerHeightBreakPoints[0]);
+    }
+  }, [isSettingsExpanded]);
+
+  const onExpand = (e) => {
+    const isHardSwipe = e.velocity > 1.3;
+
+    switch (height) {
+      case footerHeightBreakPoints[0]:
+        if (isHardSwipe) {
+          setHeight(footerHeightBreakPoints[2]);
+        } else {
+          setHeight(footerHeightBreakPoints[1]);
+        }
+        break;
+      case footerHeightBreakPoints[1]:
+        setHeight(footerHeightBreakPoints[2]);
+        break;
+      case footerHeightBreakPoints[2]:
+        break;
+    }
+  };
+
+  const onDelapse = (e) => {
+    const isHardSwipe = e.velocity > 1.3;
+
+    switch (height) {
+      case footerHeightBreakPoints[2]:
+        if (isHardSwipe) {
+          setHeight(footerHeightBreakPoints[0]);
+        } else {
+          setHeight(footerHeightBreakPoints[1]);
+        }
+        break;
+      case footerHeightBreakPoints[1]:
+        setHeight(footerHeightBreakPoints[0]);
+        break;
+      default:
+        break;
+    }
+  };
 
   const handlers = useUseSwipeable({
-    onSwipedUp: () => setIsFooterExpanded(true),
-    onSwipedDown: () => setIsFooterExpanded(false),
+    onSwipedUp: onExpand,
+    onSwipedDown: onDelapse,
   });
 
-  return (
-    <div className={`absolute`}>
-      <div className="fixed bottom-0 z-40 w-full rounded-custom border-2 border-green-100 bg-gray-100 pr-1">
-        <FooterExpandableLine
-          expandableSwipe={handlers}
-          expandableClick={() => setIsFooterExpanded(!isFooterExpanded)}
-        />
+  const clickableLine = () => {
+    switch (height) {
+      case footerHeightBreakPoints[0]:
+        setHeight(footerHeightBreakPoints[1]);
+        break;
+      case footerHeightBreakPoints[1]:
+        setHeight(footerHeightBreakPoints[0]);
+        break;
+      case footerHeightBreakPoints[2]:
+        setHeight(footerHeightBreakPoints[0]);
+        break;
+    }
+  };
 
-        <Collapse
+  return (
+    <div className="absolute">
+      <div
+        className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 pr-1"
+        {...handlers}
+      >
+        <FooterExpandableLine expandableClick={() => clickableLine()} />
+
+        <div
           style={{
-            width: "100%",
+            overflow: "auto",
+            transition: "height 0.3s ease",
+            height: height,
+            backgroundColor: "white",
           }}
-          in={isFooterExpanded}
         >
-          <div className="h-[250px] w-full overflow-y-auto bg-white scrollbar-thin scrollbar-track-slate-50">
+          <div className={`size-full scrollbar-thin scrollbar-track-slate-50`}>
             <div className="bg-gray-100">
               <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
                 Resultater
               </p>
               <span className="block h-4"></span>
             </div>
-            <div className="flex w-full justify-between bg-gray-100">
+            <div className="flex w-full justify-between bg-gray-100 shadow-lg">
               <FooterButton item="sunchaser" />
               <FooterButton item="forecast" />
             </div>
@@ -54,7 +119,7 @@ export const Footer = () => {
               {footerItem === "sunchaser" && <SunchaserListWrapper />}
             </div>
           </div>
-        </Collapse>
+        </div>
       </div>
     </div>
   );

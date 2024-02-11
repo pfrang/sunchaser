@@ -114,8 +114,8 @@ export class MapBoxHelper {
           })),
         },
         cluster: true,
-        clusterMaxZoom: 13,
-        clusterRadius: 200,
+        clusterMaxZoom: 7,
+        clusterRadius: 140,
       });
     }
   }

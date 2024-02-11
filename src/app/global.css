@@ -126,10 +126,6 @@
     text-decoration: none;
   }
 
-  button:hover {
-    filter: brightness(95%);
-  }
-
   *, *:before, *:after {
     box-sizing: inherit;
   }
