@@ -5,13 +5,13 @@ interface UseSwipeable extends SwipeableProps {}
 
 const defaultConfig: Partial<ConfigurationOptions> = {
   trackMouse: true,
-  // preventScrollOnSwipe: true,
+  // preventScrollOnSwipe: false,
 };
 
 export const useUseSwipeable = (props: UseSwipeable) => {
   const softSwipe = 1.2;
   const handlers = useSwipeable({
-    swipeDuration: 200,
+    // swipeDuration: 200,
     ...defaultConfig,
     onSwipedUp: (eventData) => {
       if (eventData.velocity > softSwipe) {
