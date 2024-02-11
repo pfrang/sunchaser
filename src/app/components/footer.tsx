@@ -8,7 +8,6 @@ import {
   useDisplayFooter,
   useDisplayIsFooterExpanded,
 } from "states/footer";
-import { useEffect, useState } from "react";
 
 import { Forecast } from "./forecast";
 import { SunchaserListWrapper } from "./sunchaser/components/result-list-wrapper";
@@ -38,10 +37,14 @@ export const Footer = () => {
           }}
           in={isFooterExpanded}
         >
-          <div className="h-[250px] w-full overflow-y-auto scrollbar-thin scrollbar-track-slate-50">
-            <p className="text-variant-regular pl-4 text-xl">Resultater</p>
-            <span className="block h-4"></span>
-            <div className="flex w-full justify-between">
+          <div className="h-[250px] w-full overflow-y-auto bg-white scrollbar-thin scrollbar-track-slate-50">
+            <div className="bg-gray-100">
+              <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
+                Resultater
+              </p>
+              <span className="block h-4"></span>
+            </div>
+            <div className="flex w-full justify-between bg-gray-100">
               <FooterButton item="sunchaser" />
               <FooterButton item="forecast" />
             </div>
@@ -63,7 +66,7 @@ const FooterButton = ({ item }: { item: FooterItemType }) => {
   const isSunchaser = item === "sunchaser";
   const buttonClass = `w-full ${
     isSunchaser ? "rounded-tr-lg" : "rounded-tl-lg"
-  } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-inherit"}`;
+  } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-gray-100 border-none"}`;
 
   return (
     <button className={buttonClass} onClick={() => setFooterItem(item)}>

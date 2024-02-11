@@ -18,13 +18,13 @@ export const SunchaserListWrapper = () => {
   });
 
   return (
-    <div className="flex h-full w-full">
+    <div className="flex size-full">
       <ConditionalPresenter
         isLoading={isLoading}
         error={error}
         data={data}
         renderLoading={() => (
-          <div className="w-full flex mt-2 justify-center">
+          <div className="mt-2 flex w-full justify-center">
             <Spinner />
           </div>
         )}
@@ -59,7 +59,7 @@ export const SunchaserListWrapper = () => {
 
           return (
             <div className="w-full">
-              <section id="section-carousell w-full">
+              <section id="section-carousell">
                 <ResultList userLocation={userLocation} items={ranks} />
               </section>
             </div>
