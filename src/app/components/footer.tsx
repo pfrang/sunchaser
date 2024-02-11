@@ -59,17 +59,11 @@ export const Footer = () => {
 
 const FooterButton = ({ item }: { item: FooterItemType }) => {
   const { footerItem, setFooterItem } = useDisplayFooter();
-  const [buttonClass, setButtonClass] = useState("");
-
-  useEffect(() => {
-    const isSelected = footerItem === item;
-    const isSunchaser = item === "sunchaser";
-    setButtonClass(
-      `w-full ${
-        isSunchaser ? "rounded-tr-lg" : "rounded-tl-lg"
-      } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-inherit"}`,
-    );
-  }, [footerItem, item]);
+  const isSelected = footerItem === item;
+  const isSunchaser = item === "sunchaser";
+  const buttonClass = `w-full ${
+    isSunchaser ? "rounded-tr-lg" : "rounded-tl-lg"
+  } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-inherit"}`;
 
   return (
     <button className={buttonClass} onClick={() => setFooterItem(item)}>
