@@ -30,7 +30,7 @@ export const Footer = () => {
   }, [isSettingsExpanded]);
 
   const onExpand = (e) => {
-    const isHardSwipe = e.velocity > 1.3;
+    const isHardSwipe = e.velocity > 1.8;
 
     switch (height) {
       case footerHeightBreakPoints[0]:
@@ -49,7 +49,7 @@ export const Footer = () => {
   };
 
   const onDelapse = (e) => {
-    const isHardSwipe = e.velocity > 1.3;
+    const isHardSwipe = e.velocity > 1.8;
 
     switch (height) {
       case footerHeightBreakPoints[2]:

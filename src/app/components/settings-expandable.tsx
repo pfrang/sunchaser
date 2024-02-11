@@ -32,12 +32,13 @@ export const SettingsExpandable = () => {
   }, [isSettingsExpanded]);
 
   const onDelapse = (e) => {
-    const isHardSwipe = e.velocity > 1.3;
+    const isHardSwipe = e.velocity > 1.8;
 
     switch (height) {
       case settingsHeightBreakPoints[2]:
         if (isHardSwipe) {
           setHeight(settingsHeightBreakPoints[0]);
+          setIsSettingsExpanded(false);
         } else {
           setHeight(settingsHeightBreakPoints[1]);
         }

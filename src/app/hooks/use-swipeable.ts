@@ -4,21 +4,22 @@ import { ConfigurationOptions, SwipeableProps } from "react-swipeable/es/types";
 interface UseSwipeable extends SwipeableProps {}
 
 const defaultConfig: Partial<ConfigurationOptions> = {
-  preventScrollOnSwipe: true,
   trackMouse: true,
+  preventScrollOnSwipe: true,
 };
 
 export const useUseSwipeable = (props: UseSwipeable) => {
+  const softSwipe = 1.2;
   const handlers = useSwipeable({
+    swipeDuration: 200,
     ...defaultConfig,
-    ...props,
     onSwipedUp: (eventData) => {
-      if (eventData.velocity > 0.5) {
+      if (eventData.velocity > softSwipe) {
         if (props.onSwipedUp) props.onSwipedUp(eventData);
       }
     },
     onSwipedDown: (eventData) => {
-      if (eventData.velocity > 0.5) {
+      if (eventData.velocity > softSwipe) {
         if (props.onSwipedDown) props.onSwipedDown(eventData);
       }
     },
