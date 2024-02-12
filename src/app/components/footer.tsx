@@ -7,10 +7,9 @@ import {
   FooterItemType,
   footerHeightBreakPoints,
   useDisplayFooter,
-  useDisplayIsFooterExpanded,
   useDisplayIsSettingsExpanded,
 } from "states/footer";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Forecast } from "./forecast";
 import { SunchaserListWrapper } from "./sunchaser/components/result-list-wrapper";
@@ -86,6 +85,8 @@ export const Footer = () => {
     }
   };
 
+  const scrollableDiv = useRef<null | HTMLDivElement>(null);
+
   return (
     <div className="absolute">
       <div
@@ -93,13 +94,12 @@ export const Footer = () => {
         {...handlers}
       >
         <FooterExpandableLine expandableClick={() => clickableLine()} />
-
         <div
           style={{
-            overflow: "auto",
             transition: "height 0.3s ease",
             height: height,
             backgroundColor: "white",
+            overflowY: "auto",
           }}
         >
           <div className={`size-full scrollbar-thin scrollbar-track-slate-50`}>

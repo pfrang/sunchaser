@@ -3,8 +3,8 @@ import { create } from "zustand";
 
 export const footerItems = ["forecast", "sunchaser"] as const;
 export const subFooterItems = ["result", "calendar"] as const;
-export const footerHeightBreakPoints = ["68px", "250px", "95dvh"] as const;
-export const settingsHeightBreakPoints = ["0px", "250px", "95dvh"] as const;
+export const footerHeightBreakPoints = ["68px", "250px", "90dvh"] as const;
+export const settingsHeightBreakPoints = ["0px", "250px", "90dvh"] as const;
 
 export type FooterItemType = (typeof footerItems)[number];
 export type FooterSubItemType = (typeof subFooterItems)[number];

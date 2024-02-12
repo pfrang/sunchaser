@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
             `}
         </script> */}
       </head>
-      <body>
+      <body style={{ overflow: "hidden" }}>
         {/* @ts-ignore*/}
         {children}
       </body>
