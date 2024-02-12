@@ -16,7 +16,7 @@ export default function Page() {
   // if (!session) throw new Error("Session not found");
   return (
     <>
-      <div className="flex h-dvh w-[100%] flex-col ">
+      <div className="flex h-dvh w-[100%] flex-col overflow-hidden">
         <Suspense fallback={<Spinner />}>
           <Header />
           <main className="h-full">
