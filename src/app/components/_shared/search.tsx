@@ -22,13 +22,15 @@ export const Search = () => {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [townId, setTownId] = useState("");
-  const locationRef = useRef<HTMLInputElement>(null);
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
 
   const { data, error, isLoading } = useFetchGoogleMapsSearches(townSearch);
   const { userLocation } = useUserLocation();
   const updateUrl = useUpdateUrl();
+
+  const locationRef = useRef<HTMLInputElement>(null);
+  const resultListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (searchParams?.location) {
@@ -46,7 +48,7 @@ export const Search = () => {
       updateUrl({
         lat: response?.latitude,
         lon: response?.longitude,
-        location: locationRef?.current?.value.split(",")[0],
+        // location: locationRef?.current?.value.split(",")[0], // TODO maybe fix if we want location to pre-populated
       });
     };
     fetcher();
@@ -73,12 +75,7 @@ export const Search = () => {
   };
 
   const onMagnifyingGlassClick = () => {
-    if (!isExpanded) {
-      setTimeout(() => {
-        locationRef?.current?.focus();
-      }, 400);
-    }
-
+    setTownSearch("");
     return setIsExpanded(!isExpanded);
     if (isExpanded) {
       if (!data) return;
@@ -90,6 +87,23 @@ export const Search = () => {
       setIsExpanded(true);
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        resultListRef.current &&
+        !resultListRef.current.contains(event.target)
+      ) {
+        setIsExpanded(false);
+        setTownSearch("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const onUseDeviceLocation = () => {
     if (!userLocation) return;
@@ -106,6 +120,7 @@ export const Search = () => {
 
   return (
     <div
+      ref={resultListRef}
       className={`relative left-[6px] top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg transition-width duration-300 ease-in-out
         ${
           isExpanded
@@ -114,20 +129,37 @@ export const Search = () => {
         }
       `}
     >
-      <input
+      {isExpanded && (
+        <input
+          autoFocus
+          ref={locationRef}
+          required
+          disabled={!isExpanded}
+          className={`bg-inherit ${
+            isExpanded ? "" : "hidden"
+          } h-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none`}
+          placeholder={isExpanded ? "Location" : ""}
+          onChange={(e) => onSearchChange(e.target.value)}
+          onFocus={() => setLocationChosen(false)}
+          type="text"
+          value={isExpanded ? townSearch : ""}
+          style={{ outline: "none" }}
+        />
+      )}
+      {/* <input
+        autoFocus
         ref={locationRef}
         required
-        disabled={!isExpanded}
-        className={`bg-inherit ${
-          isExpanded ? "" : "hidden"
-        } h-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl`}
+        // disabled={!isExpanded}
+        className={`h-full  items-center text-ellipsis rounded-inherit bg-inherit pl-4 pr-6 text-2xl`}
         placeholder={isExpanded ? "Location" : ""}
         onChange={(e) => onSearchChange(e.target.value)}
         onFocus={() => setLocationChosen(false)}
+        onClick={(e) => e.stopPropagation()}
         type="text"
         value={isExpanded ? townSearch : ""}
         style={{ outline: "none" }}
-      />
+      /> */}
 
       <div className="absolute right-2 top-[8px]">
         {isLoading ? (
@@ -157,7 +189,7 @@ export const Search = () => {
           if (isLocationChosen || !isExpanded) return <></>;
 
           return (
-            <ExpandedFlex>
+            <ResultList ref={resultListRef}>
               <div
                 className="flex w-full cursor-pointer items-center rounded-inherit border-2 border-blues-1000 bg-blues-200 px-2 py-3 text-white"
                 onClick={onUseDeviceLocation}
@@ -196,7 +228,7 @@ export const Search = () => {
                     </div>
                   );
                 })}
-            </ExpandedFlex>
+            </ResultList>
           );
         }}
       />
@@ -204,10 +236,13 @@ export const Search = () => {
   );
 };
 
-const ExpandedFlex = ({ children }) => {
+const ResultList = ({ children, ref }) => {
   return (
     <>
-      <div className="absolute top-14 flex w-full flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg">
+      <div
+        ref={ref}
+        className="absolute top-14 flex w-full flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg"
+      >
         {children}
         <span className="h-1"></span>
         <div className="flex justify-center px-28">
