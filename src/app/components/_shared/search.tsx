@@ -121,7 +121,7 @@ export const Search = () => {
   return (
     <div
       ref={resultListRef}
-      className={`relative left-[6px] top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg transition-width duration-300 ease-in-out
+      className={`relative left-[2px] top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg transition-width duration-300 ease-in-out
         ${
           isExpanded
             ? "w-[250px] bg-blues-400 sm:w-[350px] md:w-[500px]"
