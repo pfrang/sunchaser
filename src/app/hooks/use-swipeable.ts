@@ -12,7 +12,7 @@ const defaultConfig: Partial<ConfigurationOptions> = {
   touchEventOptions: {
     passive: false,
   },
-  preventScrollOnSwipe: true,
+  // preventScrollOnSwipe: true,
 };
 
 export const useUseSwipeable = (props: UseSwipeable) => {

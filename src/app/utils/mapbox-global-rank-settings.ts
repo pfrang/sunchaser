@@ -63,11 +63,17 @@ export class MapboxGlobalRankSettings {
           "heatmap-color": [
             "interpolate",
             ["linear"],
-            ["get", "rank"],
+            ["heatmap-density"],
             0,
-            "rgb(255,255,255)",
-            1,
-            "rgb(255,0,0)",
+            "rgba(255,255,255,0)",
+            0.2,
+            "rgb(239,240,215)",
+            0.4,
+            "rgb(223,221,150)",
+            0.6,
+            "rgb(205,204,101)",
+            0.8,
+            "rgb(241,240,11)",
           ],
           "heatmap-radius": {
             stops: [
