@@ -63,7 +63,7 @@ export class MapboxGlobalRankSettings {
           "heatmap-color": [
             "interpolate",
             ["linear"],
-            ["get", "weight"],
+            ["get", "rank"],
             0,
             "rgb(255,255,255)",
             1,
