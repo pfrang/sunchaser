@@ -85,8 +85,6 @@ export const Footer = () => {
     }
   };
 
-  const scrollableDiv = useRef<null | HTMLDivElement>(null);
-
   return (
     <div className="absolute">
       <div
