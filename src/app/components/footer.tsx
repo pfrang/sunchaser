@@ -10,6 +10,7 @@ import {
   useDisplayIsSettingsExpanded,
 } from "states/footer";
 import { useEffect, useRef, useState } from "react";
+import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
 import { Forecast } from "./forecast";
 import { SunchaserListWrapper } from "./sunchaser/components/result-list-wrapper";
@@ -21,6 +22,7 @@ export const Footer = () => {
   const [height, setHeight] = useState<FooterHeightBreakPoints>(
     footerHeightBreakPoints[0],
   );
+  const shouldHydrate = useShouldHydrate();
 
   useEffect(() => {
     if (isSettingsExpanded) {
@@ -92,32 +94,36 @@ export const Footer = () => {
         {...handlers}
       >
         <FooterExpandableLine expandableClick={() => clickableLine()} />
-        <div
-          style={{
-            transition: "height 0.3s ease",
-            height: height,
-            backgroundColor: "white",
-            overflowY: "auto",
-          }}
-        >
-          <div className={`size-full scrollbar-thin scrollbar-track-slate-50`}>
-            <div className="bg-gray-100">
-              <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
-                Resultater
-              </p>
-              <span className="block h-4"></span>
-            </div>
-            <div className="flex w-full justify-between bg-gray-100 shadow-lg">
-              <FooterButton item="sunchaser" />
-              <FooterButton item="forecast" />
-            </div>
-            <div className="size-full bg-white shadow-top">
-              <span className="block h-4"></span>
-              {footerItem === "forecast" && <Forecast />}
-              {footerItem === "sunchaser" && <SunchaserListWrapper />}
+        {shouldHydrate && (
+          <div
+            style={{
+              transition: "height 0.3s ease",
+              height: height,
+              backgroundColor: "white",
+              overflowY: "auto",
+            }}
+          >
+            <div
+              className={`size-full scrollbar-thin scrollbar-track-slate-50`}
+            >
+              <div className="bg-gray-100">
+                <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
+                  Resultater
+                </p>
+                <span className="block h-4"></span>
+              </div>
+              <div className="flex w-full justify-between bg-gray-100 shadow-lg">
+                <FooterButton item="sunchaser" />
+                <FooterButton item="forecast" />
+              </div>
+              <div className="size-full bg-white shadow-top">
+                <span className="block h-4"></span>
+                {footerItem === "forecast" && <Forecast />}
+                {footerItem === "sunchaser" && <SunchaserListWrapper />}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
