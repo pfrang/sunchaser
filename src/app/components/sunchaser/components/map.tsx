@@ -1,8 +1,10 @@
 "use client";
 import { MapBoxHelper } from "app/utils/mapbox-settings";
 import { CoordinatesNextApiResponse } from "app/api/azure-function/coordinates/route";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { StateHelper } from "states/sunchaser-result";
+import { fetchGlobalRank } from "app/actions/fetch-global-rank";
+import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
 interface SunchaserResultMapProps {
   data: CoordinatesNextApiResponse;
@@ -11,6 +13,7 @@ interface SunchaserResultMapProps {
 export const Map = ({ data }: SunchaserResultMapProps) => {
   const { setMapInstance } = StateHelper.mapInstance();
   const { setMapObject } = StateHelper.mapObject();
+  const searchParams = useSearchParamsToObject();
 
   useEffect(() => {
     if (document.getElementById("map")) {
@@ -41,8 +44,8 @@ export const Map = ({ data }: SunchaserResultMapProps) => {
   return (
     <section id="section-map" className="h-full">
       <div className="sticky top-0 flex h-full items-center justify-center">
-        <div id="map" className="m-auto h-full w-full "></div>
-        <div id="original-map" className="m-auto hidden h-full w-full"></div>
+        <div id="map" className="m-auto size-full "></div>
+        <div id="original-map" className="m-auto hidden size-full"></div>
       </div>
     </section>
   );

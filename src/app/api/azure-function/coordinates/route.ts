@@ -9,7 +9,7 @@ import { AzureFunctionCoordinatesMappedData } from "./coordinates-api-client/coo
 // export const fetchCache = "auto";
 // export const runtime = "nodejs";
 // export const preferredRegion = "auto";
-// https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
+// https://nextjs.orgcode=5A4h1SN2OZAWm25Z8mnLhuQBt-uWfQJhWjozGNiywS_RAzFuT3dUsw==/docs/app/api-reference/file-conventions/route-segment-config
 export interface CoordinatesNextApiResponse
   extends AzureFunctionCoordinatesMappedData {
   metaData: CommonMetaData;

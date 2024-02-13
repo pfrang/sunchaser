@@ -30,6 +30,10 @@ const nextConfig = {
   //   ignoreBuildErrors: true,
   // },
 
+  experimental: {
+    serverComponentsExternalPackages: ["axios"],
+  },
+
   async headers() {
     return [
       {

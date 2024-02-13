@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "ui-kit/spinner/spinner";
 import mapboxgl from "mapbox-gl";
+import { useGlobalRank } from "app/hooks/use-global-rank";
+import { fetchGlobalRank } from "app/actions/fetch-global-rank";
+import { GlobalRankNextApiResponse } from "app/api/azure-function/global-rank/route";
+import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
@@ -45,7 +49,7 @@ const Router = ({ mapboxKey }) => {
     router.push(`/?${urlParams}`);
   }, [userLocation]);
 
-  const { setMapInstance } = StateHelper.mapInstance();
+  const { mapInstance, setMapInstance } = StateHelper.useMapInstance();
   const { setMapObject } = StateHelper.mapObject();
 
   useEffect(() => {
@@ -76,6 +80,29 @@ const Router = ({ mapboxKey }) => {
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!searchParams?.date || !mapInstance) return;
+    const dataFetcher = async () => {
+      const response = await fetchGlobalRank(1000, searchParams.date);
+
+      const map = new MapboxGlobalRankSettings(
+        mapInstance.map,
+        response,
+      ).addHeatmapWithRanksToMap();
+    };
+
+    dataFetcher();
+  }, [searchParams?.date, mapInstance]);
+
+  // useEffect(() => {
+  //   if (globalRanks.length > 0 && mapInstance) {
+  //     const map = new MapboxGlobalRankSettings(
+  //       mapInstance.map,
+  //       globalRanks,
+  //     ).addHeatmapWithRanksToMap();
+  //   }
+  // }, [globalRanks, mapInstance]);
 
   return (
     <>
