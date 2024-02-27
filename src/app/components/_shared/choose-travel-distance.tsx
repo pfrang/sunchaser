@@ -134,28 +134,28 @@ export const ChooseTravelDistance = () => {
   ];
 
   return (
-      <div className="flex flex-col items-center justify-center">
-        {searchParams?.lat && <CircularMap kilometers={kilometers} />}
-        <p className="text-variant-poppins text-center text-white">
-          {`${valueToDisplay}km`}
-        </p>
-        <div className="mx-[20px] flex w-full justify-center">
-          <PrettoSlider
-            style={{ width: "85%" }}
-            ref={travelDistanceRef}
-            aria-label="Temperature"
-            value={index}
-            // getAriaValueText={(value: number) => `${value}km`}
-            valueLabelDisplay="auto"
-            valueLabelFormat={`${valueToDisplay}`}
-            step={1}
-            onChange={handleSlide}
-            onChangeCommitted={debouncedUpdateUrl}
-            marks={marks}
-            min={min}
-            max={max}
-          />
-        </div>
+    <div className="flex flex-col items-center justify-center">
+      {searchParams?.lat && <CircularMap kilometers={kilometers} />}
+      <p className="text-variant-poppins text-center text-white">
+        {`${valueToDisplay}km`}
+      </p>
+      <div className="mx-[20px] flex w-full justify-center">
+        <PrettoSlider
+          style={{ width: "85%" }}
+          ref={travelDistanceRef}
+          aria-label="Temperature"
+          value={index}
+          // getAriaValueText={(value: number) => `${value}km`}
+          valueLabelDisplay="auto"
+          valueLabelFormat={`${valueToDisplay}`}
+          step={1}
+          onChange={handleSlide}
+          onChangeCommitted={debouncedUpdateUrl}
+          marks={marks}
+          min={min}
+          max={max}
+        />
       </div>
+    </div>
   );
 };

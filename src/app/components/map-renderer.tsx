@@ -8,6 +8,7 @@ import { useGlobalRank } from "app/hooks/use-global-rank";
 import { fetchGlobalRank } from "app/actions/fetch-global-rank";
 import { GlobalRankNextApiResponse } from "app/api/azure-function/global-rank/route";
 import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
+import { useForecast } from "app/hooks/use-forecast";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
@@ -20,7 +21,6 @@ import { SettingsButton } from "./settings-button";
 import { UserLocationButton } from "./user-location-button";
 import { MapButtonsWrapper } from "./map-buttons-wrapper";
 import { Search } from "./_shared/search";
-import { useForecast } from "app/hooks/use-forecast";
 
 const Router = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
@@ -37,7 +37,6 @@ const Router = ({ mapboxKey }) => {
   useForecast({
     params: searchParams,
   });
-
 
   useEffect(() => {
     if (searchParams?.lat || !userLocation) return;

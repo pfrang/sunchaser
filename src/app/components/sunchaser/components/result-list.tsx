@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import React from "react";
@@ -24,7 +24,6 @@ export const ResultList = ({
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
 }) => {
-  console.log(items);
   const { highlightedCard, setHighlightedCard } =
     StateHelper.useHighlightedCard();
 

@@ -23,7 +23,9 @@ export const useUpdateUrl = () => {
 
     const paramsToString = sanitizeNextParams(params);
 
-    router.push(`/?${paramsToString}`);
+    // router.push(`/?${paramsToString}`);
+    router.prefetch(`/?${paramsToString}`);
+    router.replace(`/?${paramsToString}`);
   };
 
   return updateUrl;

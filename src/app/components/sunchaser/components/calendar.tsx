@@ -70,6 +70,7 @@ export const Calendar = () => {
             day_selected: "daypicker-selected-date",
             day_today: "daypicker-today-date",
             months: "daypicker-months",
+            day_outside: "daypicker-outside-date",
           }}
           weekStartsOn={new Date().getDay() as WeekDayNumb}
           disabled={disabledDays}
