@@ -24,6 +24,7 @@ export const ResultList = ({
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
 }) => {
+  console.log(items);
   const { highlightedCard, setHighlightedCard } =
     StateHelper.useHighlightedCard();
 

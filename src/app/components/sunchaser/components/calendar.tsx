@@ -64,7 +64,7 @@ export const Calendar = () => {
   // TODO FIX CALENDAR SPACING ON DAYS
   return (
     <>
-      <div className="flex h-full justify-center">
+      <div className="flex justify-center">
         <DayPicker
           classNames={{
             day_selected: "daypicker-selected-date",

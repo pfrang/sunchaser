@@ -20,6 +20,7 @@ import { SettingsButton } from "./settings-button";
 import { UserLocationButton } from "./user-location-button";
 import { MapButtonsWrapper } from "./map-buttons-wrapper";
 import { Search } from "./_shared/search";
+import { useForecast } from "app/hooks/use-forecast";
 
 const Router = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
@@ -32,6 +33,11 @@ const Router = ({ mapboxKey }) => {
     params: searchParams,
     data: searchParams,
   });
+
+  useForecast({
+    params: searchParams,
+  });
+
 
   useEffect(() => {
     if (searchParams?.lat || !userLocation) return;

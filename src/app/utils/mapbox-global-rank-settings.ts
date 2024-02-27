@@ -40,7 +40,7 @@ export class MapboxGlobalRankSettings {
       this.map.addLayer({
         id: "global-rank-heatmap",
         type: "heatmap",
-        maxzoom: 7,
+        maxzoom: 6,
         source: {
           type: "geojson",
           data: data,

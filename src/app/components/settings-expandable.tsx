@@ -60,7 +60,7 @@ export const SettingsExpandable = () => {
   return (
     <div className={`absolute`}>
       <div
-        className={`fixed bottom-0 z-50 w-full rounded-custom ${isSettingsExpanded && "border-t-2"} border-green-100 bg-white pr-1`}
+        className={`fixed bottom-0 z-50 w-full rounded-custom ${isSettingsExpanded && "border-t-2"} border-green-100 bg-white pr-1 pb-2`}
         {...handlers}
       >
         <div
@@ -68,21 +68,23 @@ export const SettingsExpandable = () => {
             // overflow: "hidden",
             transition: "height 0.3s ease",
             height: height,
+            display: "flex",
+            flexDirection: "column",
           }}
         >
           <FooterExpandableLine
             expandableClick={() => setIsSettingsExpanded(false)}
           />
           <div
-            className="size-full overflow-y-auto pb-4 scrollbar-thin scrollbar-track-slate-50"
+            className="flex-grow overflow-y-auto pb-4 scrollbar-thin scrollbar-track-slate-50"
             {...handlers}
           >
-            <p className="text-variant-regular"> Maps</p>
-            <MapChooser />
             <p className="text-variant-regular"> Length</p>
             <ChooseTravelDistance />
             <p className="text-variant-regular"> Calendar</p>
             <Calendar />
+            <p className="text-variant-regular"> Maps</p>
+            <MapChooser />
           </div>
         </div>
       </div>

@@ -70,14 +70,14 @@ export class MapBoxHelper {
     this.map.flyTo({
       center: [this.centerLon, this.centerLat],
       duration: 500,
-      zoom: 10,
+      zoom: 8,
     });
   }
 
   resetMap() {
     this.map.flyTo({
       center: [this.centerLon, this.centerLat],
-      zoom: 10,
+      zoom: 8,
     });
     // only remove if exist
 

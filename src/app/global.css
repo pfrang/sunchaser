@@ -148,6 +148,10 @@ h3 {
   border: 2px solid red;
 }
 
+.rdp-day_outside {
+  opacity: 1;
+}
+
 .rdp-button_reset:hover:not([disabled]) {
  background-color: #6B93AA !important;
 }

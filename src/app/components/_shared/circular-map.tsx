@@ -80,7 +80,7 @@ export const CircularMap = ({ kilometers }) => {
   const shouldAdjustHeight = footerSubItem === "result" && isFooterExpanded;
 
   return (
-    <div className="flex size-full items-center justify-center">
+    <div className="flex w-full h-[200px] items-center justify-center">
       {userLocation && (
         <ReactMapGL
           key={shouldAdjustHeight ? "adjusted" : "normal"}

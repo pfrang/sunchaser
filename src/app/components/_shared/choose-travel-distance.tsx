@@ -134,8 +134,7 @@ export const ChooseTravelDistance = () => {
   ];
 
   return (
-    <section id="distance_traveling" className="size-full grow">
-      <div className="flex size-full flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         {searchParams?.lat && <CircularMap kilometers={kilometers} />}
         <p className="text-variant-poppins text-center text-white">
           {`${valueToDisplay}km`}
@@ -158,6 +157,5 @@ export const ChooseTravelDistance = () => {
           />
         </div>
       </div>
-    </section>
   );
 };
