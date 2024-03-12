@@ -41,8 +41,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             date = datetime.datetime.now().strftime('%Y-%m-%d')
         else:
             date = params['date']
+
+        if 'groups' not in params:
+            groups = 10
+        else:
+            groups = int(params['groups'])
         
-        sql_df=Handler(config,date, top).bestLocations_response_sql()
+        sql_df=Handler(config,date, top,groups).bestLocations_response_sql()
 
         if sql_df.empty:
             return func.HttpResponse(status_code=204)
