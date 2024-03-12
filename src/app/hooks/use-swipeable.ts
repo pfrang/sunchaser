@@ -12,23 +12,23 @@ const defaultConfig: Partial<ConfigurationOptions> = {
   touchEventOptions: {
     passive: false,
   },
-  // preventScrollOnSwipe: true,
+  preventScrollOnSwipe: true,
 };
 
 export const useUseSwipeable = (props: UseSwipeable) => {
-  const softSwipe = 1;
+  const softSwipe = 0.8;
 
   const handlers = useSwipeable({
-    ...defaultConfig,
-    ...props,
+    // ...defaultConfig,
+    // ...props,
     // onTouchStartOrOnMouseDown: (eventData) => {
     //   eventData.event.preventDefault();
     // },
-    onSwiping: (eventData) => {
-      if (eventData.velocity > softSwipe) {
-        eventData.event.preventDefault();
-      }
-    },
+    // onSwiping: (eventData) => {
+    //   if (eventData.velocity > softSwipe) {
+    //     eventData.event.preventDefault();
+    //   }
+    // },
     // onSwipeStart: (eventData) => {
     //   // prevent scroll behaviour
     //   eventData.event.stopPropagation();

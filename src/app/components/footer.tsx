@@ -3,13 +3,11 @@
 import { capitalize } from "lodash";
 import { useUseSwipeable } from "app/hooks/use-swipeable";
 import {
-  FooterHeightBreakPoints,
   FooterItemType,
-  footerHeightBreakPoints,
   useDisplayFooter,
   useDisplayIsSettingsExpanded,
 } from "states/footer";
-import { useEffect, useRef, useState } from "react";
+import React, { TouchEventHandler, useEffect, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
 import { Forecast } from "./forecast";
@@ -19,9 +17,21 @@ import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 export const Footer = () => {
   const { isSettingsExpanded } = useDisplayIsSettingsExpanded();
   const { footerItem } = useDisplayFooter();
-  const [height, setHeight] = useState<FooterHeightBreakPoints>(
-    footerHeightBreakPoints[0],
-  );
+
+  const [footerHeightBreakPoints, setFooterHeightBreakPoints] = useState<
+    number[]
+  >([0, 0, 0]);
+  const [height, setHeight] = useState<number>(footerHeightBreakPoints[0]);
+
+  useEffect(() => {
+    setFooterHeightBreakPoints([
+      window.innerHeight * 0.1,
+      window.innerHeight * 0.4,
+      window.innerHeight * 0.9,
+    ]);
+    setHeight(window.innerHeight * 0.1);
+  }, []);
+
   const shouldHydrate = useShouldHydrate();
 
   useEffect(() => {
@@ -50,7 +60,7 @@ export const Footer = () => {
   };
 
   const onDelapse = (e) => {
-    const isHardSwipe = e.velocity > 1.8;
+    const isHardSwipe = e.velocity > 1.4;
 
     switch (height) {
       case footerHeightBreakPoints[2]:
@@ -87,20 +97,54 @@ export const Footer = () => {
     }
   };
 
+  const initialTouchPosition = useRef<number | null>(null);
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    initialTouchPosition.current = event.touches[0].clientY;
+  };
+
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const currentTouchPosition = event.touches[0].clientY;
+
+    if (initialTouchPosition.current !== null) {
+      const draggedPixels = initialTouchPosition.current - currentTouchPosition;
+      // Use requestAnimationFrame to batch state updates
+      requestAnimationFrame(() => {
+        setHeight((prevHeight) => prevHeight + draggedPixels * 2);
+      });
+    }
+
+    initialTouchPosition.current = currentTouchPosition;
+  };
+
+  const handleTouchEnd = (event) => {
+    // event.preventDefault();
+    const height2 = getNearestBreakpoint(height, footerHeightBreakPoints);
+
+    requestAnimationFrame(() => {
+      setHeight(height2);
+    });
+  };
+
   return (
     <div className="absolute">
       <div
         className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 pr-1"
-        {...handlers}
+        // onMouseMove={handleMouseMove}
+        // {...handlers}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <FooterExpandableLine expandableClick={() => clickableLine()} />
         {shouldHydrate && (
           <div
             style={{
               transition: "height 0.3s ease",
-              height: height,
+              height: `${height}px`,
               backgroundColor: "white",
-              overflowY: "auto",
+              overflowY: "hidden",
             }}
           >
             <div
@@ -143,3 +187,21 @@ const FooterButton = ({ item }: { item: FooterItemType }) => {
     </button>
   );
 };
+
+function getNearestBreakpoint(
+  height: number,
+  footerHeightBreakPoints: number[],
+) {
+  let nearestBreakpoint = footerHeightBreakPoints[0];
+  let smallestDifference = Math.abs(height - nearestBreakpoint);
+
+  for (let i = 1; i < footerHeightBreakPoints.length; i++) {
+    const difference = Math.abs(height - footerHeightBreakPoints[i]);
+    if (difference < smallestDifference) {
+      smallestDifference = difference;
+      nearestBreakpoint = footerHeightBreakPoints[i];
+    }
+  }
+
+  return nearestBreakpoint;
+}
