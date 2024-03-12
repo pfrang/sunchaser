@@ -41,10 +41,10 @@ class Handler:
                      ,[lon]
                      ,[date]
                      ,[group_rank]
-                  ,Ceiling(row_number() over (order by group_rank desc)*@tranch/@observations) as GroupCluster
+                     ,Cast(Ceiling(row_number() over (order by group_rank desc)*@tranch/@observations) as INT) as GroupCluster
                FROM [dbo].[weather_forecast_global]
                where date=@xdate
-               
+
        '''
 
        # HERE THE EXEUCTION HAPPENS, TIME LAG
