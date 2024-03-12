@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "ui-kit/spinner/spinner";
 import mapboxgl from "mapbox-gl";
-import { useGlobalRank } from "app/hooks/use-global-rank";
 import { fetchGlobalRank } from "app/actions/fetch-global-rank";
 import { GlobalRankNextApiResponse } from "app/api/azure-function/global-rank/route";
 import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
@@ -89,12 +88,16 @@ const Router = ({ mapboxKey }) => {
   useEffect(() => {
     if (!searchParams?.date || !mapInstance) return;
     const dataFetcher = async () => {
-      const response = await fetchGlobalRank(1000, searchParams.date);
+      const response = await fetchGlobalRank({
+        top: 1000,
+        date: searchParams.date,
+        group: 10,
+      });
 
       const map = new MapboxGlobalRankSettings(
         mapInstance.map,
         response,
-      ).addHeatmapWithRanksToMap();
+      ).addCircleRanksToMap();
     };
 
     dataFetcher();
