@@ -6,6 +6,7 @@ class APISOURCE:
         # contactInfo = os.getenv('EMAIL_CONTACT')
         return f'Hjemmeprosjekt {1+1}'
 
+
     def getKartverket(params=True):
 
         baseUrl='https://ws.geonorge.no/stedsnavn/v1/punkt'
