@@ -12,15 +12,15 @@
 # Build the frontend
 FROM node:20-alpine AS frontend
 WORKDIR /app
-COPY package*.json ./
-COPY next-env.d.ts ./
-COPY next.config.js ./
-COPY tailwind.config.js ./
-COPY tsconfig.json ./
+COPY package*.json .
+COPY next-env.d.ts .
+COPY next.config.js .
+COPY tailwind.config.js .
+COPY tsconfig.json .
 COPY public ./public
-COPY .env ./
+COPY .env .
+COPY postcss.config.js .
 COPY src ./src
-# COPY . .
 
 # Copy from backend
 FROM python:3.10-slim-buster AS backend
@@ -29,7 +29,6 @@ COPY ./azure-function .
 
 # Final image
 FROM node:20-buster-slim
-
 # Set the working directory
 WORKDIR /app
 
