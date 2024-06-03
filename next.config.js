@@ -69,7 +69,7 @@ const nextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "frame-ancestors 'self'; style-src 'self' https://api.mapbox.com/ https://fonts.googleapis.com/ https://unpkg.com/ 'unsafe-inline'",
+              "frame-ancestors 'self' https://my-profile-page-phi.vercel.app/; style-src 'self' https://api.mapbox.com/ https://fonts.googleapis.com/ https://unpkg.com/ 'unsafe-inline'",
           },
           {
             key: "Permissions-Policy",
