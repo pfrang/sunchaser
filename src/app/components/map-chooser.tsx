@@ -2,7 +2,7 @@ import { StateHelper } from "states/sunchaser-result";
 
 export const MapChooser = () => {
   return (
-    <div className="grid grid-cols-3 gap-4 px-6 w-full">
+    <div className="grid w-full grid-cols-3 gap-4 px-6">
       <MapButton style="mapbox://styles/mapbox/streets-v12">
         <p className="text-variant-regular">Streets</p>
       </MapButton>
@@ -41,7 +41,7 @@ const MapButton = ({
   const { mapInstance } = StateHelper.mapInstance();
   return (
     <button
-      className="border-2 px-4 py-2 bg-greens-300 shadow-md rounded-lg border-greens-300"
+      className="rounded-lg border-2 border-greens-300 bg-greens-300 px-4 py-2 shadow-md"
       onClick={() => mapInstance?.adjustStyle(style)}
     >
       {children}

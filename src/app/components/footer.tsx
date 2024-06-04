@@ -1,13 +1,12 @@
 "use client";
 
 import { capitalize } from "lodash";
-import { useUseSwipeable } from "app/hooks/use-swipeable";
 import {
   FooterItemType,
   useDisplayFooter,
   useDisplayIsSettingsExpanded,
 } from "states/footer";
-import React, { TouchEventHandler, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
 import { Forecast } from "./forecast";
@@ -16,12 +15,13 @@ import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 
 export const Footer = () => {
   const { isSettingsExpanded } = useDisplayIsSettingsExpanded();
+  // const { isFooterExpanded } = useDisplayIsSettingsExpanded();
+
   const { footerItem } = useDisplayFooter();
 
   const [footerHeightBreakPoints, setFooterHeightBreakPoints] = useState<
     number[]
   >([0, 0, 0]);
-  const [height, setHeight] = useState<number>(footerHeightBreakPoints[0]);
 
   useEffect(() => {
     setFooterHeightBreakPoints([
@@ -32,6 +32,9 @@ export const Footer = () => {
     setHeight(window.innerHeight * 0.1);
   }, []);
 
+  const [height, setHeight] = useState<number>(footerHeightBreakPoints[0]);
+
+  const isAtMaxHeight = footerHeightBreakPoints[2] === height;
   const shouldHydrate = useShouldHydrate();
 
   useEffect(() => {
@@ -39,49 +42,6 @@ export const Footer = () => {
       setHeight(footerHeightBreakPoints[0]);
     }
   }, [isSettingsExpanded]);
-
-  const onExpand = (e) => {
-    const isHardSwipe = e.velocity > 1.8;
-
-    switch (height) {
-      case footerHeightBreakPoints[0]:
-        if (isHardSwipe) {
-          setHeight(footerHeightBreakPoints[2]);
-        } else {
-          setHeight(footerHeightBreakPoints[1]);
-        }
-        break;
-      case footerHeightBreakPoints[1]:
-        setHeight(footerHeightBreakPoints[2]);
-        break;
-      case footerHeightBreakPoints[2]:
-        break;
-    }
-  };
-
-  const onDelapse = (e) => {
-    const isHardSwipe = e.velocity > 1.4;
-
-    switch (height) {
-      case footerHeightBreakPoints[2]:
-        if (isHardSwipe) {
-          setHeight(footerHeightBreakPoints[0]);
-        } else {
-          setHeight(footerHeightBreakPoints[1]);
-        }
-        break;
-      case footerHeightBreakPoints[1]:
-        setHeight(footerHeightBreakPoints[0]);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handlers = useUseSwipeable({
-    onSwipedUp: onExpand,
-    onSwipedDown: onDelapse,
-  });
 
   const clickableLine = () => {
     switch (height) {
@@ -103,12 +63,27 @@ export const Footer = () => {
     initialTouchPosition.current = event.touches[0].clientY;
   };
 
+  const scrollableDivRef = useRef<HTMLDivElement>(null);
+
   const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
-    event.preventDefault();
     const currentTouchPosition = event.touches[0].clientY;
+
+    const isScrollingUp = currentTouchPosition < initialTouchPosition?.current!;
 
     if (initialTouchPosition.current !== null) {
       const draggedPixels = initialTouchPosition.current - currentTouchPosition;
+      const isAtMaxScroll = scrollableDivRef.current
+        ? scrollableDivRef.current.scrollTop === 0
+        : false;
+
+      if (isAtMaxHeight && isScrollingUp) {
+        return;
+      }
+
+      if (!isAtMaxScroll) {
+        return;
+      }
+
       // Use requestAnimationFrame to batch state updates
       requestAnimationFrame(() => {
         setHeight((prevHeight) => prevHeight + draggedPixels * 2);
@@ -118,7 +93,7 @@ export const Footer = () => {
     initialTouchPosition.current = currentTouchPosition;
   };
 
-  const handleTouchEnd = (event) => {
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
     // event.preventDefault();
     const height2 = getNearestBreakpoint(height, footerHeightBreakPoints);
 
@@ -140,16 +115,16 @@ export const Footer = () => {
         <FooterExpandableLine expandableClick={() => clickableLine()} />
         {shouldHydrate && (
           <div
+            ref={scrollableDivRef}
             style={{
               transition: "height 0.3s ease",
               height: `${height}px`,
               backgroundColor: "white",
-              overflowY: "hidden",
+              overflowY: isAtMaxHeight ? "auto" : "hidden",
             }}
+            className={"scrollbar-thin scrollbar-track-slate-50"}
           >
-            <div
-              className={`size-full scrollbar-thin scrollbar-track-slate-50`}
-            >
+            <div className={`size-full`}>
               <div className="bg-gray-100">
                 <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
                   Resultater

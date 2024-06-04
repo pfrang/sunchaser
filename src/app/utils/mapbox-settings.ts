@@ -1,5 +1,6 @@
 import { AzureFunctionCoordinatesMappedItems } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import mapboxgl from "mapbox-gl";
+import { resetLayout } from "states/footer";
 
 interface Coordinates {
   longitude: number;
@@ -281,7 +282,13 @@ export class MapBoxHelper {
         .addTo(this.map);
     });
 
-    // TODO add cursor pointer for unclustered point
+    this.map.on("mousedown", () => {
+      resetLayout();
+    });
+
+    this.map.on("touchstart", () => {
+      resetLayout();
+    });
 
     this.map.on("mouseenter", "clusters", () => {
       this.map.getCanvas().style.cursor = "pointer";
