@@ -1,11 +1,7 @@
 "use client";
 
 import { capitalize } from "lodash";
-import {
-  FooterItemType,
-  useDisplayFooter,
-  useDisplayIsSettingsExpanded,
-} from "states/footer";
+import { FooterItemType, useDisplayFooter } from "states/footer";
 import React, { useEffect, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
@@ -14,9 +10,6 @@ import { SunchaserListWrapper } from "./sunchaser/components/result-list-wrapper
 import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 
 export const Footer = () => {
-  const { isSettingsExpanded } = useDisplayIsSettingsExpanded();
-  // const { isFooterExpanded } = useDisplayIsSettingsExpanded();
-
   const { footerItem } = useDisplayFooter();
 
   const [footerHeightBreakPoints, setFooterHeightBreakPoints] = useState<
@@ -36,12 +29,6 @@ export const Footer = () => {
 
   const isAtMaxHeight = footerHeightBreakPoints[2] === height;
   const shouldHydrate = useShouldHydrate();
-
-  useEffect(() => {
-    if (isSettingsExpanded) {
-      setHeight(footerHeightBreakPoints[0]);
-    }
-  }, [isSettingsExpanded]);
 
   const clickableLine = () => {
     switch (height) {

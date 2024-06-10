@@ -10,6 +10,10 @@ import {
 import { useRouter } from "next/navigation";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
+import { Field, useFormikContext } from "formik";
+import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
+
+import { FormShape } from "../right-buttons-wrapper";
 
 import { CircularMap } from "./circular-map";
 
@@ -58,7 +62,9 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-export const ChooseTravelDistance = () => {
+export const ChooseTravelDistance = ({ isExpanded }) => {
+  const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
+
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
 
@@ -134,28 +140,48 @@ export const ChooseTravelDistance = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      {searchParams?.lat && <CircularMap kilometers={kilometers} />}
-      <p className="text-variant-poppins text-center text-white">
-        {`${valueToDisplay}km`}
-      </p>
-      <div className="mx-[20px] flex w-full justify-center">
-        <PrettoSlider
-          style={{ width: "85%" }}
-          ref={travelDistanceRef}
-          aria-label="Temperature"
-          value={index}
-          // getAriaValueText={(value: number) => `${value}km`}
-          valueLabelDisplay="auto"
-          valueLabelFormat={`${valueToDisplay}`}
-          step={1}
-          onChange={handleSlide}
-          onChangeCommitted={debouncedUpdateUrl}
-          marks={marks}
-          min={min}
-          max={max}
-        />
+    <>
+      <input
+        autoFocus
+        required
+        disabled={!isExpanded}
+        className={`bg-inherit ${
+          isExpanded ? "" : "hidden"
+        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none`}
+        placeholder={isExpanded ? `${values.distance}km` : ""}
+        type="text"
+        name="calendar"
+        onChange={(e) => setFieldValue("distance", e.target.value)}
+        style={{ outline: "none" }}
+      />
+      <div className="absolute right-2 top-[6px] flex size-[36px] cursor-pointer justify-center">
+        <CalendarIcon />
       </div>
-    </div>
+
+      {isExpanded && (
+        <div className="mt-4 flex flex-col items-center justify-center rounded-[16px] bg-white">
+          <p className="text-variant-poppins text-center text-white">
+            {`${valueToDisplay}km`}
+          </p>
+          <div className="mx-[20px] flex w-full justify-center">
+            <PrettoSlider
+              style={{ width: "85%" }}
+              ref={travelDistanceRef}
+              aria-label="Temperature"
+              value={index}
+              // getAriaValueText={(value: number) => `${value}km`}
+              valueLabelDisplay="auto"
+              valueLabelFormat={`${valueToDisplay}`}
+              step={1}
+              onChange={handleSlide}
+              onChangeCommitted={debouncedUpdateUrl}
+              marks={marks}
+              min={min}
+              max={max}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };

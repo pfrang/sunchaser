@@ -10,6 +10,7 @@ const Wrapper = styled(BaseDiv)`
 
   max-width: ${(props) => props.$maxWidth};
   width: ${(props) => props.$width};
+  z-index: ${(props) => props.$zIndex};
 
   transition: ${(props) => props.$transition};
   cursor: ${(props) => (props.$clickable ? "pointer" : "default")};

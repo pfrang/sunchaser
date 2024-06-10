@@ -8,6 +8,7 @@ import { fetchGlobalRank } from "app/actions/fetch-global-rank";
 import { GlobalRankNextApiResponse } from "app/api/azure-function/global-rank/route";
 import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
 import { useForecast } from "app/hooks/use-forecast";
+import { Flex } from "ui-kit/flex";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
@@ -16,10 +17,10 @@ import { useSearchParamsToObject } from "../hooks/use-search-params";
 import { MapBoxHelper } from "../utils/mapbox-settings";
 import { StateHelper } from "../../states/sunchaser-result";
 
-import { SettingsButton } from "./settings-button";
 import { UserLocationButton } from "./user-location-button";
 import { MapButtonsWrapper } from "./map-buttons-wrapper";
 import { Search } from "./_shared/search";
+import { RightButtonsWrapper } from "./right-buttons-wrapper";
 
 const Router = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
@@ -115,10 +116,12 @@ const Router = ({ mapboxKey }) => {
   return (
     <>
       <MapButtonsWrapper>
-        <Search />
-        <SettingsButton />
-        <UserLocationButton />
+        <RightButtonsWrapper />
       </MapButtonsWrapper>
+      <div className="fixed left-6 top-20 z-30 md:left-8">
+        <UserLocationButton />
+      </div>
+
       {/* {shouldHydrate && !userLocation && <LocationModal />} */}
       <section id="section-map" className="h-full">
         <div className="sticky top-0 flex size-full items-center justify-center">
@@ -128,7 +131,7 @@ const Router = ({ mapboxKey }) => {
             </div>
           ) : (
             <>
-              <div id="map" className={`m-auto size-full `}></div>
+              <div id="map" className={`m-auto size-full`}></div>
               <div id="original-map" className="m-auto hidden size-full"></div>
             </>
           )}

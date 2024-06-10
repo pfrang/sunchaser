@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchIcon from "@mui/icons-material/Search";
 import NavigationIcon from "@mui/icons-material/Navigation";
-import { fetchTownDetails } from "app/hooks/fetch-town-details";
 import { useFetchGoogleMapsSearches } from "app/hooks/use-google-maps-auto-search";
-import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { Text } from "ui-kit/text";
@@ -14,152 +12,79 @@ import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
+import { useFormikContext } from "formik";
 
-export const Search = () => {
-  const [townSearch, setTownSearch] = useState("");
+import { FormShape } from "../right-buttons-wrapper";
+
+export const Search = ({ isExpanded, setIsExpanded, resultListRef }) => {
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [dataFetched, setDatafetched] = useState(false);
+  const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
 
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [townId, setTownId] = useState("");
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
 
-  const { data, error, isLoading } = useFetchGoogleMapsSearches(townSearch);
+  const { data, error, isLoading } = useFetchGoogleMapsSearches(
+    values.townSearch,
+  );
+
   const { userLocation } = useUserLocation();
-  const updateUrl = useUpdateUrl();
-
-  const locationRef = useRef<HTMLInputElement>(null);
-  const resultListRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (searchParams?.location) {
-      setTownSearch((searchParams.location as string) || "");
-      setLocationChosen(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!townId) return;
-
-    const fetcher = async () => {
-      const response = await fetchTownDetails(townId);
-
-      updateUrl({
-        lat: response?.latitude,
-        lon: response?.longitude,
-        // location: locationRef?.current?.value.split(",")[0], // TODO maybe fix if we want location to pre-populated
-      });
-    };
-    fetcher();
-  }, [townId]);
 
   useEffect(() => {
     if (!dataFetched && data?.items && isLocationChosen) {
       // Incase user does not change a selection on mount
-      setTownId(data.items[0].place_id);
       setDatafetched(true);
+      setFieldValue("townId", data.items[0].place_id);
     }
   }, [data, dataFetched, isLocationChosen]);
 
   const setLocationAndClearList = ({ value, id }) => {
-    setTownSearch(value);
-    setTownId(id);
+    setFieldValue("townSearch", value);
+    setFieldValue("townId", id);
     setLocationChosen(true);
     setIsExpanded(false);
-  };
-
-  const onSearchChange = (e) => {
-    setTownSearch(e);
-    setLocationChosen(false);
+    submitForm();
   };
 
   const onMagnifyingGlassClick = () => {
-    setTownSearch("");
+    setFieldValue("townSearch", "");
     return setIsExpanded(!isExpanded);
-    if (isExpanded) {
-      if (!data) return;
-      // const search = locationRef?.current?.value;
-      // const townId = data?.items[0].place_id;
-      // setTownSearch(data?.items[0].place);
-      // setLocationAndClearList({ value: search, id: townId });
-    } else {
-      setIsExpanded(true);
-    }
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        resultListRef.current &&
-        !resultListRef.current.contains(event.target)
-      ) {
-        setIsExpanded(false);
-        setTownSearch("");
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const onUseDeviceLocation = () => {
     if (!userLocation) return;
+    setFieldValue("townSearch", "mylocation");
 
-    const urlParams = sanitizeNextParams({
-      ...searchParams,
-      lat: userLocation.latitude,
-      lon: userLocation.longitude,
-      location: "",
-    });
-    setIsExpanded(false);
-    router.push(`/?${urlParams}`);
+    // submitForm();
+
+    // const urlParams = sanitizeNextParams({
+    //   ...searchParams,
+    //   lat: userLocation.latitude,
+    //   lon: userLocation.longitude,
+    //   location: "",
+    // });
+    // setIsExpanded(false);
+    // router.push(`/?${urlParams}`);
   };
 
   return (
-    <div
-      ref={resultListRef}
-      className={`relative left-[2px] top-2 z-50 flex h-[52px] flex-col content-center rounded-[16px] bg-white px-1 shadow-lg transition-width duration-300 ease-in-out
-        ${
-          isExpanded
-            ? "w-[250px] bg-blues-400 sm:w-[350px] md:w-[500px]"
-            : "w-[52px]"
-        }
-      `}
-    >
+    <>
       {isExpanded && (
         <input
           autoFocus
-          ref={locationRef}
           required
           disabled={!isExpanded}
           className={`bg-inherit ${
             isExpanded ? "" : "hidden"
-          } h-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none`}
+          } size-full text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none`}
           placeholder={isExpanded ? "Location" : ""}
-          onChange={(e) => onSearchChange(e.target.value)}
           onFocus={() => setLocationChosen(false)}
           type="text"
-          value={isExpanded ? townSearch : ""}
+          name="townSearch"
+          onChange={(e) => setFieldValue("townSearch", e.target.value)}
           style={{ outline: "none" }}
         />
       )}
-      {/* <input
-        autoFocus
-        ref={locationRef}
-        required
-        // disabled={!isExpanded}
-        className={`h-full  items-center text-ellipsis rounded-inherit bg-inherit pl-4 pr-6 text-2xl`}
-        placeholder={isExpanded ? "Location" : ""}
-        onChange={(e) => onSearchChange(e.target.value)}
-        onFocus={() => setLocationChosen(false)}
-        onClick={(e) => e.stopPropagation()}
-        type="text"
-        value={isExpanded ? townSearch : ""}
-        style={{ outline: "none" }}
-      /> */}
 
       <div className="absolute right-2 top-[8px]">
         {isLoading ? (
@@ -191,7 +116,7 @@ export const Search = () => {
           return (
             <ResultList ref={resultListRef}>
               <div
-                className="flex w-full cursor-pointer items-center rounded-inherit border-2 border-blues-1000 bg-blues-200 px-2 py-3 text-white"
+                className="flex w-full cursor-pointer items-center rounded-inherit border-2 bg-blues-200 px-2 py-3 text-white"
                 onClick={onUseDeviceLocation}
               >
                 <NavigationIcon
@@ -232,18 +157,21 @@ export const Search = () => {
           );
         }}
       />
-    </div>
+    </>
   );
 };
 
-const ResultList = ({ children, ref }) => {
+const ResultList = React.forwardRef<
+  HTMLDivElement,
+  React.PropsWithChildren<{}>
+>((props, ref) => {
   return (
     <>
       <div
         ref={ref}
-        className="absolute top-14 flex w-full flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg"
+        className="absolute top-14 z-50 flex w-full flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg"
       >
-        {children}
+        {props.children}
         <span className="h-1"></span>
         <div className="flex justify-center px-28">
           <span className="h-1 w-1/2 bg-blues-200"></span>
@@ -251,7 +179,7 @@ const ResultList = ({ children, ref }) => {
       </div>
     </>
   );
-};
+});
 
 const itemForUi = (item: GoogleMapsAutoSearchDtoItem) => {
   const { place, country } = item;

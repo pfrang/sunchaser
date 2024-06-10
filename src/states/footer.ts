@@ -21,15 +21,6 @@ export const useDisplayIsFooterExpanded = create<{
     set(() => ({ isFooterExpanded: input })),
 }));
 
-export const useDisplayIsSettingsExpanded = create<{
-  isSettingsExpanded: boolean;
-  setIsSettingsExpanded: (input: boolean) => void;
-}>((set) => ({
-  isSettingsExpanded: false,
-  setIsSettingsExpanded: (input: boolean) =>
-    set(() => ({ isSettingsExpanded: input })),
-}));
-
 export const useDisplayFooter = create<DisplayDrawerStates>((set) => ({
   footerItem: "sunchaser",
   setFooterItem: (input: FooterItemType) => set(() => ({ footerItem: input })),
@@ -50,5 +41,4 @@ export const useDisplayFooterSubItems = create<DisplayDrawerSubItemsStates>(
 
 export const resetLayout = () => {
   useDisplayIsFooterExpanded.setState({ isFooterExpanded: false });
-  useDisplayIsSettingsExpanded.setState({ isSettingsExpanded: false });
 };
