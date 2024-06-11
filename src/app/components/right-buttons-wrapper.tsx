@@ -1,3 +1,4 @@
+"use client";
 import { useState, useRef, useEffect } from "react";
 import { Formik, Form } from "formik";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
@@ -80,8 +81,10 @@ export const RightButtonsWrapper = () => {
           };
 
           document.addEventListener("mousedown", handleClickOutside);
+          document.addEventListener("touchstart", handleClickOutside);
           return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
           };
         }, [isExpanded]);
         return (
@@ -93,17 +96,16 @@ export const RightButtonsWrapper = () => {
       `}
             >
               <Wrapper>
-                <Search
-                  isExpanded={isExpanded}
-                  setIsExpanded={setIsExpanded}
-                  resultListRef={wrapperRef}
-                />
+                <Search isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
               </Wrapper>
               <Wrapper>
                 <CalendarWrapper isExpanded={isExpanded} />
               </Wrapper>
               <Wrapper>
-                <ChooseTravelDistance isExpanded={isExpanded} />
+                <ChooseTravelDistance
+                  isExpanded={isExpanded}
+                  setIsExpanded={setIsExpanded}
+                />
               </Wrapper>
             </div>
             {/* <Wrapper>
@@ -125,7 +127,7 @@ export const RightButtonsWrapper = () => {
 
 const Wrapper = ({ children }) => {
   return (
-    <div className="relative h-[52px] rounded-[16px] bg-white px-1 shadow-lg">
+    <div className="relative h-[52px] rounded-[16px] bg-white shadow-lg">
       {children}
     </div>
   );

@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import { capitalize } from "lodash";
 import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
-
-import { theme } from "../../../../ui-kit/theme";
+import { FormShape } from "app/components/right-buttons-wrapper";
+import { useFormikContext } from "formik";
 
 export const Calendar = () => {
   const searchParams = useSearchParamsToObject();
+  const { setFieldValue } = useFormikContext<FormShape>();
 
   const [, setIsPopperOpen] = useState(false);
   const [, setLocale] = useState("en-US");
@@ -53,6 +54,7 @@ export const Calendar = () => {
 
   const Submit = (e: Date) => {
     if (!e) return;
+    setFieldValue("calendar", endOfDay(e).toISOString().split("T")[0]);
 
     setIsPopperOpen(false);
     setSelectedDate(e);
@@ -119,7 +121,7 @@ export const Calendar = () => {
             head: {
               fontSize: "1rem",
               fontWeight: "bold",
-              color: "white",
+              color: "black",
             },
             table: {
               marginTop: "1rem",
@@ -129,7 +131,7 @@ export const Calendar = () => {
 
               // borderWidth: "2px",
               // borderColor: `${theme.color.blues[7]}`,
-              backgroundColor: `${theme.color.blues[5]}`,
+              backgroundColor: `white`,
               boxShadow: "0 0 0 1px #6B93AA",
               // borderWidth: "2px",
               // border: "2px solid black",
@@ -141,12 +143,12 @@ export const Calendar = () => {
               // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
               borderRadius: "16px",
               padding: "15px",
-              color: "white",
+              color: "#2C5C32",
             },
             day: {
               width: "100%",
               fontSize: "1.2rem",
-              color: "white",
+              color: "black",
               padding: "20px",
             },
           }}

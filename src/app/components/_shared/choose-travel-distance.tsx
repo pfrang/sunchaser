@@ -1,5 +1,6 @@
 "use client";
-import { useRef, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { debounce } from "lodash";
@@ -10,7 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import { Field, useFormikContext } from "formik";
+import { useFormikContext } from "formik";
 import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
 
 import { FormShape } from "../right-buttons-wrapper";
@@ -62,9 +63,16 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-export const ChooseTravelDistance = ({ isExpanded }) => {
+export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
   const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
+  const [isSliderExpanded, setIsSliderExpanded] = useState(false);
+  const wrapperRef = useRef<HTMLInputElement | null>(null);
 
+  useEffect(() => {
+    if (!isExpanded) {
+      setIsSliderExpanded(false);
+    }
+  }, [isExpanded]);
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
 
@@ -89,6 +97,7 @@ export const ChooseTravelDistance = ({ isExpanded }) => {
   const handleSlide = (e: any, num) => {
     setIndex(num);
     setKilometers(Number(valuesForSlider[num - 1].label));
+    setFieldValue("distance", valuesForSlider[num - 1].label);
     sliderChanged = true;
   };
 
@@ -139,26 +148,55 @@ export const ChooseTravelDistance = ({ isExpanded }) => {
     },
   ];
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsSliderExpanded(false);
+      }
+    };
+
+    const addEventListeners = () => {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    };
+
+    const removeEventListeners = () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+
+    if (isSliderExpanded) {
+      addEventListeners();
+    } else {
+      removeEventListeners();
+    }
+
+    return () => {
+      removeEventListeners();
+    };
+  }, [isSliderExpanded, wrapperRef]);
+
   return (
-    <>
+    <span className="rounded-inherit" ref={wrapperRef}>
       <input
-        autoFocus
         required
         disabled={!isExpanded}
+        readOnly
         className={`bg-inherit ${
           isExpanded ? "" : "hidden"
-        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none`}
-        placeholder={isExpanded ? `${values.distance}km` : ""}
+        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none ${isSliderExpanded && "ring-2 ring-greens-400"}`}
+        placeholder={isExpanded ? `${values.distance} km` : ""}
         type="text"
         name="calendar"
-        onChange={(e) => setFieldValue("distance", e.target.value)}
+        onFocus={() => setIsSliderExpanded(true)}
+        // onBlur={() => setIsSliderExpanded(false)}
         style={{ outline: "none" }}
       />
       <div className="absolute right-2 top-[6px] flex size-[36px] cursor-pointer justify-center">
         <CalendarIcon />
       </div>
 
-      {isExpanded && (
+      {isSliderExpanded && isExpanded && (
         <div className="mt-4 flex flex-col items-center justify-center rounded-[16px] bg-white">
           <p className="text-variant-poppins text-center text-white">
             {`${valueToDisplay}km`}
@@ -174,7 +212,7 @@ export const ChooseTravelDistance = ({ isExpanded }) => {
               valueLabelFormat={`${valueToDisplay}`}
               step={1}
               onChange={handleSlide}
-              onChangeCommitted={debouncedUpdateUrl}
+              // onChangeCommitted={debouncedUpdateUrl}
               marks={marks}
               min={min}
               max={max}
@@ -182,6 +220,6 @@ export const ChooseTravelDistance = ({ isExpanded }) => {
           </div>
         </div>
       )}
-    </>
+    </span>
   );
 };

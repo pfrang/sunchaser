@@ -1,28 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import SearchIcon from "@mui/icons-material/Search";
 import NavigationIcon from "@mui/icons-material/Navigation";
 import { useFetchGoogleMapsSearches } from "app/hooks/use-google-maps-auto-search";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { Text } from "ui-kit/text";
-import { sanitizeNextParams } from "app/utils/sanitize-next-query";
-import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
 import { useFormikContext } from "formik";
 
 import { FormShape } from "../right-buttons-wrapper";
 
-export const Search = ({ isExpanded, setIsExpanded, resultListRef }) => {
+export const Search = ({ isExpanded, setIsExpanded }) => {
   const [isLocationChosen, setLocationChosen] = useState(false);
   const [dataFetched, setDatafetched] = useState(false);
   const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
-
-  const searchParams = useSearchParamsToObject();
-  const router = useRouter();
 
   const { data, error, isLoading } = useFetchGoogleMapsSearches(
     values.townSearch,
@@ -76,8 +70,8 @@ export const Search = ({ isExpanded, setIsExpanded, resultListRef }) => {
           disabled={!isExpanded}
           className={`bg-inherit ${
             isExpanded ? "" : "hidden"
-          } size-full text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none`}
-          placeholder={isExpanded ? "Location" : ""}
+          } size-full text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none focus:ring-2 focus:ring-greens-400`}
+          placeholder={isExpanded ? values.townSearch || "Location" : ""}
           onFocus={() => setLocationChosen(false)}
           type="text"
           name="townSearch"
@@ -114,7 +108,7 @@ export const Search = ({ isExpanded, setIsExpanded, resultListRef }) => {
           if (isLocationChosen || !isExpanded) return <></>;
 
           return (
-            <ResultList ref={resultListRef}>
+            <ResultList>
               <div
                 className="flex w-full cursor-pointer items-center rounded-inherit border-2 bg-blues-200 px-2 py-3 text-white"
                 onClick={onUseDeviceLocation}
