@@ -13,10 +13,11 @@ import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { useFormikContext } from "formik";
 import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
+import { StateHelper } from "states/sunchaser-result";
+import * as turf from "@turf/turf";
+import mapboxgl from "mapbox-gl";
 
 import { FormShape } from "../right-buttons-wrapper";
-
-import { CircularMap } from "./circular-map";
 
 const PrettoSlider = styled(Slider)({
   color: "#52af77",
@@ -67,6 +68,8 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
   const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
   const [isSliderExpanded, setIsSliderExpanded] = useState(false);
   const wrapperRef = useRef<HTMLInputElement | null>(null);
+  const { mapObject, setMapObject } = StateHelper.mapObject();
+  const { mapInstance } = StateHelper.useMapInstance();
 
   useEffect(() => {
     if (!isExpanded) {
@@ -96,8 +99,34 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
 
   const handleSlide = (e: any, num) => {
     setIndex(num);
-    setKilometers(Number(valuesForSlider[num - 1].label));
-    setFieldValue("distance", valuesForSlider[num - 1].label);
+    const newRadius = Number(valuesForSlider[num - 1].label);
+    setKilometers(newRadius);
+    setFieldValue("distance", newRadius);
+
+    // Assuming createCircle returns a GeoJSON circle feature with the given radius
+    const circle = turf.circle(
+      [Number(searchParams?.lon), Number(searchParams?.lat)],
+      newRadius,
+      { units: "kilometers" },
+    );
+
+    const bounds = circle.geometry.coordinates[0].reduce(
+      function (bounds, coord) {
+        return bounds.extend(coord as any);
+      },
+      new mapboxgl.LngLatBounds(
+        circle.geometry.coordinates[0][0] as any,
+        circle.geometry.coordinates[0][0] as any,
+      ),
+    );
+
+    mapObject?.fitBounds(bounds, {
+      padding: 20,
+      duration: 1000,
+    });
+
+    mapInstance?.updateCircularMap(newRadius);
+
     sliderChanged = true;
   };
 

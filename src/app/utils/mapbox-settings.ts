@@ -1,7 +1,9 @@
 import { AzureFunctionCoordinatesMappedItems } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import mapboxgl from "mapbox-gl";
 import { resetLayout } from "states/footer";
-
+import * as turf from "@turf/turf";
+import { Units } from "@turf/turf";
+import { isNaN } from "lodash";
 interface Coordinates {
   longitude: number;
   latitude: number;
@@ -45,11 +47,12 @@ export class MapBoxHelper {
     });
   }
 
-  adjustStyle(input: string) {
-    this.map.setStyle(input);
-    this.map.on("style.load", () => {
-      this.sourceAndLayerAfterLoad();
-    });
+  initializeMap() {
+    this.setMarkers();
+
+    new mapboxgl.Marker({ color: "red" })
+      .setLngLat([this.centerLon, this.centerLat])
+      .addTo(this.map);
   }
 
   sourceAndLayerAfterLoad() {
@@ -57,14 +60,6 @@ export class MapBoxHelper {
     this.addCluster();
     // mapInitializer.addHeatMap();
     this.addClickHandlers();
-  }
-
-  initializeMap() {
-    this.setMarkers();
-
-    new mapboxgl.Marker({ color: "red" })
-      .setLngLat([this.centerLon, this.centerLat])
-      .addTo(this.map);
   }
 
   flyToUserLocation() {
@@ -93,6 +88,61 @@ export class MapBoxHelper {
         this.map.removeLayer(layer);
       }
     });
+  }
+
+  adjustStyle(input: string) {
+    this.map.setStyle(input);
+    this.map.on("style.load", () => {
+      this.sourceAndLayerAfterLoad();
+    });
+  }
+
+  addCircularMap(distance: number | string | undefined) {
+    if (isNaN(Number(distance))) {
+      return;
+    }
+    const _center = turf.point([this.centerLon, this.centerLat]);
+    const _radius = distance as number;
+    const _options = {
+      steps: 80,
+      units: "kilometers" as Units,
+    };
+    const _circle = turf.circle(_center, _radius, _options);
+    this.map.addSource("circleData", {
+      type: "geojson",
+      data: _circle,
+    });
+
+    this.map.addLayer({
+      id: "circle-fill",
+      type: "fill",
+      source: "circleData",
+      paint: {
+        "fill-color": "#2C5C32",
+        "fill-opacity": 0.1,
+      },
+    });
+  }
+
+  updateCircularMap(distance: number | string | undefined) {
+    if (isNaN(Number(distance))) {
+      return;
+    }
+
+    const _center = turf.point([this.centerLon, this.centerLat]);
+    const _radius = distance as number;
+    const _options = {
+      steps: 80,
+      units: "kilometers" as Units,
+    };
+    const _circle = turf.circle(_center, _radius, _options);
+
+    // Update the data of the existing source
+    if (this.map.getSource("circleData")) {
+      (this.map.getSource("circleData") as mapboxgl.GeoJSONSource).setData(
+        _circle,
+      );
+    }
   }
 
   addSourceSettings() {

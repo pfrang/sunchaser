@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import { Spinner } from "ui-kit/spinner/spinner";
 import mapboxgl from "mapbox-gl";
 import { fetchGlobalRank } from "app/actions/fetch-global-rank";
-import { GlobalRankNextApiResponse } from "app/api/azure-function/global-rank/route";
 import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
 import { useForecast } from "app/hooks/use-forecast";
-import { Flex } from "ui-kit/flex";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
@@ -19,9 +17,7 @@ import { StateHelper } from "../../states/sunchaser-result";
 
 import { UserLocationButton } from "./user-location-button";
 import { MapButtonsWrapper } from "./map-buttons-wrapper";
-import { Search } from "./_shared/search";
 import { RightButtonsWrapper } from "./right-buttons-wrapper";
-
 const Router = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
   const searchParams = useSearchParamsToObject();
@@ -55,7 +51,7 @@ const Router = ({ mapboxKey }) => {
   }, [userLocation]);
 
   const { mapInstance, setMapInstance } = StateHelper.useMapInstance();
-  const { setMapObject } = StateHelper.mapObject();
+  const { mapObject, setMapObject } = StateHelper.mapObject();
 
   useEffect(() => {
     if (document.getElementById("map") && data?.userLocation.latitude) {
@@ -80,6 +76,7 @@ const Router = ({ mapboxKey }) => {
         mapInitializer.setFitBounds();
         mapInitializer.addCluster();
         mapInitializer.addClickHandlers();
+        mapInitializer.addCircularMap(searchParams?.distance || 50);
         setMapInstance(mapInitializer);
         setMapObject(primaryMap);
       });
