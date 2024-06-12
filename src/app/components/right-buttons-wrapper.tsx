@@ -15,7 +15,7 @@ import { ChooseTravelDistance } from "./_shared/choose-travel-distance";
 export interface FormShape {
   townSearch: string;
   townId: string | null;
-  calendar: string;
+  calendar: Date;
   distance: string;
 }
 
@@ -28,7 +28,9 @@ export const RightButtonsWrapper = () => {
   const initialValues: FormShape = {
     townSearch: searchParams?.location || "",
     townId: null,
-    calendar: searchParams?.date || "",
+    calendar:
+      new Date(searchParams?.date as string) ||
+      new Date().toISOString().split("T")[0],
     distance: searchParams?.distance || "50",
   };
 

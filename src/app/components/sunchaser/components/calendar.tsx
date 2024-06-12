@@ -11,15 +11,15 @@ import { useFormikContext } from "formik";
 
 export const Calendar = () => {
   const searchParams = useSearchParamsToObject();
-  const { setFieldValue } = useFormikContext<FormShape>();
+  const { values, setFieldValue } = useFormikContext<FormShape>();
 
   const [, setIsPopperOpen] = useState(false);
   const [, setLocale] = useState("en-US");
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const updateUrl = useUpdateUrl();
 
   useEffect(() => {
-    setSelectedDate(
+    setFieldValue(
+      "calendar",
       searchParams?.date ? new Date(searchParams?.date as string) : new Date(),
     );
   }, [searchParams]);
@@ -54,10 +54,9 @@ export const Calendar = () => {
 
   const Submit = (e: Date) => {
     if (!e) return;
-    setFieldValue("calendar", endOfDay(e).toISOString().split("T")[0]);
 
     setIsPopperOpen(false);
-    setSelectedDate(e);
+    setFieldValue("calendar", e);
     updateUrl({ date: endOfDay(e).toISOString().split("T")[0] });
   };
 
@@ -81,7 +80,7 @@ export const Calendar = () => {
           locale={nb}
           disableNavigation
           mode="single"
-          selected={selectedDate}
+          selected={values.calendar}
           onSelect={Submit}
           showOutsideDays
           fixedWeeks

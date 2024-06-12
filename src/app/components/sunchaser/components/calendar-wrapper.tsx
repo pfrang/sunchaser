@@ -4,6 +4,7 @@ import { FormShape } from "app/components/right-buttons-wrapper";
 import { useFormikContext, Field } from "formik";
 import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
 import { useState } from "react";
+import { endOfDay } from "date-fns";
 
 import { Calendar } from "./calendar";
 
@@ -20,7 +21,11 @@ export const CalendarWrapper = ({ isExpanded }) => {
         className={`bg-inherit ${
           isExpanded ? "" : "hidden"
         } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none focus:ring-2 focus:ring-greens-400`}
-        placeholder={isExpanded ? values.calendar : ""}
+        placeholder={
+          isExpanded
+            ? endOfDay(values.calendar).toISOString().split("T")[0]
+            : ""
+        }
         type="text"
         name="calendar"
         onFocus={() => setIsCalendarExpanded(true)}
