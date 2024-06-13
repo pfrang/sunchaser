@@ -1,28 +1,17 @@
 "use client";
 import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
-import { differenceInCalendarDays, endOfDay, format } from "date-fns";
+import { differenceInCalendarDays, format } from "date-fns";
 import nb from "date-fns/locale/nb";
 import { useEffect, useState } from "react";
 import { capitalize } from "lodash";
-import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import { FormShape } from "app/components/right-buttons-wrapper";
+import { FormShape } from "app/components/sunchaser/components/filter-buttons/form";
 import { useFormikContext } from "formik";
 
 export const Calendar = ({ setIsCalendarExpanded }) => {
-  const searchParams = useSearchParamsToObject();
   const { values, setFieldValue } = useFormikContext<FormShape>();
 
-  const [, setIsPopperOpen] = useState(false);
   const [, setLocale] = useState("en-US");
-  const updateUrl = useUpdateUrl();
-
-  useEffect(() => {
-    setFieldValue(
-      "calendar",
-      searchParams?.date ? new Date(searchParams?.date as string) : new Date(),
-    );
-  }, [searchParams]);
 
   const today = new Date();
   const inTenDays = new Date(today.setDate(today.getDate() + 9));
@@ -55,10 +44,8 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
   const Submit = (e: Date) => {
     if (!e) return;
 
-    setIsPopperOpen(false);
     setIsCalendarExpanded(false);
     setFieldValue("calendar", e);
-    updateUrl({ date: endOfDay(e).toISOString().split("T")[0] });
   };
 
   type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;

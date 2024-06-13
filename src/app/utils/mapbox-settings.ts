@@ -1,6 +1,6 @@
 import { AzureFunctionCoordinatesMappedItems } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import mapboxgl from "mapbox-gl";
-import { resetLayout } from "states/footer";
+import { resetLayout } from "states/states";
 import * as turf from "@turf/turf";
 import { Units } from "@turf/turf";
 import { isNaN } from "lodash";
@@ -10,7 +10,6 @@ interface Coordinates {
 }
 
 const layers = ["clusters", "cluster-count", "unclustered-point", "route"];
-const source = ["tiles"];
 
 export interface StartAndEndCoordinates {
   start: Coordinates;

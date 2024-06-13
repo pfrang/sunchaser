@@ -16,8 +16,9 @@ import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
 import { StateHelper } from "states/sunchaser-result";
 import * as turf from "@turf/turf";
 import mapboxgl from "mapbox-gl";
+import { useIsFilterOpen, useIsSliding } from "states/states";
 
-import { FormShape } from "../right-buttons-wrapper";
+import { FormShape } from "./form";
 
 const PrettoSlider = styled(Slider)({
   color: "#52af77",
@@ -64,18 +65,21 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
-  const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
+export const SliderWrapper = () => {
+  const { isFilterOpen } = useIsFilterOpen();
+  const { values, setFieldValue } = useFormikContext<FormShape>();
   const [isSliderExpanded, setIsSliderExpanded] = useState(false);
   const wrapperRef = useRef<HTMLInputElement | null>(null);
-  const { mapObject, setMapObject } = StateHelper.mapObject();
+  const { mapObject } = StateHelper.mapObject();
   const { mapInstance } = StateHelper.useMapInstance();
 
+  const { setIsSliding } = useIsSliding();
+
   useEffect(() => {
-    if (!isExpanded) {
+    if (!isFilterOpen) {
       setIsSliderExpanded(false);
     }
-  }, [isExpanded]);
+  }, [isFilterOpen]);
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
 
@@ -96,6 +100,7 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
   let sliderChanged = false;
 
   const handleSlide = (e: any, num) => {
+    setIsSliding(true);
     setIndex(num);
     const newRadius = Number(valuesForSlider[num - 1].label);
     setKilometers(newRadius);
@@ -204,15 +209,15 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
   }, [isSliderExpanded, wrapperRef]);
 
   return (
-    <span className="rounded-inherit" ref={wrapperRef}>
+    <span className="w-full rounded-inherit" ref={wrapperRef}>
       <input
         required
-        disabled={!isExpanded}
+        disabled={!isFilterOpen}
         readOnly
         className={`bg-inherit ${
-          isExpanded ? "" : "hidden"
-        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none ${isSliderExpanded && "ring-2 ring-greens-400"}`}
-        placeholder={isExpanded ? `${values.distance} km` : ""}
+          isFilterOpen ? "" : "hidden"
+        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-xl outline-none ${isSliderExpanded && "ring-2 ring-greens-400"}`}
+        value={isFilterOpen ? `${values.distance} km` : ""}
         type="text"
         name="calendar"
         onFocus={() => setIsSliderExpanded(true)}
@@ -223,7 +228,7 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
         <CalendarIcon />
       </div>
 
-      {isSliderExpanded && isExpanded && (
+      {isSliderExpanded && isFilterOpen && (
         <div className="mt-4 flex flex-col items-center justify-center rounded-[16px] bg-white">
           <p className="text-variant-poppins text-center text-white">
             {`${valueToDisplay}km`}
@@ -239,6 +244,7 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
               step={1}
               onChange={handleSlide}
               // onChangeCommitted={debouncedUpdateUrl}
+              onChangeCommitted={() => setIsSliding(false)}
               marks={marks}
               min={min}
               max={max}
