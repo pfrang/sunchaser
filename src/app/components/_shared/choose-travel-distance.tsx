@@ -64,7 +64,7 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-export const ChooseTravelDistance = ({ isExpanded }) => {
+export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
   const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
   const [isSliderExpanded, setIsSliderExpanded] = useState(false);
   const wrapperRef = useRef<HTMLInputElement | null>(null);
