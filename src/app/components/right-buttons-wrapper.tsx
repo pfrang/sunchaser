@@ -28,9 +28,7 @@ export const RightButtonsWrapper = () => {
   const initialValues: FormShape = {
     townSearch: searchParams?.location || "",
     townId: null,
-    calendar:
-      new Date(searchParams?.date as string) ||
-      new Date().toISOString().split("T")[0],
+    calendar: new Date(searchParams?.date as string) || new Date(),
     distance: searchParams?.distance || "50",
   };
 

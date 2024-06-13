@@ -3,17 +3,47 @@ import styled from "styled-components";
 import { FormShape } from "app/components/right-buttons-wrapper";
 import { useFormikContext, Field } from "formik";
 import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { endOfDay } from "date-fns";
 
 import { Calendar } from "./calendar";
 
 export const CalendarWrapper = ({ isExpanded }) => {
-  const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
+  const { values } = useFormikContext<FormShape>();
   const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
 
+  const wrapperRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsCalendarExpanded(false);
+      }
+    };
+
+    const addEventListeners = () => {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside);
+    };
+
+    const removeEventListeners = () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+
+    if (isCalendarExpanded) {
+      addEventListeners();
+    } else {
+      removeEventListeners();
+    }
+
+    return () => {
+      removeEventListeners();
+    };
+  }, [isCalendarExpanded, wrapperRef]);
+
   return (
-    <>
+    <span className="rounded-inherit" ref={wrapperRef}>
       <input
         required
         readOnly
@@ -29,7 +59,6 @@ export const CalendarWrapper = ({ isExpanded }) => {
         type="text"
         name="calendar"
         onFocus={() => setIsCalendarExpanded(true)}
-        onBlur={() => setIsCalendarExpanded(false)}
         // onChange={(e) => setFieldValue("calendar", e.target.value)}
         style={{ outline: "none" }}
       />
@@ -38,12 +67,10 @@ export const CalendarWrapper = ({ isExpanded }) => {
         <CalendarIcon />
       </div>
       {isCalendarExpanded && isExpanded && (
-        <section className="">
-          <div className="flex h-full flex-col items-center">
-            <Calendar />
-          </div>
-        </section>
+        <div className="flex h-full flex-col items-center">
+          <Calendar setIsCalendarExpanded={setIsCalendarExpanded} />
+        </div>
       )}
-    </>
+    </span>
   );
 };

@@ -64,7 +64,7 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
+export const ChooseTravelDistance = ({ isExpanded }) => {
   const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
   const [isSliderExpanded, setIsSliderExpanded] = useState(false);
   const wrapperRef = useRef<HTMLInputElement | null>(null);
@@ -78,8 +78,6 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
   }, [isExpanded]);
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
-
-  const travelDistanceRef = useRef<HTMLInputElement>(null);
 
   const valuesForSlider = distanceArray({
     step: 5,
@@ -233,7 +231,6 @@ export const ChooseTravelDistance = ({ isExpanded, setIsExpanded }) => {
           <div className="mx-[20px] flex w-full justify-center">
             <PrettoSlider
               style={{ width: "85%" }}
-              ref={travelDistanceRef}
               aria-label="Temperature"
               value={index}
               // getAriaValueText={(value: number) => `${value}km`}

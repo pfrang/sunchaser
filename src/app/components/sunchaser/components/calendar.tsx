@@ -9,7 +9,7 @@ import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { FormShape } from "app/components/right-buttons-wrapper";
 import { useFormikContext } from "formik";
 
-export const Calendar = () => {
+export const Calendar = ({ setIsCalendarExpanded }) => {
   const searchParams = useSearchParamsToObject();
   const { values, setFieldValue } = useFormikContext<FormShape>();
 
@@ -56,6 +56,7 @@ export const Calendar = () => {
     if (!e) return;
 
     setIsPopperOpen(false);
+    setIsCalendarExpanded(false);
     setFieldValue("calendar", e);
     updateUrl({ date: endOfDay(e).toISOString().split("T")[0] });
   };
