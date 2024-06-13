@@ -91,3 +91,5 @@ class Handler:
 
     def error_handeling(self,response_code):
         return CustomError(self.lat,self.lon,self.apisource,response_code).logError()
+
+    

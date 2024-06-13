@@ -61,3 +61,5 @@ class Handler:
           empty_df_schema.loc[index,'rank']=row[0][3]
           empty_df_schema.loc[index,'cluster']=row[0][4]
        return empty_df_schema
+    
+      
