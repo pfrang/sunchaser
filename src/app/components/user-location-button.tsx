@@ -1,3 +1,4 @@
+"use client";
 import { StateHelper } from "states/sunchaser-result";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 

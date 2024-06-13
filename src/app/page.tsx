@@ -7,6 +7,7 @@ import { Spinner } from "../ui-kit/spinner/spinner";
 import Router from "./components/map-renderer";
 import { Header } from "./header";
 import { Footer } from "./components/footer";
+import { UserLocationButton } from "./components/user-location-button";
 
 export default function Page() {
   const mapboxKey = new AppConfig().mapBox.key;
@@ -16,7 +17,7 @@ export default function Page() {
     <>
       <div className="flex h-dvh w-full flex-col">
         <Suspense fallback={<Spinner />}>
-          <Header />
+          {/* <Header /> */}
           <main className="h-full">
             <Router mapboxKey={mapboxKey} />
           </main>

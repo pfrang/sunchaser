@@ -1,7 +1,7 @@
 "use client";
 
 import { capitalize } from "lodash";
-import { FooterItemType, useDisplayFooter } from "states/footer";
+import { FooterItemType, useDisplayFooter } from "states/states";
 import React, { useEffect, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
@@ -90,47 +90,45 @@ export const Footer = () => {
   };
 
   return (
-    <div className="absolute">
-      <div
-        className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 pr-1"
-        // onMouseMove={handleMouseMove}
-        // {...handlers}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <FooterExpandableLine expandableClick={() => clickableLine()} />
-        {shouldHydrate && (
-          <div
-            ref={scrollableDivRef}
-            style={{
-              transition: "height 0.3s ease",
-              height: `${height}px`,
-              backgroundColor: "white",
-              overflowY: isAtMaxHeight ? "auto" : "hidden",
-            }}
-            className={"scrollbar-thin scrollbar-track-slate-50"}
-          >
-            <div className={`size-full`}>
-              <div className="bg-gray-100">
-                <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
-                  Resultater
-                </p>
-                <span className="block h-4"></span>
-              </div>
-              <div className="flex w-full justify-between bg-gray-100 shadow-lg">
-                <FooterButton item="sunchaser" />
-                <FooterButton item="forecast" />
-              </div>
-              <div className="size-full bg-white shadow-top">
-                <span className="block h-4"></span>
-                {footerItem === "forecast" && <Forecast />}
-                {footerItem === "sunchaser" && <SunchaserListWrapper />}
-              </div>
+    <div
+      className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 pr-1"
+      // onMouseMove={handleMouseMove}
+      // {...handlers}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <FooterExpandableLine expandableClick={() => clickableLine()} />
+      {shouldHydrate && (
+        <div
+          ref={scrollableDivRef}
+          style={{
+            transition: "height 0.3s ease",
+            height: `${height}px`,
+            backgroundColor: "white",
+            overflowY: isAtMaxHeight ? "auto" : "hidden",
+          }}
+          className={"scrollbar-thin scrollbar-track-slate-50"}
+        >
+          <div className={`size-full`}>
+            <div className="bg-gray-100">
+              <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
+                Resultater
+              </p>
+              <span className="block h-4"></span>
+            </div>
+            <div className="flex w-full justify-between bg-gray-100 shadow-lg">
+              <FooterButton item="sunchaser" />
+              <FooterButton item="forecast" />
+            </div>
+            <div className="size-full bg-white shadow-top">
+              <span className="block h-4"></span>
+              {footerItem === "forecast" && <Forecast />}
+              {footerItem === "sunchaser" && <SunchaserListWrapper />}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

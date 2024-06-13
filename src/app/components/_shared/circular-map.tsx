@@ -8,7 +8,7 @@ import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import {
   useDisplayFooterSubItems,
   useDisplayIsFooterExpanded,
-} from "states/footer";
+} from "states/states";
 
 import { AppConfig } from "../../../app-config";
 

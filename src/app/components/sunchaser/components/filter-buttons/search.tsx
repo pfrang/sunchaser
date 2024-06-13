@@ -10,13 +10,15 @@ import { Text } from "ui-kit/text";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
 import { useFormikContext } from "formik";
+import { useIsFilterOpen } from "states/states";
 
-import { FormShape } from "../right-buttons-wrapper";
+import { FormShape } from "./form";
 
-export const Search = ({ isExpanded, setIsExpanded }) => {
-  const [isLocationChosen, setLocationChosen] = useState(false);
+export const Search = () => {
+  const { isFilterOpen, setIsFilterOpen } = useIsFilterOpen();
   const [dataFetched, setDatafetched] = useState(false);
-  const { values, setFieldValue, submitForm } = useFormikContext<FormShape>();
+  const { values, setFieldValue } = useFormikContext<FormShape>();
+  const [hasUserTyped, setHasUserTyped] = useState(false);
 
   const { data, error, isLoading } = useFetchGoogleMapsSearches(
     values.townSearch,
@@ -25,57 +27,53 @@ export const Search = ({ isExpanded, setIsExpanded }) => {
   const { userLocation } = useUserLocation();
 
   useEffect(() => {
-    if (!dataFetched && data?.items && isLocationChosen) {
+    if (!dataFetched && data?.items && values.townSearch) {
       // Incase user does not change a selection on mount
       setDatafetched(true);
       setFieldValue("townId", data.items[0].place_id);
     }
-  }, [data, dataFetched, isLocationChosen]);
+  }, [data, dataFetched, values.townSearch]);
 
   const setLocationAndClearList = ({ value, id }) => {
+    setHasUserTyped(false);
     setFieldValue("townSearch", value);
     setFieldValue("townId", id);
-    setLocationChosen(true);
-    setIsExpanded(false);
-    submitForm();
   };
 
   const onMagnifyingGlassClick = () => {
-    setFieldValue("townSearch", "");
-    return setIsExpanded(!isExpanded);
+    return setIsFilterOpen(false);
   };
 
   const onUseDeviceLocation = () => {
     if (!userLocation) return;
-    setFieldValue("townSearch", "mylocation");
-
-    // submitForm();
-
-    // const urlParams = sanitizeNextParams({
-    //   ...searchParams,
-    //   lat: userLocation.latitude,
-    //   lon: userLocation.longitude,
-    //   location: "",
-    // });
-    // setIsExpanded(false);
-    // router.push(`/?${urlParams}`);
+    setFieldValue("townSearch", "Min lokasjon");
+    setHasUserTyped(false);
   };
+
+  useEffect(() => {
+    if (isFilterOpen) {
+      setHasUserTyped(false);
+    }
+  }, [isFilterOpen]);
 
   return (
     <>
-      {isExpanded && (
+      {isFilterOpen && (
         <input
           autoFocus
           required
-          disabled={!isExpanded}
+          disabled={!isFilterOpen}
           className={`bg-inherit ${
-            isExpanded ? "" : "hidden"
-          } size-full text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none focus:ring-2 focus:ring-greens-400`}
-          placeholder={isExpanded ? values.townSearch || "Location" : ""}
-          onFocus={() => setLocationChosen(false)}
+            isFilterOpen ? "" : "hidden"
+          } size-full text-ellipsis rounded-inherit pl-4 pr-6 text-xl placeholder-black outline-none focus:ring-2 focus:ring-greens-400`}
+          placeholder={values.townSearch || "Hvor vil du reise?"}
+          value={values.townSearch}
           type="text"
           name="townSearch"
-          onChange={(e) => setFieldValue("townSearch", e.target.value)}
+          onChange={(e) => {
+            setFieldValue("townSearch", e.target.value);
+            setHasUserTyped(true); // User has started typing
+          }}
           style={{ outline: "none" }}
         />
       )}
@@ -91,7 +89,6 @@ export const Search = ({ isExpanded, setIsExpanded }) => {
             style={{
               fill: "#2C5C32",
               cursor: "pointer",
-              color: isExpanded ? "white" : "black",
               // transform: "rotate(90deg)",
             }}
           />
@@ -105,7 +102,9 @@ export const Search = ({ isExpanded, setIsExpanded }) => {
         renderData={(data) => {
           const { items } = data;
 
-          if (isLocationChosen || !isExpanded) return <></>;
+          if (!hasUserTyped) return <> </>;
+
+          if (!isFilterOpen) return <></>;
 
           return (
             <ResultList>
@@ -126,7 +125,6 @@ export const Search = ({ isExpanded, setIsExpanded }) => {
               </div>
 
               {items &&
-                !isLocationChosen &&
                 items.map((item, index) => {
                   return (
                     <div

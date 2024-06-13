@@ -1,14 +1,15 @@
 "use client";
-import styled from "styled-components";
-import { FormShape } from "app/components/right-buttons-wrapper";
+import { FormShape } from "app/components/sunchaser/components/filter-buttons/form";
 import { useFormikContext, Field } from "formik";
 import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
 import { useEffect, useRef, useState } from "react";
 import { endOfDay } from "date-fns";
+import { useIsFilterOpen } from "states/states";
 
-import { Calendar } from "./calendar";
+import { Calendar } from "../calendar";
 
-export const CalendarWrapper = ({ isExpanded }) => {
+export const CalendarWrapper = () => {
+  const { isFilterOpen } = useIsFilterOpen();
   const { values } = useFormikContext<FormShape>();
   const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
 
@@ -43,16 +44,16 @@ export const CalendarWrapper = ({ isExpanded }) => {
   }, [isCalendarExpanded, wrapperRef]);
 
   return (
-    <span className="rounded-inherit" ref={wrapperRef}>
+    <span className="w-full rounded-inherit" ref={wrapperRef}>
       <input
         required
         readOnly
-        disabled={!isExpanded}
+        disabled={!isFilterOpen}
         className={`bg-inherit ${
-          isExpanded ? "" : "hidden"
-        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-2xl outline-none focus:ring-2 focus:ring-greens-400`}
-        placeholder={
-          isExpanded
+          isFilterOpen ? "" : "hidden"
+        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-xl outline-none focus:ring-2 focus:ring-greens-400`}
+        value={
+          isFilterOpen
             ? endOfDay(values.calendar).toISOString().split("T")[0]
             : ""
         }
@@ -66,7 +67,7 @@ export const CalendarWrapper = ({ isExpanded }) => {
       <div className="absolute right-2 top-[6px] flex size-[36px] cursor-pointer justify-center">
         <CalendarIcon />
       </div>
-      {isCalendarExpanded && isExpanded && (
+      {isCalendarExpanded && isFilterOpen && (
         <div className="flex h-full flex-col items-center">
           <Calendar setIsCalendarExpanded={setIsCalendarExpanded} />
         </div>
