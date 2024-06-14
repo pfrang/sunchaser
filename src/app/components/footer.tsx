@@ -100,7 +100,7 @@ export const Footer = () => {
 
   return (
     <div
-      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 pr-1`}
+      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 `}
       // onMouseMove={handleMouseMove}
       // {...handlers}
       onTouchStart={handleTouchStart}
@@ -109,6 +109,7 @@ export const Footer = () => {
       style={{
         transition: "height 0.3s ease",
         height: `${isSliding ? "0px" : `${height + 40}px`}`,
+        maxHeight: `${footerHeightBreakPoints[2]}px`,
         backgroundColor: "white",
         overflowY: isAtMaxHeight ? "auto" : "hidden",
       }}
