@@ -26,7 +26,7 @@ const MapButtonsWrapper = ({ children }) => {
   );
 };
 
-const Router = ({ mapboxKey }) => {
+const MapRenderer = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
@@ -108,6 +108,7 @@ const Router = ({ mapboxKey }) => {
     dataFetcher();
   }, [searchParams?.date, mapInstance]);
 
+  // Uncomment for heatmap
   // useEffect(() => {
   //   if (globalRanks.length > 0 && mapInstance) {
   //     const map = new MapboxGlobalRankSettings(
@@ -144,4 +145,4 @@ const Router = ({ mapboxKey }) => {
   );
 };
 
-export default Router;
+export default MapRenderer;

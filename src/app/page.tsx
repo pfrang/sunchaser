@@ -4,10 +4,8 @@ import { Suspense } from "react";
 
 import { Spinner } from "../ui-kit/spinner/spinner";
 
-import Router from "./components/map-renderer";
-import { Header } from "./header";
+import MapRenderer from "./components/map-renderer";
 import { Footer } from "./components/footer";
-import { UserLocationButton } from "./components/user-location-button";
 
 export default function Page() {
   const mapboxKey = new AppConfig().mapBox.key;
@@ -19,7 +17,7 @@ export default function Page() {
         <Suspense fallback={<Spinner />}>
           {/* <Header /> */}
           <main className="h-full">
-            <Router mapboxKey={mapboxKey} />
+            <MapRenderer mapboxKey={mapboxKey} />
           </main>
 
           <Footer />
