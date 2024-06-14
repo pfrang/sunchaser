@@ -36,6 +36,7 @@ export const RightButtonsWrapper = () => {
 
   const searchParams = useSearchParamsToObject();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   const initialValues: FormShape = {
     townSearch: searchParams?.location || "",
@@ -90,7 +91,9 @@ export const RightButtonsWrapper = () => {
           const handleClickOutside = (event) => {
             if (
               wrapperRef.current &&
-              !wrapperRef.current.contains(event.target)
+              !wrapperRef.current.contains(event.target) &&
+              submitButtonRef.current &&
+              !submitButtonRef.current.contains(event.target)
             ) {
               setIsFilterOpen(false);
             }
@@ -103,6 +106,7 @@ export const RightButtonsWrapper = () => {
             document.removeEventListener("touchstart", handleClickOutside);
           };
         }, [isFilterOpen]);
+
         return (
           <Form className="w-full">
             <div
@@ -141,6 +145,7 @@ export const RightButtonsWrapper = () => {
             {isFilterOpen && (
               <div className="flex w-full justify-center pt-4">
                 <button
+                  ref={submitButtonRef}
                   disabled={isSubmitting}
                   type="submit"
                   className="flex w-fit gap-2 rounded-[36px] bg-greens-400  text-white"
@@ -152,16 +157,6 @@ export const RightButtonsWrapper = () => {
                 </button>
               </div>
             )}
-            {/* <Wrapper>
-              {isFilterOpen && (
-                <button
-                  type="submit"
-                  className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                >
-                  Submit
-                </button>
-              )}
-            </Wrapper> */}
           </Form>
         );
       }}
