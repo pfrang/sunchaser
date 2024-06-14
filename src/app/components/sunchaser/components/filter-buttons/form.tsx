@@ -10,6 +10,8 @@ import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useRouter } from "next/navigation";
 import { useIsFilterOpen } from "states/states";
 import { endOfDay } from "date-fns";
+import { SunchaserLogo } from "ui-kit/logo/logo";
+import { StateHelper } from "states/sunchaser-result";
 
 import { Search } from "./search";
 import { CalendarWrapper } from "./calendar-wrapper";
@@ -24,6 +26,13 @@ export interface FormShape {
 
 export const RightButtonsWrapper = () => {
   const { isFilterOpen, setIsFilterOpen } = useIsFilterOpen();
+  const { mapInstance } = StateHelper.useMapInstance();
+
+  useEffect(() => {
+    if (!isFilterOpen) {
+      mapInstance?.removeCircularMap();
+    }
+  }, [isFilterOpen]);
 
   const searchParams = useSearchParamsToObject();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -47,7 +56,6 @@ export const RightButtonsWrapper = () => {
       initialValues={initialValues}
       onSubmit={async (values, { setSubmitting }) => {
         setSubmitting(true);
-
         if (
           values.townSearch === "mylocation" &&
           userLocation?.latitude &&
@@ -85,7 +93,6 @@ export const RightButtonsWrapper = () => {
               !wrapperRef.current.contains(event.target)
             ) {
               setIsFilterOpen(false);
-              setFieldValue("townSearch", "");
             }
           };
 
@@ -106,7 +113,7 @@ export const RightButtonsWrapper = () => {
             >
               {!isFilterOpen ? (
                 <Wrapper>
-                  <div className="flex w-full justify-center">
+                  <div className="flex w-full justify-center rounded-inherit bg-white">
                     <Image
                       // sizes="(max-width: 800px) 100px, 50px"
                       height={36}
@@ -128,28 +135,23 @@ export const RightButtonsWrapper = () => {
                   <Wrapper>
                     <SliderWrapper />
                   </Wrapper>
-                  <div className="flex w-full justify-center">
-                    <button
-                      type="submit"
-                      className="flex w-fit gap-2 rounded-[36px] bg-greens-400  text-white"
-                    >
-                      <div className="flex justify-between p-4">
-                        <Image
-                          // sizes="(max-width: 800px) 100px, 50px"
-                          height={24}
-                          color="white"
-                          width={24}
-                          onClick={() => setIsFilterOpen(true)}
-                          alt="Logo"
-                          src={"/logo.svg"}
-                        />
-                        <p className="pl-4">Chase the sun</p>
-                      </div>
-                    </button>
-                  </div>
                 </>
               )}
             </div>
+            {isFilterOpen && (
+              <div className="flex w-full justify-center pt-4">
+                <button
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="flex w-fit gap-2 rounded-[36px] bg-greens-400  text-white"
+                >
+                  <div className="flex items-center justify-between p-4">
+                    <SunchaserLogo fill={"white"} />
+                    <p className="pl-4">Chase the sun</p>
+                  </div>
+                </button>
+              </div>
+            )}
             {/* <Wrapper>
               {isFilterOpen && (
                 <button
@@ -169,7 +171,9 @@ export const RightButtonsWrapper = () => {
 
 const Wrapper = ({ children }) => {
   return (
-    <div className="relative flex h-[52px] cursor-pointer rounded-[16px] bg-white shadow-lg">
+    <div
+      className={`relative flex h-[52px] cursor-pointer rounded-[16px] shadow-lg`}
+    >
       {children}
     </div>
   );

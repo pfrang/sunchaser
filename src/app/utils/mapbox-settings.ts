@@ -144,6 +144,15 @@ export class MapBoxHelper {
     }
   }
 
+  removeCircularMap() {
+    if (this.map.getLayer("circle-fill")) {
+      this.map.removeLayer("circle-fill");
+    }
+    if (this.map.getSource("circleData")) {
+      this.map.removeSource("circleData");
+    }
+  }
+
   addSourceSettings() {
     if (!this.map.getSource("tiles")) {
       this.map.addSource("tiles", {

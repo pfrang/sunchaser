@@ -1,7 +1,7 @@
 "use client";
 
 import { capitalize } from "lodash";
-import { FooterItemType, useDisplayFooter } from "states/states";
+import { FooterItemType, useDisplayFooter, useIsSliding } from "states/states";
 import React, { useEffect, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
@@ -11,6 +11,15 @@ import { FooterExpandableLine } from "./_shared/footer-expandable-line";
 
 export const Footer = () => {
   const { footerItem } = useDisplayFooter();
+  const { isSliding } = useIsSliding();
+
+  useEffect(() => {
+    if (isSliding) {
+      setHeight(0);
+    } else {
+      setHeight(footerHeightBreakPoints[0]);
+    }
+  }, [isSliding]);
 
   const [footerHeightBreakPoints, setFooterHeightBreakPoints] = useState<
     number[]
@@ -91,12 +100,18 @@ export const Footer = () => {
 
   return (
     <div
-      className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 pr-1"
+      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 pr-1`}
       // onMouseMove={handleMouseMove}
       // {...handlers}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      style={{
+        transition: "height 0.3s ease",
+        height: `${isSliding ? "0px" : `${height + 40}px`}`,
+        backgroundColor: "white",
+        overflowY: isAtMaxHeight ? "auto" : "hidden",
+      }}
     >
       <FooterExpandableLine expandableClick={() => clickableLine()} />
       {shouldHydrate && (

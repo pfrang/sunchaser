@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import { debounce } from "lodash";
@@ -65,6 +65,11 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
+const valuesForSlider = distanceArray({
+  step: 5,
+  max: 500,
+});
+
 export const SliderWrapper = () => {
   const { isFilterOpen } = useIsFilterOpen();
   const { values, setFieldValue } = useFormikContext<FormShape>();
@@ -73,37 +78,27 @@ export const SliderWrapper = () => {
   const { mapObject } = StateHelper.mapObject();
   const { mapInstance } = StateHelper.useMapInstance();
 
-  const { setIsSliding } = useIsSliding();
-
-  useEffect(() => {
-    if (!isFilterOpen) {
-      setIsSliderExpanded(false);
-    }
-  }, [isFilterOpen]);
   const searchParams = useSearchParamsToObject();
-  const router = useRouter();
-
-  const valuesForSlider = distanceArray({
-    step: 5,
-    max: 500,
-  });
-
-  const [kilometers, setKilometers] = useState(
-    Number(searchParams?.distance) || 50,
-  );
+  const { isSliding, setIsSliding } = useIsSliding();
 
   const [index, setIndex] = useState(
     getCounterValue(valuesForSlider, searchParams?.distance as string) ||
       valuesForSlider.length / 2,
   );
 
-  let sliderChanged = false;
+  useEffect(() => {
+    if (isSliderExpanded) {
+      const newRadius = Number(valuesForSlider[index - 1].label);
+      mapInstance?.addCircularMap(newRadius);
+    } else {
+      mapInstance?.removeCircularMap();
+    }
+  }, [isSliderExpanded]);
 
   const handleSlide = (e: any, num) => {
     setIsSliding(true);
     setIndex(num);
     const newRadius = Number(valuesForSlider[num - 1].label);
-    setKilometers(newRadius);
     setFieldValue("distance", newRadius);
 
     // Assuming createCircle returns a GeoJSON circle feature with the given radius
@@ -129,21 +124,19 @@ export const SliderWrapper = () => {
     });
 
     mapInstance?.updateCircularMap(newRadius);
-
-    sliderChanged = true;
   };
 
-  const debouncedUpdateUrl = debounce(() => {
-    if (!sliderChanged) {
-      const urlParams = sanitizeNextParams({
-        ...searchParams,
-        distance: kilometers,
-      });
+  // const debouncedUpdateUrl = debounce(() => {
+  //   if (!sliderChanged) {
+  //     const urlParams = sanitizeNextParams({
+  //       ...searchParams,
+  //       distance: kilometers,
+  //     });
 
-      router.push(`/?${urlParams}`);
-    }
-    sliderChanged = false;
-  }, 2000);
+  //     router.push(`/?${urlParams}`);
+  //   }
+  //   sliderChanged = false;
+  // }, 2000);
 
   const min = 1;
   const max = valuesForSlider.length;
@@ -209,14 +202,14 @@ export const SliderWrapper = () => {
   }, [isSliderExpanded, wrapperRef]);
 
   return (
-    <span className="w-full rounded-inherit" ref={wrapperRef}>
+    <span className={`w-full rounded-inherit `} ref={wrapperRef}>
       <input
         required
         disabled={!isFilterOpen}
         readOnly
         className={`bg-inherit ${
           isFilterOpen ? "" : "hidden"
-        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-xl outline-none ${isSliderExpanded && "ring-2 ring-greens-400"}`}
+        } size-full items-center text-ellipsis rounded-inherit bg-white pl-4 pr-6 text-xl outline-none ${isSliding && "opacity-30"} ${isSliderExpanded && "ring-2 ring-greens-400"}`}
         value={isFilterOpen ? `${values.distance} km` : ""}
         type="text"
         name="calendar"
@@ -230,12 +223,9 @@ export const SliderWrapper = () => {
 
       {isSliderExpanded && isFilterOpen && (
         <div className="mt-4 flex flex-col items-center justify-center rounded-[16px] bg-white">
-          <p className="text-variant-poppins text-center text-white">
-            {`${valueToDisplay}km`}
-          </p>
-          <div className="mx-[20px] flex w-full justify-center">
+          <div className="relative flex w-full flex-col justify-center px-4 py-8">
             <PrettoSlider
-              style={{ width: "85%" }}
+              style={{ margin: 0 }}
               aria-label="Temperature"
               value={index}
               // getAriaValueText={(value: number) => `${value}km`}
@@ -249,6 +239,12 @@ export const SliderWrapper = () => {
               min={min}
               max={max}
             />
+            <div className="absolute bottom-2 right-4">
+              <div className="flex gap-4 text-greens-400">
+                <p onClick={() => setIsSliderExpanded(false)}>Cancel</p>
+                <p onClick={() => setIsSliderExpanded(false)}>Ok</p>
+              </div>
+            </div>
           </div>
         </div>
       )}

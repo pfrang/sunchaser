@@ -84,7 +84,6 @@ const Router = ({ mapboxKey }) => {
         mapInitializer.setFitBounds();
         mapInitializer.addCluster();
         mapInitializer.addClickHandlers();
-        mapInitializer.addCircularMap(searchParams?.distance || 50);
         setMapInstance(mapInitializer);
         setMapObject(primaryMap);
       });

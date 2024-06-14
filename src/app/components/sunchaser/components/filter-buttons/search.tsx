@@ -10,12 +10,13 @@ import { Text } from "ui-kit/text";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
 import { useFormikContext } from "formik";
-import { useIsFilterOpen } from "states/states";
+import { useIsFilterOpen, useIsSliding } from "states/states";
 
 import { FormShape } from "./form";
 
 export const Search = () => {
   const { isFilterOpen, setIsFilterOpen } = useIsFilterOpen();
+  const { isSliding } = useIsSliding();
   const [dataFetched, setDatafetched] = useState(false);
   const { values, setFieldValue } = useFormikContext<FormShape>();
   const [hasUserTyped, setHasUserTyped] = useState(false);
@@ -57,7 +58,9 @@ export const Search = () => {
   }, [isFilterOpen]);
 
   return (
-    <>
+    <span
+      className={`w-full rounded-inherit bg-white ${isSliding && "opacity-30"}`}
+    >
       {isFilterOpen && (
         <input
           autoFocus
@@ -66,7 +69,7 @@ export const Search = () => {
           className={`bg-inherit ${
             isFilterOpen ? "" : "hidden"
           } size-full text-ellipsis rounded-inherit pl-4 pr-6 text-xl placeholder-black outline-none focus:ring-2 focus:ring-greens-400`}
-          placeholder={values.townSearch || "Hvor vil du reise?"}
+          placeholder={"Hvor vil du reise?"}
           value={values.townSearch}
           type="text"
           name="townSearch"
@@ -149,7 +152,7 @@ export const Search = () => {
           );
         }}
       />
-    </>
+    </span>
   );
 };
 

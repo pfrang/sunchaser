@@ -4,12 +4,13 @@ import { useFormikContext, Field } from "formik";
 import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
 import { useEffect, useRef, useState } from "react";
 import { endOfDay } from "date-fns";
-import { useIsFilterOpen } from "states/states";
+import { useIsFilterOpen, useIsSliding } from "states/states";
 
 import { Calendar } from "../calendar";
 
 export const CalendarWrapper = () => {
   const { isFilterOpen } = useIsFilterOpen();
+  const { isSliding } = useIsSliding();
   const { values } = useFormikContext<FormShape>();
   const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
 
@@ -44,7 +45,10 @@ export const CalendarWrapper = () => {
   }, [isCalendarExpanded, wrapperRef]);
 
   return (
-    <span className="w-full rounded-inherit" ref={wrapperRef}>
+    <span
+      className={`w-full rounded-inherit bg-white ${isSliding && "opacity-30"}`}
+      ref={wrapperRef}
+    >
       <input
         required
         readOnly
