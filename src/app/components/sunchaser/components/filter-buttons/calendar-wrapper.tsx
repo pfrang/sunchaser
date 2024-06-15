@@ -1,6 +1,6 @@
 "use client";
 import { FormShape } from "app/components/sunchaser/components/filter-buttons/form";
-import { useFormikContext, Field } from "formik";
+import { useFormikContext } from "formik";
 import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
 import { useEffect, useRef, useState } from "react";
 import { endOfDay } from "date-fns";
@@ -44,12 +44,24 @@ export const CalendarWrapper = () => {
     };
   }, [isCalendarExpanded, wrapperRef]);
 
+  const calendarRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (isCalendarExpanded) {
+      inputRef.current?.focus();
+    } else {
+      inputRef.current?.blur();
+    }
+  }, [isCalendarExpanded]);
+
   return (
     <span
       className={`w-full rounded-inherit bg-white ${isSliding && "opacity-30"}`}
       ref={wrapperRef}
     >
       <input
+        ref={inputRef}
         required
         readOnly
         disabled={!isFilterOpen}
@@ -68,7 +80,11 @@ export const CalendarWrapper = () => {
         style={{ outline: "none" }}
       />
 
-      <div className="absolute right-2 top-[6px] flex size-[36px] cursor-pointer justify-center">
+      <div
+        onClick={() => setIsCalendarExpanded(!isCalendarExpanded)}
+        ref={calendarRef}
+        className="absolute right-2 top-0 flex h-full items-center text-greens-400"
+      >
         <CalendarIcon />
       </div>
       {isCalendarExpanded && isFilterOpen && (

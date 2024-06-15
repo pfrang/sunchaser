@@ -144,13 +144,19 @@ h3 {
   font-weight: bold !important;
   /* background-color: var(--rdp-background-color); */
   border: 2px solid #2C5C32;
-  color: "#FFFFFF";
+  color: #FFFFFF !important;
+  background: #2C5C32
 }
 
 .daypicker-outside-date {
   opacity: 1;
 }
 
+.rdp-button_reset:hover:not([disabled]) {
+  background-color: #2C5C32 !important;
+  opacity: 0.5;
+  color: #FFFFFF !important;
+}
 
 .range-thumb {
   position: absolute;

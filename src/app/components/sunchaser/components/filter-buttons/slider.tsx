@@ -1,18 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Slider from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
-import { debounce } from "lodash";
+import CreateIcon from "@mui/icons-material/Create";
 import {
   distanceArray,
   getCounterValue,
 } from "app/utils/travel-distance-settings";
-import { useRouter } from "next/navigation";
-import { sanitizeNextParams } from "app/utils/sanitize-next-query";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { useFormikContext } from "formik";
-import { CalendarIcon } from "ui-kit/calendar-icon/calendar-icon";
 import { StateHelper } from "states/sunchaser-result";
 import * as turf from "@turf/turf";
 import mapboxgl from "mapbox-gl";
@@ -201,9 +198,20 @@ export const SliderWrapper = () => {
     };
   }, [isSliderExpanded, wrapperRef]);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (isSliderExpanded) {
+      inputRef.current?.focus();
+    } else {
+      inputRef.current?.blur();
+    }
+  }, [isSliderExpanded]);
+
   return (
     <span className={`w-full rounded-inherit `} ref={wrapperRef}>
       <input
+        ref={inputRef}
         required
         disabled={!isFilterOpen}
         readOnly
@@ -217,8 +225,11 @@ export const SliderWrapper = () => {
         // onBlur={() => setIsSliderExpanded(false)}
         style={{ outline: "none" }}
       />
-      <div className="absolute right-2 top-[6px] flex size-[36px] cursor-pointer justify-center">
-        <CalendarIcon />
+      <div
+        onClick={() => setIsSliderExpanded(!isSliderExpanded)}
+        className="absolute right-4 top-0 flex h-full items-center text-greens-400"
+      >
+        <CreateIcon />
       </div>
 
       {isSliderExpanded && isFilterOpen && (

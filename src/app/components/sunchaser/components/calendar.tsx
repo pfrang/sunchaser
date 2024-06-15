@@ -1,5 +1,11 @@
 "use client";
-import { DayPicker, Matcher, Row, RowProps } from "react-day-picker";
+import {
+  DayPicker,
+  Matcher,
+  Row,
+  RowProps,
+  CaptionProps,
+} from "react-day-picker";
 import { differenceInCalendarDays, format } from "date-fns";
 import nb from "date-fns/locale/nb";
 import { useEffect, useState } from "react";
@@ -11,7 +17,7 @@ import { useFormikContext } from "formik";
 export const Calendar = ({ setIsCalendarExpanded }) => {
   const { values, setFieldValue } = useFormikContext<FormShape>();
 
-  const [, setLocale] = useState("en-US");
+  const [locale, setLocale] = useState("en-US");
 
   const today = new Date();
   const inTenDays = new Date(today.setDate(today.getDate() + 9));
@@ -20,9 +26,18 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
     after: inTenDays,
   };
 
-  useEffect(() => {
-    setLocale(navigator.language);
-  }, []);
+  const CustomCaption = ({ displayMonth }: CaptionProps) => {
+    const formattedDate = capitalize(
+      format(displayMonth, "MMMM yyyy", {
+        locale: nb,
+      }),
+    );
+    return (
+      <div className="flex items-center justify-center gap-2 p-2">
+        <span>{formattedDate}</span>
+      </div>
+    );
+  };
 
   function pastDates(date: Date) {
     return differenceInCalendarDays(date, new Date()) < 0;
@@ -42,9 +57,8 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
   }
 
   const Submit = (e: Date) => {
-    if (!e) return;
-
     setIsCalendarExpanded(false);
+    if (!e) return;
     setFieldValue("calendar", e);
   };
 
@@ -53,7 +67,7 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
   // TODO FIX CALENDAR SPACING ON DAYS
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex cursor-default justify-center pt-2">
         <DayPicker
           classNames={{
             day_selected: "daypicker-selected-date",
@@ -64,7 +78,7 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
           weekStartsOn={new Date().getDay() as WeekDayNumb}
           disabled={disabledDays}
           defaultMonth={new Date()}
-          components={{ Row: OnlyFutureRow }}
+          components={{ Caption: CustomCaption, Row: OnlyFutureRow }}
           locale={nb}
           disableNavigation
           mode="single"
@@ -74,6 +88,7 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
           fixedWeeks
           style={{
             margin: 0,
+            zIndex: 99,
             // backgroundColor: `${theme.colors.green}`,
             // padding: "10px",
             // position: "absolute",
@@ -84,24 +99,29 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
             // width: "100%",
             // borderStyle: "hidden" /* hide standard table (collapsed) border */,
           }}
-          formatters={{
-            formatCaption: (date, options) => {
-              // Format the date as you wish
-              const formattedDateMonth = capitalize(
-                format(date, "MMMM", options),
-              );
-              const formattedDateYear = capitalize(
-                format(date, "yyyy", options),
-              );
-              return (
-                <div className="flex w-full justify-between rounded-[16px] border-2 border-blues-700 bg-blues-500 p-4 text-white">
-                  <p className="text-variant-poppins">{formattedDateMonth}</p>
-                  <p className="text-variant-poppins">{formattedDateYear}</p>
-                </div>
-              );
-            },
-          }}
+          // formatters={{
+          //   formatCaption: (date, options) => {
+          //     // Format the date as you wish
+          //     const formattedDateMonth = capitalize(
+          //       format(date, "MMMM", options),
+          //     );
+          //     const formattedDateYear = capitalize(
+          //       format(date, "yyyy", options),
+          //     );
+          //     return (
+          //       <div className="flex w-full justify-between rounded-[16px] border-2 border-blues-700 bg-blues-500 p-4 text-white">
+          //         <p className="text-variant-poppins">{formattedDateMonth}</p>
+          //         <p className="text-variant-poppins">{formattedDateYear}</p>
+          //       </div>
+          //     );
+          //   },
+          // }}
           styles={{
+            root: {
+              backgroundColor: "white",
+              boxShadow: "0 0 0 1px #6B93AA",
+              borderRadius: "16px",
+            },
             caption_label: {
               width: "100%",
             },
@@ -111,15 +131,12 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
               color: "black",
             },
             table: {
-              marginTop: "1rem",
               width: "100%",
               display: "table",
               borderCollapse: "separate",
 
               // borderWidth: "2px",
               // borderColor: `${theme.color.blues[7]}`,
-              backgroundColor: `white`,
-              boxShadow: "0 0 0 1px #6B93AA",
               // borderWidth: "2px",
               // border: "2px solid black",
               // borderWidth: "4px",
@@ -129,12 +146,13 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
               // backgroundColor: `${theme.color.blues[6]}`,
               // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
               borderRadius: "16px",
-              padding: "15px",
-              color: "#2C5C32",
+              // padding: "15px",
+              paddingLeft: "12px",
+              paddingRight: "12px",
             },
             day: {
               width: "100%",
-              fontSize: "1.2rem",
+              fontSize: "1rem",
               color: "black",
               padding: "20px",
             },

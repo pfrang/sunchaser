@@ -91,9 +91,7 @@ export const RightButtonsWrapper = () => {
           const handleClickOutside = (event) => {
             if (
               wrapperRef.current &&
-              !wrapperRef.current.contains(event.target) &&
-              submitButtonRef.current &&
-              !submitButtonRef.current.contains(event.target)
+              !wrapperRef.current.contains(event.target)
             ) {
               setIsFilterOpen(false);
             }
@@ -108,7 +106,7 @@ export const RightButtonsWrapper = () => {
         }, [isFilterOpen]);
 
         return (
-          <Form className="w-full">
+          <Form className="relative w-full">
             <div
               ref={wrapperRef}
               className={`relative ml-auto flex flex-col content-center gap-4 transition-width duration-300 ease-in-out
@@ -139,24 +137,21 @@ export const RightButtonsWrapper = () => {
                   <Wrapper>
                     <SliderWrapper />
                   </Wrapper>
+                  <div className="flex w-full justify-center">
+                    <button
+                      disabled={isSubmitting}
+                      type="submit"
+                      className="flex w-fit gap-2 rounded-[36px] bg-greens-400  text-white"
+                    >
+                      <div className="flex items-center justify-between p-4">
+                        <SunchaserLogo fill={"white"} />
+                        <p className="pl-4">Chase the sun</p>
+                      </div>
+                    </button>
+                  </div>
                 </>
               )}
             </div>
-            {isFilterOpen && (
-              <div className="flex w-full justify-center pt-4">
-                <button
-                  ref={submitButtonRef}
-                  disabled={isSubmitting}
-                  type="submit"
-                  className="flex w-fit gap-2 rounded-[36px] bg-greens-400  text-white"
-                >
-                  <div className="flex items-center justify-between p-4">
-                    <SunchaserLogo fill={"white"} />
-                    <p className="pl-4">Chase the sun</p>
-                  </div>
-                </button>
-              </div>
-            )}
           </Form>
         );
       }}

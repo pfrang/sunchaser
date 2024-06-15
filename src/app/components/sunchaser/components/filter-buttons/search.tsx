@@ -6,11 +6,12 @@ import NavigationIcon from "@mui/icons-material/Navigation";
 import { useFetchGoogleMapsSearches } from "app/hooks/use-google-maps-auto-search";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
-import { Text } from "ui-kit/text";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { GoogleMapsAutoSearchDtoItem } from "app/api/google-maps/auto-search/dtos/google-auto-search.get-dto";
 import { useFormikContext } from "formik";
 import { useIsFilterOpen, useIsSliding } from "states/states";
+import { XLogo } from "ui-kit/x/x";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
 
 import { FormShape } from "./form";
 
@@ -19,7 +20,7 @@ export const Search = () => {
   const { isSliding } = useIsSliding();
   const [dataFetched, setDatafetched] = useState(false);
   const { values, setFieldValue } = useFormikContext<FormShape>();
-  const [hasUserTyped, setHasUserTyped] = useState(false);
+  const [isUserTyping, setIsUserTyping] = useState(false);
 
   const { data, error, isLoading } = useFetchGoogleMapsSearches(
     values.townSearch,
@@ -36,7 +37,7 @@ export const Search = () => {
   }, [data, dataFetched, values.townSearch]);
 
   const setLocationAndClearList = ({ value, id }) => {
-    setHasUserTyped(false);
+    setIsUserTyping(false);
     setFieldValue("townSearch", value);
     setFieldValue("townId", id);
   };
@@ -48,14 +49,19 @@ export const Search = () => {
   const onUseDeviceLocation = () => {
     if (!userLocation) return;
     setFieldValue("townSearch", "Min lokasjon");
-    setHasUserTyped(false);
+    setIsUserTyping(false);
   };
 
   useEffect(() => {
     if (isFilterOpen) {
-      setHasUserTyped(false);
+      setIsUserTyping(false);
     }
   }, [isFilterOpen]);
+
+  const handleClear = () => {
+    setFieldValue("townSearch", "");
+    setIsUserTyping(false);
+  };
 
   return (
     <span
@@ -68,25 +74,28 @@ export const Search = () => {
           disabled={!isFilterOpen}
           className={`bg-inherit ${
             isFilterOpen ? "" : "hidden"
-          } size-full text-ellipsis rounded-inherit pl-4 pr-6 text-xl placeholder-black outline-none focus:ring-2 focus:ring-greens-400`}
+          } ${isUserTyping ? "rounded-t-inherit" : "rounded-inherit"} size-full text-ellipsis pl-4 pr-6 text-lg placeholder-black outline-none`}
           placeholder={"Hvor vil du reise?"}
           value={values.townSearch}
           type="text"
           name="townSearch"
           onChange={(e) => {
             setFieldValue("townSearch", e.target.value);
-            setHasUserTyped(true); // User has started typing
+            setIsUserTyping(true); // User has started typing
           }}
           style={{ outline: "none" }}
         />
       )}
 
-      <div className="absolute right-2 top-[8px]">
+      <div className="absolute right-2 top-0 flex h-full items-center">
         {isLoading ? (
           <Spinner />
+        ) : isUserTyping ? (
+          <div onClick={() => handleClear()}>
+            <XLogo />
+          </div>
         ) : (
           <SearchIcon
-            // TODO fix
             fontSize="large"
             onClick={onMagnifyingGlassClick}
             style={{
@@ -105,33 +114,35 @@ export const Search = () => {
         renderData={(data) => {
           const { items } = data;
 
-          if (!hasUserTyped) return <> </>;
+          if (!isUserTyping) return <> </>;
 
           if (!isFilterOpen) return <></>;
 
           return (
             <ResultList>
               <div
-                className="flex w-full cursor-pointer items-center rounded-inherit border-2 bg-blues-200 px-2 py-3 text-white"
+                className="mb-1 flex w-full cursor-pointer items-center border-b-2 border-t border-black p-2 hover:bg-gray-100"
                 onClick={onUseDeviceLocation}
               >
-                <NavigationIcon
-                  style={{
-                    transform: "rotate(90deg)",
-                    justifyContent: "center",
-                  }}
-                />
+                <span className="inline-flex size-8 items-center justify-center ">
+                  <MyLocationIcon
+                    style={{
+                      transform: "rotate(90deg)",
+                      justifyContent: "center",
+                    }}
+                  />
+                </span>
                 {/* TODO filter for unique places */}
-                <Text variant="poppins" color="black">
-                  Use device location
-                </Text>
+                <p className="pl-2 text-sm">Min lokasjon</p>
               </div>
 
               {items &&
                 items.map((item, index) => {
                   return (
                     <div
-                      className={`flex cursor-pointer items-center rounded-[36px] border-2 border-blues-1000 bg-blues-400 px-4 py-3 text-white`}
+                      className={`flex h-full cursor-pointer items-center p-2 hover:bg-gray-100 ${
+                        index === items.length - 1 && "rounded-b-inherit"
+                      }`}
                       key={item.place + index}
                       onClick={() =>
                         setLocationAndClearList({
@@ -141,9 +152,12 @@ export const Search = () => {
                       }
                     >
                       {
-                        <Text variant="poppins" color="white">
-                          {itemForUi(item)}
-                        </Text>
+                        <>
+                          <span className="inline-flex size-8 items-center justify-center rounded-full bg-greens-500">
+                            A
+                          </span>
+                          <p className="pl-2 text-sm ">{itemForUi(item)}</p>
+                        </>
                       }
                     </div>
                   );
@@ -156,25 +170,13 @@ export const Search = () => {
   );
 };
 
-const ResultList = React.forwardRef<
-  HTMLDivElement,
-  React.PropsWithChildren<{}>
->((props, ref) => {
+const ResultList = ({ children }) => {
   return (
-    <>
-      <div
-        ref={ref}
-        className="absolute top-14 z-50 flex w-full flex-col gap-2 rounded-[36px] border-2 border-blues-900 bg-blues-500 p-3 shadow-lg"
-      >
-        {props.children}
-        <span className="h-1"></span>
-        <div className="flex justify-center px-28">
-          <span className="h-1 w-1/2 bg-blues-200"></span>
-        </div>
-      </div>
-    </>
+    <div className="relative z-50 -mt-1 flex w-full flex-col rounded-b-inherit bg-inherit">
+      {children}
+    </div>
   );
-});
+};
 
 const itemForUi = (item: GoogleMapsAutoSearchDtoItem) => {
   const { place, country } = item;

@@ -37,20 +37,10 @@ export const GlobalStyle = createGlobalStyle`
   .rdp-button_reset.rdp-button.rdp-day.daypicker-selected-date {
     font-weight: bold !important;
     /* background-color: var(--rdp-background-color); */
-    border: 2px solid red;
   }
 
   .rdp-button_reset:hover:not([disabled]) {
-    background-color: #6B93AA !important;
-  }
-
-
-  .rdp {
-    /* --rdp-background-color: inherit !important; */
-    /* --rdp-outline-selected: 3px solid red !important; */
-  }
-
-  .datepicker-today-date {
+    background-color: #2C5C32 !important;
   }
 
 
