@@ -2,7 +2,7 @@
 
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   AzureFunctionCoordinatesMappedItems,
   UserLocation,
@@ -13,7 +13,6 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 import {
-  useHighlightedCard,
   useMapInstance,
   useMapObject,
 } from "../../../../states/sunchaser-result";
@@ -28,11 +27,9 @@ export const ResultList = ({
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
 }) => {
-  const { highlightedCard, setHighlightedCard } = useHighlightedCard();
-
-  const highlightedCardIndex = useMemo(() => {
-    return highlightedCard?.index;
-  }, [highlightedCard?.index]);
+  const [highlightedCardIndex, setHighlightedCardIndex] = useState<
+    null | number
+  >(null);
 
   const { mapObject } = useMapObject();
   const { mapInstance } = useMapInstance();
@@ -49,7 +46,7 @@ export const ResultList = ({
   };
 
   const onClickCard = (item: AzureFunctionCoordinatesMappedItems) => {
-    if (item.index !== highlightedCard?.index && mapObject) {
+    if (item.index !== highlightedCardIndex && mapObject) {
       const { lat, lon } = {
         lat: item.latitude,
         lon: item.longitude,
@@ -76,14 +73,14 @@ export const ResultList = ({
 
       mapInstance?.drawLine(coordinates);
 
-      setHighlightedCard(item);
+      setHighlightedCardIndex(item.index);
 
       return setTimeout(() => {
         const element = document.getElementById(item.index.toString());
         element?.scrollIntoView({ behavior: "smooth" });
       }, 350);
     }
-    setHighlightedCard(undefined);
+    setHighlightedCardIndex(null);
     resetMap();
     // return setTimeout(() => {
     //   swiper.update();
