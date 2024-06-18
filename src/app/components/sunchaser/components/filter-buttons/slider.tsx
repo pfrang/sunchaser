@@ -10,10 +10,10 @@ import {
 } from "app/utils/travel-distance-settings";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { useFormikContext } from "formik";
-import { StateHelper } from "states/sunchaser-result";
 import * as turf from "@turf/turf";
 import mapboxgl from "mapbox-gl";
 import { useIsFilterOpen, useIsSliding } from "states/states";
+import { useMapInstance, useMapObject } from "states/sunchaser-result";
 
 import { FormShape } from "./form";
 
@@ -72,8 +72,8 @@ export const SliderWrapper = () => {
   const { values, setFieldValue } = useFormikContext<FormShape>();
   const [isSliderExpanded, setIsSliderExpanded] = useState(false);
   const wrapperRef = useRef<HTMLInputElement | null>(null);
-  const { mapObject } = StateHelper.mapObject();
-  const { mapInstance } = StateHelper.useMapInstance();
+  const { mapObject } = useMapObject();
+  const { mapInstance } = useMapInstance();
 
   const searchParams = useSearchParamsToObject();
   const { isSliding, setIsSliding } = useIsSliding();

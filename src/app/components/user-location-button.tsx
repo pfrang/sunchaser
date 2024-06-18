@@ -1,10 +1,10 @@
 "use client";
-import { StateHelper } from "states/sunchaser-result";
+
 import MyLocationIcon from "@mui/icons-material/MyLocation";
+import { useMapInstance } from "states/sunchaser-result";
 
 export const UserLocationButton = () => {
-  const { mapInstance } = StateHelper.useMapInstance();
-
+  const { mapInstance } = useMapInstance();
   return (
     <button
       onClick={() => mapInstance?.flyToUserLocation()}

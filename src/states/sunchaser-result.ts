@@ -6,7 +6,7 @@ import { AzureFunctionCoordinatesMappedItems } from "../app/api/azure-function/c
 
 export interface DisplayMap {
   mapObject: undefined | mapboxgl.Map;
-  setMap: (input: mapboxgl.Map) => void;
+  setMapObject: (input: mapboxgl.Map) => void;
 }
 
 export interface DisplayMapInstance {
@@ -21,55 +21,18 @@ export interface HighlightedCard {
   ) => void;
 }
 
-const useMap = create<DisplayMap>((set) => ({
+export const useMapObject = create<DisplayMap>((set) => ({
   mapObject: undefined,
-  setMap: (input: mapboxgl.Map) => set(() => ({ mapObject: input })),
+  setMapObject: (input: mapboxgl.Map) => set(() => ({ mapObject: input })),
 }));
 
-const useMapInstance = create<DisplayMapInstance>((set) => ({
+export const useMapInstance = create<DisplayMapInstance>((set) => ({
   mapInstance: undefined,
   setMapInstance: (input: MapBoxHelper) => set(() => ({ mapInstance: input })),
 }));
 
-const useHighlightedCard = create<HighlightedCard>((set) => ({
+export const useHighlightedCard = create<HighlightedCard>((set) => ({
   highlightedCard: undefined,
   setHighlightedCard: (input: AzureFunctionCoordinatesMappedItems) =>
     set(() => ({ highlightedCard: input })),
 }));
-
-export abstract class StateHelper {
-  static useMap = useMap;
-  static useMapInstance = useMapInstance;
-  static useHighlightedCard = useHighlightedCard;
-
-  static mapObject = () => {
-    return {
-      mapObject: StateHelper.useMap.getState().mapObject,
-      setMapObject: (input: mapboxgl.Map) =>
-        StateHelper.useMap.setState({ mapObject: input }),
-    };
-  };
-
-  static mapInstance = () => {
-    return {
-      mapInstance: StateHelper.useMapInstance.getState().mapInstance,
-      setMapInstance: (input: MapBoxHelper) =>
-        StateHelper.useMapInstance.setState({
-          mapInstance: input,
-        }),
-    };
-  };
-
-  static highlightedCard = () => {
-    return {
-      highlightedCard:
-        StateHelper.useHighlightedCard.getState().highlightedCard,
-      setHighlightedCard: (
-        input: AzureFunctionCoordinatesMappedItems | undefined,
-      ) =>
-        StateHelper.useHighlightedCard.setState({
-          highlightedCard: input,
-        }),
-    };
-  };
-}

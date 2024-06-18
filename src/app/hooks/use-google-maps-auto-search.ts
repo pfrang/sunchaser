@@ -25,11 +25,13 @@ export const useFetchGoogleMapsSearches = (townSearch: string) => {
     GoogleMapsAutoSearchGetResponse,
     AxiosError
   >(
-    townSearch ? urlWithParams : null,
-    townSearch ? () => fetcherFactory(fetcherRequest) : null,
+    townSearch && townSearch !== "Min Lokasjon" ? urlWithParams : null,
+    townSearch && townSearch !== "Min Lokasjon"
+      ? () => fetcherFactory(fetcherRequest)
+      : null,
   );
 
-  const isLoading = !data && !error && townSearch;
+  const isLoading = !data && !error && Boolean(townSearch);
 
   return data
     ? { data, error, isLoading, mutate }

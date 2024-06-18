@@ -6,12 +6,10 @@ import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { fetchTownDetails } from "app/hooks/fetch-town-details";
-import { sanitizeNextParams } from "app/utils/sanitize-next-query";
-import { useRouter } from "next/navigation";
 import { useIsFilterOpen } from "states/states";
 import { endOfDay } from "date-fns";
 import { SunchaserLogo } from "ui-kit/logo/logo";
-import { StateHelper } from "states/sunchaser-result";
+import { useMapInstance } from "states/sunchaser-result";
 
 import { Search } from "./search";
 import { CalendarWrapper } from "./calendar-wrapper";
@@ -26,7 +24,7 @@ export interface FormShape {
 
 export const RightButtonsWrapper = () => {
   const { isFilterOpen, setIsFilterOpen } = useIsFilterOpen();
-  const { mapInstance } = StateHelper.useMapInstance();
+  const { mapInstance } = useMapInstance();
 
   useEffect(() => {
     if (!isFilterOpen) {
@@ -36,7 +34,6 @@ export const RightButtonsWrapper = () => {
 
   const searchParams = useSearchParamsToObject();
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   const initialValues: FormShape = {
     townSearch: searchParams?.location || "",
@@ -47,8 +44,6 @@ export const RightButtonsWrapper = () => {
     distance: searchParams?.distance || "50",
   };
 
-  const router = useRouter();
-
   const { userLocation } = useUserLocation();
   const updateUrl = useUpdateUrl();
 
@@ -58,19 +53,17 @@ export const RightButtonsWrapper = () => {
       onSubmit={async (values, { setSubmitting }) => {
         setSubmitting(true);
         if (
-          values.townSearch === "mylocation" &&
+          values.townSearch === "Min lokasjon" &&
           userLocation?.latitude &&
           userLocation?.longitude
         ) {
-          const urlParams = sanitizeNextParams({
-            ...searchParams,
+          updateUrl({
             lat: userLocation.latitude,
             lon: userLocation.longitude,
-            location: "",
+            distance: Number(values.distance),
+            date: endOfDay(values.calendar).toISOString().split("T")[0],
+            location: "Min lokasjon",
           });
-          setIsFilterOpen(false);
-          router.push(`/?${urlParams}`);
-          return;
         } else {
           const response = await fetchTownDetails(values.townId);
 
@@ -86,7 +79,7 @@ export const RightButtonsWrapper = () => {
         setIsFilterOpen(false);
       }}
     >
-      {({ isSubmitting, setFieldValue }) => {
+      {({ values, isSubmitting, setFieldValue }) => {
         useEffect(() => {
           const handleClickOutside = (event) => {
             if (

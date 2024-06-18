@@ -2,7 +2,7 @@
 
 import { Collapse, useMediaQuery } from "@mui/material";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   AzureFunctionCoordinatesMappedItems,
   UserLocation,
@@ -12,7 +12,11 @@ import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
-import { StateHelper } from "../../../../states/sunchaser-result";
+import {
+  useHighlightedCard,
+  useMapInstance,
+  useMapObject,
+} from "../../../../states/sunchaser-result";
 import { StartAndEndCoordinates } from "../../../utils/mapbox-settings";
 
 import { Carousell } from "./carousell";
@@ -24,11 +28,14 @@ export const ResultList = ({
   items: AzureFunctionCoordinatesMappedItems[];
   userLocation: UserLocation;
 }) => {
-  const { highlightedCard, setHighlightedCard } =
-    StateHelper.useHighlightedCard();
+  const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
-  const { mapObject } = StateHelper.useMap();
-  const { mapInstance } = StateHelper.useMapInstance();
+  const highlightedCardIndex = useMemo(() => {
+    return highlightedCard?.index;
+  }, [highlightedCard?.index]);
+
+  const { mapObject } = useMapObject();
+  const { mapInstance } = useMapInstance();
 
   const resetMap = () => {
     if (mapObject) {
@@ -87,19 +94,6 @@ export const ResultList = ({
     <div className="flex w-full flex-col rounded-inherit px-2">
       <div className={`flex w-full flex-col gap-2 px-2`}>
         {items.map((item) => {
-          // const shouldBeExpanded = highlightedCard?.index === item.index;
-          // const [isDelayedExpanded, setIsDelayedExpanded] = useState(false);
-
-          // useEffect(() => {
-          //   if (shouldBeExpanded) {
-          //     setTimeout(() => {
-          //       setIsDelayedExpanded(true);
-          //     }, 600);
-          //   }
-          // }, [shouldBeExpanded]);
-
-          const isExpanded = highlightedCard?.index === item.index;
-
           return (
             <React.Fragment key={item.index}>
               <div
@@ -121,7 +115,7 @@ export const ResultList = ({
 
                     <div className="flex justify-end gap-4">
                       <div className="flex">{Icon(item.times)}</div>
-                      {isExpanded ? (
+                      {highlightedCardIndex === item.index ? (
                         <KeyboardArrowDownIcon />
                       ) : (
                         <KeyboardArrowRightIcon />
@@ -130,7 +124,7 @@ export const ResultList = ({
                   </div>
                 </button>
 
-                <Collapse in={isExpanded}>
+                <Collapse in={highlightedCardIndex === item.index}>
                   <Carousell item={item} />
                 </Collapse>
               </div>

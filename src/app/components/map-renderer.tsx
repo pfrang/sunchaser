@@ -1,19 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "ui-kit/spinner/spinner";
 import mapboxgl from "mapbox-gl";
 import { fetchGlobalRank } from "app/actions/fetch-global-rank";
 import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
 import { useForecast } from "app/hooks/use-forecast";
+import { useMapInstance, useMapObject } from "states/sunchaser-result";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
 import { sanitizeNextParams } from "../utils/sanitize-next-query";
 import { useSearchParamsToObject } from "../hooks/use-search-params";
 import { MapBoxHelper } from "../utils/mapbox-settings";
-import { StateHelper } from "../../states/sunchaser-result";
 
 import { UserLocationButton } from "./user-location-button";
 import { RightButtonsWrapper } from "./sunchaser/components/filter-buttons/form";
@@ -58,8 +58,8 @@ const MapRenderer = ({ mapboxKey }) => {
     router.push(`/?${urlParams}`);
   }, [userLocation]);
 
-  const { mapInstance, setMapInstance } = StateHelper.useMapInstance();
-  const { mapObject, setMapObject } = StateHelper.mapObject();
+  const { mapInstance, setMapInstance } = useMapInstance();
+  const { setMapObject } = useMapObject();
 
   useEffect(() => {
     if (document.getElementById("map") && data?.userLocation.latitude) {

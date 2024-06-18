@@ -1,8 +1,7 @@
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test } from "@jest/globals";
 
-
-describe('Some test', () => {
-	test('adds 1 +2 sum to 3', () => {
-		expect(1 + 2).toBe(3);
-	})
-})
+describe("Some test", () => {
+  test("adds 1 +2 sum to 3", () => {
+    expect(1 + 2).toBe(3);
+  });
+});

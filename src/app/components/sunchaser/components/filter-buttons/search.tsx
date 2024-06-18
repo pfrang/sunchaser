@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import NavigationIcon from "@mui/icons-material/Navigation";
 import { useFetchGoogleMapsSearches } from "app/hooks/use-google-maps-auto-search";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
@@ -18,7 +17,6 @@ import { FormShape } from "./form";
 export const Search = () => {
   const { isFilterOpen, setIsFilterOpen } = useIsFilterOpen();
   const { isSliding } = useIsSliding();
-  const [dataFetched, setDatafetched] = useState(false);
   const { values, setFieldValue } = useFormikContext<FormShape>();
   const [isUserTyping, setIsUserTyping] = useState(false);
 
@@ -27,14 +25,6 @@ export const Search = () => {
   );
 
   const { userLocation } = useUserLocation();
-
-  useEffect(() => {
-    if (!dataFetched && data?.items && values.townSearch) {
-      // Incase user does not change a selection on mount
-      setDatafetched(true);
-      setFieldValue("townId", data.items[0].place_id);
-    }
-  }, [data, dataFetched, values.townSearch]);
 
   const setLocationAndClearList = ({ value, id }) => {
     setIsUserTyping(false);
@@ -110,16 +100,12 @@ export const Search = () => {
       <ConditionalPresenter
         data={data}
         error={error}
-        isLoading={false}
+        isLoading={!isUserTyping}
         renderData={(data) => {
           const { items } = data;
 
-          if (!isUserTyping) return <> </>;
-
-          if (!isFilterOpen) return <></>;
-
           return (
-            <ResultList>
+            <div className="relative z-50 -mt-1 flex w-full flex-col rounded-b-inherit bg-inherit">
               <div
                 className="mb-1 flex w-full cursor-pointer items-center border-b-2 border-t border-black p-2 hover:bg-gray-100"
                 onClick={onUseDeviceLocation}
@@ -137,6 +123,7 @@ export const Search = () => {
               </div>
 
               {items &&
+                items.length > 0 &&
                 items.map((item, index) => {
                   return (
                     <div
@@ -162,19 +149,11 @@ export const Search = () => {
                     </div>
                   );
                 })}
-            </ResultList>
+            </div>
           );
         }}
       />
     </span>
-  );
-};
-
-const ResultList = ({ children }) => {
-  return (
-    <div className="relative z-50 -mt-1 flex w-full flex-col rounded-b-inherit bg-inherit">
-      {children}
-    </div>
   );
 };
 
