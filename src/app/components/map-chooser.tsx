@@ -1,4 +1,4 @@
-import { StateHelper } from "states/sunchaser-result";
+import { useMapInstance } from "states/sunchaser-result";
 
 export const MapChooser = () => {
   return (
@@ -38,7 +38,7 @@ const MapButton = ({
   children: React.ReactNode;
   style: string;
 }) => {
-  const { mapInstance } = StateHelper.mapInstance();
+  const { mapInstance } = useMapInstance();
   return (
     <button
       className="rounded-lg border-2 border-greens-300 bg-greens-300 px-4 py-2 shadow-md"
