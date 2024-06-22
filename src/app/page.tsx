@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { Spinner } from "../ui-kit/spinner/spinner";
 
 import MapRenderer from "./components/map-renderer";
-import { Footer } from "./components/footer";
+import { Footer } from "./components/sunchaser/components/footer/footer";
 
 export default function Page() {
   const mapboxKey = new AppConfig().mapBox.key;

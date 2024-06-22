@@ -9,7 +9,7 @@ export const FooterExpandableLine = ({
 }: FooterExpandableLineProps) => {
   return (
     <div
-      className="flex size-full h-10 justify-center bg-gray-100"
+      className="flex size-full h-10 justify-center"
       onClick={() => expandableClick()}
     >
       <div className="mt-2 w-[25px] cursor-pointer pb-2 pt-1 sm:w-[40px]">

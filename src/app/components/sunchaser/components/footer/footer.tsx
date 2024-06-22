@@ -1,17 +1,21 @@
 "use client";
 
 import { capitalize } from "lodash";
-import { FooterItemType, useDisplayFooter, useIsSliding } from "states/states";
-import React, { useEffect, useRef, useState } from "react";
+import { useIsSliding } from "states/states";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
+import { useSearchParamsToObject } from "app/hooks/use-search-params";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 
-import { Forecast } from "./forecast";
-import { SunchaserListWrapper } from "./sunchaser/components/result-list-wrapper";
-import { FooterExpandableLine } from "./_shared/footer-expandable-line";
+import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
+
+import { ForecastNew } from "./forecast-new";
+import { SunchaserResultList } from "./sunchaser-result-list";
 
 export const Footer = () => {
-  const { footerItem } = useDisplayFooter();
   const { isSliding } = useIsSliding();
+  const searchParams = useSearchParamsToObject();
+  const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
 
   useEffect(() => {
     if (isSliding) {
@@ -98,9 +102,24 @@ export const Footer = () => {
     });
   };
 
+  const dateDisplay = useMemo(() => {
+    const date = new Date(searchParams?.date || new Date());
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    };
+    return capitalize(new Intl.DateTimeFormat("nb-NO", options).format(date));
+  }, [searchParams?.date]);
+
+  const toggleDetailedTable = () => {
+    setHeight(footerHeightBreakPoints[2]);
+    setDetailedTableExpanded(true);
+  };
+
   return (
     <div
-      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 bg-gray-100 `}
+      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 `}
       // onMouseMove={handleMouseMove}
       // {...handlers}
       onTouchStart={handleTouchStart}
@@ -126,41 +145,41 @@ export const Footer = () => {
           }}
           className={"scrollbar-thin scrollbar-track-slate-50"}
         >
-          <div className={`size-full`}>
-            <div className="bg-gray-100">
-              <p className="text-variant-regular bg-gray-100 pl-4 text-xl">
-                Resultater
-              </p>
-              <span className="block h-4"></span>
+          <div
+            className={`relative h-full ${isAtMaxHeight ? "overflow-y-auto" : "overflow-hidden"} p-2`}
+          >
+            <div
+              className={`h-full ${!detailedTableExpanded ? "slide-in" : "slide-out"}`}
+            >
+              <div>
+                <p className="text-variant-regular text-xl">{dateDisplay}</p>
+                <span className="block h-4 border-b-4 border-greens-600"></span>
+              </div>
+              <div className="flex gap-4">
+                {/* Assuming you want to keep ForecastNew visible in both states but it could be replaced or removed as needed */}
+                <ForecastNew setDetailedTableExpanded={toggleDetailedTable} />
+              </div>
+              <span className="block h-4 border-b-4 border-greens-600"></span>
+              <div className="py-4">
+                {/* New content for expanded state */}
+                <SunchaserResultList
+                  setDetailedTableExpanded={toggleDetailedTable}
+                />
+              </div>
             </div>
-            <div className="flex w-full justify-between bg-gray-100 shadow-lg">
-              <FooterButton item="sunchaser" />
-              <FooterButton item="forecast" />
-            </div>
-            <div className="size-full bg-white shadow-top">
-              <span className="block h-4"></span>
-              {footerItem === "forecast" && <Forecast />}
-              {footerItem === "sunchaser" && <SunchaserListWrapper />}
+            <div
+              className={`absolute top-0 w-full ${detailedTableExpanded ? "slide-in" : "slide-out-2"}`}
+            >
+              <KeyboardArrowLeft
+                onClick={() => setDetailedTableExpanded(false)}
+              />
+              <p>Some text</p>
+              {/* Content 2 */}
             </div>
           </div>
         </div>
       )}
     </div>
-  );
-};
-
-const FooterButton = ({ item }: { item: FooterItemType }) => {
-  const { footerItem, setFooterItem } = useDisplayFooter();
-  const isSelected = footerItem === item;
-  const isSunchaser = item === "sunchaser";
-  const buttonClass = `w-full ${
-    isSunchaser ? "rounded-tr-lg" : "rounded-tl-lg"
-  } ${isSelected ? "border-t-2 border-greens-300 bg-white p-2" : "bg-gray-100 border-none"}`;
-
-  return (
-    <button className={buttonClass} onClick={() => setFooterItem(item)}>
-      {capitalize(item)}
-    </button>
   );
 };
 

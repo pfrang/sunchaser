@@ -3,7 +3,7 @@ import { TableCell } from "@mui/material";
 import Image from "next/image";
 import { ForecastTime } from "app/api/forecast/mapper/forecast-mapper";
 import React from "react";
-import { WeatherIconList } from "ui-kit/weather-svg-ref/weather-icon-list";
+import { WeatherIconList } from "ui-kit/weather-icon/weather-icon-list";
 
 interface ForecastTableRowProps extends ForecastTime {}
 

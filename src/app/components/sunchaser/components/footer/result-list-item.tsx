@@ -9,7 +9,7 @@ import {
 import { getInterval, getWeatherIconFromTimes } from "app/utils/times-helper";
 import React from "react";
 
-import { Carousell } from "./carousell";
+import { Carousell } from "../carousell";
 
 export const ResultListItem = ({
   item,

@@ -38,10 +38,6 @@ const MapRenderer = ({ mapboxKey }) => {
     data: searchParams,
   });
 
-  useForecast({
-    params: searchParams,
-  });
-
   useEffect(() => {
     if (searchParams?.lat || !userLocation) return;
 
