@@ -35,9 +35,23 @@ export const getAverageFromKey = (
   key:
     | (keyof Times & ("rank" | "temperature" | "wind" | "rain"))
     | (keyof ForecastTime & ("rank" | "temperature" | "wind" | "rain")),
-) => {
+): number => {
   const sum = times.reduce((acc, time) => acc + time[key], 0);
   return sum / times.length;
+};
+
+export const getAverageItemsFromTimes = (times: Times[]): Times | undefined => {
+  if (!times.length) return undefined;
+  return {
+    temperature: Number(getAverageFromKey(times, "temperature").toFixed(1)),
+    wind: Number(getAverageFromKey(times, "wind").toFixed(1)),
+    // TODO fix rain
+    rain: Number(getAverageFromKey(times, "rain").toFixed(1)) || 0,
+    symbol: getWeatherIconFromTimes(times),
+    rank: getAverageFromKey(times, "rank"),
+    date: times[0].date,
+    time: times[0].time,
+  };
 };
 
 export function getWeatherIconFromTimes(times?: Times[]) {
@@ -45,8 +59,23 @@ export function getWeatherIconFromTimes(times?: Times[]) {
   const highestRank = times.reduce((prev, current) => {
     return prev.rank > current.rank ? prev : current;
   });
+  return highestRank.symbol;
 
   return WeatherIconList[
     highestRank.symbol.charAt(0).toUpperCase() + highestRank.symbol.slice(1)
   ];
 }
+
+export const splitTimesIntoDays = (times: Times[]) => {
+  const days: Record<string, Times[]> = {};
+
+  times.forEach((time) => {
+    const date = formatISO(startOfDay(new Date(time.date)));
+    if (!days[date]) {
+      days[date] = [];
+    }
+    days[date].push(time);
+  });
+
+  return days;
+};

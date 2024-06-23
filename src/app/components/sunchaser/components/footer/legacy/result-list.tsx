@@ -9,8 +9,8 @@ import {
 import {
   useMapInstance,
   useMapObject,
-} from "../../../../../states/sunchaser-result";
-import { StartAndEndCoordinates } from "../../../../utils/mapbox-settings";
+} from "../../../../../../states/sunchaser-result";
+import { StartAndEndCoordinates } from "../../../../../utils/mapbox-settings";
 
 import { ResultListItem } from "./result-list-item";
 

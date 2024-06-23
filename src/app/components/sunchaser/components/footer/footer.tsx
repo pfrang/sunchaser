@@ -9,13 +9,10 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
 
-import { ForecastNew } from "./forecast-new";
-import { SunchaserResultList } from "./sunchaser-result-list";
+import { ListContainer } from "./list-container";
 
 export const Footer = () => {
   const { isSliding } = useIsSliding();
-  const searchParams = useSearchParamsToObject();
-  const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
 
   useEffect(() => {
     if (isSliding) {
@@ -102,19 +99,8 @@ export const Footer = () => {
     });
   };
 
-  const dateDisplay = useMemo(() => {
-    const date = new Date(searchParams?.date || new Date());
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-    };
-    return capitalize(new Intl.DateTimeFormat("nb-NO", options).format(date));
-  }, [searchParams?.date]);
-
-  const toggleDetailedTable = () => {
+  const expandList = () => {
     setHeight(footerHeightBreakPoints[2]);
-    setDetailedTableExpanded(true);
   };
 
   return (
@@ -146,36 +132,9 @@ export const Footer = () => {
           className={"scrollbar-thin scrollbar-track-slate-50"}
         >
           <div
-            className={`relative h-full ${isAtMaxHeight ? "overflow-y-auto" : "overflow-hidden"} p-2`}
+            className={`relative h-full ${isAtMaxHeight ? "overflow-y-auto" : "overflow-hidden"}`}
           >
-            <div
-              className={`h-full ${!detailedTableExpanded ? "slide-in" : "slide-out"}`}
-            >
-              <div>
-                <p className="text-variant-regular text-xl">{dateDisplay}</p>
-                <span className="block h-4 border-b-4 border-greens-600"></span>
-              </div>
-              <div className="flex gap-4">
-                {/* Assuming you want to keep ForecastNew visible in both states but it could be replaced or removed as needed */}
-                <ForecastNew setDetailedTableExpanded={toggleDetailedTable} />
-              </div>
-              <span className="block h-4 border-b-4 border-greens-600"></span>
-              <div className="py-4">
-                {/* New content for expanded state */}
-                <SunchaserResultList
-                  setDetailedTableExpanded={toggleDetailedTable}
-                />
-              </div>
-            </div>
-            <div
-              className={`absolute top-0 w-full ${detailedTableExpanded ? "slide-in" : "slide-out-2"}`}
-            >
-              <KeyboardArrowLeft
-                onClick={() => setDetailedTableExpanded(false)}
-              />
-              <p>Some text</p>
-              {/* Content 2 */}
-            </div>
+            <ListContainer expandList={expandList} />
           </div>
         </div>
       )}

@@ -35,6 +35,7 @@ export interface Times {
   temperature: number;
   wind: number;
   time: string;
+  rain?: number;
   date: Date;
 }
 

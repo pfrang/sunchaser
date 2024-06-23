@@ -5,7 +5,7 @@ import { Spinner } from "ui-kit/spinner/spinner";
 import { useForecast } from "app/hooks/use-forecast";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 
-import { ForecastTableContainer } from "../../../forecast/components/table-container";
+import { ForecastTableContainer } from "../../../../forecast/components/table-container";
 
 export const Forecast = () => {
   const searchParams = useSearchParamsToObject();

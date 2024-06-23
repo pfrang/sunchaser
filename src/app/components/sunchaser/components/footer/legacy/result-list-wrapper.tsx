@@ -3,8 +3,8 @@
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { Spinner } from "ui-kit/spinner/spinner";
 
-import { ConditionalPresenter } from "../../../../../ui-kit/conditional-presenter/conditional-presenter";
-import { useCoordinates } from "../../../../hooks/use-coordinates";
+import { ConditionalPresenter } from "../../../../../../ui-kit/conditional-presenter/conditional-presenter";
+import { useCoordinates } from "../../../../../hooks/use-coordinates";
 
 import { ResultList } from "./result-list";
 

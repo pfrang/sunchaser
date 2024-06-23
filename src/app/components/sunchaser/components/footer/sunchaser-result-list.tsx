@@ -4,11 +4,18 @@ import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-p
 import { Spinner } from "ui-kit/spinner/spinner";
 import { ListItem } from "ui-kit/list-item/list-item";
 import { getAverageFromKey } from "app/utils/times-helper";
-import { useState } from "react";
+import {
+  AzureFunctionCoordinatesMappedItems,
+  UserLocation,
+} from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import { StartAndEndCoordinates } from "app/utils/mapbox-settings";
+import { useUserLocation } from "app/hooks/use-user-location";
+import { useMapInstance, useMapObject } from "states/sunchaser-result";
 
-export const SunchaserResultList = ({ setDetailedTableExpanded }) => {
+export const SunchaserResultList = ({ toggleDetailedTable }) => {
   const searchParams = useSearchParamsToObject();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const { mapInstance } = useMapInstance();
+  const { mapObject } = useMapObject();
 
   const { data, isLoading, error } = useCoordinates({
     method: "POST",
@@ -16,8 +23,35 @@ export const SunchaserResultList = ({ setDetailedTableExpanded }) => {
     data: searchParams,
   });
 
-  const onClick = () => {
-    setIsExpanded(!true);
+  const { userLocation } = useUserLocation() as { userLocation: UserLocation };
+
+  const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
+    toggleDetailedTable(item);
+    const { lat, lon } = {
+      lat: item.latitude,
+      lon: item.longitude,
+    };
+
+    const coordinates: StartAndEndCoordinates = {
+      start: {
+        longitude: lon,
+        latitude: lat,
+      },
+      end: {
+        longitude: userLocation.longitude,
+        latitude: userLocation.latitude,
+      },
+    };
+
+    mapObject?.flyTo({
+      center: [item.longitude, item.latitude],
+      duration: 500,
+      zoom: 11,
+    });
+
+    // mapInstance?.fitBounds(coordinates, 50, 1000);
+
+    mapInstance?.drawLine(coordinates);
   };
 
   return (
@@ -58,7 +92,7 @@ export const SunchaserResultList = ({ setDetailedTableExpanded }) => {
                       rain: getAverageFromKey(rank.times, "rain") || 0,
                       wind: getAverageFromKey(rank.times, "wind"),
                     }}
-                    onClick={setDetailedTableExpanded}
+                    onClick={() => onClick(rank)}
                   />
                 );
               })}
