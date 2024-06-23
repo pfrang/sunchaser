@@ -20,7 +20,6 @@ export const GlobalStyle = createGlobalStyle`
     /* height: 100%; */
   }
 
-
   h3 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }

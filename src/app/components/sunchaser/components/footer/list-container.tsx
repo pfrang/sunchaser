@@ -59,7 +59,7 @@ export const ListContainer = ({ expandList }) => {
   return (
     <>
       <div
-        className={`h-full p-2 ${!detailedTableExpanded ? "slide-in" : "slide-out"}`}
+        className={`h-full p-2 transition-transform duration-500 ease-in-out ${!detailedTableExpanded ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div>
           <p className="text-variant-regular text-xl">{dateDisplay}</p>
@@ -74,7 +74,7 @@ export const ListContainer = ({ expandList }) => {
         </div>
       </div>
       <div
-        className={`absolute top-0 flex w-full p-2 ${detailedTableExpanded ? "slide-in" : "slide-out-2"}`}
+        className={`absolute top-0 flex w-full p-2 transition-transform duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="inline">
           <SunchaserDetailedList
