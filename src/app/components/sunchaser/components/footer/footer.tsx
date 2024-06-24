@@ -128,6 +128,7 @@ export const Footer = () => {
             height: `${height}px`,
             backgroundColor: "white",
             overflowY: isAtMaxHeight ? "auto" : "hidden",
+            overflowX: "hidden",
           }}
           className={"scrollbar-thin scrollbar-track-slate-50"}
         >

@@ -16,7 +16,7 @@ import { dateFormatter } from "app/utils/date-formatter";
 
 import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
-import { SunchaserDetailedList } from "./detailed/sunchaser-detailed-list";
+import { SunchaserDetailedList } from "./detailed/sunchaser-list-wrapper";
 
 export const ListContainer = ({ expandList }) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
