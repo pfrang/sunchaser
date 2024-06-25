@@ -3,10 +3,8 @@ import {
   useMapInstance,
   useMapObject,
 } from "states/sunchaser-result";
-import { KeyboardArrowLeft } from "@mui/icons-material";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import { capitalize } from "lodash";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { useUserLocation } from "app/hooks/use-user-location";
 import {
   AzureFunctionCoordinatesMappedItems,
@@ -20,6 +18,7 @@ import { SunchaserDetailedList } from "./detailed/sunchaser-list-wrapper";
 
 export const ListContainer = ({ expandList }) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
+  const divRef = useRef(null);
 
   const searchParams = useSearchParamsToObject();
   const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
@@ -57,9 +56,10 @@ export const ListContainer = ({ expandList }) => {
   };
 
   return (
-    <>
+    <div className="relative">
       <div
-        className={`h-full p-2 transition-transform duration-500 ease-in-out ${!detailedTableExpanded ? "translate-x-0" : "-translate-x-full"}`}
+        ref={divRef}
+        className={`p-2 transition-all duration-500 ease-in-out ${!detailedTableExpanded ? "max-h-[2000px] translate-x-0" : "-translate-x-full"}`}
       >
         <div>
           <p className="text-variant-regular text-xl">{dateDisplay}</p>
@@ -74,7 +74,7 @@ export const ListContainer = ({ expandList }) => {
         </div>
       </div>
       <div
-        className={`absolute top-0 flex w-full p-2 transition-transform duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : "translate-x-full"}`}
+        className={`absolute top-0 p-2 transition-transform duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : "h-0 translate-x-full"}`}
       >
         <div className="inline">
           <SunchaserDetailedList
@@ -83,6 +83,6 @@ export const ListContainer = ({ expandList }) => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };

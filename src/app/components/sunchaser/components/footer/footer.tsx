@@ -1,11 +1,8 @@
 "use client";
 
-import { capitalize } from "lodash";
 import { useIsSliding } from "states/states";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
-import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
 
@@ -105,7 +102,7 @@ export const Footer = () => {
 
   return (
     <div
-      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100 `}
+      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100`}
       // onMouseMove={handleMouseMove}
       // {...handlers}
       onTouchStart={handleTouchStart}
@@ -117,6 +114,8 @@ export const Footer = () => {
         maxHeight: `${footerHeightBreakPoints[2]}px`,
         backgroundColor: "white",
         overflowY: isAtMaxHeight ? "auto" : "hidden",
+        scrollbarWidth: "none" /* For Firefox */,
+        msOverflowStyle: "none" /* For Internet Explorer and Edge */,
       }}
     >
       <FooterExpandableLine expandableClick={() => clickableLine()} />
@@ -125,18 +124,14 @@ export const Footer = () => {
           ref={scrollableDivRef}
           style={{
             transition: "height 0.3s ease",
-            height: `${height}px`,
+            height: `${height + 40}px`,
             backgroundColor: "white",
             overflowY: isAtMaxHeight ? "auto" : "hidden",
             overflowX: "hidden",
           }}
           className={"scrollbar-thin scrollbar-track-slate-50"}
         >
-          <div
-            className={`relative h-full ${isAtMaxHeight ? "overflow-y-auto" : "overflow-hidden"}`}
-          >
-            <ListContainer expandList={expandList} />
-          </div>
+          <ListContainer expandList={expandList} />
         </div>
       )}
     </div>

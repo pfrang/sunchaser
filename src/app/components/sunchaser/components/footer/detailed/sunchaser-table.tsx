@@ -14,44 +14,42 @@ const TimeTable = ({
   times: Times[] | never[];
 }) => {
   return (
-    <table className="w-full table-fixed" id="row-wrapper">
-      <tbody>
-        {times.length > 0 &&
-          times.map((time, index) => {
-            return (
-              <tr key={index}>
-                <td className="w-1/12 text-center align-middle">
-                  <p>{interval}</p>
-                </td>
-                <td className="w-1/12 text-center align-middle">
-                  <WeatherIcon
-                    icon={time.symbol as WeatherIconList}
-                    className="object-contain"
-                  />
-                </td>
-                <td className="w-3/12">
-                  <div className="flex flex-col items-center">
-                    <span className="max-w-full truncate">Temp.°C</span>
-                    <span className="text-red-500">{time.temperature}</span>
-                  </div>
-                </td>
-                <td className="w-3/12">
-                  <div className="flex flex-col items-center">
-                    <span className="max-w-full truncate">Nedbør mm</span>
-                    <span className="text-blue-500">{time?.rain || 0}</span>
-                  </div>
-                </td>
-                <td className="w-3/12">
-                  <div className="flex flex-col items-center">
-                    <span className="max-w-full truncate">Vind m/s</span>
-                    <span>{time.wind}</span>
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-      </tbody>
-    </table>
+    <>
+      {times.length > 0 &&
+        times.map((time, index) => {
+          return (
+            <tr className="border-b-2 border-greens-600" key={index}>
+              <td className="w-1/12 text-center align-middle">
+                <p>{interval}</p>
+              </td>
+              <td className="w-1/12 text-center align-middle">
+                <WeatherIcon
+                  icon={time.symbol as WeatherIconList}
+                  className="object-contain"
+                />
+              </td>
+              <td className="w-3/12">
+                <div className="flex flex-col items-center">
+                  {/* <span className="max-w-full truncate">Temp.°C</span> */}
+                  <span className="text-red-500">{time.temperature}</span>
+                </div>
+              </td>
+              <td className="w-3/12">
+                <div className="flex flex-col items-center">
+                  {/* <span className="max-w-full truncate">Nedbør mm</span> */}
+                  <span className="text-blue-500">{time?.rain || 0}</span>
+                </div>
+              </td>
+              <td className="w-3/12">
+                <div className="flex flex-col items-center">
+                  {/* <span className="max-w-full truncate">Vind m/s</span> */}
+                  <span>{time.wind}</span>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
+    </>
   );
 };
 
@@ -68,20 +66,12 @@ export const SunchaserTable = ({ day }: { day: Times[] }) => {
   const initialRows = Object.keys(timeIntervals).map((time) => {
     const time2 = timeIntervals[time];
     return time2 ? (
-      <>
-        <TimeTable key={time} interval={time} times={[time2]} />
-        <span className="block border-b-2 border-greens-600"></span>
-      </>
+      <TimeTable key={time} interval={time} times={[time2]} />
     ) : null;
   });
 
   const expandedRows = day.map((time) => {
-    return (
-      <>
-        <TimeTable key={time.time} interval={time.time} times={[time]} />
-        <span className="block border-b-2 border-greens-600"></span>
-      </>
-    );
+    return <TimeTable key={time.time} interval={time.time} times={[time]} />;
   });
 
   const [rowsToDisplay, setRowsToDisplay] =
@@ -122,7 +112,9 @@ export const SunchaserTable = ({ day }: { day: Times[] }) => {
             transition: "max-height 0.5s ease-in-out",
           }}
         >
-          {rowsToDisplay}
+          <table className="w-full table-fixed" id="row-wrapper">
+            <tbody>{rowsToDisplay}</tbody>
+          </table>
         </div>
         <div className="flex size-full items-center justify-center py-2">
           <div
