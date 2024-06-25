@@ -113,7 +113,9 @@ export const Footer = () => {
         height: `${isSliding ? "0px" : `${height + 40}px`}`,
         maxHeight: `${footerHeightBreakPoints[2]}px`,
         backgroundColor: "white",
-        overflowY: isAtMaxHeight ? "auto" : "hidden",
+        // overflowY: isAtMaxHeight ? "auto" : "hidden",
+        // overflowY: "hidden",
+        overflow: "hidden",
         scrollbarWidth: "none" /* For Firefox */,
         msOverflowStyle: "none" /* For Internet Explorer and Edge */,
       }}
@@ -123,10 +125,11 @@ export const Footer = () => {
         <div
           ref={scrollableDivRef}
           style={{
-            transition: "height 0.3s ease",
-            height: `${height + 40}px`,
+            // transition: "height 0.3s ease",
+            height: `100%`,
             backgroundColor: "white",
             overflowY: isAtMaxHeight ? "auto" : "hidden",
+            // overflowY: "hidden",
             overflowX: "hidden",
           }}
           className={"scrollbar-thin scrollbar-track-slate-50"}

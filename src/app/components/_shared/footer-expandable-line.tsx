@@ -1,5 +1,3 @@
-import { SwipeableHandlers } from "react-swipeable";
-
 interface FooterExpandableLineProps {
   expandableClick: () => void;
 }
