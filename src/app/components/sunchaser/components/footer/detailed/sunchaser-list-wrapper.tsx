@@ -4,29 +4,25 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 import { SunchaserTable } from "./sunchaser-table";
 
-export const SunchaserDetailedList = ({
-  highlightedCard,
-  resetDetailedTable,
-}: {
-  highlightedCard?: AzureFunctionCoordinatesMappedItems;
+interface ListWrapperProps {
+  location?: string;
   resetDetailedTable: () => void;
-}) => {
-  if (!highlightedCard) return null;
+  renderTable: () => JSX.Element;
+}
 
-  const days = splitTimesIntoDays(highlightedCard?.times);
-
+export const SunchaserDetailedList = ({
+  location,
+  renderTable,
+  resetDetailedTable,
+}: ListWrapperProps) => {
   return (
     <>
       <div className="flex">
         <KeyboardArrowLeftIcon onClick={resetDetailedTable} />
-        <p className="inline pl-1">{highlightedCard.primaryName}</p>
+        <p className="inline pl-1">{location}</p>
       </div>
       <span className="block h-2"></span>
-      <div className="flex flex-col gap-4">
-        {Object.values(days).map((day, index) => {
-          return <SunchaserTable key={index} day={day} />;
-        })}
-      </div>
+      <div className="flex flex-col gap-4">{renderTable()}</div>
     </>
   );
 };

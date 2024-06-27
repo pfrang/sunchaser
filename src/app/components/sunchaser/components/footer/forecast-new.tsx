@@ -6,7 +6,7 @@ import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-p
 import { ListItem } from "ui-kit/list-item/list-item";
 import { Spinner } from "ui-kit/spinner/spinner";
 
-export const ForecastNew = ({ setDetailedTableExpanded }) => {
+export const ForecastNew = ({ toggleDetailedTable }) => {
   const searchParams = useSearchParamsToObject();
 
   const { data, isLoading, error } = useForecast({
@@ -15,9 +15,6 @@ export const ForecastNew = ({ setDetailedTableExpanded }) => {
 
   const locationDisplay = `Været på ${searchParams?.location || "min lokasjon"}`;
 
-  const onClick = () => {
-    setDetailedTableExpanded(true);
-  };
   return (
     <div className="flex w-full flex-col">
       <span className="block h-4"></span>
@@ -49,7 +46,7 @@ export const ForecastNew = ({ setDetailedTableExpanded }) => {
                   rain: avgRain,
                   wind: avgWind,
                 }}
-                onClick={onClick}
+                onClick={() => toggleDetailedTable(firstDay)}
               />
             );
           }}

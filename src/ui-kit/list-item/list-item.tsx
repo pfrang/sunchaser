@@ -56,10 +56,13 @@ export const ListItem = ({ header, body, onClick }: ListItemProps) => {
                 <span>{body.wind.toFixed(1)}</span>
               </div>
             </td>
+
             <td onClick={onClick} className="w-2/12 text-center align-middle">
-              <div>
-                <KeyboardArrowRightIcon />
-              </div>
+              {onClick && (
+                <div>
+                  <KeyboardArrowRightIcon />
+                </div>
+              )}
             </td>
           </tr>
         </tbody>

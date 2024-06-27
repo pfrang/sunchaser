@@ -40,7 +40,10 @@ export const getAverageFromKey = (
   return sum / times.length;
 };
 
-export const getAverageItemsFromTimes = (times: Times[]): Times | undefined => {
+export const getAverageItemsFromTimes = (
+  times: Times[],
+  key: string,
+): Times | undefined => {
   if (!times.length) return undefined;
   return {
     temperature: Number(getAverageFromKey(times, "temperature").toFixed(1)),
@@ -50,7 +53,7 @@ export const getAverageItemsFromTimes = (times: Times[]): Times | undefined => {
     symbol: getWeatherIconFromTimes(times),
     rank: getAverageFromKey(times, "rank"),
     date: times[0].date,
-    time: times[0].time,
+    time: key ?? times[0].time,
   };
 };
 

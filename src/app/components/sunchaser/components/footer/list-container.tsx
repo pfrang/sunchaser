@@ -4,20 +4,32 @@ import {
   useMapObject,
 } from "states/sunchaser-result";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useUserLocation } from "app/hooks/use-user-location";
 import {
   AzureFunctionCoordinatesMappedItems,
+  Times,
   UserLocation,
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import { dateFormatter } from "app/utils/date-formatter";
+import { ForecastDay } from "app/api/forecast/mapper/forecast-mapper";
+import { splitTimesIntoDays } from "app/utils/times-helper";
+import { useForecast } from "app/hooks/use-forecast";
+import { TimeTable } from "ui-kit/list-item/list-item-detailed";
 
 import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
 import { SunchaserDetailedList } from "./detailed/sunchaser-list-wrapper";
+import { ForecastDetailed } from "./detailed/forecast-new-detailed";
+import { SunchaserTable } from "./detailed/sunchaser-table";
+
+type ExpandedTable = "sunchaser" | "forecast";
 
 export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
+
+  const [expandDetailedTable, setExpandDetailedTable] =
+    useState<ExpandedTable | null>("sunchaser");
 
   const searchParams = useSearchParamsToObject();
   const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
@@ -30,9 +42,23 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
     return dateFormatter(date);
   }, [searchParams?.date]);
 
-  const toggleDetailedTable = (item: AzureFunctionCoordinatesMappedItems) => {
+  const { data, isLoading, error } = useForecast({
+    params: searchParams,
+  });
+
+  const toggleDetailedTable = (
+    item: AzureFunctionCoordinatesMappedItems | ForecastDay,
+  ) => {
     expandList();
-    setHighlightedCard(item);
+    if (
+      item !== highlightedCard &&
+      isAzureFunctionCoordinatesMappedItems(item)
+    ) {
+      setHighlightedCard(item);
+      setExpandDetailedTable("sunchaser");
+    } else if (!isAzureFunctionCoordinatesMappedItems(item)) {
+      setExpandDetailedTable("forecast");
+    }
     setDetailedTableExpanded(true);
   };
 
@@ -60,6 +86,52 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
     }
   }, [detailedTableExpanded]);
 
+  const renderSunchaserTable = useCallback(() => {
+    if (highlightedCard) {
+      const days = splitTimesIntoDays(highlightedCard?.times);
+      return (
+        <>
+          {Object.values(days).map((day, index) => {
+            return <SunchaserTable key={index} day={day} />;
+          })}
+        </>
+      );
+    } else {
+      return <></>;
+    }
+  }, [highlightedCard?.times]);
+
+  const renderForecastTable = useCallback(() => {
+    if (data) {
+      const days = Object.values(data.days);
+
+      return (
+        <>
+          {days.map((day) => {
+            const date = dateFormatter(new Date(day.overview.date));
+            const times: Times[] = day.times.map((time) => {
+              return {
+                temperature: time.temperature || 0,
+                rain: time.rain || 0,
+                wind: time.wind || 0,
+                symbol: time.symbol || "sun",
+                time: time.time,
+              } as Times;
+            });
+            return (
+              <div className="rounded-lg bg-greens-300 p-2">
+                <p>{date}</p>
+                <TimeTable times={times} />
+              </div>
+            );
+          })}
+        </>
+      );
+    } else {
+      return <></>;
+    }
+  }, [data]);
+
   return (
     <div
       ref={parentRef}
@@ -79,7 +151,7 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
           <span className="block h-4 border-b-4 border-greens-600"></span>
         </div>
         <div className="flex gap-4">
-          <ForecastNew setDetailedTableExpanded={toggleDetailedTable} />
+          <ForecastNew toggleDetailedTable={toggleDetailedTable} />
         </div>
         <span className="block h-4 border-b-4 border-greens-600"></span>
         <div className="py-4">
@@ -90,12 +162,31 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
         className={`absolute top-0 p-2 pb-14 transition-all duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : "h-0 translate-x-full"}`}
       >
         <div className="inline">
-          <SunchaserDetailedList
-            resetDetailedTable={resetDetailedTable}
-            highlightedCard={highlightedCard}
-          />
+          {expandDetailedTable === "sunchaser" && highlightedCard?.date && (
+            <SunchaserDetailedList
+              location={highlightedCard.primaryName}
+              resetDetailedTable={resetDetailedTable}
+              renderTable={renderSunchaserTable}
+            />
+          )}
+          {expandDetailedTable === "forecast" && (
+            <SunchaserDetailedList
+              location={searchParams?.location}
+              resetDetailedTable={resetDetailedTable}
+              renderTable={renderForecastTable}
+            />
+          )}
         </div>
       </div>
     </div>
   );
 };
+
+// typeguard check for AzureFunctionCoordinatesMappedItems
+function isAzureFunctionCoordinatesMappedItems(
+  item: AzureFunctionCoordinatesMappedItems | ForecastDay,
+): item is AzureFunctionCoordinatesMappedItems {
+  return (
+    (item as AzureFunctionCoordinatesMappedItems).primaryName !== undefined
+  );
+}
