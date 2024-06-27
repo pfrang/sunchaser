@@ -22,9 +22,9 @@ export const SunchaserDetailedList = ({
         <p className="inline pl-1">{highlightedCard.primaryName}</p>
       </div>
       <span className="block h-2"></span>
-      <div className="flex flex-col gap-4 pb-12">
-        {Object.values(days).map((day) => {
-          return <SunchaserTable day={day} />;
+      <div className="flex flex-col gap-4">
+        {Object.values(days).map((day, index) => {
+          return <SunchaserTable key={index} day={day} />;
         })}
       </div>
     </>

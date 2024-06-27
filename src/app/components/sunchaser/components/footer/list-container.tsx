@@ -4,7 +4,7 @@ import {
   useMapObject,
 } from "states/sunchaser-result";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useUserLocation } from "app/hooks/use-user-location";
 import {
   AzureFunctionCoordinatesMappedItems,
@@ -16,9 +16,8 @@ import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
 import { SunchaserDetailedList } from "./detailed/sunchaser-list-wrapper";
 
-export const ListContainer = ({ expandList }) => {
+export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
-  const divRef = useRef(null);
 
   const searchParams = useSearchParamsToObject();
   const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
@@ -55,11 +54,25 @@ export const ListContainer = ({ expandList }) => {
     }
   };
 
+  useEffect(() => {
+    if (parentRef.current) {
+      parentRef.current.scrollTop = 0;
+    }
+  }, [detailedTableExpanded]);
+
   return (
-    <div className="relative">
+    <div
+      ref={parentRef}
+      style={{
+        height: `100%`,
+        overflowY: isAtMaxHeight ? "auto" : "hidden",
+        overflowX: "hidden",
+        position: detailedTableExpanded ? "relative" : "initial",
+      }}
+      className={"scrollbar-thin scrollbar-track-slate-50"}
+    >
       <div
-        ref={divRef}
-        className={`p-2 transition-all duration-500 ease-in-out ${!detailedTableExpanded ? "max-h-[2000px] translate-x-0" : "-translate-x-full"}`}
+        className={`p-2 pb-12 transition-all duration-500 ease-in-out ${!detailedTableExpanded ? "translate-x-0" : "h-0 -translate-x-full"}`}
       >
         <div>
           <p className="text-variant-regular text-xl">{dateDisplay}</p>
@@ -74,7 +87,7 @@ export const ListContainer = ({ expandList }) => {
         </div>
       </div>
       <div
-        className={`absolute top-0 p-2 transition-transform duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : "h-0 translate-x-full"}`}
+        className={`absolute top-0 p-2 pb-14 transition-all duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : "h-0 translate-x-full"}`}
       >
         <div className="inline">
           <SunchaserDetailedList

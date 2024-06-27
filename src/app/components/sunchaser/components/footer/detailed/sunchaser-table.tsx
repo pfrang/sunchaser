@@ -17,8 +17,12 @@ const TimeTable = ({
     <>
       {times.length > 0 &&
         times.map((time, index) => {
+          const isLastIndex = index === times.length - 1;
           return (
-            <tr className="border-b-2 border-greens-600" key={index}>
+            <tr
+              className={`${isLastIndex ? "" : "border-b-2 border-greens-600"}`}
+              key={index}
+            >
               <td className="w-1/12 text-center align-middle">
                 <p>{interval}</p>
               </td>
@@ -100,6 +104,8 @@ export const SunchaserTable = ({ day }: { day: Times[] }) => {
     }
   }, [isExpanded]);
 
+  const shouldDisplayExpanded = day.length > 4;
+
   return (
     <>
       <div key={date} className="rounded-lg bg-greens-300 p-2">
@@ -116,17 +122,19 @@ export const SunchaserTable = ({ day }: { day: Times[] }) => {
             <tbody>{rowsToDisplay}</tbody>
           </table>
         </div>
-        <div className="flex size-full items-center justify-center py-2">
-          <div
-            className="flex cursor-pointer"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            <p>Detaljer</p>
-            <KeyboardArrowDownIcon
-              className={`cursor-pointer ${isExpanded ? "rotate-180 transform" : ""} transition-transform duration-300`}
-            />
+        {shouldDisplayExpanded && (
+          <div className="flex size-full items-center justify-center border-t-2 border-greens-600 py-2">
+            <div
+              className="flex cursor-pointer"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              <p>Detaljer</p>
+              <KeyboardArrowDownIcon
+                className={`cursor-pointer ${isExpanded ? "rotate-180 transform" : ""} transition-transform duration-300`}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

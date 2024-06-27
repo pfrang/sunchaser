@@ -1,7 +1,7 @@
 "use client";
 
 import { useIsSliding } from "states/states";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
@@ -120,23 +120,16 @@ export const Footer = () => {
         msOverflowStyle: "none" /* For Internet Explorer and Edge */,
       }}
     >
-      <FooterExpandableLine expandableClick={() => clickableLine()} />
-      {shouldHydrate && (
-        <div
-          ref={scrollableDivRef}
-          style={{
-            // transition: "height 0.3s ease",
-            height: `100%`,
-            backgroundColor: "white",
-            overflowY: isAtMaxHeight ? "auto" : "hidden",
-            // overflowY: "hidden",
-            overflowX: "hidden",
-          }}
-          className={"scrollbar-thin scrollbar-track-slate-50"}
-        >
-          <ListContainer expandList={expandList} />
-        </div>
-      )}
+      <FooterExpandableLine
+        fullExpand={() => setHeight(footerHeightBreakPoints[2])}
+        expandableClick={() => clickableLine()}
+      />
+
+      <ListContainer
+        parentRef={scrollableDivRef}
+        isAtMaxHeight={isAtMaxHeight}
+        expandList={expandList}
+      />
     </div>
   );
 };

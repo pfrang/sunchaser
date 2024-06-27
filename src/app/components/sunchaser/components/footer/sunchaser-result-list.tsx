@@ -13,9 +13,10 @@ import { useUserLocation } from "app/hooks/use-user-location";
 import { useMapInstance, useMapObject } from "states/sunchaser-result";
 
 export const SunchaserResultList = ({ toggleDetailedTable }) => {
-  const searchParams = useSearchParamsToObject();
   const { mapInstance } = useMapInstance();
   const { mapObject } = useMapObject();
+
+  const searchParams = useSearchParamsToObject();
 
   const { data, isLoading, error } = useCoordinates({
     method: "POST",
