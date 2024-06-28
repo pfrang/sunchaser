@@ -16,8 +16,18 @@ interface ListItemProps {
 }
 
 export const ListItem = ({ header, body, onClick }: ListItemProps) => {
+  const Wrapper = ({ children }) => {
+    return onClick ? (
+      <button onClick={onClick} className="rounded-lg bg-greens-300 px-3 py-2">
+        {children}
+      </button>
+    ) : (
+      <div className="rounded-lg bg-greens-300 px-3 py-2">{children}</div>
+    );
+  };
+
   return (
-    <div className="rounded-lg bg-greens-300 px-3 py-2">
+    <Wrapper>
       {header && (
         <div className="flex items-center gap-4">
           <div className="flex size-6 items-center justify-center rounded-full bg-greens-400">
@@ -57,7 +67,7 @@ export const ListItem = ({ header, body, onClick }: ListItemProps) => {
               </div>
             </td>
 
-            <td onClick={onClick} className="w-2/12 text-center align-middle">
+            <td className="w-2/12 text-center align-middle">
               {onClick && (
                 <div>
                   <KeyboardArrowRightIcon />
@@ -67,6 +77,6 @@ export const ListItem = ({ header, body, onClick }: ListItemProps) => {
           </tr>
         </tbody>
       </table>
-    </div>
+    </Wrapper>
   );
 };

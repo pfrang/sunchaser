@@ -16,28 +16,30 @@ export const TimeTable = ({ times }: { times: (Times | null)[] }) => {
                 className={`${isLastIndex ? "" : "border-b-2 border-greens-600"}`}
                 key={index}
               >
-                <td className="w-1/12 text-center align-middle">
+                <td className="w-2/12 align-middle">
                   <p>{time.time}</p>
                 </td>
-                <td className="w-1/12 text-center align-middle">
-                  <WeatherIcon
-                    icon={time.symbol as WeatherIconList}
-                    className="object-contain"
-                  />
+                <td className="w-2/12 text-center align-middle">
+                  <div className="flex items-center justify-center">
+                    <WeatherIcon
+                      icon={time.symbol as WeatherIconList}
+                      className="object-contain"
+                    />
+                  </div>
                 </td>
-                <td className="w-3/12">
+                <td className="w-2/12">
                   <div className="flex flex-col items-center">
                     {/* <span className="max-w-full truncate">Temp.°C</span> */}
                     <span className="text-red-500">{time.temperature}</span>
                   </div>
                 </td>
-                <td className="w-3/12">
+                <td className="w-2/12">
                   <div className="flex flex-col items-center">
                     {/* <span className="max-w-full truncate">Nedbør mm</span> */}
                     <span className="text-blue-500">{time?.rain || 0}</span>
                   </div>
                 </td>
-                <td className="w-3/12">
+                <td className="w-2/12">
                   <div className="flex flex-col items-center">
                     {/* <span className="max-w-full truncate">Vind m/s</span> */}
                     <span>{time.wind}</span>

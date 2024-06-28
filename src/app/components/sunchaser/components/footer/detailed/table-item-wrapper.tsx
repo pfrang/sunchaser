@@ -1,12 +1,11 @@
 import { Times } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { dateFormatter } from "app/utils/date-formatter";
 import { getAverageItemsFromTimes, getInterval } from "app/utils/times-helper";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { WeatherIconList } from "ui-kit/weather-icon/weather-icon-list";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useState, useEffect, useRef } from "react";
 import { TimeTable } from "ui-kit/list-item/list-item-detailed";
 
-export const SunchaserTable = ({ day }: { day: Times[] }) => {
+export const TableItemWrapper = ({ day }: { day: Times[] }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [maxHeight, setMaxHeight] = useState("0px");
   const [rows, setRows] = useState<(Times | null)[]>([]);

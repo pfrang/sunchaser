@@ -19,9 +19,8 @@ import { TimeTable } from "ui-kit/list-item/list-item-detailed";
 
 import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
-import { SunchaserDetailedList } from "./detailed/sunchaser-list-wrapper";
-import { ForecastDetailed } from "./detailed/forecast-new-detailed";
-import { SunchaserTable } from "./detailed/sunchaser-table";
+import { ListWrapper } from "./detailed/list-wrapper";
+import { TableItemWrapper } from "./detailed/table-item-wrapper";
 
 type ExpandedTable = "sunchaser" | "forecast";
 
@@ -70,13 +69,13 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
   const { mapObject } = useMapObject();
 
   const resetMap = () => {
-    if (mapObject) {
-      mapObject.removeLayer("route");
+    if (mapObject && mapInstance) {
+      mapInstance.removeLayer("route");
       mapObject.flyTo({
         center: [userLocation.longitude, userLocation.latitude],
         duration: 500,
       });
-      mapInstance?.setFitBounds();
+      mapInstance.setFitBounds();
     }
   };
 
@@ -92,7 +91,7 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
       return (
         <>
           {Object.values(days).map((day, index) => {
-            return <SunchaserTable key={index} day={day} />;
+            return <TableItemWrapper key={index} day={day} />;
           })}
         </>
       );
@@ -116,14 +115,11 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
                 wind: time.wind || 0,
                 symbol: time.symbol || "sun",
                 time: time.time,
+                date: new Date(day.overview.date),
               } as Times;
             });
-            return (
-              <div className="rounded-lg bg-greens-300 p-2">
-                <p>{date}</p>
-                <TimeTable times={times} />
-              </div>
-            );
+
+            return <TableItemWrapper key={day.overview.date} day={times} />;
           })}
         </>
       );
@@ -163,15 +159,15 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
       >
         <div className="inline">
           {expandDetailedTable === "sunchaser" && highlightedCard?.date && (
-            <SunchaserDetailedList
+            <ListWrapper
               location={highlightedCard.primaryName}
               resetDetailedTable={resetDetailedTable}
               renderTable={renderSunchaserTable}
             />
           )}
           {expandDetailedTable === "forecast" && (
-            <SunchaserDetailedList
-              location={searchParams?.location}
+            <ListWrapper
+              location={searchParams?.location || "Min lokasjon"}
               resetDetailedTable={resetDetailedTable}
               renderTable={renderForecastTable}
             />

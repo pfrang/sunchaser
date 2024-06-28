@@ -20,7 +20,7 @@ export const ForecastNew = ({ toggleDetailedTable }) => {
       <span className="block h-4"></span>
       <div className="flex">
         <PlaceIcon />
-        <p className="">{locationDisplay}</p>
+        <p className="pl-2">{locationDisplay}</p>
       </div>
       <span className="block h-4"></span>
       <div>

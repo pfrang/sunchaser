@@ -89,6 +89,12 @@ export class MapBoxHelper {
     });
   }
 
+  removeLayer(layer: string) {
+    if (this.map.getLayer(layer)) {
+      this.map.removeLayer(layer);
+    }
+  }
+
   adjustStyle(input: string) {
     this.map.setStyle(input);
     this.map.on("style.load", () => {
