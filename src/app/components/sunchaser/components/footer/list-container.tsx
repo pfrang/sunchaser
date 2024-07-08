@@ -79,9 +79,18 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
     }
   };
 
+  const [shouldBeVisible, setShouldBeVisible] = useState(true);
+
   useEffect(() => {
     if (parentRef.current) {
       parentRef.current.scrollTop = 0;
+    }
+    if (detailedTableExpanded) {
+      setShouldBeVisible(true);
+    } else {
+      setTimeout(() => {
+        setShouldBeVisible(false);
+      }, 500);
     }
   }, [detailedTableExpanded]);
 
@@ -132,15 +141,15 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
     <div
       ref={parentRef}
       style={{
-        height: `100%`,
+        height: "100%",
         overflowY: isAtMaxHeight ? "auto" : "hidden",
         overflowX: "hidden",
-        position: detailedTableExpanded ? "relative" : "initial",
+        position: "relative",
       }}
       className={"scrollbar-thin scrollbar-track-slate-50"}
     >
       <div
-        className={`p-2 pb-12 transition-all duration-500 ease-in-out ${!detailedTableExpanded ? "translate-x-0" : "h-0 -translate-x-full"}`}
+        className={`p-2 pb-12 transition-all duration-500 ease-in-out ${!detailedTableExpanded ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div>
           <p className="text-variant-regular text-xl">{dateDisplay}</p>
@@ -155,24 +164,26 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
         </div>
       </div>
       <div
-        className={`absolute top-0 p-2 pb-14 transition-all duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : "h-0 translate-x-full"}`}
+        className={`absolute top-0 p-2 pb-14 transition-all duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : ` translate-x-full`}`}
       >
-        <div className="inline">
-          {expandDetailedTable === "sunchaser" && highlightedCard?.date && (
-            <ListWrapper
-              location={highlightedCard.primaryName}
-              resetDetailedTable={resetDetailedTable}
-              renderTable={renderSunchaserTable}
-            />
-          )}
-          {expandDetailedTable === "forecast" && (
-            <ListWrapper
-              location={searchParams?.location || "Min lokasjon"}
-              resetDetailedTable={resetDetailedTable}
-              renderTable={renderForecastTable}
-            />
-          )}
-        </div>
+        {shouldBeVisible && (
+          <div className="inline">
+            {expandDetailedTable === "sunchaser" && highlightedCard?.date && (
+              <ListWrapper
+                location={highlightedCard.primaryName}
+                resetDetailedTable={resetDetailedTable}
+                renderTable={renderSunchaserTable}
+              />
+            )}
+            {expandDetailedTable === "forecast" && (
+              <ListWrapper
+                location={searchParams?.location || "Min lokasjon"}
+                resetDetailedTable={resetDetailedTable}
+                renderTable={renderForecastTable}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
