@@ -29,10 +29,9 @@ export const CircularMap = ({ kilometers }) => {
   >>(null);
 
   const currentLatLocation = React.useMemo(() => {
-    return (
-      { latitude: Number(params?.lat), longitude: Number(params?.lon) } ||
-      userLocation
-    );
+    return Number(params?.lat) && Number(params?.lon)
+      ? { latitude: Number(params?.lat), longitude: Number(params?.lon) }
+      : userLocation;
   }, [searchParams, userLocation]);
 
   useEffect(() => {
@@ -102,8 +101,8 @@ export const CircularMap = ({ kilometers }) => {
           {...disableInteractivitySettings}
         >
           <Marker
-            latitude={currentLatLocation.latitude}
-            longitude={currentLatLocation.longitude}
+            latitude={currentLatLocation?.latitude || userLocation.latitude}
+            longitude={currentLatLocation?.longitude || userLocation.longitude}
           >
             <div
               style={{

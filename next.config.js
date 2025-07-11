@@ -10,7 +10,12 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   mode: "production",
 });
 
+const staticExport =
+  process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" &&
+  process.env.NEXT_PUBLIC_HOST === "http://localhost:3000";
+
 const nextConfig = {
+  output: staticExport ? "export" : "standalone",
   reactStrictMode: true,
   swcMinify: true,
   images: {

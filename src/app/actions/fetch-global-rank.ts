@@ -1,8 +1,6 @@
-"use server";
-
-import { AppConfig } from "app-config";
 import { azureFuncGlobalRankEndPoint } from "app/api/azure-function/global-rank/handlers/handle-post";
 import { GlobalRankNextApiResponse } from "app/api/azure-function/global-rank/route";
+import { fetcherFactory } from "app/utils/fetcher-factory";
 
 type GlobalRankParams = {
   top: number;
@@ -13,12 +11,12 @@ type GlobalRankParams = {
 export const fetchGlobalRank = async (
   params: GlobalRankParams,
 ): Promise<GlobalRankNextApiResponse> => {
-  const host = new AppConfig().next.host;
-  const response = await fetch(`${host}/api/${azureFuncGlobalRankEndPoint}`, {
+  const response = await fetcherFactory({
+    url: azureFuncGlobalRankEndPoint,
     method: "POST",
-    body: JSON.stringify({ ...params }),
+    data: params,
   });
-  const data = await response.json();
+  const data: GlobalRankNextApiResponse = response;
 
   return data;
 };

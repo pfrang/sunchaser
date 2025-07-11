@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: "com.sunchaser.app",
   appName: "Sunchaser",
   webDir: "out",
-  bundledWebRuntime: false,
+  // bundledWebRuntime: false,
   // server: {
   //   // androidScheme: "https",
   //   // url: "http://172.18.68.11:3000/",

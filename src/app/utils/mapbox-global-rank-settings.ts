@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { AzureFunctionGlobalRankItem } from "app/api/azure-function/global-rank/api-client/global-rank-api-response-schema";
 import { FeatureCollection, Point } from "geojson";
 

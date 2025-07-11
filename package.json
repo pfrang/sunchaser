@@ -8,8 +8,7 @@
     "dev": "NODE_ENV=development next dev",
     "build": "tsc --project tsconfig.json && next build",
     "start": "tsc --project tsconfig.json && next start",
-    "static": "yarn build && next export",
-    "export": "next export",
+    "check:types": "tsc -p tsconfig.json --noEmit",
     "cap-on-android": "run-cap-on-android -id com.sunchaser.app",
     "build-android": "npx cap add android",
     "build-ios": "npx cap add ios"

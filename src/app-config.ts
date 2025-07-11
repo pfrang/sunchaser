@@ -1,6 +1,7 @@
 export class AppConfig {
   next = {
     host: process.env.NEXT_PUBLIC_HOST as string,
+    static: process.env.NEXT_PUBLIC_STATIC_EXPORT as string,
   };
 
   azureFunction = {
