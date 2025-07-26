@@ -4,10 +4,9 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "ui-kit/spinner/spinner";
 import mapboxgl from "mapbox-gl";
-import { fetchGlobalRank } from "app/actions/fetch-global-rank";
 import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
-import { useForecast } from "app/hooks/use-forecast";
 import { useMapInstance, useMapObject } from "states/sunchaser-result";
+import { fetchGlobalRank } from "app/actions/fetch-global-rank";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";

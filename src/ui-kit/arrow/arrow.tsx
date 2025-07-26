@@ -1,24 +1,15 @@
 import { FC } from "react";
-import styled from "styled-components";
-
-import { SpacerProps } from "../spacer/spacer";
 
 export type DirectionChoice = "right" | "left";
-interface Direction extends SpacerProps {
+interface Direction {
   direction: DirectionChoice;
 }
-
-const ArrowStyle = styled.svg`
-  height: 30px;
-  width: 30px;
-  cursor: pointer;
-`;
 
 export const Arrow: FC<Direction> = ({ direction }: Direction) => {
   switch (direction) {
     case "right":
       return (
-        <ArrowStyle viewBox="0 0 16 16">
+        <svg className="size-[30px] cursor-pointer" viewBox="0 0 16 16">
           <path
             d="M0.5 8L15.5 8"
             stroke="currentColor"
@@ -33,12 +24,12 @@ export const Arrow: FC<Direction> = ({ direction }: Direction) => {
             stroke-linecap="round"
             stroke-linejoin="round"
           />
-        </ArrowStyle>
+        </svg>
       );
 
     default:
       return (
-        <ArrowStyle viewBox="0 0 16 16">
+        <svg className="size-[30px] cursor-pointer" viewBox="0 0 16 16">
           <path
             d="M15.5 8L0.5 8"
             stroke="currentColor"
@@ -53,7 +44,7 @@ export const Arrow: FC<Direction> = ({ direction }: Direction) => {
             stroke-linecap="round"
             stroke-linejoin="round"
           />
-        </ArrowStyle>
+        </svg>
       );
   }
 };

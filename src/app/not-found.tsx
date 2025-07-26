@@ -1,17 +1,9 @@
-"use client";
-import { Flex } from "ui-kit/flex";
-
 export default function NotFoundPage() {
   return (
     <>
-      <Flex
-        justifyContent={"center"}
-        alignContent={"center"}
-        width={"100%"}
-        height={"100%"}
-      >
+      <div className="flex size-full items-center justify-center">
         Den siden finner vi ikke!
-      </Flex>
+      </div>
     </>
   );
 }

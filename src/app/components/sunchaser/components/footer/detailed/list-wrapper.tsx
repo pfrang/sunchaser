@@ -1,9 +1,10 @@
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import { ReactNode } from "react";
 
 interface ListWrapperProps {
   location?: string;
   resetDetailedTable: () => void;
-  renderTable: () => JSX.Element;
+  renderTable: () => ReactNode;
 }
 
 export const ListWrapper = ({

@@ -1,8 +1,8 @@
 "use client";
 
 import { useIsSliding } from "states/states";
-import React, { useEffect, useRef, useState } from "react";
-import { useShouldHydrate } from "app/hooks/use-should-hydrate";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Spinner } from "ui-kit/spinner/spinner";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
 
@@ -35,7 +35,6 @@ export const Footer = () => {
   const [height, setHeight] = useState<number>(footerHeightBreakPoints[0]);
 
   const isAtMaxHeight = footerHeightBreakPoints[2] === height;
-  const shouldHydrate = useShouldHydrate();
 
   const clickableLine = () => {
     switch (height) {
@@ -125,11 +124,13 @@ export const Footer = () => {
         expandableClick={() => clickableLine()}
       />
 
-      <ListContainer
-        parentRef={scrollableDivRef}
-        isAtMaxHeight={isAtMaxHeight}
-        expandList={expandList}
-      />
+      <Suspense fallback={<Spinner />}>
+        <ListContainer
+          parentRef={scrollableDivRef}
+          isAtMaxHeight={isAtMaxHeight}
+          expandList={expandList}
+        />
+      </Suspense>
     </div>
   );
 };

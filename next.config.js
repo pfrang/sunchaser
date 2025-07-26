@@ -1,23 +1,18 @@
-/** @type {import('next').NextConfig} */
+/**
+ * @type {import('next').NextConfig}
+ */
+// const staticExport =
+//   process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" &&
+//   process.env.NEXT_PUBLIC_HOST === "http://localhost:3000" &&
+//   process.env.NODE_ENV !== "development";
 
-const withPWA = require("@ducanh2912/next-pwa").default({
-  dest: "public",
-  cacheStartUrl: true,
-  disable:
-    process.env.NODE_ENV === "development" ||
-    process.env.NEXT_PUBLIC_HOST === " http://localhost:3000",
-  reloadOnOnline: true,
-  mode: "production",
-});
+module.exports = {
+  output: "export",
+  // output: staticExport ? "export" : undefined,
+  // reactStrictMode: true,
+  // swcMinify: true,
 
-const staticExport =
-  process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" &&
-  process.env.NEXT_PUBLIC_HOST === "http://localhost:3000";
-
-const nextConfig = {
-  output: staticExport ? "export" : "standalone",
-  reactStrictMode: true,
-  swcMinify: true,
+  exclude: ["api"],
   images: {
     unoptimized: true,
   },
@@ -35,9 +30,9 @@ const nextConfig = {
   //   ignoreBuildErrors: true,
   // },
 
-  experimental: {
-    serverComponentsExternalPackages: ["axios"],
-  },
+  // experimental: {
+  //   serverComponentsExternalPackages: ["axios"],
+  // },
 
   async headers() {
     return [
@@ -85,5 +80,3 @@ const nextConfig = {
     ];
   },
 };
-
-module.exports = withPWA({ ...nextConfig });

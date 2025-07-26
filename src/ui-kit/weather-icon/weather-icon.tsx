@@ -12,6 +12,11 @@ export const WeatherIcon = ({
 }: WeatherIconProps) => {
   const iconRef = WeatherIconList[icon.charAt(0).toUpperCase() + icon.slice(1)];
 
+  if (!iconRef) {
+    console.warn(`Icon "${icon}" not found in WeatherIconList.`);
+    return null; // or you can return a default icon or placeholder
+  }
+
   return (
     <Image
       alt="partlySunny"

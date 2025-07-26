@@ -10,19 +10,23 @@ import { Footer } from "./components/sunchaser/components/footer/footer";
 export default function Page() {
   const mapboxKey = new AppConfig().mapBox.key;
 
-  // if (!session) throw new Error("Session not found");
   return (
     <>
       <div className="flex h-dvh w-full flex-col">
-        <Suspense fallback={<Spinner />}>
-          {/* <Header /> */}
-          <main className="h-full">
+        <main className="h-full">
+          <Suspense
+            fallback={
+              <div className="flex w-full items-center justify-center">
+                <Spinner />
+              </div>
+            }
+          >
             <MapRenderer mapboxKey={mapboxKey} />
-          </main>
+          </Suspense>
+        </main>
 
-          <Footer />
-          <IosInstallPrompt />
-        </Suspense>
+        <Footer />
+        <IosInstallPrompt />
       </div>
 
       {/* <SpeedInsights /> */}

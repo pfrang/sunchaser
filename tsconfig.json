@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es6",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-     "typeRoots": ["./node_modules/@types/*"],
     "baseUrl": "./src",
     "allowJs": true,
     "skipLibCheck": true,
@@ -15,7 +14,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -32,7 +31,7 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.json",
-    ".next/types/**/*.ts",
+    ".next/types/**/*.ts", "next.config.js",
   ],
   "exclude": [
     "node_modules"
