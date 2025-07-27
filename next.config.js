@@ -1,18 +1,13 @@
 /**
  * @type {import('next').NextConfig}
  */
-// const staticExport =
-//   process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" &&
-//   process.env.NEXT_PUBLIC_HOST === "http://localhost:3000" &&
-//   process.env.NODE_ENV !== "development";
 
 module.exports = {
-  output: "export",
-  // output: staticExport ? "export" : undefined,
+  // Uncomment to build for capacitor
+  // output: "export",
   // reactStrictMode: true,
   // swcMinify: true,
 
-  exclude: ["api"],
   images: {
     unoptimized: true,
   },

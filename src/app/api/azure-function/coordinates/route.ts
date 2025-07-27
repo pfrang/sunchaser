@@ -1,3 +1,5 @@
+import { corsHeaders } from "app/api/utils/cors-headers";
+
 import { CommonMetaData } from "../../common-proprties";
 
 import { handlePost } from "./handler/handle-post";
@@ -15,6 +17,12 @@ export interface CoordinatesNextApiResponse
   metaData: CommonMetaData;
 }
 
+export const dynamic = "force-static";
+
 export async function POST(req: Request) {
   return await handlePost(req);
+}
+
+export async function OPTIONS(req: Request) {
+  return new Response(null, { headers: corsHeaders });
 }
