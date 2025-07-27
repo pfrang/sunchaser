@@ -30,6 +30,9 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
+    - name: Setup unixodbc-dev
+      run: sudo apt-get install unixodbc-dev
+      
     - name: 'Resolve Project Dependencies Using Pip'
       shell: bash
       run: |
