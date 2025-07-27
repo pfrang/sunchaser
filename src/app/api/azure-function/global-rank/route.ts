@@ -5,8 +5,6 @@ import { handlePost } from "./handlers/handle-post";
 
 export type GlobalRankNextApiResponse = AzureFunctionGlobalRankItem[];
 
-export const dynamic = "force-static";
-
 export async function POST(req: Request) {
   return await handlePost(req);
 }
