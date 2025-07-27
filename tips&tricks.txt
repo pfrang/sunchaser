@@ -3,11 +3,23 @@ CSS Mobile height - https://css-tricks.com/the-trick-to-viewport-units-on-mobile
 
 How to publish android app - https://orangesoft.co/blog/how-to-publish-an-android-app-on-google-play-store
 
+
+---
 Geo permissions in mainfest file:
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-android sutdio logs
+----
+For Hot RELOAD
+Finn WSL ip i powershell med wsl hostname -I for HMR. Sett i capacitor.config.ts
+spinn opp med yarn dev
 
+expose PowerShell to wsl: 
+
+netsh interface portproxy add v4tov4 listenport=3000 listenaddress=172.23.210.2 connectport=3000 connectaddress=127.0.0.1
+
+
+-----
+android sutdio logs
 C:\Users\Peder\AppData\Local\Google\AndroidStudio2022.3\log
 
 

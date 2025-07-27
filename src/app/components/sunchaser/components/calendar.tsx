@@ -8,11 +8,11 @@ import {
 } from "react-day-picker";
 import { differenceInCalendarDays, format } from "date-fns";
 import nb from "date-fns/locale/nb";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { capitalize } from "lodash";
-import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { FormShape } from "app/components/sunchaser/components/filter-buttons/form";
 import { useFormikContext } from "formik";
+import "./calendar.css";
 
 export const Calendar = ({ setIsCalendarExpanded }) => {
   const { values, setFieldValue } = useFormikContext<FormShape>();

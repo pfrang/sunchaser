@@ -1,29 +1,24 @@
-import React, { FC, HTMLAttributes } from "react";
-import {
-  BorderProps,
-  LayoutProps,
-  SpaceProps,
-  ShadowProps,
-} from "styled-system";
+import React from "react";
+import clsx from "clsx";
 
-import { JSToCSS } from "../utils/js-to-css";
-
-import { Wrapper } from "./spacer.style";
-
-export interface SpacerProps
-  extends HTMLAttributes<HTMLDivElement>,
-    SpaceProps,
-    ShadowProps,
-    LayoutProps,
-    BorderProps {
-  vertical?: number;
-  horizontal?: number;
-  debug?: boolean;
+interface SpacerProps {
   line?: boolean;
+  className?: string;
+  children?: React.ReactNode;
 }
 
-export const Spacer: FC<SpacerProps> = ({ line, ...props }) => {
-  const wrapperProps: Record<any, any> = JSToCSS(props);
-
-  return <Wrapper $line={line} {...wrapperProps} />;
-};
+export const Wrapper: React.FC<SpacerProps> = ({
+  line,
+  className,
+  children,
+}) => (
+  <span
+    className={clsx(
+      "block w-full bg-inherit",
+      line && "border-t border-black",
+      className,
+    )}
+  >
+    {children}
+  </span>
+);

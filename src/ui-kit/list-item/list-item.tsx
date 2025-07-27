@@ -69,7 +69,7 @@ export const ListItem = ({ header, body, onClick }: ListItemProps) => {
 
             <td className="w-2/12 text-center align-middle">
               {onClick && (
-                <div>
+                <div className="inline-block">
                   <KeyboardArrowRightIcon />
                 </div>
               )}

@@ -1,5 +1,4 @@
 import { Times } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { ForecastDay } from "app/api/forecast/mapper/forecast-mapper";
 import { WeatherIcon } from "ui-kit/weather-icon/weather-icon";
 import { WeatherIconList } from "ui-kit/weather-icon/weather-icon-list";
 

@@ -14,7 +14,7 @@ export type GoogleMapsAutoSearchDtoItem = {
 export const assemblePredictions = (
   predictions: Prediction[] | null,
 ): GoogleMapsAutoSearchDtoItem[] | null => {
-  if (!isArray(predictions)) return null;
+  if (!isArray(predictions) || !predictions) return null;
   const response = predictions.map((item) => {
     return {
       place: item.structured_formatting.main_text,

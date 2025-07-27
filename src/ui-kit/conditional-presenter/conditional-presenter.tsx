@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { isEmpty as _isEmpty } from "lodash";
 import { AxiosError } from "axios";
 
@@ -6,9 +6,9 @@ interface ConditionalPresenterProps<Data, Error> {
   isLoading: boolean;
   error: Error;
   data: Data;
-  renderData: (data: NonNullable<Data>) => JSX.Element;
-  renderLoading?: () => JSX.Element;
-  renderError?: () => JSX.Element;
+  renderData: (data: NonNullable<Data>) => ReactNode;
+  renderLoading?: () => ReactNode;
+  renderError?: () => ReactNode;
 }
 
 export enum StateStage {

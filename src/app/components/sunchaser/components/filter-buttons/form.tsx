@@ -103,7 +103,7 @@ export const RightButtonsWrapper = () => {
             <div
               ref={wrapperRef}
               className={`relative ml-auto flex flex-col content-center gap-4 transition-width duration-300 ease-in-out
-        ${isFilterOpen ? "w-full sm:w-[350px] md:w-[500px]" : "w-[52px]"}
+        ${isFilterOpen ? "w-full" : "w-[52px]"}
       `}
             >
               {!isFilterOpen ? (
