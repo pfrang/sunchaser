@@ -1,7 +1,13 @@
 "use client";
 
 import { useIsSliding } from "states/states";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, {
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 import { Spinner } from "ui-kit/spinner/spinner";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
@@ -10,118 +16,232 @@ import { ListContainer } from "./list-container";
 
 export const Footer = () => {
   const { isSliding } = useIsSliding();
+  const footerRef = useRef<HTMLDivElement>(null);
+  const scrollableDivRef = useRef<HTMLDivElement>(null);
 
+  // Touch state refs - no React re-renders during drag
+  const isDragging = useRef(false);
+  const startY = useRef(0);
+  const startHeight = useRef(0);
+  const currentHeight = useRef(0);
+  const lastY = useRef(0); // Track last Y position for velocity
+  const lastVelocity = useRef(0);
+  const lastTime = useRef(0);
+
+  // Only these cause re-renders
+  const [breakpoints, setBreakpoints] = useState([0, 0, 0]);
+  const [height, setHeight] = useState(0);
+
+  // Initialize breakpoints once
   useEffect(() => {
-    if (isSliding) {
-      setHeight(0);
-    } else {
-      setHeight(footerHeightBreakPoints[0]);
-    }
-  }, [isSliding]);
-
-  const [footerHeightBreakPoints, setFooterHeightBreakPoints] = useState<
-    number[]
-  >([0, 0, 0]);
-
-  useEffect(() => {
-    setFooterHeightBreakPoints([
+    const bp = [
       window.innerHeight * 0.1,
       window.innerHeight * 0.4,
       window.innerHeight * 0.9,
-    ]);
-    setHeight(window.innerHeight * 0.1);
+    ];
+    setBreakpoints(bp);
+    setHeight(bp[0]);
+    currentHeight.current = bp[0];
   }, []);
 
-  const [height, setHeight] = useState<number>(footerHeightBreakPoints[0]);
+  // Handle sliding state
+  useEffect(() => {
+    const newHeight = isSliding ? 0 : breakpoints[0];
+    setHeight(newHeight);
+    currentHeight.current = newHeight;
+    updateDOMHeight(newHeight);
+  }, [isSliding, breakpoints]);
 
-  const isAtMaxHeight = footerHeightBreakPoints[2] === height;
+  const isAtMaxHeight = breakpoints[2] === height;
 
-  const clickableLine = () => {
-    switch (height) {
-      case footerHeightBreakPoints[0]:
-        setHeight(footerHeightBreakPoints[1]);
-        break;
-      case footerHeightBreakPoints[1]:
-        setHeight(footerHeightBreakPoints[0]);
-        break;
-      case footerHeightBreakPoints[2]:
-        setHeight(footerHeightBreakPoints[0]);
-        break;
+  // Direct DOM manipulation - no React re-renders
+  const updateDOMHeight = useCallback((newHeight: number) => {
+    if (footerRef.current) {
+      footerRef.current.style.height = `${newHeight + 40}px`;
     }
-  };
+  }, []);
 
-  const initialTouchPosition = useRef<number | null>(null);
+  // Find nearest breakpoint
+  const getNearestBreakpoint = useCallback(
+    (currentHeight: number) => {
+      return breakpoints.reduce((nearest, breakpoint) =>
+        Math.abs(breakpoint - currentHeight) < Math.abs(nearest - currentHeight)
+          ? breakpoint
+          : nearest,
+      );
+    },
+    [breakpoints],
+  );
 
-  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
-    initialTouchPosition.current = event.touches[0].clientY;
-  };
+  // Get target based on velocity and position
+  const getTargetBreakpoint = useCallback(
+    (currentHeight: number, velocity: number) => {
+      const nearest = getNearestBreakpoint(currentHeight);
 
-  const scrollableDivRef = useRef<HTMLDivElement>(null);
+      // Fast swipe detection (velocity in pixels per ms)
+      const fastSwipeThreshold = 1.5; // Increased threshold for more reliable detection
 
-  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
-    const currentTouchPosition = event.touches[0].clientY;
+      // Only override nearest breakpoint if velocity is significant
+      if (Math.abs(velocity) > fastSwipeThreshold) {
+        const currentIndex = breakpoints.findIndex((bp) => bp === nearest);
 
-    const isScrollingUp = currentTouchPosition < initialTouchPosition?.current!;
-
-    if (initialTouchPosition.current !== null) {
-      const draggedPixels = initialTouchPosition.current - currentTouchPosition;
-      const isAtMaxScroll = scrollableDivRef.current
-        ? scrollableDivRef.current.scrollTop === 0
-        : false;
-
-      if (isAtMaxHeight && isScrollingUp) {
-        return;
+        if (velocity > 0 && currentIndex < breakpoints.length - 1) {
+          // Fast swipe up (positive velocity) - go to next higher breakpoint
+          return breakpoints[currentIndex + 1];
+        } else if (velocity < 0 && currentIndex > 0) {
+          // Fast swipe down (negative velocity) - go to next lower breakpoint
+          return breakpoints[currentIndex - 1];
+        }
       }
 
-      if (!isAtMaxScroll) {
-        return;
+      // Default: snap to nearest breakpoint
+      return nearest;
+    },
+    [breakpoints, getNearestBreakpoint],
+  );
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!footerRef.current) return;
+
+    isDragging.current = true;
+    startY.current = e.touches[0].clientY;
+    lastY.current = e.touches[0].clientY; // Initialize last Y position
+    startHeight.current = currentHeight.current;
+    lastTime.current = Date.now();
+    lastVelocity.current = 0;
+
+    // Remove transition during drag for immediate response
+    footerRef.current.style.transition = "none";
+  }, []);
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!isDragging.current || !footerRef.current) return;
+
+      const currentY = e.touches[0].clientY;
+      const deltaY = startY.current - currentY; // Total movement from start
+      const now = Date.now();
+
+      // Calculate velocity based on frame-to-frame movement
+      if (lastTime.current > 0) {
+        const timeDelta = now - lastTime.current;
+        const positionDelta = lastY.current - currentY; // Movement since last frame
+
+        if (timeDelta > 0) {
+          lastVelocity.current = positionDelta / timeDelta; // pixels per ms
+        }
       }
 
-      // Use requestAnimationFrame to batch state updates
-      requestAnimationFrame(() => {
-        setHeight((prevHeight) => prevHeight + draggedPixels * 2);
-      });
+      lastY.current = currentY;
+      lastTime.current = now;
+
+      // Check scroll constraints
+      const isScrollingUp = deltaY > 0;
+      const isAtMaxScroll = scrollableDivRef.current?.scrollTop === 0;
+
+      if (isAtMaxHeight && isScrollingUp) return;
+      if (!isAtMaxScroll && isScrollingUp) return;
+
+      // Prevent default touch behavior
+      e.preventDefault();
+
+      // Calculate new height with resistance at boundaries
+      let newHeight = startHeight.current + deltaY;
+
+      // Add resistance at edges
+      const minHeight = breakpoints[0];
+      const maxHeight = breakpoints[2];
+
+      if (newHeight < minHeight) {
+        newHeight = minHeight - (minHeight - newHeight) * 0.3;
+      } else if (newHeight > maxHeight) {
+        newHeight = maxHeight + (newHeight - maxHeight) * 0.3;
+      }
+
+      // Update DOM directly - NO React re-render
+      currentHeight.current = newHeight;
+      updateDOMHeight(newHeight);
+    },
+    [isAtMaxHeight, breakpoints, updateDOMHeight],
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    if (!isDragging.current || !footerRef.current) return;
+
+    isDragging.current = false;
+
+    // Get target breakpoint based on position and velocity
+    const targetHeight = getTargetBreakpoint(
+      currentHeight.current,
+      lastVelocity.current,
+    );
+
+    // Animate to target with CSS transition
+    footerRef.current.style.transition =
+      "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    updateDOMHeight(targetHeight);
+
+    // Update React state ONCE at the end
+    setHeight(targetHeight);
+    currentHeight.current = targetHeight;
+
+    // Clean up transition after animation
+    setTimeout(() => {
+      if (footerRef.current) {
+        footerRef.current.style.transition = "";
+      }
+    }, 300);
+  }, [getTargetBreakpoint, updateDOMHeight]);
+
+  const clickableLine = useCallback(() => {
+    const currentIndex = breakpoints.indexOf(height);
+    let nextHeight: number;
+
+    switch (currentIndex) {
+      case 0:
+        nextHeight = breakpoints[1];
+        break;
+      case 1:
+        nextHeight = breakpoints[0];
+        break;
+      case 2:
+        nextHeight = breakpoints[0];
+        break;
+      default:
+        nextHeight = breakpoints[0];
     }
 
-    initialTouchPosition.current = currentTouchPosition;
-  };
+    setHeight(nextHeight);
+    currentHeight.current = nextHeight;
+  }, [height, breakpoints]);
 
-  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
-    // event.preventDefault();
-    const height2 = getNearestBreakpoint(height, footerHeightBreakPoints);
-
-    requestAnimationFrame(() => {
-      setHeight(height2);
-    });
-  };
-
-  const expandList = () => {
-    setHeight(footerHeightBreakPoints[2]);
-  };
+  const expandList = useCallback(() => {
+    const maxHeight = breakpoints[2];
+    setHeight(maxHeight);
+    currentHeight.current = maxHeight;
+  }, [breakpoints]);
 
   return (
     <div
-      className={`fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100`}
-      // onMouseMove={handleMouseMove}
-      // {...handlers}
+      ref={footerRef}
+      className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       style={{
-        transition: "height 0.3s ease",
-        height: `${isSliding ? "0px" : `${height + 40}px`}`,
-        maxHeight: `${footerHeightBreakPoints[2]}px`,
+        height: `${height + 40}px`,
+        maxHeight: `${breakpoints[2] + 40}px`,
         backgroundColor: "white",
-        // overflowY: isAtMaxHeight ? "auto" : "hidden",
-        // overflowY: "hidden",
         overflow: "hidden",
-        scrollbarWidth: "none" /* For Firefox */,
-        msOverflowStyle: "none" /* For Internet Explorer and Edge */,
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+        touchAction: "pan-y",
+        willChange: "height", // Optimize for height animations
       }}
     >
       <FooterExpandableLine
-        fullExpand={() => setHeight(footerHeightBreakPoints[2])}
-        expandableClick={() => clickableLine()}
+        fullExpand={expandList}
+        expandableClick={clickableLine}
       />
 
       <Suspense fallback={<Spinner />}>
@@ -134,21 +254,3 @@ export const Footer = () => {
     </div>
   );
 };
-
-function getNearestBreakpoint(
-  height: number,
-  footerHeightBreakPoints: number[],
-) {
-  let nearestBreakpoint = footerHeightBreakPoints[0];
-  let smallestDifference = Math.abs(height - nearestBreakpoint);
-
-  for (let i = 1; i < footerHeightBreakPoints.length; i++) {
-    const difference = Math.abs(height - footerHeightBreakPoints[i]);
-    if (difference < smallestDifference) {
-      smallestDifference = difference;
-      nearestBreakpoint = footerHeightBreakPoints[i];
-    }
-  }
-
-  return nearestBreakpoint;
-}
