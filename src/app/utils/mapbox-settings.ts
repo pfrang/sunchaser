@@ -113,20 +113,24 @@ export class MapBoxHelper {
       units: "kilometers" as Units,
     };
     const _circle = turf.circle(_center, _radius, _options);
-    this.map.addSource("circleData", {
-      type: "geojson",
-      data: _circle,
-    });
 
-    this.map.addLayer({
-      id: "circle-fill",
-      type: "fill",
-      source: "circleData",
-      paint: {
-        "fill-color": "#2C5C32",
-        "fill-opacity": 0.1,
-      },
-    });
+    if (!this.map.getSource("circleData")) {
+      this.map.addSource("circleData", {
+        type: "geojson",
+        data: _circle,
+      });
+    }
+    if (!this.map.getLayer("circle-fill")) {
+      this.map.addLayer({
+        id: "circle-fill",
+        type: "fill",
+        source: "circleData",
+        paint: {
+          "fill-color": "#2C5C32",
+          "fill-opacity": 0.1,
+        },
+      });
+    }
   }
 
   updateCircularMap(distance: number | string | undefined) {

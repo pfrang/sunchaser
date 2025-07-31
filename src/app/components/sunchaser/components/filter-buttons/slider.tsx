@@ -83,22 +83,9 @@ export const SliderWrapper = () => {
       valuesForSlider.length / 2,
   );
 
-  useEffect(() => {
-    if (isSliderExpanded) {
-      const newRadius = Number(valuesForSlider[index - 1].label);
-      mapInstance?.addCircularMap(newRadius);
-    } else {
-      mapInstance?.removeCircularMap();
-    }
-  }, [isSliderExpanded]);
+  const updateBounds = (newRadius?: number) => {
+    if (!searchParams?.lat || !searchParams?.lon) return;
 
-  const handleSlide = (e: any, num) => {
-    setIsSliding(true);
-    setIndex(num);
-    const newRadius = Number(valuesForSlider[num - 1].label);
-    setFieldValue("distance", newRadius);
-
-    // Assuming createCircle returns a GeoJSON circle feature with the given radius
     const circle = turf.circle(
       [Number(searchParams?.lon), Number(searchParams?.lat)],
       newRadius,
@@ -119,6 +106,26 @@ export const SliderWrapper = () => {
       padding: 20,
       duration: 1000,
     });
+  };
+
+  useEffect(() => {
+    if (isFilterOpen) {
+      const newRadius = Number(valuesForSlider[index - 1].label);
+      updateBounds(newRadius);
+      mapInstance?.addCircularMap(newRadius);
+    } else {
+      mapInstance?.removeCircularMap();
+    }
+  }, [isFilterOpen]);
+
+  const handleSlide = (e: any, num) => {
+    setIsSliding(true);
+    setIndex(num);
+    const newRadius = Number(valuesForSlider[num - 1].label);
+    setFieldValue("distance", newRadius);
+
+    // Assuming createCircle returns a GeoJSON circle feature with the given radius
+    updateBounds(newRadius);
 
     mapInstance?.updateCircularMap(newRadius);
   };
