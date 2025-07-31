@@ -29,6 +29,8 @@ export const RightButtonsWrapper = () => {
   useEffect(() => {
     if (!isFilterOpen) {
       mapInstance?.removeCircularMap();
+      mapInstance?.map.resize();
+      mapInstance?.setFitBounds();
     }
   }, [isFilterOpen]);
 
