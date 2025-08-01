@@ -29,7 +29,7 @@ const MapRenderer = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
   const searchParams = useSearchParamsToObject();
   const router = useRouter();
-  const { userLocation } = useUserLocation();
+  const { userLocation, error: userLocationError } = useUserLocation();
 
   const { data, error, isLoading } = useCoordinates({
     method: "POST",
@@ -51,7 +51,7 @@ const MapRenderer = ({ mapboxKey }) => {
     const urlParams = sanitizeNextParams(params);
 
     router.push(`/?${urlParams}`);
-  }, [userLocation]);
+  }, [userLocation, searchParams?.lat]);
 
   const { mapInstance, setMapInstance } = useMapInstance();
   const { setMapObject } = useMapObject();
@@ -124,9 +124,14 @@ const MapRenderer = ({ mapboxKey }) => {
 
       <section id="section-map" className="h-full bg-white">
         <div className="sticky top-0 flex size-full items-center justify-center">
-          {isLoading ? (
-            <div className="z-50">
+          {isLoading && (
+            <div className="absolute z-50">
               <Spinner />
+            </div>
+          )}
+          {userLocationError || error?.message ? (
+            <div className="absolute z-50 text-red-500">
+              {userLocationError || error?.message}
             </div>
           ) : (
             <>

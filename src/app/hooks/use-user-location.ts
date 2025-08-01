@@ -8,19 +8,29 @@ export const useUserLocation = () => {
 
   useEffect(() => {
     const geoLocation = async () => {
-      const geo = Geolocation;
-      if (!geo) {
-        setError("Geolocation is not supported");
-        return;
+      try {
+        const geo = Geolocation;
+        if (!geo) {
+          setError("Geolocation is not supported");
+          return;
+        }
+        const { longitude, latitude } = (await geo.getCurrentPosition()).coords;
+        if (!longitude || !latitude) {
+          setError("Unable to retrieve user location");
+          return;
+        }
+
+        const userLocation = {
+          longitude,
+          latitude,
+        };
+
+        setLocation(userLocation);
+        setError(null);
+      } catch (err) {
+        setError("Failed to get location");
+        console.error("Geolocation error:", err);
       }
-      const { longitude, latitude } = (await geo.getCurrentPosition()).coords;
-
-      const userLocation = {
-        longitude,
-        latitude,
-      };
-
-      setLocation(userLocation);
     };
     geoLocation();
   }, []);
