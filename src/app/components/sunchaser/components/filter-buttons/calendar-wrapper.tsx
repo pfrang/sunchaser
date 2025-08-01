@@ -15,46 +15,91 @@ export const CalendarWrapper = () => {
   const [isCalendarExpanded, setIsCalendarExpanded] = useState(false);
 
   const wrapperRef = useRef<HTMLInputElement | null>(null);
+  const calendarRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
+  // Handle click/touch outside to close calendar
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsCalendarExpanded(false);
       }
     };
 
-    const addEventListeners = () => {
+    if (isCalendarExpanded) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("touchstart", handleClickOutside);
-    };
 
-    const removeEventListeners = () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-
-    if (isCalendarExpanded) {
-      addEventListeners();
-    } else {
-      removeEventListeners();
-    }
-
-    return () => {
-      removeEventListeners();
-    };
-  }, [isCalendarExpanded, wrapperRef]);
-
-  const calendarRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    if (isCalendarExpanded) {
-      inputRef.current?.focus();
-    } else {
-      inputRef.current?.blur();
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener("touchstart", handleClickOutside);
+      };
     }
   }, [isCalendarExpanded]);
 
+  useEffect(() => {
+    const handleFocusOut = (event: FocusEvent) => {
+      // Check if the new focus target is outside the calendar wrapper
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.relatedTarget as Node)
+      ) {
+        setIsCalendarExpanded(false);
+      }
+    };
+
+    const wrapperElement = wrapperRef.current;
+    if (wrapperElement && isCalendarExpanded) {
+      wrapperElement.addEventListener("focusout", handleFocusOut);
+
+      return () => {
+        wrapperElement.removeEventListener("focusout", handleFocusOut);
+      };
+    }
+  }, [isCalendarExpanded]);
+
+  // Handle escape key to close calendar
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isCalendarExpanded) {
+        setIsCalendarExpanded(false);
+        inputRef.current?.focus(); // Return focus to input
+      }
+    };
+
+    if (isCalendarExpanded) {
+      document.addEventListener("keydown", handleEscape);
+
+      return () => {
+        document.removeEventListener("keydown", handleEscape);
+      };
+    }
+  }, [isCalendarExpanded]);
+
+  // Close calendar when filter closes
+  useEffect(() => {
+    if (!isFilterOpen) {
+      setIsCalendarExpanded(false);
+    }
+  }, [isFilterOpen]);
+
+  const handleCalendarIconClick = () => {
+    setIsCalendarExpanded(!isCalendarExpanded);
+    if (!isCalendarExpanded) {
+      inputRef.current?.focus();
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+
+      handleCalendarIconClick();
+    }
+  };
   return (
     <span
       className={`w-full rounded-inherit bg-white ${isSliding && "opacity-30"}`}
@@ -76,14 +121,20 @@ export const CalendarWrapper = () => {
         type="text"
         name="calendar"
         onFocus={() => setIsCalendarExpanded(true)}
-        // onChange={(e) => setFieldValue("calendar", e.target.value)}
+        placeholder="Select a date"
+        aria-label="Select a date"
+        aria-expanded={isCalendarExpanded}
+        aria-haspopup="dialog"
         style={{ outline: "none" }}
       />
 
       <div
-        onClick={() => setIsCalendarExpanded(!isCalendarExpanded)}
+        onClick={handleCalendarIconClick}
+        onKeyDown={handleKeyDown}
         ref={calendarRef}
-        className="absolute right-2 top-0 flex h-full items-center text-greens-400"
+        role="button"
+        aria-label={isCalendarExpanded ? "Close calendar" : "Open calendar"}
+        className="absolute right-2 top-0 flex h-full cursor-pointer items-center rounded text-greens-400 focus:outline-none focus:ring-2 focus:ring-greens-400"
       >
         <CalendarIcon />
       </div>

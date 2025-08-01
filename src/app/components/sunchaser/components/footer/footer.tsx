@@ -103,6 +103,15 @@ export const Footer = () => {
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (!footerRef.current) return;
 
+    const listContainer = scrollableDivRef.current;
+    if (listContainer && listContainer.contains(e.target as Node)) {
+      // If touch started inside scrollable content and not at top, don't handle footer drag
+      const isAtTop = listContainer.scrollTop === 0;
+      if (!isAtTop) {
+        return; // Let the list handle scrolling
+      }
+    }
+
     isDragging.current = true;
     startY.current = e.touches[0].clientY;
     lastY.current = e.touches[0].clientY; // Initialize last Y position
@@ -211,15 +220,50 @@ export const Footer = () => {
         nextHeight = breakpoints[0];
     }
 
+    // Add CSS transition for animation
+    if (footerRef.current) {
+      footerRef.current.style.transition =
+        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    }
+
+    // Update DOM height with animation
+    updateDOMHeight(nextHeight);
+
+    // Update React state
     setHeight(nextHeight);
     currentHeight.current = nextHeight;
-  }, [height, breakpoints]);
+
+    // Clean up transition after animation
+    setTimeout(() => {
+      if (footerRef.current) {
+        footerRef.current.style.transition = "";
+      }
+    }, 300);
+  }, [height, breakpoints, updateDOMHeight]);
 
   const expandList = useCallback(() => {
     const maxHeight = breakpoints[2];
+
+    // Add CSS transition for animation
+    if (footerRef.current) {
+      footerRef.current.style.transition =
+        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    }
+
+    // Update DOM height with animation
+    updateDOMHeight(maxHeight);
+
+    // Update React state
     setHeight(maxHeight);
     currentHeight.current = maxHeight;
-  }, [breakpoints]);
+
+    // Clean up transition after animation
+    setTimeout(() => {
+      if (footerRef.current) {
+        footerRef.current.style.transition = "";
+      }
+    }, 300);
+  }, [breakpoints, updateDOMHeight]);
 
   return (
     <div

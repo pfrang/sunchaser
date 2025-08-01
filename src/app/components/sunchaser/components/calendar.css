@@ -19,3 +19,23 @@
   opacity: 0.5;
   color: #FFFFFF !important;
 }
+
+/* Ensure focus indicators are visible on calendar days */
+.rdp-day:focus {
+  outline: 2px solid #2C5C32 !important;
+  outline-offset: 2px !important;
+  z-index: 1;
+}
+
+.rdp-day:focus-visible {
+  background-color: #2C5C32 !important;
+  opacity: 0.5;
+  border: none !important;
+  outline: 2px solid #ffffff !important;
+}
+
+/* Ensure selected day has proper contrast */
+.daypicker-selected-date:focus {
+  outline: 2px solid #ffffff !important;
+  outline-offset: 2px !important;
+}

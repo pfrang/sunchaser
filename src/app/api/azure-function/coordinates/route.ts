@@ -17,6 +17,7 @@ export interface CoordinatesNextApiResponse
   metaData: CommonMetaData;
 }
 
+// export const dynamic = "force-static";
 export async function POST(req: Request) {
   return await handlePost(req);
 }

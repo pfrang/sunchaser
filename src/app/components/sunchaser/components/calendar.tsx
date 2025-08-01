@@ -16,7 +16,6 @@ import "./calendar.css";
 
 export const Calendar = ({ setIsCalendarExpanded }) => {
   const { values, setFieldValue } = useFormikContext<FormShape>();
-
   const [locale, setLocale] = useState("en-US");
 
   const today = new Date();
@@ -33,7 +32,12 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
       }),
     );
     return (
-      <div className="flex items-center justify-center gap-2 p-2">
+      <div
+        className="flex items-center justify-center gap-2 p-2"
+        role="heading"
+        aria-level={2}
+        aria-label={`Calendar showing ${formattedDate}`}
+      >
         <span>{formattedDate}</span>
       </div>
     );
@@ -64,7 +68,6 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
 
   type WeekDayNumb = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-  // TODO FIX CALENDAR SPACING ON DAYS
   return (
     <>
       <div className="flex cursor-default justify-center pt-2">
@@ -86,36 +89,12 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
           onSelect={Submit}
           showOutsideDays
           fixedWeeks
+          // Add ARIA attributes for better accessibility
+          aria-label="Select a date"
           style={{
             margin: 0,
             zIndex: 99,
-            // backgroundColor: `${theme.colors.green}`,
-            // padding: "10px",
-            // position: "absolute",
-            // zIndex: 99,
-            // boxShadow: "0 0 0 1px #6B93AA",
-            // borderCollapse: "collapse",
-            // tableLayout: "fixed",
-            // width: "100%",
-            // borderStyle: "hidden" /* hide standard table (collapsed) border */,
           }}
-          // formatters={{
-          //   formatCaption: (date, options) => {
-          //     // Format the date as you wish
-          //     const formattedDateMonth = capitalize(
-          //       format(date, "MMMM", options),
-          //     );
-          //     const formattedDateYear = capitalize(
-          //       format(date, "yyyy", options),
-          //     );
-          //     return (
-          //       <div className="flex w-full justify-between rounded-[16px] border-2 border-blues-700 bg-blues-500 p-4 text-white">
-          //         <p className="text-variant-poppins">{formattedDateMonth}</p>
-          //         <p className="text-variant-poppins">{formattedDateYear}</p>
-          //       </div>
-          //     );
-          //   },
-          // }}
           styles={{
             root: {
               backgroundColor: "white",
@@ -134,19 +113,9 @@ export const Calendar = ({ setIsCalendarExpanded }) => {
               width: "100%",
               display: "table",
               borderCollapse: "separate",
-
-              // borderWidth: "2px",
-              // borderColor: `${theme.color.blues[7]}`,
-              // borderWidth: "2px",
-              // border: "2px solid black",
-              // borderWidth: "4px",
               borderStyle: "solid",
               maxWidth: "calc(var(--rdp-cell-size) * 8)",
-
-              // backgroundColor: `${theme.color.blues[6]}`,
-              // boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
               borderRadius: "16px",
-              // padding: "15px",
               paddingLeft: "12px",
               paddingRight: "12px",
             },

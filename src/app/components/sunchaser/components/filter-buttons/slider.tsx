@@ -79,7 +79,7 @@ export const SliderWrapper = () => {
   const { isSliding, setIsSliding } = useIsSliding();
 
   const [index, setIndex] = useState(
-    getCounterValue(valuesForSlider, searchParams?.distance as string) ||
+    getCounterValue(valuesForSlider, values.distance as string) ||
       valuesForSlider.length / 2,
   );
 
@@ -229,7 +229,6 @@ export const SliderWrapper = () => {
         type="text"
         name="calendar"
         onFocus={() => setIsSliderExpanded(true)}
-        // onBlur={() => setIsSliderExpanded(false)}
         style={{ outline: "none" }}
       />
       <div
@@ -259,8 +258,24 @@ export const SliderWrapper = () => {
             />
             <div className="absolute bottom-2 right-4">
               <div className="flex gap-4 text-greens-400">
-                <p onClick={() => setIsSliderExpanded(false)}>Cancel</p>
-                <p onClick={() => setIsSliderExpanded(false)}>Ok</p>
+                <p
+                  tabIndex={0}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && setIsSliderExpanded(false)
+                  }
+                  onClick={() => setIsSliderExpanded(false)}
+                >
+                  Cancel
+                </p>
+                <p
+                  tabIndex={0}
+                  onKeyDown={(e) =>
+                    e.key === "Enter" && setIsSliderExpanded(false)
+                  }
+                  onClick={() => setIsSliderExpanded(false)}
+                >
+                  Ok
+                </p>
               </div>
             </div>
           </div>

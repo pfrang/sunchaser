@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { useFetchGoogleMapsSearches } from "app/hooks/use-google-maps-auto-search";
 import { useUserLocation } from "app/hooks/use-user-location";
@@ -25,6 +25,46 @@ export const Search = () => {
   );
 
   const { userLocation } = useUserLocation();
+  const searchContainerRef = useRef<HTMLSpanElement>(null);
+
+  // Handle focus out to close search
+  useEffect(() => {
+    const handleFocusOut = (event: FocusEvent) => {
+      // Check if the new focus target is outside the search container
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.relatedTarget as Node)
+      ) {
+        setIsUserTyping(false);
+      }
+    };
+
+    const searchElement = searchContainerRef.current;
+    if (searchElement && isFilterOpen) {
+      searchElement.addEventListener("focusout", handleFocusOut);
+
+      return () => {
+        searchElement.removeEventListener("focusout", handleFocusOut);
+      };
+    }
+  }, [isFilterOpen, setIsFilterOpen]);
+
+  // Handle escape key to close search
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isFilterOpen) {
+        setIsUserTyping(false);
+      }
+    };
+
+    if (isFilterOpen) {
+      document.addEventListener("keydown", handleEscape);
+
+      return () => {
+        document.removeEventListener("keydown", handleEscape);
+      };
+    }
+  }, [isFilterOpen, setIsFilterOpen]);
 
   const setLocationAndClearList = ({ value, id }) => {
     setIsUserTyping(false);
@@ -53,8 +93,16 @@ export const Search = () => {
     setIsUserTyping(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent, callback: () => void) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      callback();
+    }
+  };
+
   return (
     <span
+      ref={searchContainerRef}
       className={`w-full rounded-inherit bg-white ${isSliding && "opacity-30"}`}
     >
       {isFilterOpen && (
@@ -105,10 +153,16 @@ export const Search = () => {
           const { items } = data;
 
           return (
-            <div className="relative z-50 -mt-1 flex w-full flex-col rounded-b-inherit bg-inherit">
+            <div
+              className="relative z-50 -mt-1 flex w-full flex-col rounded-b-inherit bg-inherit"
+              role="listbox"
+              aria-label="Search results"
+            >
               <div
                 className="mb-1 flex w-full cursor-pointer items-center border-b-2 border-t border-black p-2 hover:bg-gray-100"
                 onClick={onUseDeviceLocation}
+                onKeyDown={(e) => e.key === "Enter" && onUseDeviceLocation()}
+                tabIndex={0}
               >
                 <span className="inline-flex size-8 items-center justify-center ">
                   <MyLocationIcon
@@ -137,6 +191,17 @@ export const Search = () => {
                           id: item.place_id,
                         })
                       }
+                      onKeyDown={(e) =>
+                        handleKeyDown(e, () =>
+                          setLocationAndClearList({
+                            value: item.place,
+                            id: item.place_id,
+                          }),
+                        )
+                      }
+                      tabIndex={0}
+                      role="option"
+                      aria-label={`Select ${itemForUi(item)}`}
                     >
                       {
                         <>

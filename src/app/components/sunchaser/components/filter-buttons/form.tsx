@@ -116,8 +116,15 @@ export const RightButtonsWrapper = () => {
                       height={36}
                       width={36}
                       onClick={() => setIsFilterOpen(true)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setIsFilterOpen(true);
+                        }
+                      }}
                       alt="Logo"
                       src={"/logo.svg"}
+                      tabIndex={0}
                     />
                   </div>
                 </Wrapper>

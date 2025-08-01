@@ -27,7 +27,7 @@ export const getCounterValue = (
   range: Range[],
   label: string,
 ): number | undefined => {
-  const match = range.find((item) => item.label === label);
+  const match = range.find((item) => item.label === String(label));
 
   return match ? match.value : undefined;
 };

@@ -122,7 +122,7 @@ const MapRenderer = ({ mapboxKey }) => {
         <UserLocationButton />
       </div>
 
-      <section id="section-map" className="h-full">
+      <section id="section-map" className="h-full bg-white">
         <div className="sticky top-0 flex size-full items-center justify-center">
           {isLoading ? (
             <div className="z-50">
