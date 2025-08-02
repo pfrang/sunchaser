@@ -90,7 +90,7 @@ const MapRenderer = ({ mapboxKey }) => {
         setMapObject(primaryMap);
       });
     }
-  }, [data]);
+  }, [data, userLocation?.latitude]);
 
   useEffect(() => {
     if (!searchParams?.date || !mapInstance) return;
@@ -108,7 +108,7 @@ const MapRenderer = ({ mapboxKey }) => {
     };
 
     dataFetcher();
-  }, [searchParams?.date, mapInstance]);
+  }, [searchParams?.date, mapInstance, userLocation?.latitude]);
 
   // Uncomment for heatmap
   // useEffect(() => {
