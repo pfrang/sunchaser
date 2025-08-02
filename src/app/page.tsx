@@ -23,7 +23,7 @@ export default function Page() {
 
           <Suspense
             fallback={
-              <div className="flex w-full items-center justify-center">
+              <div className="flex size-full items-center justify-center">
                 <Spinner />
               </div>
             }
