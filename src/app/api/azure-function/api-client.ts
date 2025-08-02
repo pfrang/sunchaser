@@ -17,9 +17,17 @@ export class AzureFunctionApiClient {
       },
       (error) => {
         if (isAxiosError(error)) {
-          console.error(error?.response?.data);
-          return Promise.reject(error);
+          return Promise.reject({
+            message: error.message,
+            status: error.response?.status,
+            data: error.response?.data,
+          });
         }
+        return Promise.reject({
+          message: "An unknown error occurred",
+          status: 500,
+          data: null,
+        });
       },
     );
   }
