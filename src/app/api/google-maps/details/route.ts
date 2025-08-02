@@ -6,7 +6,7 @@ import { GoogleMapsDetailsResponse } from "./dtos/gmaps-details.get-dto";
 
 export type TownDetailsResponse = ResponseDTO<GoogleMapsDetailsResponse>;
 
-// export const dynamic = "force-static";
+export const dynamic = "force-static";
 export async function GET(req: Request) {
   return await handleGet(req);
 }

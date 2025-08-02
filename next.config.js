@@ -4,7 +4,7 @@
 
 module.exports = {
   // Uncomment to build for capacitor
-  // output: "export",
+  output: "export",
   // reactStrictMode: true,
   // swcMinify: true,
 

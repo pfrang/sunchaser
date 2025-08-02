@@ -7,7 +7,7 @@ import {
 
 export type GoogleMapsAutoSearchResponse = GoogleMapsAutoSearchGetResponse;
 
-// export const dynamic = "force-static";
+export const dynamic = "force-static";
 export async function GET(req: Request) {
   return await handleGet(req);
 }
