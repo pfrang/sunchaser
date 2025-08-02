@@ -15,15 +15,6 @@ import { useSearchParamsToObject } from "../hooks/use-search-params";
 import { MapBoxHelper } from "../utils/mapbox-settings";
 
 import { UserLocationButton } from "./user-location-button";
-import { RightButtonsWrapper } from "./sunchaser/components/filter-buttons/form";
-
-const MapButtonsWrapper = ({ children }) => {
-  return (
-    <div className="fixed top-6 z-30 flex w-full flex-col items-end gap-4 px-2">
-      {children}
-    </div>
-  );
-};
 
 const MapRenderer = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
@@ -115,14 +106,11 @@ const MapRenderer = ({ mapboxKey }) => {
 
   return (
     <>
-      <MapButtonsWrapper>
-        <RightButtonsWrapper />
-      </MapButtonsWrapper>
       <div className="fixed bottom-40 z-30 flex w-full justify-end pr-2">
         <UserLocationButton />
       </div>
 
-      <section id="section-map" className="h-full bg-white">
+      <section id="section-map" className="h-full">
         <div className="sticky top-0 flex size-full items-center justify-center">
           {isLoading && (
             <div className="absolute z-50">

@@ -6,14 +6,21 @@ import { Spinner } from "../ui-kit/spinner/spinner";
 
 import MapRenderer from "./components/map-renderer";
 import { Footer } from "./components/sunchaser/components/footer/footer";
+import { RightButtonsWrapper } from "./components/sunchaser/components/filter-buttons/form";
 
 export default function Page() {
   const mapboxKey = new AppConfig().mapBox.key;
 
   return (
     <>
-      <div className="flex h-dvh w-full flex-col">
+      <div className="flex h-dvh w-full flex-col bg-white">
         <main className="h-full">
+          <div className="fixed top-6 z-30 flex w-full flex-col items-end gap-4 px-2">
+            <Suspense fallback={null}>
+              <RightButtonsWrapper />
+            </Suspense>
+          </div>
+
           <Suspense
             fallback={
               <div className="flex w-full items-center justify-center">

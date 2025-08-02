@@ -6,7 +6,10 @@ How to publish android app - https://orangesoft.co/blog/how-to-publish-an-androi
 
 ---
 Geo permissions in mainfest file:
+<!-- Geolocation Plugin -->
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-feature android:name="android.hardware.location.gps" />
 
 ----
 For Hot RELOAD
