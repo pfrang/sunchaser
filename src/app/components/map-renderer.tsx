@@ -90,7 +90,7 @@ const MapRenderer = ({ mapboxKey }) => {
         setMapObject(primaryMap);
       });
     }
-  }, [data]);
+  }, [data, userLocation?.latitude]);
 
   useEffect(() => {
     if (!searchParams?.date || !mapInstance) return;
