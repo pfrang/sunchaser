@@ -16,7 +16,7 @@ export const ListWrapper = ({
     <>
       <div
         onClick={resetDetailedTable}
-        className="flex cursor-pointer items-center"
+        className="sticky top-0 flex cursor-pointer items-center bg-white pb-2"
       >
         <KeyboardArrowLeftIcon />
         <p className="pl-4 text-2xl">{location}</p>

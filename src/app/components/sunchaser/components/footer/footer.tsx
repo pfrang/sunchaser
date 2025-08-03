@@ -15,6 +15,7 @@ import React, {
 } from "react";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { MapChooser } from "app/components/map-chooser";
+import { useAnimatedHeight } from "app/hooks/use-animated-height";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
 
@@ -27,6 +28,7 @@ export const Footer = () => {
   const { isSettingsOpen, setIsSettingsOpen } = useIsSettingsOpen();
   const { isMapBeingTouched } = useIsMapBeingTouched();
   const { isFilterOpen } = useIsFilterOpen();
+  const { animateHeight, updateDOMHeight } = useAnimatedHeight(0, footerRef);
 
   // Touch state refs - no React re-renders during drag
   const isDragging = useRef(false);
@@ -40,13 +42,36 @@ export const Footer = () => {
   // Only these cause re-renders
   const [breakpoints, setBreakpoints] = useState([0, 0, 0]);
   const [height, setHeight] = useState(0);
+  // Direct DOM manipulation - no React re-renders
 
   useEffect(() => {
-    if (isMapBeingTouched || isFilterOpen) {
-      setHeight(breakpoints[0]);
-      setIsSettingsOpen(false);
+    animateHeight(height);
+  }, [height]);
+
+  useEffect(() => {
+    if (isMapBeingTouched) {
+      animateHeight(breakpoints[0]);
+    } else {
+      animateHeight(height);
     }
-  }, [isMapBeingTouched, breakpoints, isFilterOpen, isSettingsOpen]);
+  }, [isMapBeingTouched, breakpoints]);
+
+  useEffect(() => {
+    if (isFilterOpen) {
+      animateHeight(breakpoints[0]);
+      setHeight(breakpoints[0]);
+    }
+
+    if (isFilterOpen && isSettingsOpen) {
+      setIsSettingsOpen(false);
+    } else if (isSettingsOpen) {
+      animateHeight(breakpoints[1]);
+      setHeight(breakpoints[1]);
+    } else if (!isSettingsOpen) {
+      animateHeight(breakpoints[0]);
+      setHeight(breakpoints[0]);
+    }
+  }, [isFilterOpen, isSettingsOpen]);
 
   // Initialize breakpoints once
   useEffect(() => {
@@ -69,13 +94,6 @@ export const Footer = () => {
   }, [isSliding, breakpoints]);
 
   const isAtMaxHeight = breakpoints[2] === height;
-
-  // Direct DOM manipulation - no React re-renders
-  const updateDOMHeight = useCallback((newHeight: number) => {
-    if (footerRef.current) {
-      footerRef.current.style.height = `${newHeight + 40}px`;
-    }
-  }, []);
 
   // Find nearest breakpoint
   const getNearestBreakpoint = useCallback(
