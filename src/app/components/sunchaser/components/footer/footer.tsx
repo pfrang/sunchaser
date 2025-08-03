@@ -27,6 +27,7 @@ export const Footer = () => {
   const { isSettingsOpen, setIsSettingsOpen } = useIsSettingsOpen();
   const { isMapBeingTouched } = useIsMapBeingTouched();
   const { isFilterOpen } = useIsFilterOpen();
+
   // Touch state refs - no React re-renders during drag
   const isDragging = useRef(false);
   const startY = useRef(0);
@@ -64,9 +65,17 @@ export const Footer = () => {
     const newHeight = isSliding ? 0 : breakpoints[0];
     setHeight(newHeight);
     currentHeight.current = newHeight;
+    updateDOMHeight(newHeight);
   }, [isSliding, breakpoints]);
 
   const isAtMaxHeight = breakpoints[2] === height;
+
+  // Direct DOM manipulation - no React re-renders
+  const updateDOMHeight = useCallback((newHeight: number) => {
+    if (footerRef.current) {
+      footerRef.current.style.height = `${newHeight + 40}px`;
+    }
+  }, []);
 
   // Find nearest breakpoint
   const getNearestBreakpoint = useCallback(
@@ -176,12 +185,13 @@ export const Footer = () => {
 
       // Update DOM directly - NO React re-render
       currentHeight.current = newHeight;
+      updateDOMHeight(newHeight);
     },
-    [isAtMaxHeight, breakpoints],
+    [isAtMaxHeight, breakpoints, updateDOMHeight],
   );
 
   const handleTouchEnd = useCallback(() => {
-    if (!isDragging.current) return;
+    if (!isDragging.current || !footerRef.current) return;
 
     isDragging.current = false;
 
@@ -191,10 +201,22 @@ export const Footer = () => {
       lastVelocity.current,
     );
 
+    // Animate to target with CSS transition
+    footerRef.current.style.transition =
+      "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    updateDOMHeight(targetHeight);
+
     // Update React state ONCE at the end
     setHeight(targetHeight);
     currentHeight.current = targetHeight;
-  }, [getTargetBreakpoint]);
+
+    // Clean up transition after animation
+    setTimeout(() => {
+      if (footerRef.current) {
+        footerRef.current.style.transition = "";
+      }
+    }, 300);
+  }, [getTargetBreakpoint, updateDOMHeight]);
 
   const clickableLine = useCallback(() => {
     const currentIndex = breakpoints.indexOf(height);
@@ -215,26 +237,49 @@ export const Footer = () => {
     }
 
     // Add CSS transition for animation
+    if (footerRef.current) {
+      footerRef.current.style.transition =
+        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    }
 
+    // Update DOM height with animation
+    updateDOMHeight(nextHeight);
+
+    // Update React state
     setHeight(nextHeight);
     currentHeight.current = nextHeight;
 
     // Clean up transition after animation
-  }, [height, breakpoints]);
+    setTimeout(() => {
+      if (footerRef.current) {
+        footerRef.current.style.transition = "";
+      }
+    }, 300);
+  }, [height, breakpoints, updateDOMHeight]);
 
   const expandList = useCallback(() => {
     const maxHeight = breakpoints[2];
 
+    // Add CSS transition for animation
+    if (footerRef.current) {
+      footerRef.current.style.transition =
+        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+    }
+
+    // Update DOM height with animation
+    updateDOMHeight(maxHeight);
+
     // Update React state
     setHeight(maxHeight);
     currentHeight.current = maxHeight;
-  }, [breakpoints]);
 
-  useEffect(() => {
-    if (isSettingsOpen) {
-      setHeight(breakpoints[1]);
-    }
-  }, [isSettingsOpen]);
+    // Clean up transition after animation
+    setTimeout(() => {
+      if (footerRef.current) {
+        footerRef.current.style.transition = "";
+      }
+    }, 300);
+  }, [breakpoints, updateDOMHeight]);
 
   return (
     <div
@@ -252,9 +297,6 @@ export const Footer = () => {
         msOverflowStyle: "none",
         touchAction: "pan-y",
         willChange: "height", // Optimize for height animations
-        transition: isDragging.current
-          ? "none"
-          : "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
       }}
     >
       <FooterExpandableLine
