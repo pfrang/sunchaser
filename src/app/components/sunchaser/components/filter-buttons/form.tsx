@@ -92,12 +92,14 @@ export const RightButtonsWrapper = () => {
             }
           };
 
-          document.addEventListener("mousedown", handleClickOutside);
-          document.addEventListener("touchstart", handleClickOutside);
-          return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-            document.removeEventListener("touchstart", handleClickOutside);
-          };
+          if (isFilterOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("touchstart", handleClickOutside);
+            return () => {
+              document.removeEventListener("mousedown", handleClickOutside);
+              document.removeEventListener("touchstart", handleClickOutside);
+            };
+          }
         }, [isFilterOpen]);
 
         return (

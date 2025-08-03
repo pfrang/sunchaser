@@ -1,5 +1,7 @@
 import { useMapInstance } from "states/sunchaser-result";
 
+// TODO save map choice in mapbox initialization convert this to form
+
 export const MapChooser = () => {
   return (
     <div className="grid w-full grid-cols-3 gap-4 px-6">
@@ -45,7 +47,10 @@ const MapButton = ({
   return (
     <button
       className="rounded-lg border-2 border-greens-300 bg-greens-300 px-4 py-2 shadow-md"
-      onClick={() => mapInstance?.adjustStyle(style)}
+      onClick={(e) => {
+        e.stopPropagation();
+        mapInstance?.adjustStyle(style);
+      }}
     >
       {children}
     </button>

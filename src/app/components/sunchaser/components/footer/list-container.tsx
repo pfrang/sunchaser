@@ -15,7 +15,6 @@ import { dateFormatter } from "app/utils/date-formatter";
 import { ForecastDay } from "app/api/forecast/mapper/forecast-mapper";
 import { splitTimesIntoDays } from "app/utils/times-helper";
 import { useForecast } from "app/hooks/use-forecast";
-import { TimeTable } from "ui-kit/list-item/list-item-detailed";
 
 import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
@@ -145,6 +144,8 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
         overflowY: isAtMaxHeight ? "auto" : "hidden",
         overflowX: "hidden",
         position: "relative",
+        overscrollBehaviorY: "none",
+        WebkitOverflowScrolling: "touch",
       }}
       className={"scrollbar-thin scrollbar-track-slate-50"}
     >
