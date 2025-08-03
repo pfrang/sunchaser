@@ -3,6 +3,9 @@ import { useMapInstance } from "states/sunchaser-result";
 export const MapChooser = () => {
   return (
     <div className="grid w-full grid-cols-3 gap-4 px-6">
+      <MapButton style="mapbox://styles/mapbox/streets-v11">
+        <p className="text-variant-regular">Standard</p>
+      </MapButton>
       <MapButton style="mapbox://styles/mapbox/streets-v12">
         <p className="text-variant-regular">Streets</p>
       </MapButton>

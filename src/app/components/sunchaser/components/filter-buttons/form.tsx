@@ -101,7 +101,7 @@ export const RightButtonsWrapper = () => {
         }, [isFilterOpen]);
 
         return (
-          <Form className="relative w-full">
+          <Form className="relative z-10 w-full">
             <div
               ref={wrapperRef}
               className={`relative ml-auto flex flex-col content-center gap-4 transition-width duration-300 ease-in-out

@@ -1,6 +1,5 @@
 import { AzureFunctionCoordinatesMappedItems } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
 import mapboxgl from "mapbox-gl";
-import { resetLayout } from "states/states";
 import * as turf from "@turf/turf";
 import { Units } from "@turf/turf";
 import { isNaN } from "lodash";
@@ -348,14 +347,6 @@ export class MapBoxHelper {
               <img src="/icons/white/svg/sunny.svg" alt="Description of image">`,
         )
         .addTo(this.map);
-    });
-
-    this.map.on("mousedown", () => {
-      resetLayout();
-    });
-
-    this.map.on("touchstart", () => {
-      resetLayout();
     });
 
     this.map.on("mouseenter", "clusters", () => {

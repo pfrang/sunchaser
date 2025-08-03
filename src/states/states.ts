@@ -1,21 +1,29 @@
 "use client";
 import { create } from "zustand";
 
-export const useDisplayIsFooterExpanded = create<{
-  isFooterExpanded: boolean;
-  setIsFooterExpanded: (input: boolean) => void;
-}>((set) => ({
-  isFooterExpanded: false,
-  setIsFooterExpanded: (input: boolean) =>
-    set(() => ({ isFooterExpanded: input })),
-}));
-
 export const useIsFilterOpen = create<{
   isFilterOpen: boolean;
   setIsFilterOpen: (input: boolean) => void;
 }>((set) => ({
   isFilterOpen: false,
   setIsFilterOpen: (input: boolean) => set(() => ({ isFilterOpen: input })),
+}));
+
+export const useIsMapBeingTouched = create<{
+  isMapBeingTouched: boolean;
+  setIsMapBeingTouched: (input: boolean) => void;
+}>((set) => ({
+  isMapBeingTouched: false,
+  setIsMapBeingTouched: (input: boolean) =>
+    set(() => ({ isMapBeingTouched: input })),
+}));
+
+export const useIsSettingsOpen = create<{
+  isSettingsOpen: boolean;
+  setIsSettingsOpen: (input: boolean) => void;
+}>((set) => ({
+  isSettingsOpen: false,
+  setIsSettingsOpen: (input: boolean) => set(() => ({ isSettingsOpen: input })),
 }));
 
 export const useIsSliding = create<{
@@ -25,7 +33,3 @@ export const useIsSliding = create<{
   isSliding: false,
   setIsSliding: (input: boolean) => set(() => ({ isSliding: input })),
 }));
-
-export const resetLayout = () => {
-  useDisplayIsFooterExpanded.setState({ isFooterExpanded: false });
-};

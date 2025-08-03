@@ -112,7 +112,7 @@ export const Search = () => {
           disabled={!isFilterOpen}
           className={`bg-inherit ${
             isFilterOpen ? "" : "hidden"
-          } ${isUserTyping ? "rounded-t-inherit" : "rounded-inherit"} size-full text-ellipsis pl-4 pr-6 text-lg placeholder-black outline-none`}
+          } ${isUserTyping ? "rounded-t-inherit" : "rounded-inherit"} size-full text-ellipsis pl-4 pr-6 text-lg outline-none`}
           placeholder={"Hvor vil du reise?"}
           value={values.townSearch}
           type="text"
