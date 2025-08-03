@@ -7,6 +7,7 @@ import mapboxgl from "mapbox-gl";
 import { MapboxGlobalRankSettings } from "app/utils/mapbox-global-rank-settings";
 import { useMapInstance, useMapObject } from "states/sunchaser-result";
 import { fetchGlobalRank } from "app/actions/fetch-global-rank";
+import { useIsMapBeingTouched } from "states/states";
 
 import { useCoordinates } from "../hooks/use-coordinates";
 import { useUserLocation } from "../hooks/use-user-location";
@@ -31,6 +32,7 @@ const LocationOnIcon = ({ sx, className }) => (
 const MapRenderer = ({ mapboxKey }) => {
   mapboxgl.accessToken = mapboxKey;
   const searchParams = useSearchParamsToObject();
+  const { setIsMapBeingTouched } = useIsMapBeingTouched();
   const router = useRouter();
   const {
     userLocation,
@@ -88,6 +90,18 @@ const MapRenderer = ({ mapboxKey }) => {
         mapInitializer.addClickHandlers();
         setMapInstance(mapInitializer);
         setMapObject(primaryMap);
+        primaryMap.on("touchstart", () => {
+          setIsMapBeingTouched(true);
+        });
+        primaryMap.on("touchend", () => {
+          setIsMapBeingTouched(false);
+        });
+        primaryMap.on("mousedown", () => {
+          setIsMapBeingTouched(true);
+        });
+        primaryMap.on("mouseup", () => {
+          setIsMapBeingTouched(false);
+        });
       });
     }
   }, [data, userLocation?.latitude]);
