@@ -14,12 +14,13 @@ import React, {
   useCallback,
 } from "react";
 import { Spinner } from "ui-kit/spinner/spinner";
-import { MapChooser } from "app/components/map-chooser";
+import { MapChooser } from "app/components/sunchaser/components/footer/map-chooser";
 import { useAnimatedHeight } from "app/hooks/use-animated-height";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
 
 import { ListContainer } from "./list-container";
+import { MapOptionsEnum } from "./settings-form-values";
 
 export const Footer = () => {
   const { isSliding } = useIsSliding();
@@ -28,6 +29,9 @@ export const Footer = () => {
   const { isSettingsOpen, setIsSettingsOpen } = useIsSettingsOpen();
   const { isMapBeingTouched } = useIsMapBeingTouched();
   const { isFilterOpen } = useIsFilterOpen();
+  const [mapOption, setMapOption] = useState<MapOptionsEnum>(
+    MapOptionsEnum.Standard,
+  );
   const { animateHeight, updateDOMHeight } = useAnimatedHeight(0, footerRef);
 
   // Touch state refs - no React re-renders during drag
@@ -324,7 +328,7 @@ export const Footer = () => {
 
       <Suspense fallback={<Spinner />}>
         {isSettingsOpen ? (
-          <MapChooser />
+          <MapChooser mapOption={mapOption} setMapOption={setMapOption} />
         ) : (
           <ListContainer
             parentRef={scrollableDivRef}

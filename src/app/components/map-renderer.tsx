@@ -1,5 +1,5 @@
 "use client";
-
+import "./map.css";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "ui-kit/spinner/spinner";
