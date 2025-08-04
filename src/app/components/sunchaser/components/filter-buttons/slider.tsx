@@ -8,12 +8,9 @@ import {
   distanceArray,
   getCounterValue,
 } from "app/utils/travel-distance-settings";
-import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { useFormikContext } from "formik";
-import * as turf from "@turf/turf";
-import mapboxgl from "mapbox-gl";
 import { useIsFilterOpen, useIsSliding } from "states/states";
-import { useMapInstance, useMapObject } from "states/sunchaser-result";
+import { useMapInstance } from "states/sunchaser-result";
 
 import { FormShape } from "./form";
 
@@ -72,10 +69,8 @@ export const SliderWrapper = () => {
   const { values, setFieldValue } = useFormikContext<FormShape>();
   const [isSliderExpanded, setIsSliderExpanded] = useState(false);
   const wrapperRef = useRef<HTMLInputElement | null>(null);
-  const { mapObject } = useMapObject();
   const { mapInstance } = useMapInstance();
 
-  const searchParams = useSearchParamsToObject();
   const { isSliding, setIsSliding } = useIsSliding();
 
   const [index, setIndex] = useState(
@@ -83,40 +78,15 @@ export const SliderWrapper = () => {
       valuesForSlider.length / 2,
   );
 
-  const updateBounds = (newRadius?: number) => {
-    if (!searchParams?.lat || !searchParams?.lon) return;
-
-    const circle = turf.circle(
-      [Number(searchParams?.lon), Number(searchParams?.lat)],
-      newRadius,
-      { units: "kilometers" },
-    );
-
-    const bounds = circle.geometry.coordinates[0].reduce(
-      function (bounds, coord) {
-        return bounds.extend(coord as any);
-      },
-      new mapboxgl.LngLatBounds(
-        circle.geometry.coordinates[0][0] as any,
-        circle.geometry.coordinates[0][0] as any,
-      ),
-    );
-
-    mapObject?.fitBounds(bounds, {
-      padding: 20,
-      duration: 1000,
-    });
-  };
-
   useEffect(() => {
-    if (isFilterOpen) {
+    if (isFilterOpen && isSliderExpanded) {
       const newRadius = Number(valuesForSlider[index - 1].label);
-      updateBounds(newRadius);
+      mapInstance?.updateBounds(newRadius);
       mapInstance?.addCircularMap(newRadius);
     } else {
       mapInstance?.removeCircularMap();
     }
-  }, [isFilterOpen]);
+  }, [isFilterOpen, isSliderExpanded]);
 
   const handleSlide = (e: any, num) => {
     setIsSliding(true);
@@ -125,7 +95,7 @@ export const SliderWrapper = () => {
     setFieldValue("distance", newRadius);
 
     // Assuming createCircle returns a GeoJSON circle feature with the given radius
-    updateBounds(newRadius);
+    mapInstance?.updateBounds(newRadius);
 
     mapInstance?.updateCircularMap(newRadius);
   };

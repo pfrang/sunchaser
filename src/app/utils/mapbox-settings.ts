@@ -22,8 +22,11 @@ export class MapBoxHelper {
   longitudes: number[];
   centerLon: number;
   centerLat: number;
+  originalLon: number;
+  originalLat: number;
   ranks: AzureFunctionCoordinatesMappedItems[];
   currentPopup: mapboxgl.Popup | null = null;
+  private marker: mapboxgl.Marker | null = null;
 
   constructor(
     centerLon: number,
@@ -33,6 +36,9 @@ export class MapBoxHelper {
   ) {
     this.centerLon = centerLon;
     this.centerLat = centerLat;
+    this.originalLon = centerLon;
+    this.originalLat = centerLat;
+    this.marker = null;
     this.ranks = ranks;
 
     this.longitudes = ranks.map((item) => item.longitude);
@@ -43,14 +49,32 @@ export class MapBoxHelper {
       center: [this.centerLon, this.centerLat],
       zoom: 8,
     });
-  }
-
-  initializeMap() {
-    this.setMarkers();
 
     new mapboxgl.Marker({ color: "red" })
       .setLngLat([this.centerLon, this.centerLat])
       .addTo(this.map);
+  }
+
+  setMarker() {
+    if (this.marker) {
+      this.marker.remove(); // Remove existing marker
+    }
+    this.marker = new mapboxgl.Marker({ color: "blue" })
+      .setLngLat([this.centerLon, this.centerLat])
+      .addTo(this.map);
+  }
+
+  setLatLon(centerLon: number, centerLat: number) {
+    this.centerLon = centerLon;
+    this.centerLat = centerLat;
+    this.map.setCenter([this.centerLon, this.centerLat]);
+  }
+
+  removeMarker() {
+    if (this.marker) {
+      this.marker.remove();
+      this.marker = null;
+    }
   }
 
   sourceAndLayerAfterLoad() {
@@ -62,7 +86,7 @@ export class MapBoxHelper {
 
   flyToUserLocation() {
     this.map.flyTo({
-      center: [this.centerLon, this.centerLat],
+      center: [this.originalLon, this.originalLat],
       duration: 500,
       zoom: 8,
     });
@@ -70,7 +94,7 @@ export class MapBoxHelper {
 
   resetMap() {
     this.map.flyTo({
-      center: [this.centerLon, this.centerLat],
+      center: [this.originalLon, this.originalLat],
       zoom: 8,
     });
     // only remove if exist
@@ -131,6 +155,29 @@ export class MapBoxHelper {
       });
     }
   }
+
+  updateBounds = (newRadius?: number) => {
+    const circle = turf.circle(
+      [Number(this.centerLon), Number(this.centerLat)],
+      newRadius,
+      { units: "kilometers" },
+    );
+
+    const bounds = circle.geometry.coordinates[0].reduce(
+      function (bounds, coord) {
+        return bounds.extend(coord as any);
+      },
+      new mapboxgl.LngLatBounds(
+        circle.geometry.coordinates[0][0] as any,
+        circle.geometry.coordinates[0][0] as any,
+      ),
+    );
+
+    this.map.fitBounds(bounds, {
+      padding: 160,
+      duration: 1000,
+    });
+  };
 
   updateCircularMap(distance: number | string | undefined) {
     if (isNaN(Number(distance))) {
@@ -383,7 +430,7 @@ export class MapBoxHelper {
     bounds.extend(new mapboxgl.LngLat(this.centerLon, this.centerLat));
 
     this.map.fitBounds(bounds, {
-      padding: 50,
+      padding: 160,
       duration: 1000,
     });
 

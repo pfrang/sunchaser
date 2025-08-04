@@ -79,8 +79,6 @@ const MapRenderer = ({ mapboxKey }) => {
 
       const primaryMap = mapInitializer.map;
 
-      mapInitializer.initializeMap();
-
       primaryMap.on("load", () => {
         primaryMap.resize();
         // primaryMap.addControl(new mapboxgl.NavigationControl());'
@@ -122,7 +120,7 @@ const MapRenderer = ({ mapboxKey }) => {
     };
 
     dataFetcher();
-  }, [searchParams?.date, mapInstance]);
+  }, [searchParams, mapInstance]);
 
   // Uncomment for heatmap
   // useEffect(() => {
