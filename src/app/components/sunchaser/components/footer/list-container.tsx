@@ -23,7 +23,12 @@ import { TableItemWrapper } from "./detailed/table-item-wrapper";
 
 type ExpandedTable = "sunchaser" | "forecast";
 
-export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
+export const ListContainer = ({
+  parentRef,
+  isAtMaxHeight,
+  expandList,
+  middleList,
+}) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
   const [expandDetailedTable, setExpandDetailedTable] =
@@ -47,7 +52,7 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
   const toggleDetailedTable = (
     item: AzureFunctionCoordinatesMappedItems | ForecastDay,
   ) => {
-    expandList();
+    middleList();
     if (
       item !== highlightedCard &&
       isAzureFunctionCoordinatesMappedItems(item)
@@ -62,6 +67,7 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
 
   const resetDetailedTable = () => {
     setDetailedTableExpanded(false);
+    middleList();
     resetMap();
   };
 
@@ -99,7 +105,9 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
       return (
         <>
           {Object.values(days).map((day, index) => {
-            return <TableItemWrapper key={index} day={day} />;
+            return (
+              <TableItemWrapper expandList={expandList} key={index} day={day} />
+            );
           })}
         </>
       );

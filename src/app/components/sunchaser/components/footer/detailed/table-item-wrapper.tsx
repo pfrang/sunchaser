@@ -5,7 +5,13 @@ import { getAverageItemsFromTimes, getInterval } from "app/utils/times-helper";
 import { useState, useEffect, useRef } from "react";
 import { TimeTable } from "ui-kit/list-item/list-item-detailed";
 
-export const TableItemWrapper = ({ day }: { day: Times[] }) => {
+export const TableItemWrapper = ({
+  day,
+  expandList,
+}: {
+  day: Times[];
+  expandList?: () => void;
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [maxHeight, setMaxHeight] = useState("0px");
   const [rows, setRows] = useState<(Times | null)[]>([]);
@@ -45,11 +51,14 @@ export const TableItemWrapper = ({ day }: { day: Times[] }) => {
 
     if (isExpanded) {
       updateHeight();
+      setTimeout(() => {
+        expandList?.();
+      }, 100);
     } else {
       // Delay setting maxHeight to allow transition
       setTimeout(() => {
         updateHeight();
-      }, 10);
+      }, 300);
     }
   }, [isExpanded, rows]);
 

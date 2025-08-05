@@ -425,7 +425,7 @@ export class MapBoxHelper {
           .addTo(this.map);
 
         setTimeout(() => {
-          const popupElement = document.querySelector("#popup-close-btn");
+          const popupElement = document.getElementById("popup-close-btn");
           popupElement?.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent event propagation
             this.removePopup(); // Remove the popup

@@ -22,6 +22,8 @@ import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
 import { ListContainer } from "./list-container";
 import { MapOptionsEnum } from "./settings-form-values";
 
+export type Breakpoints = [number, number, number];
+
 export const Footer = () => {
   const { isSliding } = useIsSliding();
   const footerRef = useRef<HTMLDivElement>(null);
@@ -44,7 +46,7 @@ export const Footer = () => {
   const lastTime = useRef(0);
 
   // Only these cause re-renders
-  const [breakpoints, setBreakpoints] = useState([0, 0, 0]);
+  const [breakpoints, setBreakpoints] = useState<Breakpoints>([0, 0, 0]);
   const [height, setHeight] = useState(0);
   // Direct DOM manipulation - no React re-renders
 
@@ -83,7 +85,7 @@ export const Footer = () => {
       window.innerHeight * 0.1,
       window.innerHeight * 0.4,
       window.innerHeight * 0.9,
-    ];
+    ] as Breakpoints;
     setBreakpoints(bp);
     setHeight(bp[0]);
     currentHeight.current = bp[0];
@@ -212,6 +214,25 @@ export const Footer = () => {
     [isAtMaxHeight, breakpoints, updateDOMHeight],
   );
 
+  const animateHeightv2 = (newHeight: number) => {
+    if (footerRef.current) {
+      footerRef.current.style.transition =
+        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+      updateDOMHeight(newHeight);
+
+      // Update React state ONCE at the end
+      setHeight(newHeight);
+      currentHeight.current = newHeight;
+
+      // Clean up transition after animation
+      setTimeout(() => {
+        if (footerRef.current) {
+          footerRef.current.style.transition = "";
+        }
+      }, 300);
+    }
+  };
+
   const handleTouchEnd = useCallback(() => {
     if (!isDragging.current || !footerRef.current) return;
 
@@ -223,21 +244,7 @@ export const Footer = () => {
       lastVelocity.current,
     );
 
-    // Animate to target with CSS transition
-    footerRef.current.style.transition =
-      "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-    updateDOMHeight(targetHeight);
-
-    // Update React state ONCE at the end
-    setHeight(targetHeight);
-    currentHeight.current = targetHeight;
-
-    // Clean up transition after animation
-    setTimeout(() => {
-      if (footerRef.current) {
-        footerRef.current.style.transition = "";
-      }
-    }, 300);
+    animateHeightv2(targetHeight);
   }, [getTargetBreakpoint, updateDOMHeight]);
 
   const clickableLine = useCallback(() => {
@@ -258,49 +265,19 @@ export const Footer = () => {
         nextHeight = breakpoints[0];
     }
 
-    // Add CSS transition for animation
-    if (footerRef.current) {
-      footerRef.current.style.transition =
-        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-    }
-
-    // Update DOM height with animation
-    updateDOMHeight(nextHeight);
-
-    // Update React state
-    setHeight(nextHeight);
-    currentHeight.current = nextHeight;
-
-    // Clean up transition after animation
-    setTimeout(() => {
-      if (footerRef.current) {
-        footerRef.current.style.transition = "";
-      }
-    }, 300);
+    animateHeightv2(nextHeight);
   }, [height, breakpoints, updateDOMHeight]);
 
   const expandList = useCallback(() => {
     const maxHeight = breakpoints[2];
 
-    // Add CSS transition for animation
-    if (footerRef.current) {
-      footerRef.current.style.transition =
-        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-    }
+    animateHeightv2(maxHeight);
+  }, [breakpoints, updateDOMHeight]);
 
-    // Update DOM height with animation
-    updateDOMHeight(maxHeight);
+  const middleList = useCallback(() => {
+    const maxHeight = breakpoints[1];
 
-    // Update React state
-    setHeight(maxHeight);
-    currentHeight.current = maxHeight;
-
-    // Clean up transition after animation
-    setTimeout(() => {
-      if (footerRef.current) {
-        footerRef.current.style.transition = "";
-      }
-    }, 300);
+    animateHeightv2(maxHeight);
   }, [breakpoints, updateDOMHeight]);
 
   return (
@@ -322,7 +299,7 @@ export const Footer = () => {
       }}
     >
       <FooterExpandableLine
-        fullExpand={expandList}
+        fullExpand={expandList} // Pass function that calls expandList with argument
         expandableClick={clickableLine}
       />
 
@@ -334,6 +311,7 @@ export const Footer = () => {
             parentRef={scrollableDivRef}
             isAtMaxHeight={isAtMaxHeight}
             expandList={expandList}
+            middleList={middleList}
           />
         )}
       </Suspense>
