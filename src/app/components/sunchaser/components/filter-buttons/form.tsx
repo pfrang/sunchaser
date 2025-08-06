@@ -30,7 +30,7 @@ export const RightButtonsWrapper = () => {
     if (!isFilterOpen) {
       mapInstance?.removeCircularMap();
       mapInstance?.map.resize();
-      // mapInstance?.setFitBounds();
+      mapInstance?.setFitBounds();
     }
   }, [isFilterOpen]);
 

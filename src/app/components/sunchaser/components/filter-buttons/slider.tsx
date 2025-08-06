@@ -79,14 +79,14 @@ export const SliderWrapper = () => {
   );
 
   useEffect(() => {
-    if (isFilterOpen && isSliderExpanded) {
+    if (isFilterOpen) {
       const newRadius = Number(valuesForSlider[index - 1].label);
       mapInstance?.updateBounds(newRadius);
       mapInstance?.addCircularMap(newRadius);
     } else {
       mapInstance?.removeCircularMap();
     }
-  }, [isFilterOpen, isSliderExpanded]);
+  }, [isFilterOpen]);
 
   const handleSlide = (e: any, num) => {
     setIsSliding(true);
@@ -177,13 +177,13 @@ export const SliderWrapper = () => {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    if (isSliderExpanded) {
-      inputRef.current?.focus();
-    } else {
-      inputRef.current?.blur();
-    }
-  }, [isSliderExpanded]);
+  // useEffect(() => {
+  //   if (isSliderExpanded) {
+  //     inputRef.current?.focus();
+  //   } else {
+  //     inputRef.current?.blur();
+  //   }
+  // }, [isSliderExpanded]);
 
   return (
     <span className={`w-full rounded-inherit `} ref={wrapperRef}>
@@ -192,7 +192,7 @@ export const SliderWrapper = () => {
         required
         disabled={!isFilterOpen}
         readOnly
-        className={`bg-inherit ${
+        className={`hidden bg-inherit ${
           isFilterOpen ? "" : "hidden"
         } size-full items-center text-ellipsis rounded-inherit bg-white pl-4 pr-6 text-xl outline-none ${isSliding && "opacity-30"} ${isSliderExpanded && "ring-2 ring-greens-400"}`}
         value={isFilterOpen ? `${values.distance} km` : ""}
@@ -201,56 +201,61 @@ export const SliderWrapper = () => {
         onFocus={() => setIsSliderExpanded(true)}
         style={{ outline: "none" }}
       />
-      <div
+      {/* <div
         onClick={() => setIsSliderExpanded(!isSliderExpanded)}
         className="absolute right-4 top-0 flex h-full items-center text-greens-400"
       >
         <CreateIcon />
-      </div>
+      </div> */}
 
-      {isSliderExpanded && isFilterOpen && (
-        <div className="mt-4 flex flex-col items-center justify-center rounded-[16px] bg-white">
-          <div className="relative flex w-full flex-col justify-center px-4 py-8">
-            <PrettoSlider
-              style={{ margin: 0 }}
-              aria-label="Temperature"
-              value={index}
-              // getAriaValueText={(value: number) => `${value}km`}
-              valueLabelDisplay="auto"
-              valueLabelFormat={`${valueToDisplay}`}
-              step={1}
-              onChange={handleSlide}
-              // onChangeCommitted={debouncedUpdateUrl}
-              onChangeCommitted={() => setIsSliding(false)}
-              marks={marks}
-              min={min}
-              max={max}
-            />
-            <div className="absolute bottom-2 right-4">
-              <div className="flex gap-4 text-greens-400">
-                <p
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && setIsSliderExpanded(false)
-                  }
-                  onClick={() => setIsSliderExpanded(false)}
-                >
-                  Cancel
-                </p>
-                <p
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && setIsSliderExpanded(false)
-                  }
-                  onClick={() => setIsSliderExpanded(false)}
-                >
-                  Ok
-                </p>
-              </div>
-            </div>
+      <div className="flex flex-col items-center justify-center rounded-[16px] bg-white">
+        <div className="relative flex w-full flex-col justify-center p-4">
+          <div className="flex w-full justify-between">
+            <p>
+              Hvor langt er du villig til å reise fra{" "}
+              {values.townSearch || "din lokasjon"}
+            </p>
+            <p>{values.distance} km</p>
           </div>
+          <PrettoSlider
+            style={{ margin: 0 }}
+            aria-label="Temperature"
+            value={index}
+            // getAriaValueText={(value: number) => `${value}km`}
+            valueLabelDisplay="auto"
+            valueLabelFormat={`${valueToDisplay}`}
+            step={1}
+            onChange={handleSlide}
+            // onChangeCommitted={debouncedUpdateUrl}
+            onChangeCommitted={() => setIsSliding(false)}
+            marks={marks}
+            min={min}
+            max={max}
+          />
+          {/* <div className="absolute bottom-2 right-4">
+            <div className="flex gap-4 text-greens-400">
+              <p
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && setIsSliderExpanded(false)
+                }
+                onClick={() => setIsSliderExpanded(false)}
+              >
+                Cancel
+              </p>
+              <p
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && setIsSliderExpanded(false)
+                }
+                onClick={() => setIsSliderExpanded(false)}
+              >
+                Ok
+              </p>
+            </div>
+          </div> */}
         </div>
-      )}
+      </div>
     </span>
   );
 };

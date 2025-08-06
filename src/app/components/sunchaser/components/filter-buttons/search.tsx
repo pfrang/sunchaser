@@ -22,10 +22,9 @@ export const Search = () => {
   const { isFilterOpen, setIsFilterOpen } = useIsFilterOpen();
   const { isSliding } = useIsSliding();
   const { values, setFieldValue } = useFormikContext<FormShape>();
+  const [searchText, setSearchText] = useState(values.townSearch);
   const [isUserTyping, setIsUserTyping] = useState(false);
-  const { data, error, isLoading } = useFetchGoogleMapsSearches(
-    values.townSearch,
-  );
+  const { data, error, isLoading } = useFetchGoogleMapsSearches(searchText);
   const { mapObject } = useMapObject();
   const { mapInstance } = useMapInstance();
 
@@ -88,7 +87,7 @@ export const Search = () => {
       setTimeout(() => {
         mapInstance.setLatLon(response.longitude, response.latitude);
         mapInstance?.removeMarker();
-        mapInstance?.setMarker();
+        mapInstance?.setSearchMarker();
         mapInstance?.removeCircularMap();
         mapInstance?.addCircularMap(values.distance);
       }, 500);
@@ -133,11 +132,11 @@ export const Search = () => {
             isFilterOpen ? "" : "hidden"
           } ${isUserTyping ? "rounded-t-inherit" : "rounded-inherit"} size-full overscroll-y-contain text-ellipsis pl-4 pr-6 text-lg outline-none`}
           placeholder={"Hvor vil du reise?"}
-          value={values.townSearch}
+          value={searchText}
           type="text"
           name="townSearch"
           onChange={(e) => {
-            setFieldValue("townSearch", e.target.value);
+            setSearchText(e.target.value);
             setIsUserTyping(true); // User has started typing
           }}
           style={{ outline: "none" }}

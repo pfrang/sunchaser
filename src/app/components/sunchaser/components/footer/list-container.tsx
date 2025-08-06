@@ -74,7 +74,7 @@ export const ListContainer = ({
   const { mapObject } = useMapObject();
 
   const resetMap = () => {
-    if (mapObject && mapInstance) {
+    if (mapObject && mapInstance && userLocation?.longitude) {
       mapInstance.removeLayer("route");
       mapObject.flyTo({
         center: [userLocation.longitude, userLocation.latitude],

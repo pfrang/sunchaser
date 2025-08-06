@@ -22,6 +22,8 @@ export class MapBoxHelper {
   longitudes: number[];
   centerLon: number;
   centerLat: number;
+  userLocationLon: number;
+  userLocationLat: number;
   originalLon: number;
   originalLat: number;
   ranks: AzureFunctionCoordinatesMappedItems[];
@@ -31,11 +33,15 @@ export class MapBoxHelper {
   constructor(
     centerLon: number,
     centerLat: number,
+    userLocationLon: number,
+    userLocationLat: number,
     ranks: AzureFunctionCoordinatesMappedItems[],
     name: string = "map",
   ) {
     this.centerLon = centerLon;
     this.centerLat = centerLat;
+    this.userLocationLon = userLocationLon;
+    this.userLocationLat = userLocationLat;
     this.originalLon = centerLon;
     this.originalLat = centerLat;
     this.marker = null;
@@ -51,15 +57,26 @@ export class MapBoxHelper {
     });
 
     new mapboxgl.Marker({ color: "red" })
-      .setLngLat([this.centerLon, this.centerLat])
+      .setLngLat([this.userLocationLon, this.userLocationLat])
       .addTo(this.map);
   }
 
   setMarker() {
+    if (
+      this.userLocationLat !== this.centerLat &&
+      this.userLocationLon !== this.centerLon
+    ) {
+      new mapboxgl.Marker({ color: "blue" })
+        .setLngLat([this.originalLon, this.originalLat])
+        .addTo(this.map);
+    }
+  }
+
+  setSearchMarker() {
     if (this.marker) {
       this.marker.remove(); // Remove existing marker
     }
-    this.marker = new mapboxgl.Marker({ color: "blue" })
+    this.marker = new mapboxgl.Marker({ color: "green" })
       .setLngLat([this.centerLon, this.centerLat])
       .addTo(this.map);
   }
@@ -85,6 +102,14 @@ export class MapBoxHelper {
   }
 
   flyToUserLocation() {
+    this.map.flyTo({
+      center: [this.userLocationLon, this.userLocationLat],
+      duration: 500,
+      zoom: 8,
+    });
+  }
+
+  flyToDataLocation() {
     this.map.flyTo({
       center: [this.originalLon, this.originalLat],
       duration: 500,
