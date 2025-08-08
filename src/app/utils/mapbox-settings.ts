@@ -63,8 +63,8 @@ export class MapBoxHelper {
 
   setMarker() {
     if (
-      this.userLocationLat !== this.centerLat &&
-      this.userLocationLon !== this.centerLon
+      Number(this.userLocationLat) !== Number(this.centerLat) &&
+      Number(this.userLocationLon) !== Number(this.centerLon)
     ) {
       new mapboxgl.Marker({ color: "blue" })
         .setLngLat([this.originalLon, this.originalLat])

@@ -11,6 +11,7 @@ import {
 import { useFormikContext } from "formik";
 import { useIsFilterOpen, useIsSliding } from "states/states";
 import { useMapInstance } from "states/sunchaser-result";
+import { transform } from "lodash";
 
 import { FormShape } from "./form";
 
@@ -52,7 +53,14 @@ const PrettoSlider = styled(Slider)({
     },
   },
   "& .MuiSlider-markLabel": {
-    color: "white",
+    color: "black",
+    top: "17px",
+  },
+  "& .MuiSlider-markLabel[data-index='0']": {
+    left: "7px !important", // Adjust this value as needed
+  },
+  "& .MuiSlider-markLabel[data-index='2']": {
+    left: "99.5% !important", // Adjust this value as needed
   },
   "& .MuiSlider-markActive": {
     color: "white",
@@ -140,7 +148,7 @@ export const SliderWrapper = () => {
       value: valuesForSlider.length,
       label: `${valuesForSlider[valuesForSlider.length - 1].label}km`,
       markActive: (
-        <div className="circle">
+        <div className="circle left-2">
           <div className="inner-circle" />
         </div>
       ),
@@ -208,17 +216,22 @@ export const SliderWrapper = () => {
         <CreateIcon />
       </div> */}
 
-      <div className="flex flex-col items-center justify-center rounded-[16px] bg-white">
-        <div className="relative flex w-full flex-col justify-center p-4">
-          <div className="flex w-full justify-between">
+      <div className="flex flex-col items-center justify-center rounded-[16px] bg-white p-3 px-4">
+        <div className="relative flex w-full flex-col justify-center pb-3">
+          <div className="mb-2 flex w-full justify-between">
             <p>
               Hvor langt er du villig til å reise fra{" "}
-              {values.townSearch || "din lokasjon"}
+              <b>{values.townSearch || "din lokasjon"}</b>
             </p>
             <p>{values.distance} km</p>
           </div>
           <PrettoSlider
-            style={{ margin: 0 }}
+            style={{
+              margin: 0,
+              boxSizing: "inherit",
+              padding: "8px",
+              width: "calc(100% - 12px)",
+            }}
             aria-label="Temperature"
             value={index}
             // getAriaValueText={(value: number) => `${value}km`}

@@ -32,6 +32,10 @@ export const Search = () => {
   const searchContainerRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
+    setSearchText(values.townSearch);
+  }, [values.townSearch]);
+
+  useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isFilterOpen) {
         setIsUserTyping(false);
