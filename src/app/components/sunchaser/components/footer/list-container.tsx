@@ -24,7 +24,7 @@ import { TableItemWrapper } from "./detailed/table-item-wrapper";
 type ExpandedTable = "sunchaser" | "forecast";
 
 type Props = {
-  parentRef: React.RefObject<HTMLDivElement>;
+  parentRef: React.RefObject<HTMLDivElement | null>;
   isAtMaxHeight: boolean;
   expandList: () => void;
   middleList: () => void;
