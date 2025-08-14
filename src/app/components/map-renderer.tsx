@@ -1,5 +1,5 @@
 "use client";
-
+import "./map.css";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "ui-kit/spinner/spinner";
@@ -16,6 +16,7 @@ import { useSearchParamsToObject } from "../hooks/use-search-params";
 import { MapBoxHelper } from "../utils/mapbox-settings";
 
 import { UserLocationButton } from "./user-location-button";
+import { SuitcaseButton } from "./suitcase-button";
 
 const LocationOnIcon = ({ sx, className }) => (
   <svg
@@ -66,20 +67,24 @@ const MapRenderer = ({ mapboxKey }) => {
   const { setMapObject } = useMapObject();
 
   useEffect(() => {
-    if (document.getElementById("map") && data?.userLocation.latitude) {
+    if (
+      document.getElementById("map") &&
+      data?.userLocation.latitude &&
+      userLocation
+    ) {
       // const longitudes = data.ranks.map((item) => item.longitude);
       // const latitudes = data.ranks.map((item) => item.latitude);
-      const userLocation = data.userLocation;
+      const dataLocation = data.userLocation;
 
       const mapInitializer = new MapBoxHelper(
+        dataLocation.longitude,
+        dataLocation.latitude,
         userLocation.longitude,
         userLocation.latitude,
         data.ranks,
       );
 
       const primaryMap = mapInitializer.map;
-
-      mapInitializer.initializeMap();
 
       primaryMap.on("load", () => {
         primaryMap.resize();
@@ -88,6 +93,7 @@ const MapRenderer = ({ mapboxKey }) => {
         mapInitializer.setFitBounds();
         mapInitializer.addCluster();
         mapInitializer.addClickHandlers();
+        mapInitializer.setMarker();
         setMapInstance(mapInitializer);
         setMapObject(primaryMap);
         primaryMap.on("touchstart", () => {
@@ -122,7 +128,7 @@ const MapRenderer = ({ mapboxKey }) => {
     };
 
     dataFetcher();
-  }, [searchParams?.date, mapInstance, userLocation?.latitude]);
+  }, [searchParams, mapInstance]);
 
   // Uncomment for heatmap
   // useEffect(() => {
@@ -155,7 +161,10 @@ const MapRenderer = ({ mapboxKey }) => {
   return (
     <>
       <div className="fixed bottom-40 z-30 flex w-full justify-end pr-2">
-        <UserLocationButton />
+        <div className="flex flex-col gap-2">
+          <SuitcaseButton />
+          <UserLocationButton />
+        </div>
       </div>
 
       <section id="section-map" className="h-full">

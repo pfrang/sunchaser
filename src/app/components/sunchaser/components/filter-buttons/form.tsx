@@ -30,7 +30,7 @@ export const RightButtonsWrapper = () => {
     if (!isFilterOpen) {
       mapInstance?.removeCircularMap();
       mapInstance?.map.resize();
-      mapInstance?.setFitBounds();
+      // mapInstance?.setFitBounds();
     }
   }, [isFilterOpen]);
 
@@ -138,10 +138,12 @@ export const RightButtonsWrapper = () => {
                   <Wrapper>
                     <CalendarWrapper />
                   </Wrapper>
-                  <Wrapper>
+                  <div
+                    className={`relative flex cursor-pointer rounded-[16px] shadow-lg`}
+                  >
                     <SliderWrapper />
-                  </Wrapper>
-                  <div className="flex w-full justify-center">
+                  </div>
+                  <div className="mt-6 flex w-full justify-center">
                     <button
                       disabled={isSubmitting}
                       type="submit"

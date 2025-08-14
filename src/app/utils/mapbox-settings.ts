@@ -22,17 +22,29 @@ export class MapBoxHelper {
   longitudes: number[];
   centerLon: number;
   centerLat: number;
+  userLocationLon: number;
+  userLocationLat: number;
+  originalLon: number;
+  originalLat: number;
   ranks: AzureFunctionCoordinatesMappedItems[];
   currentPopup: mapboxgl.Popup | null = null;
+  private marker: mapboxgl.Marker | null = null;
 
   constructor(
     centerLon: number,
     centerLat: number,
+    userLocationLon: number,
+    userLocationLat: number,
     ranks: AzureFunctionCoordinatesMappedItems[],
     name: string = "map",
   ) {
     this.centerLon = centerLon;
     this.centerLat = centerLat;
+    this.userLocationLon = userLocationLon;
+    this.userLocationLat = userLocationLat;
+    this.originalLon = centerLon;
+    this.originalLat = centerLat;
+    this.marker = null;
     this.ranks = ranks;
 
     this.longitudes = ranks.map((item) => item.longitude);
@@ -43,14 +55,43 @@ export class MapBoxHelper {
       center: [this.centerLon, this.centerLat],
       zoom: 8,
     });
-  }
-
-  initializeMap() {
-    this.setMarkers();
 
     new mapboxgl.Marker({ color: "red" })
+      .setLngLat([this.userLocationLon, this.userLocationLat])
+      .addTo(this.map);
+  }
+
+  setMarker() {
+    if (
+      Number(this.userLocationLat) !== Number(this.centerLat) &&
+      Number(this.userLocationLon) !== Number(this.centerLon)
+    ) {
+      new mapboxgl.Marker({ color: "blue" })
+        .setLngLat([this.originalLon, this.originalLat])
+        .addTo(this.map);
+    }
+  }
+
+  setSearchMarker() {
+    if (this.marker) {
+      this.marker.remove(); // Remove existing marker
+    }
+    this.marker = new mapboxgl.Marker({ color: "green" })
       .setLngLat([this.centerLon, this.centerLat])
       .addTo(this.map);
+  }
+
+  setLatLon(centerLon: number, centerLat: number) {
+    this.centerLon = centerLon;
+    this.centerLat = centerLat;
+    this.map.setCenter([this.centerLon, this.centerLat]);
+  }
+
+  removeMarker() {
+    if (this.marker) {
+      this.marker.remove();
+      this.marker = null;
+    }
   }
 
   sourceAndLayerAfterLoad() {
@@ -62,24 +103,36 @@ export class MapBoxHelper {
 
   flyToUserLocation() {
     this.map.flyTo({
-      center: [this.centerLon, this.centerLat],
+      center: [this.userLocationLon, this.userLocationLat],
       duration: 500,
       zoom: 8,
     });
   }
 
-  resetMap() {
+  flyToDataLocation() {
     this.map.flyTo({
-      center: [this.centerLon, this.centerLat],
+      center: [this.originalLon, this.originalLat],
+      duration: 500,
       zoom: 8,
     });
-    // only remove if exist
+  }
 
-    // remove any popup
+  removePopup() {
     if (this.currentPopup) {
       this.currentPopup.remove();
       this.currentPopup = null;
     }
+  }
+
+  resetMap() {
+    this.map.flyTo({
+      center: [this.originalLon, this.originalLat],
+      zoom: 8,
+    });
+    // only remove if exist
+
+    this.removePopup();
+    // remove any popup
 
     layers.forEach((layer) => {
       if (this.map.getLayer(layer)) {
@@ -131,6 +184,29 @@ export class MapBoxHelper {
       });
     }
   }
+
+  updateBounds = (newRadius?: number) => {
+    const circle = turf.circle(
+      [Number(this.centerLon), Number(this.centerLat)],
+      newRadius,
+      { units: "kilometers" },
+    );
+
+    const bounds = circle.geometry.coordinates[0].reduce(
+      function (bounds, coord) {
+        return bounds.extend(coord as any);
+      },
+      new mapboxgl.LngLatBounds(
+        circle.geometry.coordinates[0][0] as any,
+        circle.geometry.coordinates[0][0] as any,
+      ),
+    );
+
+    this.map.fitBounds(bounds, {
+      padding: 80,
+      duration: 1000,
+    });
+  };
 
   updateCircularMap(distance: number | string | undefined) {
     if (isNaN(Number(distance))) {
@@ -306,7 +382,9 @@ export class MapBoxHelper {
   }
 
   addClickHandlers() {
-    this.map.on("click", "clusters", (e) => {
+    const handleClusterClick = (
+      e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent,
+    ) => {
       const features = this.map.queryRenderedFeatures(e.point, {
         layers: ["clusters"],
       });
@@ -322,32 +400,73 @@ export class MapBoxHelper {
           });
         },
       );
-    });
+    };
 
-    // TODO fix any
-    this.map.on("click", "unclustered-point", (e: any) => {
-      const coordinates = e?.features[0]?.geometry?.coordinates?.slice();
-      const primaryName = e?.features[0]?.properties?.primaryName;
-      const rank = e?.features[0]?.properties?.rank;
+    // Add both click and touchend handlers
+    this.map.on("click", "clusters", handleClusterClick);
+    this.map.on("touchend", "clusters", handleClusterClick);
 
-      // Ensure that if the map is zoomed out such that
-      // multiple copies of the feature are visible, the
-      // popup appears over the copy being pointed to.
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    const handleUnclusteredPointClick = (
+      e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent,
+    ) => {
+      const features = this.map.queryRenderedFeatures(e.point, {
+        layers: ["unclustered-point"],
+      });
+      if (features.length) {
+        let coordinates: number[] = [];
+        if (features[0].geometry.type === "Point") {
+          coordinates = (
+            features[0].geometry as turf.Point
+          ).coordinates.slice();
+        }
+        const primaryName = features[0].properties?.primaryName;
+        const rank = features[0].properties?.rank;
+
+        // Ensure that if the map is zoomed out such that
+        // multiple copies of the feature are visible, the
+        // popup appears over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        this.removePopup();
+
+        this.currentPopup = new mapboxgl.Popup()
+          .setLngLat([coordinates[0], coordinates[1]] as [number, number])
+          .setHTML(
+            `
+              <h3 style="margin: 0; font-size: 16px; color: #333;">${primaryName}</h3>
+              <p style="margin: 5px 0; font-size: 14px; color: #555;">
+                <strong>Latitude:</strong> ${coordinates[1].toFixed(2)}<br>
+                <strong>Longitude:</strong> ${coordinates[0].toFixed(2)}<br>
+                <strong>Rank:</strong> ${rank}
+              </p>
+              <img src="/icons/white/svg/sunny.svg" alt="Description of image" style="width: 50px; height: 50px; margin-top: 10px;">
+              <button id="popup-close-btn" style="margin-top: 10px; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #d9534f; border: none; border-radius: 4px; cursor: pointer;">
+                Close
+              </button>
+    `,
+          )
+          .addTo(this.map);
+
+        setTimeout(() => {
+          const popupElement = document.getElementById("popup-close-btn");
+          popupElement?.addEventListener("click", (e) => {
+            e.stopPropagation(); // Prevent event propagation
+            this.removePopup(); // Remove the popup
+          });
+        }, 0);
+
+        this.map.easeTo({
+          center: (features[0].geometry as any).coordinates as any,
+          // zoom: 8,
+        });
       }
+    };
 
-      this.currentPopup = new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(
-          `Latitude: ${coordinates[1].toFixed(2)}<br>
-              Longitude: ${coordinates[0].toFixed(2)}<br>
-              Location: ${primaryName}<br>
-              Rank: ${rank}<br>
-              <img src="/icons/white/svg/sunny.svg" alt="Description of image">`,
-        )
-        .addTo(this.map);
-    });
+    // Add both click and touchend handlers
+    this.map.on("click", "unclustered-point", handleUnclusteredPointClick);
+    this.map.on("touchend", "unclustered-point", handleUnclusteredPointClick);
 
     this.map.on("mouseenter", "clusters", () => {
       this.map.getCanvas().style.cursor = "pointer";
@@ -383,7 +502,7 @@ export class MapBoxHelper {
     bounds.extend(new mapboxgl.LngLat(this.centerLon, this.centerLat));
 
     this.map.fitBounds(bounds, {
-      padding: 50,
+      padding: 60,
       duration: 1000,
     });
 

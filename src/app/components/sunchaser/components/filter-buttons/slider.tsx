@@ -8,12 +8,10 @@ import {
   distanceArray,
   getCounterValue,
 } from "app/utils/travel-distance-settings";
-import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { useFormikContext } from "formik";
-import * as turf from "@turf/turf";
-import mapboxgl from "mapbox-gl";
 import { useIsFilterOpen, useIsSliding } from "states/states";
-import { useMapInstance, useMapObject } from "states/sunchaser-result";
+import { useMapInstance } from "states/sunchaser-result";
+import { transform } from "lodash";
 
 import { FormShape } from "./form";
 
@@ -55,7 +53,14 @@ const PrettoSlider = styled(Slider)({
     },
   },
   "& .MuiSlider-markLabel": {
-    color: "white",
+    color: "black",
+    top: "17px",
+  },
+  "& .MuiSlider-markLabel[data-index='0']": {
+    left: "7px !important", // Adjust this value as needed
+  },
+  "& .MuiSlider-markLabel[data-index='2']": {
+    left: "99.5% !important", // Adjust this value as needed
   },
   "& .MuiSlider-markActive": {
     color: "white",
@@ -72,10 +77,8 @@ export const SliderWrapper = () => {
   const { values, setFieldValue } = useFormikContext<FormShape>();
   const [isSliderExpanded, setIsSliderExpanded] = useState(false);
   const wrapperRef = useRef<HTMLInputElement | null>(null);
-  const { mapObject } = useMapObject();
   const { mapInstance } = useMapInstance();
 
-  const searchParams = useSearchParamsToObject();
   const { isSliding, setIsSliding } = useIsSliding();
 
   const [index, setIndex] = useState(
@@ -83,35 +86,10 @@ export const SliderWrapper = () => {
       valuesForSlider.length / 2,
   );
 
-  const updateBounds = (newRadius?: number) => {
-    if (!searchParams?.lat || !searchParams?.lon) return;
-
-    const circle = turf.circle(
-      [Number(searchParams?.lon), Number(searchParams?.lat)],
-      newRadius,
-      { units: "kilometers" },
-    );
-
-    const bounds = circle.geometry.coordinates[0].reduce(
-      function (bounds, coord) {
-        return bounds.extend(coord as any);
-      },
-      new mapboxgl.LngLatBounds(
-        circle.geometry.coordinates[0][0] as any,
-        circle.geometry.coordinates[0][0] as any,
-      ),
-    );
-
-    mapObject?.fitBounds(bounds, {
-      padding: 20,
-      duration: 1000,
-    });
-  };
-
   useEffect(() => {
     if (isFilterOpen) {
       const newRadius = Number(valuesForSlider[index - 1].label);
-      updateBounds(newRadius);
+      mapInstance?.updateBounds(newRadius);
       mapInstance?.addCircularMap(newRadius);
     } else {
       mapInstance?.removeCircularMap();
@@ -125,7 +103,7 @@ export const SliderWrapper = () => {
     setFieldValue("distance", newRadius);
 
     // Assuming createCircle returns a GeoJSON circle feature with the given radius
-    updateBounds(newRadius);
+    mapInstance?.updateBounds(newRadius);
 
     mapInstance?.updateCircularMap(newRadius);
   };
@@ -170,7 +148,7 @@ export const SliderWrapper = () => {
       value: valuesForSlider.length,
       label: `${valuesForSlider[valuesForSlider.length - 1].label}km`,
       markActive: (
-        <div className="circle">
+        <div className="circle left-2">
           <div className="inner-circle" />
         </div>
       ),
@@ -207,13 +185,13 @@ export const SliderWrapper = () => {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    if (isSliderExpanded) {
-      inputRef.current?.focus();
-    } else {
-      inputRef.current?.blur();
-    }
-  }, [isSliderExpanded]);
+  // useEffect(() => {
+  //   if (isSliderExpanded) {
+  //     inputRef.current?.focus();
+  //   } else {
+  //     inputRef.current?.blur();
+  //   }
+  // }, [isSliderExpanded]);
 
   return (
     <span className={`w-full rounded-inherit `} ref={wrapperRef}>
@@ -222,7 +200,7 @@ export const SliderWrapper = () => {
         required
         disabled={!isFilterOpen}
         readOnly
-        className={`bg-inherit ${
+        className={`hidden bg-inherit ${
           isFilterOpen ? "" : "hidden"
         } size-full items-center text-ellipsis rounded-inherit bg-white pl-4 pr-6 text-xl outline-none ${isSliding && "opacity-30"} ${isSliderExpanded && "ring-2 ring-greens-400"}`}
         value={isFilterOpen ? `${values.distance} km` : ""}
@@ -231,56 +209,66 @@ export const SliderWrapper = () => {
         onFocus={() => setIsSliderExpanded(true)}
         style={{ outline: "none" }}
       />
-      <div
+      {/* <div
         onClick={() => setIsSliderExpanded(!isSliderExpanded)}
         className="absolute right-4 top-0 flex h-full items-center text-greens-400"
       >
         <CreateIcon />
-      </div>
+      </div> */}
 
-      {isSliderExpanded && isFilterOpen && (
-        <div className="mt-4 flex flex-col items-center justify-center rounded-[16px] bg-white">
-          <div className="relative flex w-full flex-col justify-center px-4 py-8">
-            <PrettoSlider
-              style={{ margin: 0 }}
-              aria-label="Temperature"
-              value={index}
-              // getAriaValueText={(value: number) => `${value}km`}
-              valueLabelDisplay="auto"
-              valueLabelFormat={`${valueToDisplay}`}
-              step={1}
-              onChange={handleSlide}
-              // onChangeCommitted={debouncedUpdateUrl}
-              onChangeCommitted={() => setIsSliding(false)}
-              marks={marks}
-              min={min}
-              max={max}
-            />
-            <div className="absolute bottom-2 right-4">
-              <div className="flex gap-4 text-greens-400">
-                <p
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && setIsSliderExpanded(false)
-                  }
-                  onClick={() => setIsSliderExpanded(false)}
-                >
-                  Cancel
-                </p>
-                <p
-                  tabIndex={0}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && setIsSliderExpanded(false)
-                  }
-                  onClick={() => setIsSliderExpanded(false)}
-                >
-                  Ok
-                </p>
-              </div>
-            </div>
+      <div className="flex flex-col items-center justify-center rounded-[16px] bg-white p-3 px-4">
+        <div className="relative flex w-full flex-col justify-center pb-3">
+          <div className="mb-2 flex w-full justify-between">
+            <p>
+              Hvor langt er du villig til å reise fra{" "}
+              <b>{values.townSearch || "din lokasjon"}</b>
+            </p>
+            <p>{values.distance} km</p>
           </div>
+          <PrettoSlider
+            style={{
+              margin: 0,
+              boxSizing: "inherit",
+              padding: "8px",
+              width: "calc(100% - 12px)",
+            }}
+            aria-label="Temperature"
+            value={index}
+            // getAriaValueText={(value: number) => `${value}km`}
+            valueLabelDisplay="auto"
+            valueLabelFormat={`${valueToDisplay}`}
+            step={1}
+            onChange={handleSlide}
+            // onChangeCommitted={debouncedUpdateUrl}
+            onChangeCommitted={() => setIsSliding(false)}
+            marks={marks}
+            min={min}
+            max={max}
+          />
+          {/* <div className="absolute bottom-2 right-4">
+            <div className="flex gap-4 text-greens-400">
+              <p
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && setIsSliderExpanded(false)
+                }
+                onClick={() => setIsSliderExpanded(false)}
+              >
+                Cancel
+              </p>
+              <p
+                tabIndex={0}
+                onKeyDown={(e) =>
+                  e.key === "Enter" && setIsSliderExpanded(false)
+                }
+                onClick={() => setIsSliderExpanded(false)}
+              >
+                Ok
+              </p>
+            </div>
+          </div> */}
         </div>
-      )}
+      </div>
     </span>
   );
 };

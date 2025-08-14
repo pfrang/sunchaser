@@ -23,16 +23,31 @@ import { TableItemWrapper } from "./detailed/table-item-wrapper";
 
 type ExpandedTable = "sunchaser" | "forecast";
 
-export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
+type Props = {
+  parentRef: React.RefObject<HTMLDivElement | null>;
+  isAtMaxHeight: boolean;
+  expandList: () => void;
+  middleList: () => void;
+};
+
+export const ListContainer = ({
+  parentRef,
+  isAtMaxHeight,
+  expandList,
+  middleList,
+}: Props) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
   const [expandDetailedTable, setExpandDetailedTable] =
     useState<ExpandedTable | null>("sunchaser");
+  const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
+
+  // NEW: separate animation state vs. mount state
+  const [showDetail, setShowDetail] = useState(false); // drives CSS transform
+  const [mountedDetail, setMountedDetail] = useState(false); // controls conditional render
 
   const searchParams = useSearchParamsToObject();
-  const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
   const { mapInstance } = useMapInstance();
-
   const { userLocation } = useUserLocation() as { userLocation: UserLocation };
 
   const dateDisplay = useMemo(() => {
@@ -40,14 +55,14 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
     return dateFormatter(date);
   }, [searchParams?.date]);
 
-  const { data, isLoading, error } = useForecast({
+  const { data } = useForecast({
     params: searchParams,
   });
 
   const toggleDetailedTable = (
     item: AzureFunctionCoordinatesMappedItems | ForecastDay,
   ) => {
-    expandList();
+    middleList();
     if (
       item !== highlightedCard &&
       isAzureFunctionCoordinatesMappedItems(item)
@@ -60,15 +75,10 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
     setDetailedTableExpanded(true);
   };
 
-  const resetDetailedTable = () => {
-    setDetailedTableExpanded(false);
-    resetMap();
-  };
-
   const { mapObject } = useMapObject();
 
   const resetMap = () => {
-    if (mapObject && mapInstance) {
+    if (mapObject && mapInstance && userLocation?.longitude) {
       mapInstance.removeLayer("route");
       mapObject.flyTo({
         center: [userLocation.longitude, userLocation.latitude],
@@ -78,20 +88,33 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
     }
   };
 
-  const [shouldBeVisible, setShouldBeVisible] = useState(true);
+  const resetDetailedTable = () => {
+    setDetailedTableExpanded(false); // this starts the slide-out
+    resetMap();
+  };
 
+  // Keep scrollTop at 0 when switching views
   useEffect(() => {
     if (parentRef.current) {
       parentRef.current.scrollTop = 0;
     }
+  }, [detailedTableExpanded, parentRef]);
+
+  // Drive mount/animation timing so collapse animates properly
+  useEffect(() => {
     if (detailedTableExpanded) {
-      setShouldBeVisible(true);
+      setMountedDetail(true); // mount immediately
+      // kick to next frame so the transform transition runs
+      requestAnimationFrame(() => setShowDetail(true));
     } else {
-      setTimeout(() => {
-        setShouldBeVisible(false);
-      }, 500);
+      setShowDetail(false); // start slide-out
     }
   }, [detailedTableExpanded]);
+
+  const handleDetailTransitionEnd = () => {
+    // after slide-out completes, unmount
+    if (!showDetail) setMountedDetail(false);
+  };
 
   const renderSunchaserTable = useCallback(() => {
     if (highlightedCard) {
@@ -99,14 +122,16 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
       return (
         <>
           {Object.values(days).map((day, index) => {
-            return <TableItemWrapper key={index} day={day} />;
+            return (
+              <TableItemWrapper expandList={expandList} key={index} day={day} />
+            );
           })}
         </>
       );
     } else {
       return <></>;
     }
-  }, [highlightedCard?.times]);
+  }, [highlightedCard?.times, expandList]);
 
   const renderForecastTable = useCallback(() => {
     if (data) {
@@ -115,7 +140,6 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
       return (
         <>
           {days.map((day) => {
-            const date = dateFormatter(new Date(day.overview.date));
             const times: Times[] = day.times.map((time) => {
               return {
                 temperature: time.temperature || 0,
@@ -127,14 +151,20 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
               } as Times;
             });
 
-            return <TableItemWrapper key={day.overview.date} day={times} />;
+            return (
+              <TableItemWrapper
+                expandList={expandList}
+                key={day.overview.date}
+                day={times}
+              />
+            );
           })}
         </>
       );
     } else {
       return <></>;
     }
-  }, [data]);
+  }, [data, expandList]);
 
   return (
     <div
@@ -147,10 +177,13 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
         overscrollBehaviorY: "none",
         WebkitOverflowScrolling: "touch",
       }}
-      className={"scrollbar-thin scrollbar-track-slate-50"}
+      className="relative scrollbar-thin scrollbar-track-slate-50"
     >
+      {/* Main list */}
       <div
-        className={`p-2 pb-12 transition-all duration-500 ease-in-out ${!detailedTableExpanded ? "translate-x-0" : "-translate-x-full"}`}
+        className={`p-2 pb-12 transition-transform duration-500 ease-in-out will-change-transform ${
+          showDetail ? "-translate-x-full" : "translate-x-0"
+        }`}
       >
         <div>
           <p className="text-variant-regular text-xl">{dateDisplay}</p>
@@ -164,10 +197,15 @@ export const ListContainer = ({ parentRef, isAtMaxHeight, expandList }) => {
           <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
         </div>
       </div>
+
+      {/* Detail overlay */}
       <div
-        className={`absolute top-0 p-2 pb-14 transition-all duration-500 ease-in-out ${detailedTableExpanded ? "translate-x-0" : ` translate-x-full`}`}
+        className={`absolute inset-0 z-10 w-full p-2 pb-14 transition-transform duration-500 ease-in-out will-change-transform ${
+          showDetail ? "translate-x-0" : "translate-x-full"
+        }`}
+        onTransitionEnd={handleDetailTransitionEnd}
       >
-        {shouldBeVisible && (
+        {mountedDetail && (
           <div className="inline">
             {expandDetailedTable === "sunchaser" && highlightedCard?.date && (
               <ListWrapper

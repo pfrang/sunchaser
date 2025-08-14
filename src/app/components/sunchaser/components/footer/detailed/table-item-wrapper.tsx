@@ -5,10 +5,14 @@ import { getAverageItemsFromTimes, getInterval } from "app/utils/times-helper";
 import { useState, useEffect, useRef } from "react";
 import { TimeTable } from "ui-kit/list-item/list-item-detailed";
 
-export const TableItemWrapper = ({ day }: { day: Times[] }) => {
+export const TableItemWrapper = ({
+  day,
+  expandList,
+}: {
+  day: Times[];
+  expandList?: () => void;
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [maxHeight, setMaxHeight] = useState("0px");
-  const [rows, setRows] = useState<(Times | null)[]>([]);
 
   const timeIntervals: Times[] = [
     getAverageItemsFromTimes(getInterval(day, 0, 5), "00-06"),
@@ -23,36 +27,63 @@ export const TableItemWrapper = ({ day }: { day: Times[] }) => {
     return time2;
   });
 
+  // Initialize with collapsed rows
+  const [rows, setRows] = useState<(Times | null)[]>(initialRows.slice(0, 4));
+  // Don't initialize maxHeight to 0px - let it be auto initially
+  const [maxHeight, setMaxHeight] = useState<string>("auto");
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Calculate initial height after first render
+  useEffect(() => {
+    if (containerRef.current && maxHeight === "auto") {
+      const initialHeight = containerRef.current.scrollHeight;
+      setMaxHeight(`${initialHeight}px`);
+    }
+  }, []);
+
   useEffect(() => {
     if (isExpanded) {
       setRows(day);
     } else {
-      setRows(initialRows.slice(0, 4));
+      setTimeout(() => {
+        setRows(initialRows.slice(0, 4));
+      }, 500);
     }
   }, [isExpanded]);
-
-  const date = dateFormatter(new Date(day[0].date));
-
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const updateHeight = () => {
       if (containerRef.current) {
-        const scrollHeight = containerRef.current.scrollHeight;
-        setMaxHeight(`${scrollHeight}px`);
+        if (isExpanded) {
+          setTimeout(() => {
+            if (containerRef.current) {
+              const scrollHeight = containerRef.current.scrollHeight;
+              setMaxHeight(`${scrollHeight}px`);
+            }
+          }, 10);
+        } else {
+          // Calculate collapsed height instead of 0px
+          setTimeout(() => {
+            if (containerRef.current) {
+              const collapsedHeight = containerRef.current.scrollHeight;
+              setMaxHeight(`${collapsedHeight}px`);
+            }
+          }, 10);
+        }
       }
     };
 
+    updateHeight();
+
     if (isExpanded) {
-      updateHeight();
-    } else {
-      // Delay setting maxHeight to allow transition
       setTimeout(() => {
-        updateHeight();
-      }, 10);
+        expandList?.();
+      }, 100);
     }
   }, [isExpanded, rows]);
 
+  const date = dateFormatter(new Date(day[0].date));
   const shouldDisplayExpanded = day.length > 4;
 
   return (
