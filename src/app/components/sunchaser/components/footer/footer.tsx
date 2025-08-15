@@ -16,6 +16,7 @@ import React, {
 import { Spinner } from "ui-kit/spinner/spinner";
 import { MapChooser } from "app/components/sunchaser/components/footer/map-chooser";
 import { useAnimatedHeight } from "app/hooks/use-animated-height";
+import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 
 import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
 
@@ -32,8 +33,9 @@ export const Footer = () => {
   const { isMapBeingTouched } = useIsMapBeingTouched();
   const { isFilterOpen } = useIsFilterOpen();
   const [mapOption, setMapOption] = useState<MapOptionsEnum>(
-    MapOptionsEnum.Standard,
+    MapOptionsEnum.Standard
   );
+  const shouldHydrate = useShouldHydrate();
   const { animateHeight, updateDOMHeight } = useAnimatedHeight(0, footerRef);
 
   // Touch state refs - no React re-renders during drag
@@ -107,10 +109,10 @@ export const Footer = () => {
       return breakpoints.reduce((nearest, breakpoint) =>
         Math.abs(breakpoint - currentHeight) < Math.abs(nearest - currentHeight)
           ? breakpoint
-          : nearest,
+          : nearest
       );
     },
-    [breakpoints],
+    [breakpoints]
   );
 
   // Get target based on velocity and position
@@ -137,7 +139,7 @@ export const Footer = () => {
       // Default: snap to nearest breakpoint
       return nearest;
     },
-    [breakpoints, getNearestBreakpoint],
+    [breakpoints, getNearestBreakpoint]
   );
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -211,7 +213,7 @@ export const Footer = () => {
       currentHeight.current = newHeight;
       updateDOMHeight(newHeight);
     },
-    [isAtMaxHeight, breakpoints, updateDOMHeight],
+    [isAtMaxHeight, breakpoints, updateDOMHeight]
   );
 
   const animateHeightv2 = (newHeight: number) => {
@@ -241,7 +243,7 @@ export const Footer = () => {
     // Get target breakpoint based on position and velocity
     const targetHeight = getTargetBreakpoint(
       currentHeight.current,
-      lastVelocity.current,
+      lastVelocity.current
     );
 
     animateHeightv2(targetHeight);
@@ -279,6 +281,8 @@ export const Footer = () => {
 
     animateHeightv2(maxHeight);
   }, [breakpoints, updateDOMHeight]);
+
+  if (!shouldHydrate) return null;
 
   return (
     <div

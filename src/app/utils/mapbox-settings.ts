@@ -36,7 +36,7 @@ export class MapBoxHelper {
     userLocationLon: number,
     userLocationLat: number,
     ranks: AzureFunctionCoordinatesMappedItems[],
-    name: string = "map",
+    name: string = "map"
   ) {
     this.centerLon = centerLon;
     this.centerLat = centerLat;
@@ -61,10 +61,15 @@ export class MapBoxHelper {
       .addTo(this.map);
   }
 
+  private sameToDecimals(a: number, b: number, decimals: number = 4): boolean {
+    const f = 10 ** decimals;
+    return Math.trunc(a * f) === Math.trunc(b * f);
+  }
+
   setMarker() {
     if (
-      Number(this.userLocationLat) !== Number(this.centerLat) &&
-      Number(this.userLocationLon) !== Number(this.centerLon)
+      !this.sameToDecimals(this.userLocationLat, this.centerLat, 2) &&
+      !this.sameToDecimals(this.userLocationLon, this.centerLon, 2)
     ) {
       new mapboxgl.Marker({ color: "blue" })
         .setLngLat([this.originalLon, this.originalLat])
@@ -189,7 +194,7 @@ export class MapBoxHelper {
     const circle = turf.circle(
       [Number(this.centerLon), Number(this.centerLat)],
       newRadius,
-      { units: "kilometers" },
+      { units: "kilometers" }
     );
 
     const bounds = circle.geometry.coordinates[0].reduce(
@@ -198,8 +203,8 @@ export class MapBoxHelper {
       },
       new mapboxgl.LngLatBounds(
         circle.geometry.coordinates[0][0] as any,
-        circle.geometry.coordinates[0][0] as any,
-      ),
+        circle.geometry.coordinates[0][0] as any
+      )
     );
 
     this.map.fitBounds(bounds, {
@@ -224,7 +229,7 @@ export class MapBoxHelper {
     // Update the data of the existing source
     if (this.map.getSource("circleData")) {
       (this.map.getSource("circleData") as mapboxgl.GeoJSONSource).setData(
-        _circle,
+        _circle
       );
     }
   }
@@ -383,7 +388,7 @@ export class MapBoxHelper {
 
   addClickHandlers() {
     const handleClusterClick = (
-      e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent,
+      e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent
     ) => {
       const features = this.map.queryRenderedFeatures(e.point, {
         layers: ["clusters"],
@@ -398,7 +403,7 @@ export class MapBoxHelper {
             center: (features[0].geometry as any).coordinates as any,
             zoom: zoom,
           });
-        },
+        }
       );
     };
 
@@ -407,7 +412,7 @@ export class MapBoxHelper {
     this.map.on("touchend", "clusters", handleClusterClick);
 
     const handleUnclusteredPointClick = (
-      e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent,
+      e: mapboxgl.MapMouseEvent | mapboxgl.MapTouchEvent
     ) => {
       const features = this.map.queryRenderedFeatures(e.point, {
         layers: ["unclustered-point"],
@@ -445,7 +450,7 @@ export class MapBoxHelper {
               <button id="popup-close-btn" style="margin-top: 10px; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #d9534f; border: none; border-radius: 4px; cursor: pointer;">
                 Close
               </button>
-    `,
+    `
           )
           .addTo(this.map);
 
@@ -512,14 +517,14 @@ export class MapBoxHelper {
   fitBounds(
     coordinates: StartAndEndCoordinates,
     padding: number = 4,
-    duration: number = 4,
+    duration: number = 4
   ) {
     this.map.fitBounds(
       [
         [coordinates.start.longitude, coordinates.start.latitude],
         [coordinates.end.longitude, coordinates.end.latitude],
       ],
-      { padding, duration },
+      { padding, duration }
     );
   }
 
