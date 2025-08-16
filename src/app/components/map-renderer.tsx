@@ -81,7 +81,7 @@ const MapRenderer = ({ mapboxKey }) => {
         dataLocation.latitude,
         userLocation.longitude,
         userLocation.latitude,
-        data.ranks,
+        data.ranks
       );
 
       const primaryMap = mapInitializer.map;
@@ -123,7 +123,7 @@ const MapRenderer = ({ mapboxKey }) => {
 
       const map = new MapboxGlobalRankSettings(
         mapInstance.map,
-        response,
+        response
       ).addCircleRanksToMap();
     };
 
