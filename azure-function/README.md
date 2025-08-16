@@ -1,5 +1,7 @@
 start project
 
+#Python version 3.12.2
+
 #powershell - activate env
 .venv\Scripts\activate + enter
 

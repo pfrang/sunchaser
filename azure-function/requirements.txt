@@ -1,16 +1,15 @@
 # DO NOT include azure-functions-worker in this file
 # The Python Worker is managed by Azure Functions platform
 # Manually managing azure-functions-worker may cause unexpected issues
-
 azure-functions
 azure-functions-durable
-requests==2.28.1
-pandas==1.5.0
-numpy==1.23.1
-Shapely==1.8.5.post1
-ipython==8.5.0
-jinja2==3.1.2
-pyodbc==4.0.32
-pyarrow==12.0.1
+requests
+pandas
+numpy
+Shapely
+ipython
+jinja2
+pyodbc
+pyarrow
 azure-storage-file-datalake==12.11.0
 skyfield>=1.43.1
