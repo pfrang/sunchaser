@@ -11,6 +11,8 @@ Geo permissions in mainfest file:
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-feature android:name="android.hardware.location.gps" />
 
+For å bumpe versjon
+yarn bump:android -vC 6 -vN 1.0.5
 ----
 For Hot RELOAD
 Finn WSL ip i powershell med wsl hostname -I for HMR. Sett i capacitor.config.ts

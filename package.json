@@ -10,8 +10,10 @@
     "start": "tsc --project tsconfig.json && next start",
     "check:types": "tsc -p tsconfig.json --noEmit",
     "static": "npx serve@latest out",
-    "cap-on-android": "run-cap-on-android -id com.sunchaser.app",
+    "clear:all": "rm -rf .next android out",
     "build-android": "npx cap add android",
+    "cap-on-android": "run-cap-on-android -id com.sunchaser.app",
+    "bump:android": "bash -c 'f=android/app/build.gradle; oldVC=$(grep -E \"versionCode[[:space:]]+[0-9]+\" $f | head -1 | sed -E \"s/.*versionCode[[:space:]]+([0-9]+)/\\1/\"); oldVN=$(grep -E \"versionName[[:space:]]+\\\".+\\\"\" $f | head -1 | sed -E \"s/.*versionName[[:space:]]+\\\"(.+)\\\"/\\1/\"); newVC=\"\"; newVN=\"\"; while [ $# -gt 0 ]; do case $1 in -vC) newVC=$2; shift 2;; -vN|-vname) newVN=$2; shift 2;; *) shift;; esac; done; [ -z \"$newVC\" ] && newVC=$((oldVC+1)); [ -z \"$newVN\" ] && newVN=$oldVN; sed -i \"s/versionCode[[:space:]]$oldVC/versionCode $newVC/\" $f; sed -i \"s/versionName \\\"$oldVN\\\"/versionName \\\"$newVN\\\"/\" $f; printf \"Bumped versionCode %s -> %s\\n\" \"$oldVC\" \"$newVC\"; printf \"Bumped versionName %s -> %s\\n\" \"$oldVN\" \"$newVN\"' _",
     "build-ios": "npx cap add ios"
   },
   "dependencies": {
