@@ -36,6 +36,7 @@ export const Footer = () => {
   const [mapOption, setMapOption] = useState<MapOptionsEnum>(
     MapOptionsEnum.Standard
   );
+  const footerRef = React.useRef<HTMLDivElement>(null);
 
   const [snap, setSnap] = useState<number | string | null>(snapPoints[1]);
 
@@ -57,6 +58,7 @@ export const Footer = () => {
           forceOpen
           snapPoints={snapPoints}
           activeSnapPoint={snap}
+          shouldScaleBackground={false}
           setActiveSnapPoint={setSnap}
         >
           <DrawerTitle className="hidden"></DrawerTitle>
@@ -65,13 +67,17 @@ export const Footer = () => {
               noPortal
               noOverlay
               data-testid="content"
-              className="w-full rounded-custom border-green-100"
+              className="w-full rounded-custom border-green-100 flex h-full"
             >
               <div
-                className={clsx("flex flex-col w-full ", {
-                  "overflow-y-auto": snap === snapPoints[2],
-                  "overflow-hidden": snap !== snapPoints[2],
-                })}
+                className={clsx(
+                  "w-full h-full", // allow shrinking
+
+                  {
+                    "overflow-y-auto": isAtMaxHeight,
+                    "overflow-hidden": !isAtMaxHeight,
+                  }
+                )}
               >
                 <Suspense fallback={<Spinner />}>
                   {isSettingsOpen ? (

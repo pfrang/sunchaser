@@ -36,8 +36,9 @@ export const ListContainer = ({
 }: Props) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
-  const [expandDetailedTable, setExpandDetailedTable] =
-    useState<ExpandedTable | null>("sunchaser");
+  const [tableDisplay, setTableDisplay] = useState<ExpandedTable | null>(
+    "forecast"
+  );
   const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
 
   // NEW: separate animation state vs. mount state
@@ -66,14 +67,20 @@ export const ListContainer = ({
       isAzureFunctionCoordinatesMappedItems(item)
     ) {
       setHighlightedCard(item);
-      setExpandDetailedTable("sunchaser");
+      setTableDisplay("sunchaser");
     } else if (!isAzureFunctionCoordinatesMappedItems(item)) {
-      setExpandDetailedTable("forecast");
+      setTableDisplay("forecast");
     }
     setDetailedTableExpanded(true);
   };
 
   const { mapObject } = useMapObject();
+
+  // useEffect(() => {
+  //   if (parentRef.current) {
+  //     parentRef.current.scrollTop = 0;
+  //   }
+  // }, [detailedTableExpanded, parentRef]);
 
   const resetMap = () => {
     if (mapObject && mapInstance && userLocation?.longitude) {
@@ -99,6 +106,7 @@ export const ListContainer = ({
       requestAnimationFrame(() => setShowDetail(true));
     } else {
       setShowDetail(false); // start slide-out
+      requestAnimationFrame(() => setShowDetail(false));
     }
   }, [detailedTableExpanded]);
 
@@ -112,7 +120,7 @@ export const ListContainer = ({
       const days = splitTimesIntoDays(highlightedCard?.times);
       return (
         <>
-          {Object.values(days).map((day, index) => {
+          {Object.values(days).map((day: Times[], index) => {
             return (
               <TableItemWrapper expandList={expandList} key={index} day={day} />
             );
@@ -168,11 +176,10 @@ export const ListContainer = ({
       //   overscrollBehaviorY: "none",
       //   WebkitOverflowScrolling: "touch",
       // }}
-      className="relative h-full scrollbar-thin scrollbar-track-slate-50"
+      className="relative"
     >
-      {/* Main list */}
       <div
-        className={`p-2 pb-12 transition-transform duration-500 ease-in-out will-change-transform ${
+        className={`p-2 transition-transform duration-500 ease-in-out will-change-transform ${
           showDetail ? "-translate-x-full" : "translate-x-0"
         }`}
       >
@@ -191,21 +198,22 @@ export const ListContainer = ({
 
       {/* Detail overlay */}
       <div
-        className={`absolute inset-0 z-10 w-full p-2 pb-14 transition-transform duration-500 ease-in-out will-change-transform ${
-          showDetail ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`absolute inset-0 
+          z-10 w-full p-2 pb-14 transition-transform duration-500 
+          ease-in-out will-change-transform 
+          ${showDetail ? "translate-x-0" : "translate-x-full"}`}
         onTransitionEnd={handleDetailTransitionEnd}
       >
         {mountedDetail && (
           <div className="inline">
-            {expandDetailedTable === "sunchaser" && highlightedCard?.date && (
+            {tableDisplay === "sunchaser" && highlightedCard?.date && (
               <ListWrapper
                 location={highlightedCard.primaryName}
                 resetDetailedTable={resetDetailedTable}
                 renderTable={renderSunchaserTable}
               />
             )}
-            {expandDetailedTable === "forecast" && (
+            {tableDisplay === "forecast" && (
               <ListWrapper
                 location={searchParams?.location || "Min lokasjon"}
                 resetDetailedTable={resetDetailedTable}

@@ -78,26 +78,31 @@ export const SunchaserResultList = ({ toggleDetailedTable }) => {
           }
 
           return (
-            <div className="flex w-full flex-col gap-2">
-              {ranks.map((rank, index) => {
-                return (
-                  <ListItem
-                    key={rank.index}
-                    header={{
-                      placement: index + 1,
-                      name: rank.primaryName,
-                    }}
-                    body={{
-                      icon: rank.times[0].symbol || "partlycloudy",
-                      temperature: getAverageFromKey(rank.times, "temperature"),
-                      rain: getAverageFromKey(rank.times, "rain") || 0,
-                      wind: getAverageFromKey(rank.times, "wind"),
-                    }}
-                    onClick={() => onClick(rank)}
-                  />
-                );
-              })}
-            </div>
+            <>
+              <div className="flex flex-col gap-2">
+                {ranks.map((rank, index) => {
+                  return (
+                    <ListItem
+                      key={rank.index}
+                      header={{
+                        placement: index + 1,
+                        name: rank.primaryName,
+                      }}
+                      body={{
+                        icon: rank.times[0].symbol || "partlycloudy",
+                        temperature: getAverageFromKey(
+                          rank.times,
+                          "temperature"
+                        ),
+                        rain: getAverageFromKey(rank.times, "rain") || 0,
+                        wind: getAverageFromKey(rank.times, "wind"),
+                      }}
+                      onClick={() => onClick(rank)}
+                    />
+                  );
+                })}
+              </div>
+            </>
           );
         }}
       />
