@@ -24,7 +24,7 @@ export const Carousell = ({
 
   return (
     <>
-      <div key={item.index} className="flex w-full flex-shrink flex-col">
+      <div key={item.index} className="flex w-full shrink flex-col">
         <>
           {Object.keys(days).map((day, index) => {
             const times: Times[] = days[day];
