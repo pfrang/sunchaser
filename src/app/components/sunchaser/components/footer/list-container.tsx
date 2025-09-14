@@ -24,14 +24,12 @@ import { TableItemWrapper } from "./detailed/table-item-wrapper";
 type ExpandedTable = "sunchaser" | "forecast";
 
 type Props = {
-  parentRef: React.RefObject<HTMLDivElement | null>;
   isAtMaxHeight: boolean;
   expandList: () => void;
   middleList: () => void;
 };
 
 export const ListContainer = ({
-  parentRef,
   isAtMaxHeight,
   expandList,
   middleList,
@@ -60,7 +58,7 @@ export const ListContainer = ({
   });
 
   const toggleDetailedTable = (
-    item: AzureFunctionCoordinatesMappedItems | ForecastDay,
+    item: AzureFunctionCoordinatesMappedItems | ForecastDay
   ) => {
     middleList();
     if (
@@ -92,13 +90,6 @@ export const ListContainer = ({
     setDetailedTableExpanded(false); // this starts the slide-out
     resetMap();
   };
-
-  // Keep scrollTop at 0 when switching views
-  useEffect(() => {
-    if (parentRef.current) {
-      parentRef.current.scrollTop = 0;
-    }
-  }, [detailedTableExpanded, parentRef]);
 
   // Drive mount/animation timing so collapse animates properly
   useEffect(() => {
@@ -168,16 +159,16 @@ export const ListContainer = ({
 
   return (
     <div
-      ref={parentRef}
-      style={{
-        height: "100%",
-        overflowY: isAtMaxHeight ? "auto" : "hidden",
-        overflowX: "hidden",
-        position: "relative",
-        overscrollBehaviorY: "none",
-        WebkitOverflowScrolling: "touch",
-      }}
-      className="relative scrollbar-thin scrollbar-track-slate-50"
+      // ref={parentRef}
+      // style={{
+      //   height: "100%",
+      //   overflowY: isAtMaxHeight ? "auto" : "hidden",
+      //   overflowX: "hidden",
+      //   position: "relative",
+      //   overscrollBehaviorY: "none",
+      //   WebkitOverflowScrolling: "touch",
+      // }}
+      className="relative h-full scrollbar-thin scrollbar-track-slate-50"
     >
       {/* Main list */}
       <div
@@ -230,7 +221,7 @@ export const ListContainer = ({
 
 // typeguard check for AzureFunctionCoordinatesMappedItems
 function isAzureFunctionCoordinatesMappedItems(
-  item: AzureFunctionCoordinatesMappedItems | ForecastDay,
+  item: AzureFunctionCoordinatesMappedItems | ForecastDay
 ): item is AzureFunctionCoordinatesMappedItems {
   return (
     (item as AzureFunctionCoordinatesMappedItems).primaryName !== undefined

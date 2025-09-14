@@ -14,12 +14,14 @@ export const ListWrapper = ({
 }: ListWrapperProps) => {
   return (
     <>
-      <div
-        onClick={resetDetailedTable}
-        className="sticky top-0 flex cursor-pointer items-center bg-white pb-2"
-      >
-        <KeyboardArrowLeftIcon />
-        <p className="pl-4 text-2xl">{location}</p>
+      <div className="sticky top-0 flex items-center bg-white pb-2">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={resetDetailedTable}
+        >
+          <KeyboardArrowLeftIcon />
+          <p className="pl-2 text-2xl">{location}</p>
+        </div>
       </div>
       <span className="block h-2"></span>
       <div className="flex flex-col gap-4">{renderTable()}</div>
