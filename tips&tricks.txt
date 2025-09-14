@@ -4,6 +4,11 @@ CSS Mobile height - https://css-tricks.com/the-trick-to-viewport-units-on-mobile
 How to publish android app - https://orangesoft.co/blog/how-to-publish-an-android-app-on-google-play-store
 
 
+----BUMP package version---
+
+go to android/app/build.gradle
+bump versionCode and versionname
+
 ---
 Geo permissions in mainfest file:
 <!-- Geolocation Plugin -->
@@ -24,7 +29,6 @@ netsh interface portproxy add v4tov4 listenport=3000 listenaddress=172.23.210.2 
 -----
 android sutdio logs
 C:\Users\Peder\AppData\Local\Google\AndroidStudio2022.3\log
-
 
 
 // tailwind cheat sheet
