@@ -21,7 +21,7 @@ export const IosInstallPrompt = () => {
             and then Add to home-screen{" "}
             <button onClick={() => setDisplayPrompt(false)}>[close]</button>
           </div>
-          <div className="m-auto -mt-1 size-0 border-x-[30px] border-b-0 border-t-[30px] border-solid border-green-400" />
+          <div className="m-auto -mt-1 size-0 border-x-30 border-b-0 border-t-30 border-solid border-green-400" />
         </div>
       )}
     </>
