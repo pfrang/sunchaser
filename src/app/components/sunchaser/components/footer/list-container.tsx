@@ -24,12 +24,14 @@ import { TableItemWrapper } from "./detailed/table-item-wrapper";
 type ExpandedTable = "sunchaser" | "forecast";
 
 type Props = {
+  parentRef: React.RefObject<HTMLDivElement | null>;
   isAtMaxHeight: boolean;
   expandList: () => void;
   middleList: () => void;
 };
 
 export const ListContainer = ({
+  parentRef,
   isAtMaxHeight,
   expandList,
   middleList,
@@ -44,6 +46,13 @@ export const ListContainer = ({
   // NEW: separate animation state vs. mount state
   const [showDetail, setShowDetail] = useState(false); // drives CSS transform
   const [mountedDetail, setMountedDetail] = useState(false); // controls conditional render
+
+  // Keep scrollTop at 0 when switching views
+  useEffect(() => {
+    if (parentRef.current) {
+      parentRef.current.scrollTop = 0;
+    }
+  }, [detailedTableExpanded, parentRef]);
 
   const searchParams = useSearchParamsToObject();
   const { mapInstance } = useMapInstance();
@@ -106,7 +115,6 @@ export const ListContainer = ({
       requestAnimationFrame(() => setShowDetail(true));
     } else {
       setShowDetail(false); // start slide-out
-      requestAnimationFrame(() => setShowDetail(false));
     }
   }, [detailedTableExpanded]);
 
@@ -167,7 +175,7 @@ export const ListContainer = ({
 
   return (
     <div
-      // ref={parentRef}
+      ref={parentRef}
       // style={{
       //   height: "100%",
       //   overflowY: isAtMaxHeight ? "auto" : "hidden",

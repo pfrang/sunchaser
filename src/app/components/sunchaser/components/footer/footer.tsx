@@ -6,7 +6,7 @@ import {
   useIsSettingsOpen,
   useIsSliding,
 } from "states/states";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -30,13 +30,14 @@ export type Breakpoints = [number, number, number];
 const snapPoints: Breakpoints = [0.1, 0.25, 0.85];
 export const Footer = () => {
   const { isSliding } = useIsSliding();
+  const scrollableDivRef = useRef<HTMLDivElement>(null);
+
   const { isSettingsOpen, setIsSettingsOpen } = useIsSettingsOpen();
   const { isMapBeingTouched } = useIsMapBeingTouched();
   const { isFilterOpen } = useIsFilterOpen();
   const [mapOption, setMapOption] = useState<MapOptionsEnum>(
     MapOptionsEnum.Standard
   );
-  const footerRef = React.useRef<HTMLDivElement>(null);
 
   const [snap, setSnap] = useState<number | string | null>(snapPoints[1]);
 
@@ -69,9 +70,14 @@ export const Footer = () => {
               data-testid="content"
               className="w-full rounded-custom border-green-100 flex h-full"
             >
+              {/* <div
+                data-vaul-handle
+                className="mx-auto h-20 mt-1 mb-1 h-2 w-14 bg-red rounded-full bg-muted active:opacity-70"
+              /> */}
               <div
+                ref={scrollableDivRef}
                 className={clsx(
-                  "w-full h-full", // allow shrinking
+                  "flex-1 min-h-0 w-full flex flex-col", // allow shrinking
 
                   {
                     "overflow-y-auto": isAtMaxHeight,
@@ -87,6 +93,7 @@ export const Footer = () => {
                     />
                   ) : (
                     <ListContainer
+                      parentRef={scrollableDivRef}
                       isAtMaxHeight={isAtMaxHeight}
                       expandList={expandList}
                       middleList={middleList}
