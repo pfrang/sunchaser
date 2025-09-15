@@ -20,6 +20,13 @@ import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
 import { ListWrapper } from "./detailed/list-wrapper";
 import { TableItemWrapper } from "./detailed/table-item-wrapper";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  useCarousel,
+} from "ui-kit/carousel/Carousel";
+import { Card, CardContent } from "@mui/material";
 
 type ExpandedTable = "sunchaser" | "forecast";
 
@@ -85,12 +92,6 @@ export const ListContainer = ({
 
   const { mapObject } = useMapObject();
 
-  // useEffect(() => {
-  //   if (parentRef.current) {
-  //     parentRef.current.scrollTop = 0;
-  //   }
-  // }, [detailedTableExpanded, parentRef]);
-
   const resetMap = () => {
     if (mapObject && mapInstance && userLocation?.longitude) {
       mapInstance.removeLayer("route");
@@ -103,8 +104,10 @@ export const ListContainer = ({
   };
 
   const resetDetailedTable = () => {
-    setDetailedTableExpanded(false); // this starts the slide-out
-    resetMap();
+    // setDetailedTableExpanded(false); // this starts the slide-out
+    setHighlightedCard(undefined);
+
+    requestAnimationFrame(() => resetMap());
   };
 
   // Drive mount/animation timing so collapse animates properly
@@ -118,14 +121,12 @@ export const ListContainer = ({
     }
   }, [detailedTableExpanded]);
 
-  const handleDetailTransitionEnd = () => {
-    // after slide-out completes, unmount
-    if (!showDetail) setMountedDetail(false);
-  };
+  const { api } = useCarousel();
 
-  const renderSunchaserTable = useCallback(() => {
+  const current = api?.selectedScrollSnap(); // 👈 track active index
+  const activeTimesComponent = useMemo(() => {
     if (highlightedCard) {
-      const days = splitTimesIntoDays(highlightedCard?.times);
+      const days = splitTimesIntoDays(highlightedCard.times);
       return (
         <>
           {Object.values(days).map((day: Times[], index) => {
@@ -135,12 +136,7 @@ export const ListContainer = ({
           })}
         </>
       );
-    } else {
-      return <></>;
     }
-  }, [highlightedCard?.times, expandList]);
-
-  const renderForecastTable = useCallback(() => {
     if (data) {
       const days = Object.values(data.days);
 
@@ -168,70 +164,41 @@ export const ListContainer = ({
           })}
         </>
       );
-    } else {
-      return <></>;
     }
-  }, [data, expandList]);
+    return <></>;
+  }, [highlightedCard, current]);
+
+  useEffect(() => {
+    if (current === 0) {
+      resetDetailedTable();
+    }
+  }, [current]);
 
   return (
-    <div
-      ref={parentRef}
-      // style={{
-      //   height: "100%",
-      //   overflowY: isAtMaxHeight ? "auto" : "hidden",
-      //   overflowX: "hidden",
-      //   position: "relative",
-      //   overscrollBehaviorY: "none",
-      //   WebkitOverflowScrolling: "touch",
-      // }}
-      className="relative"
-    >
-      <div
-        className={`p-2 transition-transform duration-500 ease-in-out will-change-transform ${
-          showDetail ? "-translate-x-full" : "translate-x-0"
-        }`}
-      >
-        <div>
-          <p className="text-variant-regular text-xl">{dateDisplay}</p>
-          <span className="block h-4 border-b-4 border-greens-600"></span>
-        </div>
-        <div className="flex gap-4">
-          <ForecastNew toggleDetailedTable={toggleDetailedTable} />
-        </div>
-        <span className="block h-4 border-b-4 border-greens-600"></span>
-        <div className="py-4">
-          <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
-        </div>
-      </div>
-
-      {/* Detail overlay */}
-      <div
-        className={`absolute inset-0 
-          z-10 w-full p-2 pb-14 transition-transform duration-500 
-          ease-in-out will-change-transform 
-          ${showDetail ? "translate-x-0" : "translate-x-full"}`}
-        onTransitionEnd={handleDetailTransitionEnd}
-      >
-        {mountedDetail && (
-          <div className="inline">
-            {tableDisplay === "sunchaser" && highlightedCard?.date && (
-              <ListWrapper
-                location={highlightedCard.primaryName}
-                resetDetailedTable={resetDetailedTable}
-                renderTable={renderSunchaserTable}
-              />
-            )}
-            {tableDisplay === "forecast" && (
-              <ListWrapper
-                location={searchParams?.location || "Min lokasjon"}
-                resetDetailedTable={resetDetailedTable}
-                renderTable={renderForecastTable}
-              />
-            )}
+    <>
+      <CarouselContent>
+        <CarouselItem>
+          <div className="flex gap-4">
+            <ForecastNew toggleDetailedTable={toggleDetailedTable} />
           </div>
-        )}
-      </div>
-    </div>
+          <span className="block h-4 border-b-4 border-greens-600"></span>
+          <div className="py-4">
+            <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
+          </div>
+        </CarouselItem>
+        <CarouselItem>
+          <ListWrapper
+            location={
+              highlightedCard?.primaryName ||
+              searchParams?.location ||
+              "Min lokasjon"
+            }
+            resetDetailedTable={resetDetailedTable}
+            renderTable={activeTimesComponent}
+          />
+        </CarouselItem>
+      </CarouselContent>
+    </>
   );
 };
 

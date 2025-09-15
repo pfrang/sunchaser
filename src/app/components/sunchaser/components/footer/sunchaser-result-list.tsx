@@ -11,10 +11,12 @@ import {
 import { StartAndEndCoordinates } from "app/utils/mapbox-settings";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { useMapInstance, useMapObject } from "states/sunchaser-result";
+import { useCarousel } from "ui-kit/carousel/Carousel";
 
 export const SunchaserResultList = ({ toggleDetailedTable }) => {
   const { mapInstance } = useMapInstance();
   const { mapObject } = useMapObject();
+  const { scrollNext } = useCarousel();
 
   const searchParams = useSearchParamsToObject();
 
@@ -28,6 +30,7 @@ export const SunchaserResultList = ({ toggleDetailedTable }) => {
 
   const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
     toggleDetailedTable(item);
+    scrollNext();
     const { lat, lon } = {
       lat: item.latitude,
       lon: item.longitude,

@@ -24,10 +24,11 @@ import { useShouldHydrate } from "app/hooks/use-should-hydrate";
 import { ListContainer } from "./list-container";
 import { MapOptionsEnum } from "./settings-form-values";
 import clsx from "clsx";
+import { Carousel } from "ui-kit/carousel/Carousel";
 
 export type Breakpoints = [number, number, number];
 
-const snapPoints: Breakpoints = [0.1, 0.25, 0.85];
+const snapPoints: Breakpoints = [0.1, 0.3, 0.85];
 export const Footer = () => {
   const { isSliding } = useIsSliding();
   const scrollableDivRef = useRef<HTMLDivElement>(null);
@@ -92,12 +93,14 @@ export const Footer = () => {
                       setMapOption={setMapOption}
                     />
                   ) : (
-                    <ListContainer
-                      parentRef={scrollableDivRef}
-                      isAtMaxHeight={isAtMaxHeight}
-                      expandList={expandList}
-                      middleList={middleList}
-                    />
+                    <Carousel className="w-full">
+                      <ListContainer
+                        parentRef={scrollableDivRef}
+                        isAtMaxHeight={isAtMaxHeight}
+                        expandList={expandList}
+                        middleList={middleList}
+                      />
+                    </Carousel>
                   )}
                 </Suspense>
               </div>

@@ -2,12 +2,14 @@ import PlaceIcon from "@mui/icons-material/Place";
 import { useForecast } from "app/hooks/use-forecast";
 import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { getAverageFromKey } from "app/utils/times-helper";
+import { useCarousel } from "ui-kit/carousel/Carousel";
 import { ConditionalPresenter } from "ui-kit/conditional-presenter/conditional-presenter";
 import { ListItem } from "ui-kit/list-item/list-item";
 import { Spinner } from "ui-kit/spinner/spinner";
 
 export const ForecastNew = ({ toggleDetailedTable }) => {
   const searchParams = useSearchParamsToObject();
+  const { scrollNext, scrollPrev } = useCarousel();
 
   const { data, isLoading, error } = useForecast({
     params: searchParams,
@@ -46,7 +48,10 @@ export const ForecastNew = ({ toggleDetailedTable }) => {
                   rain: avgRain,
                   wind: avgWind,
                 }}
-                onClick={() => toggleDetailedTable(firstDay)}
+                onClick={() => {
+                  scrollNext();
+                  toggleDetailedTable(firstDay);
+                }}
               />
             );
           }}
