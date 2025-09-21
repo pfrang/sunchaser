@@ -9,7 +9,7 @@ import { Spinner } from "ui-kit/spinner/spinner";
 
 export const ForecastNew = ({ toggleDetailedTable }) => {
   const searchParams = useSearchParamsToObject();
-  const { scrollNext, scrollPrev } = useCarousel();
+  const { scrollNext } = useCarousel();
 
   const { data, isLoading, error } = useForecast({
     params: searchParams,

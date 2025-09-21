@@ -10,17 +10,12 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
   DrawerPortal,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { MapChooser } from "app/components/sunchaser/components/footer/map-chooser";
-import { useShouldHydrate } from "app/hooks/use-should-hydrate";
-
+import AutoHeight from "embla-carousel-auto-height";
 import { ListContainer } from "./list-container";
 import { MapOptionsEnum } from "./settings-form-values";
 import clsx from "clsx";
@@ -28,7 +23,7 @@ import { Carousel } from "ui-kit/carousel/Carousel";
 
 export type Breakpoints = [number, number, number];
 
-const snapPoints: Breakpoints = [0.1, 0.3, 0.85];
+export const snapPoints: Breakpoints = [0.1, 0.3, 0.85];
 export const Footer = () => {
   const { isSliding } = useIsSliding();
   const scrollableDivRef = useRef<HTMLDivElement>(null);
@@ -40,13 +35,26 @@ export const Footer = () => {
     MapOptionsEnum.Standard
   );
 
+  const prevUserSnapRef = useRef<number | string | null>(snapPoints[1]);
   const [snap, setSnap] = useState<number | string | null>(snapPoints[1]);
 
   useEffect(() => {
-    if (isMapBeingTouched) {
-      setSnap(snapPoints[0]);
+    if (snap !== snapPoints[0]) {
+      prevUserSnapRef.current = snap;
     }
-  }, [isMapBeingTouched, snapPoints]);
+  }, [snap]);
+
+  useEffect(() => {
+    if (isMapBeingTouched || isSliding || isFilterOpen) {
+      if (snap !== snapPoints[0]) {
+        prevUserSnapRef.current = snap;
+      }
+      setSnap(snapPoints[0]);
+    } else {
+      // Restore previous user snap
+      setSnap(prevUserSnapRef.current ?? snapPoints[1]);
+    }
+  }, [isMapBeingTouched, isSliding, isFilterOpen]);
 
   const expandList = () => setSnap(snapPoints[2]);
   const middleList = () => setSnap(snapPoints[1]);
@@ -62,6 +70,7 @@ export const Footer = () => {
           activeSnapPoint={snap}
           shouldScaleBackground={false}
           setActiveSnapPoint={setSnap}
+          modal={false}
         >
           <DrawerTitle className="hidden"></DrawerTitle>
           <DrawerPortal>
@@ -93,7 +102,16 @@ export const Footer = () => {
                       setMapOption={setMapOption}
                     />
                   ) : (
-                    <Carousel className="w-full">
+                    <Carousel
+                      // plugins={[
+                      //   AutoHeight(), // Add the AutoHeight plugin here
+                      // ]}
+                      opts={{
+                        align: "start",
+                        loop: false,
+                      }}
+                      className=""
+                    >
                       <ListContainer
                         parentRef={scrollableDivRef}
                         isAtMaxHeight={isAtMaxHeight}

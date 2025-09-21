@@ -83,7 +83,7 @@ export const SliderWrapper = () => {
 
   const [index, setIndex] = useState(
     getCounterValue(valuesForSlider, values.distance as string) ||
-      valuesForSlider.length / 2,
+      valuesForSlider.length / 2
   );
 
   useEffect(() => {
@@ -185,14 +185,6 @@ export const SliderWrapper = () => {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // useEffect(() => {
-  //   if (isSliderExpanded) {
-  //     inputRef.current?.focus();
-  //   } else {
-  //     inputRef.current?.blur();
-  //   }
-  // }, [isSliderExpanded]);
-
   return (
     <span className={`w-full rounded-inherit `} ref={wrapperRef}>
       <input
@@ -209,12 +201,6 @@ export const SliderWrapper = () => {
         onFocus={() => setIsSliderExpanded(true)}
         style={{ outline: "none" }}
       />
-      {/* <div
-        onClick={() => setIsSliderExpanded(!isSliderExpanded)}
-        className="absolute right-4 top-0 flex h-full items-center text-greens-400"
-      >
-        <CreateIcon />
-      </div> */}
 
       <div className="flex flex-col items-center justify-center rounded-[16px] bg-white p-3 px-4">
         <div className="relative flex w-full flex-col justify-center pb-3">
@@ -245,28 +231,6 @@ export const SliderWrapper = () => {
             min={min}
             max={max}
           />
-          {/* <div className="absolute bottom-2 right-4">
-            <div className="flex gap-4 text-greens-400">
-              <p
-                tabIndex={0}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && setIsSliderExpanded(false)
-                }
-                onClick={() => setIsSliderExpanded(false)}
-              >
-                Cancel
-              </p>
-              <p
-                tabIndex={0}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && setIsSliderExpanded(false)
-                }
-                onClick={() => setIsSliderExpanded(false)}
-              >
-                Ok
-              </p>
-            </div>
-          </div> */}
         </div>
       </div>
     </span>
