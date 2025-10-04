@@ -9,8 +9,6 @@ import { Footer } from "./components/sunchaser/components/footer/footer";
 import { RightButtonsWrapper } from "./components/sunchaser/components/filter-buttons/form";
 import { SettingsButton } from "./components/settings-button";
 
-export const revalidate = 0; // Disable caching, always fetch a fresh version
-
 export default function Page() {
   const mapboxKey = new AppConfig().mapBox.key;
 
