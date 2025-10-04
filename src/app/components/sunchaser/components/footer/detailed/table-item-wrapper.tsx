@@ -27,23 +27,11 @@ export const TableItemWrapper = ({
     return time2;
   });
 
-  // Initialize with collapsed rows
   const [rows, setRows] = useState<(Times | null)[]>(initialRows.slice(0, 4));
-  // Don't initialize maxHeight to 0px - let it be auto initially
-  const [maxHeight, setMaxHeight] = useState<string>("auto");
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Calculate initial height after first render
-  useEffect(() => {
-    if (containerRef.current && maxHeight === "auto") {
-      const initialHeight = containerRef.current.scrollHeight;
-      setMaxHeight(`${initialHeight}px`);
-    }
-  }, []);
 
   useEffect(() => {
     if (isExpanded) {
+      expandList?.();
       setRows(day);
     } else {
       setTimeout(() => {
@@ -51,37 +39,6 @@ export const TableItemWrapper = ({
       }, 500);
     }
   }, [isExpanded]);
-
-  useEffect(() => {
-    const updateHeight = () => {
-      if (containerRef.current) {
-        if (isExpanded) {
-          setTimeout(() => {
-            if (containerRef.current) {
-              const scrollHeight = containerRef.current.scrollHeight;
-              setMaxHeight(`${scrollHeight}px`);
-            }
-          }, 10);
-        } else {
-          // Calculate collapsed height instead of 0px
-          setTimeout(() => {
-            if (containerRef.current) {
-              const collapsedHeight = containerRef.current.scrollHeight;
-              setMaxHeight(`${collapsedHeight}px`);
-            }
-          }, 10);
-        }
-      }
-    };
-
-    updateHeight();
-
-    if (isExpanded) {
-      setTimeout(() => {
-        expandList?.();
-      }, 100);
-    }
-  }, [isExpanded, rows]);
 
   const date = dateFormatter(new Date(day[0].date));
   const shouldDisplayExpanded = day.length > 4;
@@ -91,13 +48,7 @@ export const TableItemWrapper = ({
       <div key={date} className="rounded-lg bg-greens-300 p-2">
         <p>{date}</p>
         <span className="block h-2"></span>
-        <div
-          ref={containerRef}
-          style={{
-            maxHeight: maxHeight,
-          }}
-          className="overflow-hidden transition-all duration-500 ease-in-out"
-        >
+        <div className="transition-all duration-500 ease-in-out">
           <TimeTable times={rows} />
         </div>
         {shouldDisplayExpanded && (

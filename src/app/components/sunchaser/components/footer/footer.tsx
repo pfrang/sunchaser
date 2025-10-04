@@ -9,316 +9,172 @@ import {
 import React, {
   Suspense,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
-  useCallback,
 } from "react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerPortal,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { MapChooser } from "app/components/sunchaser/components/footer/map-chooser";
-import { useAnimatedHeight } from "app/hooks/use-animated-height";
-import { useShouldHydrate } from "app/hooks/use-should-hydrate";
-
-import { FooterExpandableLine } from "../../../_shared/footer-expandable-line";
-
 import { ListContainer } from "./list-container";
 import { MapOptionsEnum } from "./settings-form-values";
+import clsx from "clsx";
+import { Carousel } from "ui-kit/carousel/Carousel";
 
 export type Breakpoints = [number, number, number];
 
+export const snapPoints: Breakpoints = [0.1, 0.3, 0.85];
 export const Footer = () => {
   const { isSliding } = useIsSliding();
-  const footerRef = useRef<HTMLDivElement>(null);
   const scrollableDivRef = useRef<HTMLDivElement>(null);
+
   const { isSettingsOpen, setIsSettingsOpen } = useIsSettingsOpen();
   const { isMapBeingTouched } = useIsMapBeingTouched();
   const { isFilterOpen } = useIsFilterOpen();
   const [mapOption, setMapOption] = useState<MapOptionsEnum>(
     MapOptionsEnum.Standard
   );
-  const shouldHydrate = useShouldHydrate();
-  const { animateHeight, updateDOMHeight } = useAnimatedHeight(0, footerRef);
 
-  // Touch state refs - no React re-renders during drag
-  const isDragging = useRef(false);
-  const startY = useRef(0);
-  const startHeight = useRef(0);
-  const currentHeight = useRef(0);
-  const lastY = useRef(0); // Track last Y position for velocity
-  const lastVelocity = useRef(0);
-  const lastTime = useRef(0);
-
-  // Only these cause re-renders
-  const [breakpoints, setBreakpoints] = useState<Breakpoints>([0, 0, 0]);
-  const [height, setHeight] = useState(0);
-  // Direct DOM manipulation - no React re-renders
+  const prevUserSnapRef = useRef<number | string | null>(snapPoints[1]);
+  const [snap, setSnap] = useState<number | string | null>(snapPoints[1]);
 
   useEffect(() => {
-    animateHeight(height);
-  }, [height]);
+    if (snap !== snapPoints[0]) {
+      prevUserSnapRef.current = snap;
+    }
+  }, [snap]);
 
   useEffect(() => {
-    if (isMapBeingTouched) {
-      animateHeight(breakpoints[0]);
+    if (isMapBeingTouched || isSliding || isFilterOpen) {
+      if (snap !== snapPoints[0]) {
+        prevUserSnapRef.current = snap;
+      }
+      setSnap(snapPoints[0]);
     } else {
-      animateHeight(height);
+      // Restore previous user snap
+      setSnap(prevUserSnapRef.current ?? snapPoints[1]);
     }
-  }, [isMapBeingTouched, breakpoints]);
+  }, [isMapBeingTouched, isSliding, isFilterOpen]);
 
-  useEffect(() => {
-    if (isFilterOpen) {
-      animateHeight(breakpoints[0]);
-      setHeight(breakpoints[0]);
-    }
+  const expandList = () => setSnap(snapPoints[2]);
+  const middleList = () => setSnap(snapPoints[1]);
 
-    if (isFilterOpen && isSettingsOpen) {
-      setIsSettingsOpen(false);
-    } else if (isSettingsOpen) {
-      animateHeight(breakpoints[1]);
-      setHeight(breakpoints[1]);
-    } else if (!isSettingsOpen) {
-      animateHeight(breakpoints[0]);
-      setHeight(breakpoints[0]);
-    }
-  }, [isFilterOpen, isSettingsOpen]);
+  const isAtMaxHeight = snap === snapPoints[2];
 
-  // Initialize breakpoints once
-  useEffect(() => {
-    const bp = [
-      window.innerHeight * 0.1,
-      window.innerHeight * 0.4,
-      window.innerHeight * 0.9,
-    ] as Breakpoints;
-    setBreakpoints(bp);
-    setHeight(bp[0]);
-    currentHeight.current = bp[0];
+  useLayoutEffect(() => {
+    document.addEventListener("focusin", (e) => e.stopImmediatePropagation());
+    document.addEventListener("focusout", (e) => e.stopImmediatePropagation());
   }, []);
-
-  // Handle sliding state
-  useEffect(() => {
-    const newHeight = isSliding ? 0 : breakpoints[0];
-    setHeight(newHeight);
-    currentHeight.current = newHeight;
-    updateDOMHeight(newHeight);
-  }, [isSliding, breakpoints]);
-
-  const isAtMaxHeight = breakpoints[2] === height;
-
-  // Find nearest breakpoint
-  const getNearestBreakpoint = useCallback(
-    (currentHeight: number) => {
-      return breakpoints.reduce((nearest, breakpoint) =>
-        Math.abs(breakpoint - currentHeight) < Math.abs(nearest - currentHeight)
-          ? breakpoint
-          : nearest
-      );
-    },
-    [breakpoints]
-  );
-
-  // Get target based on velocity and position
-  const getTargetBreakpoint = useCallback(
-    (currentHeight: number, velocity: number) => {
-      const nearest = getNearestBreakpoint(currentHeight);
-
-      // Fast swipe detection (velocity in pixels per ms)
-      const fastSwipeThreshold = 1.5; // Increased threshold for more reliable detection
-
-      // Only override nearest breakpoint if velocity is significant
-      if (Math.abs(velocity) > fastSwipeThreshold) {
-        const currentIndex = breakpoints.findIndex((bp) => bp === nearest);
-
-        if (velocity > 0 && currentIndex < breakpoints.length - 1) {
-          // Fast swipe up (positive velocity) - go to next higher breakpoint
-          return breakpoints[currentIndex + 1];
-        } else if (velocity < 0 && currentIndex > 0) {
-          // Fast swipe down (negative velocity) - go to next lower breakpoint
-          return breakpoints[currentIndex - 1];
-        }
-      }
-
-      // Default: snap to nearest breakpoint
-      return nearest;
-    },
-    [breakpoints, getNearestBreakpoint]
-  );
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (!footerRef.current) return;
-
-    const listContainer = scrollableDivRef.current;
-    if (listContainer && listContainer.contains(e.target as Node)) {
-      // If touch started inside scrollable content and not at top, don't handle footer drag
-      const isAtTop = listContainer.scrollTop === 0;
-      if (!isAtTop) {
-        return; // Let the list handle scrolling
-      }
-    }
-
-    isDragging.current = true;
-    startY.current = e.touches[0].clientY;
-    lastY.current = e.touches[0].clientY; // Initialize last Y position
-    startHeight.current = currentHeight.current;
-    lastTime.current = Date.now();
-    lastVelocity.current = 0;
-
-    // Remove transition during drag for immediate response
-    footerRef.current.style.transition = "none";
-  }, []);
-
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (!isDragging.current || !footerRef.current) return;
-
-      const currentY = e.touches[0].clientY;
-      const deltaY = startY.current - currentY; // Total movement from start
-      const now = Date.now();
-
-      // Calculate velocity based on frame-to-frame movement
-      if (lastTime.current > 0) {
-        const timeDelta = now - lastTime.current;
-        const positionDelta = lastY.current - currentY; // Movement since last frame
-
-        if (timeDelta > 0) {
-          lastVelocity.current = positionDelta / timeDelta; // pixels per ms
-        }
-      }
-
-      lastY.current = currentY;
-      lastTime.current = now;
-
-      // Check scroll constraints
-      const isScrollingUp = deltaY > 0;
-      const isAtMaxScroll = scrollableDivRef.current?.scrollTop === 0;
-
-      if (isAtMaxHeight && isScrollingUp) return;
-      if (!isAtMaxScroll && isScrollingUp) return;
-
-      // Prevent default touch behavior
-      e.preventDefault();
-
-      // Calculate new height with resistance at boundaries
-      let newHeight = startHeight.current + deltaY;
-
-      // Add resistance at edges
-      const minHeight = breakpoints[0];
-      const maxHeight = breakpoints[2];
-
-      if (newHeight < minHeight) {
-        newHeight = minHeight - (minHeight - newHeight) * 0.3;
-      } else if (newHeight > maxHeight) {
-        newHeight = maxHeight + (newHeight - maxHeight) * 0.3;
-      }
-
-      // Update DOM directly - NO React re-render
-      currentHeight.current = newHeight;
-      updateDOMHeight(newHeight);
-    },
-    [isAtMaxHeight, breakpoints, updateDOMHeight]
-  );
-
-  const animateHeightv2 = (newHeight: number) => {
-    if (footerRef.current) {
-      footerRef.current.style.transition =
-        "height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-      updateDOMHeight(newHeight);
-
-      // Update React state ONCE at the end
-      setHeight(newHeight);
-      currentHeight.current = newHeight;
-
-      // Clean up transition after animation
-      setTimeout(() => {
-        if (footerRef.current) {
-          footerRef.current.style.transition = "";
-        }
-      }, 300);
-    }
-  };
-
-  const handleTouchEnd = useCallback(() => {
-    if (!isDragging.current || !footerRef.current) return;
-
-    isDragging.current = false;
-
-    // Get target breakpoint based on position and velocity
-    const targetHeight = getTargetBreakpoint(
-      currentHeight.current,
-      lastVelocity.current
-    );
-
-    animateHeightv2(targetHeight);
-  }, [getTargetBreakpoint, updateDOMHeight]);
-
-  const clickableLine = useCallback(() => {
-    const currentIndex = breakpoints.indexOf(height);
-    let nextHeight: number;
-
-    switch (currentIndex) {
-      case 0:
-        nextHeight = breakpoints[1];
-        break;
-      case 1:
-        nextHeight = breakpoints[0];
-        break;
-      case 2:
-        nextHeight = breakpoints[0];
-        break;
-      default:
-        nextHeight = breakpoints[0];
-    }
-
-    animateHeightv2(nextHeight);
-  }, [height, breakpoints, updateDOMHeight]);
-
-  const expandList = useCallback(() => {
-    const maxHeight = breakpoints[2];
-
-    animateHeightv2(maxHeight);
-  }, [breakpoints, updateDOMHeight]);
-
-  const middleList = useCallback(() => {
-    const maxHeight = breakpoints[1];
-
-    animateHeightv2(maxHeight);
-  }, [breakpoints, updateDOMHeight]);
-
-  if (!shouldHydrate) return null;
 
   return (
-    <div
-      ref={footerRef}
-      className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      style={{
-        height: `${height + 40}px`,
-        maxHeight: `${breakpoints[2] + 40}px`,
-        backgroundColor: "white",
-        overflow: "hidden",
-        scrollbarWidth: "none",
-        msOverflowStyle: "none",
-        touchAction: "pan-y",
-        willChange: "height", // Optimize for height animations
-      }}
-    >
-      <FooterExpandableLine
-        fullExpand={expandList} // Pass function that calls expandList with argument
-        expandableClick={clickableLine}
-      />
+    snap && (
+      <footer className="h-20">
+        <Drawer
+          forceOpen
+          snapPoints={snapPoints}
+          activeSnapPoint={snap}
+          shouldScaleBackground={false}
+          dismissible={false}
+          setActiveSnapPoint={setSnap}
+          modal={false}
+        >
+          <DrawerTitle className="hidden"></DrawerTitle>
+          <DrawerPortal>
+            <DrawerContent
+              noPortal
+              noOverlay
+              data-testid="content"
+              className="w-full rounded-custom border-green-100 flex h-full"
+            >
+              {/* <div
+                data-vaul-handle
+                className="mx-auto h-20 mt-1 mb-1 h-2 w-14 bg-red rounded-full bg-muted active:opacity-70"
+              /> */}
+              <div
+                ref={scrollableDivRef}
+                className={clsx(
+                  "flex-1 min-h-0 w-full flex flex-col", // allow shrinking
 
-      <Suspense fallback={<Spinner />}>
-        {isSettingsOpen ? (
-          <MapChooser mapOption={mapOption} setMapOption={setMapOption} />
-        ) : (
-          <ListContainer
-            parentRef={scrollableDivRef}
-            isAtMaxHeight={isAtMaxHeight}
-            expandList={expandList}
-            middleList={middleList}
-          />
-        )}
-      </Suspense>
-    </div>
+                  {
+                    "overflow-y-auto": isAtMaxHeight,
+                    "overflow-hidden": !isAtMaxHeight,
+                  }
+                )}
+              >
+                <Suspense fallback={<Spinner />}>
+                  {isSettingsOpen ? (
+                    <MapChooser
+                      mapOption={mapOption}
+                      setMapOption={setMapOption}
+                    />
+                  ) : (
+                    <Carousel
+                      // plugins={[
+                      //   AutoHeight(), // Add the AutoHeight plugin here
+                      // ]}
+                      opts={{
+                        align: "start",
+                        loop: false,
+                      }}
+                      className="h-auto"
+                    >
+                      <ListContainer
+                        parentRef={scrollableDivRef}
+                        isAtMaxHeight={isAtMaxHeight}
+                        expandList={expandList}
+                        middleList={middleList}
+                      />
+                    </Carousel>
+                  )}
+                </Suspense>
+              </div>
+            </DrawerContent>
+          </DrawerPortal>
+        </Drawer>
+      </footer>
+    )
   );
+
+  // return (
+  //   <div
+  //     ref={footerRef}
+  //     className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100"
+  //     onTouchStart={handleTouchStart}
+  //     onTouchMove={handleTouchMove}
+  //     onTouchEnd={handleTouchEnd}
+  //     style={{
+  //       height: `${height + 40}px`,
+  //       maxHeight: `${breakpoints[2] + 40}px`,
+  //       backgroundColor: "white",
+  //       overflow: "hidden",
+  //       scrollbarWidth: "none",
+  //       msOverflowStyle: "none",
+  //       touchAction: "pan-y",
+  //       willChange: "height", // Optimize for height animations
+  //     }}
+  //   >
+  //     <FooterExpandableLine
+  //       fullExpand={expandList} // Pass function that calls expandList with argument
+  //       expandableClick={clickableLine}
+  //     />
+
+  //     <Suspense fallback={<Spinner />}>
+  //       {isSettingsOpen ? (
+  //         <MapChooser mapOption={mapOption} setMapOption={setMapOption} />
+  //       ) : (
+  //         <ListContainer
+  //           parentRef={scrollableDivRef}
+  //           isAtMaxHeight={isAtMaxHeight}
+  //           expandList={expandList}
+  //           middleList={middleList}
+  //         />
+  //       )}
+  //     </Suspense>
+  //   </div>
+  // );
 };

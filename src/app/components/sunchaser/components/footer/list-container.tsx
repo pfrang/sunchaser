@@ -3,23 +3,22 @@ import {
   useMapInstance,
   useMapObject,
 } from "states/sunchaser-result";
-import { useSearchParamsToObject } from "app/hooks/use-search-params";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { useUserLocation } from "app/hooks/use-user-location";
 import {
   AzureFunctionCoordinatesMappedItems,
-  Times,
   UserLocation,
 } from "app/api/azure-function/coordinates/coordinates-api-client/coordinates-api-response-schema";
-import { dateFormatter } from "app/utils/date-formatter";
 import { ForecastDay } from "app/api/forecast/mapper/forecast-mapper";
-import { splitTimesIntoDays } from "app/utils/times-helper";
-import { useForecast } from "app/hooks/use-forecast";
 
 import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
 import { ListWrapper } from "./detailed/list-wrapper";
-import { TableItemWrapper } from "./detailed/table-item-wrapper";
+import {
+  CarouselContent,
+  CarouselItem,
+  useCarousel,
+} from "ui-kit/carousel/Carousel";
 
 type ExpandedTable = "sunchaser" | "forecast";
 
@@ -38,29 +37,13 @@ export const ListContainer = ({
 }: Props) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
-  const [expandDetailedTable, setExpandDetailedTable] =
-    useState<ExpandedTable | null>("sunchaser");
-  const [detailedTableExpanded, setDetailedTableExpanded] = useState(false);
+  const { api } = useCarousel();
 
-  // NEW: separate animation state vs. mount state
-  const [showDetail, setShowDetail] = useState(false); // drives CSS transform
-  const [mountedDetail, setMountedDetail] = useState(false); // controls conditional render
-
-  const searchParams = useSearchParamsToObject();
   const { mapInstance } = useMapInstance();
   const { userLocation } = useUserLocation() as { userLocation: UserLocation };
 
-  const dateDisplay = useMemo(() => {
-    const date = new Date(searchParams?.date || new Date());
-    return dateFormatter(date);
-  }, [searchParams?.date]);
-
-  const { data } = useForecast({
-    params: searchParams,
-  });
-
   const toggleDetailedTable = (
-    item: AzureFunctionCoordinatesMappedItems | ForecastDay,
+    item: AzureFunctionCoordinatesMappedItems | ForecastDay
   ) => {
     middleList();
     if (
@@ -68,11 +51,10 @@ export const ListContainer = ({
       isAzureFunctionCoordinatesMappedItems(item)
     ) {
       setHighlightedCard(item);
-      setExpandDetailedTable("sunchaser");
     } else if (!isAzureFunctionCoordinatesMappedItems(item)) {
-      setExpandDetailedTable("forecast");
+      setHighlightedCard(undefined);
+      mapInstance?.flyToDataLocation(11);
     }
-    setDetailedTableExpanded(true);
   };
 
   const { mapObject } = useMapObject();
@@ -89,148 +71,42 @@ export const ListContainer = ({
   };
 
   const resetDetailedTable = () => {
-    setDetailedTableExpanded(false); // this starts the slide-out
-    resetMap();
+    // setDetailedTableExpanded(false); // this starts the slide-out
+
+    requestAnimationFrame(() => resetMap());
   };
 
-  // Keep scrollTop at 0 when switching views
+  const current = api?.selectedScrollSnap();
+
   useEffect(() => {
-    if (parentRef.current) {
-      parentRef.current.scrollTop = 0;
+    if (current === 0) {
+      resetDetailedTable();
     }
-  }, [detailedTableExpanded, parentRef]);
-
-  // Drive mount/animation timing so collapse animates properly
-  useEffect(() => {
-    if (detailedTableExpanded) {
-      setMountedDetail(true); // mount immediately
-      // kick to next frame so the transform transition runs
-      requestAnimationFrame(() => setShowDetail(true));
-    } else {
-      setShowDetail(false); // start slide-out
-    }
-  }, [detailedTableExpanded]);
-
-  const handleDetailTransitionEnd = () => {
-    // after slide-out completes, unmount
-    if (!showDetail) setMountedDetail(false);
-  };
-
-  const renderSunchaserTable = useCallback(() => {
-    if (highlightedCard) {
-      const days = splitTimesIntoDays(highlightedCard?.times);
-      return (
-        <>
-          {Object.values(days).map((day, index) => {
-            return (
-              <TableItemWrapper expandList={expandList} key={index} day={day} />
-            );
-          })}
-        </>
-      );
-    } else {
-      return <></>;
-    }
-  }, [highlightedCard?.times, expandList]);
-
-  const renderForecastTable = useCallback(() => {
-    if (data) {
-      const days = Object.values(data.days);
-
-      return (
-        <>
-          {days.map((day) => {
-            const times: Times[] = day.times.map((time) => {
-              return {
-                temperature: time.temperature || 0,
-                rain: time.rain || 0,
-                wind: time.wind || 0,
-                symbol: time.symbol || "sun",
-                time: time.time,
-                date: new Date(day.overview.date),
-              } as Times;
-            });
-
-            return (
-              <TableItemWrapper
-                expandList={expandList}
-                key={day.overview.date}
-                day={times}
-              />
-            );
-          })}
-        </>
-      );
-    } else {
-      return <></>;
-    }
-  }, [data, expandList]);
+  }, [current]);
 
   return (
-    <div
-      ref={parentRef}
-      style={{
-        height: "100%",
-        overflowY: isAtMaxHeight ? "auto" : "hidden",
-        overflowX: "hidden",
-        position: "relative",
-        overscrollBehaviorY: "none",
-        WebkitOverflowScrolling: "touch",
-      }}
-      className="relative scrollbar-thin scrollbar-track-slate-50"
-    >
-      {/* Main list */}
-      <div
-        className={`p-2 pb-12 transition-transform duration-500 ease-in-out will-change-transform ${
-          showDetail ? "-translate-x-full" : "translate-x-0"
-        }`}
-      >
-        <div>
-          <p className="text-variant-regular text-xl">{dateDisplay}</p>
-          <span className="block h-4 border-b-4 border-greens-600"></span>
-        </div>
-        <div className="flex gap-4">
-          <ForecastNew toggleDetailedTable={toggleDetailedTable} />
-        </div>
-        <span className="block h-4 border-b-4 border-greens-600"></span>
-        <div className="py-4">
-          <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
-        </div>
-      </div>
-
-      {/* Detail overlay */}
-      <div
-        className={`absolute inset-0 z-10 w-full p-2 pb-14 transition-transform duration-500 ease-in-out will-change-transform ${
-          showDetail ? "translate-x-0" : "translate-x-full"
-        }`}
-        onTransitionEnd={handleDetailTransitionEnd}
-      >
-        {mountedDetail && (
-          <div className="inline">
-            {expandDetailedTable === "sunchaser" && highlightedCard?.date && (
-              <ListWrapper
-                location={highlightedCard.primaryName}
-                resetDetailedTable={resetDetailedTable}
-                renderTable={renderSunchaserTable}
-              />
-            )}
-            {expandDetailedTable === "forecast" && (
-              <ListWrapper
-                location={searchParams?.location || "Min lokasjon"}
-                resetDetailedTable={resetDetailedTable}
-                renderTable={renderForecastTable}
-              />
-            )}
+    <>
+      <CarouselContent>
+        <CarouselItem>
+          <div className="flex gap-4">
+            <ForecastNew toggleDetailedTable={toggleDetailedTable} />
           </div>
-        )}
-      </div>
-    </div>
+          <span className="block h-4 border-b-4 border-greens-600"></span>
+          <div className="py-4">
+            <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
+          </div>
+        </CarouselItem>
+        <CarouselItem>
+          <ListWrapper expandList={expandList} />
+        </CarouselItem>
+      </CarouselContent>
+    </>
   );
 };
 
 // typeguard check for AzureFunctionCoordinatesMappedItems
 function isAzureFunctionCoordinatesMappedItems(
-  item: AzureFunctionCoordinatesMappedItems | ForecastDay,
+  item: AzureFunctionCoordinatesMappedItems | ForecastDay
 ): item is AzureFunctionCoordinatesMappedItems {
   return (
     (item as AzureFunctionCoordinatesMappedItems).primaryName !== undefined

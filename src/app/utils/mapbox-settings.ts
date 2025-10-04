@@ -106,19 +106,19 @@ export class MapBoxHelper {
     this.addClickHandlers();
   }
 
-  flyToUserLocation() {
+  flyToUserLocation(zoom: number = 8) {
     this.map.flyTo({
       center: [this.userLocationLon, this.userLocationLat],
       duration: 500,
-      zoom: 8,
+      zoom: zoom,
     });
   }
 
-  flyToDataLocation() {
+  flyToDataLocation(zoom: number = 8) {
     this.map.flyTo({
       center: [this.originalLon, this.originalLat],
       duration: 500,
-      zoom: 8,
+      zoom: zoom,
     });
   }
 
