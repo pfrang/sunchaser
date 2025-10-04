@@ -6,7 +6,13 @@ import {
   useIsSettingsOpen,
   useIsSliding,
 } from "states/states";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, {
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Drawer,
   DrawerContent,
@@ -15,7 +21,6 @@ import {
 } from "@/components/ui/drawer";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { MapChooser } from "app/components/sunchaser/components/footer/map-chooser";
-import AutoHeight from "embla-carousel-auto-height";
 import { ListContainer } from "./list-container";
 import { MapOptionsEnum } from "./settings-form-values";
 import clsx from "clsx";
@@ -61,6 +66,11 @@ export const Footer = () => {
 
   const isAtMaxHeight = snap === snapPoints[2];
 
+  useLayoutEffect(() => {
+    document.addEventListener("focusin", (e) => e.stopImmediatePropagation());
+    document.addEventListener("focusout", (e) => e.stopImmediatePropagation());
+  }, []);
+
   return (
     snap && (
       <footer className="h-20">
@@ -69,6 +79,7 @@ export const Footer = () => {
           snapPoints={snapPoints}
           activeSnapPoint={snap}
           shouldScaleBackground={false}
+          dismissible={false}
           setActiveSnapPoint={setSnap}
           modal={false}
         >
@@ -110,7 +121,7 @@ export const Footer = () => {
                         align: "start",
                         loop: false,
                       }}
-                      className=""
+                      className="h-auto"
                     >
                       <ListContainer
                         parentRef={scrollableDivRef}

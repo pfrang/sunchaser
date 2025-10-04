@@ -77,7 +77,7 @@ export const SunchaserResultList = ({ toggleDetailedTable }) => {
         renderData={(data) => {
           const { userLocation, ranks } = data;
           if (ranks.length === 0) {
-            return <></>;
+            return <>Fant ingen steder med disse filtrene</>;
           }
 
           return (
