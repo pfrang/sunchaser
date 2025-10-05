@@ -3,7 +3,6 @@ import {
   useMapInstance,
   useMapObject,
 } from "states/sunchaser-result";
-import { useEffect } from "react";
 import { useUserLocation } from "app/hooks/use-user-location";
 import {
   AzureFunctionCoordinatesMappedItems,
@@ -14,11 +13,17 @@ import { ForecastDay } from "app/api/forecast/mapper/forecast-mapper";
 import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
 import { ListWrapper } from "./detailed/list-wrapper";
+import { CarouselContent, CarouselItem } from "ui-kit/carousel/Carousel";
 import {
-  CarouselContent,
-  CarouselItem,
-  useCarousel,
-} from "ui-kit/carousel/Carousel";
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerPortal,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { snapPoints } from "./footer";
+import { useState } from "react";
 
 type ExpandedTable = "sunchaser" | "forecast";
 
@@ -37,15 +42,14 @@ export const ListContainer = ({
 }: Props) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
-  const { api } = useCarousel();
-
+  const [snap, setSnap] = useState<number | string | null>(null);
   const { mapInstance } = useMapInstance();
   const { userLocation } = useUserLocation() as { userLocation: UserLocation };
 
   const toggleDetailedTable = (
     item: AzureFunctionCoordinatesMappedItems | ForecastDay
   ) => {
-    middleList();
+    setSnap(snapPoints[1]);
     if (
       item !== highlightedCard &&
       isAzureFunctionCoordinatesMappedItems(item)
@@ -76,30 +80,37 @@ export const ListContainer = ({
     requestAnimationFrame(() => resetMap());
   };
 
-  const current = api?.selectedScrollSnap();
-
-  useEffect(() => {
-    if (current === 0) {
-      resetDetailedTable();
-    }
-  }, [current]);
-
+  console.log("snap", snap);
   return (
     <>
-      <CarouselContent>
-        <CarouselItem>
-          <div className="flex gap-4">
-            <ForecastNew toggleDetailedTable={toggleDetailedTable} />
-          </div>
-          <span className="block h-4 border-b-4 border-greens-600"></span>
-          <div className="py-4">
-            <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
-          </div>
-        </CarouselItem>
-        <CarouselItem>
-          <ListWrapper expandList={expandList} />
-        </CarouselItem>
-      </CarouselContent>
+      <Drawer
+        snapPoints={[snapPoints[1], snapPoints[2]]}
+        activeSnapPoint={snap}
+        setActiveSnapPoint={setSnap}
+        shouldScaleBackground={false}
+        modal={false}
+      >
+        <div className="py-4">
+          <ForecastNew toggleDetailedTable={toggleDetailedTable} />
+        </div>
+        <span className="block h-4 border-b-4 border-greens-600"></span>
+        <div className="py-4">
+          <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
+        </div>
+
+        <DrawerHeader>
+          <DrawerTitle className="hidden"></DrawerTitle>
+          <DrawerPortal>
+            <DrawerContent
+              noOverlay
+              noPortal
+              className="w-full rounded-custom border-green-100 flex"
+            >
+              <ListWrapper expandList={expandList} />
+            </DrawerContent>
+          </DrawerPortal>
+        </DrawerHeader>
+      </Drawer>
     </>
   );
 };

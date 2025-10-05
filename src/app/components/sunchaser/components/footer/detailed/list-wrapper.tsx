@@ -6,7 +6,6 @@ import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { splitTimesIntoDays } from "app/utils/times-helper";
 import { useCallback, useMemo } from "react";
 import { useHighlightedCard } from "states/sunchaser-result";
-import { useCarousel } from "ui-kit/carousel/Carousel";
 import { TableItemWrapper } from "./table-item-wrapper";
 
 interface ListWrapperProps {
@@ -34,7 +33,6 @@ function transformDays(
 }
 
 export const ListWrapper = ({ expandList }: ListWrapperProps) => {
-  const { scrollPrev } = useCarousel();
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
   const searchParams = useSearchParamsToObject();
 
@@ -59,8 +57,8 @@ export const ListWrapper = ({ expandList }: ListWrapperProps) => {
 
   return (
     <>
-      <div className="sticky top-0 flex items-center bg-white pb-2">
-        <div className="flex items-center cursor-pointer" onClick={scrollPrev}>
+      <div className="flex items-center bg-white pb-2">
+        <div className="flex items-center cursor-pointer">
           <KeyboardArrowLeftIcon />
           <p className="pl-2 text-2xl">{location}</p>
         </div>

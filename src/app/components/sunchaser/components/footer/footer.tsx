@@ -23,8 +23,6 @@ import { Spinner } from "ui-kit/spinner/spinner";
 import { MapChooser } from "app/components/sunchaser/components/footer/map-chooser";
 import { ListContainer } from "./list-container";
 import { MapOptionsEnum } from "./settings-form-values";
-import clsx from "clsx";
-import { Carousel } from "ui-kit/carousel/Carousel";
 
 export type Breakpoints = [number, number, number];
 
@@ -91,48 +89,21 @@ export const Footer = () => {
               data-testid="content"
               className="w-full rounded-custom border-green-100 flex h-full"
             >
-              {/* <div
-                data-vaul-handle
-                className="mx-auto h-20 mt-1 mb-1 h-2 w-14 bg-red rounded-full bg-muted active:opacity-70"
-              /> */}
-              <div
-                ref={scrollableDivRef}
-                className={clsx(
-                  "flex-1 min-h-0 w-full flex flex-col", // allow shrinking
-
-                  {
-                    "overflow-y-auto": isAtMaxHeight,
-                    "overflow-hidden": !isAtMaxHeight,
-                  }
+              <Suspense fallback={<Spinner />}>
+                {isSettingsOpen ? (
+                  <MapChooser
+                    mapOption={mapOption}
+                    setMapOption={setMapOption}
+                  />
+                ) : (
+                  <ListContainer
+                    parentRef={scrollableDivRef}
+                    isAtMaxHeight={isAtMaxHeight}
+                    expandList={expandList}
+                    middleList={middleList}
+                  />
                 )}
-              >
-                <Suspense fallback={<Spinner />}>
-                  {isSettingsOpen ? (
-                    <MapChooser
-                      mapOption={mapOption}
-                      setMapOption={setMapOption}
-                    />
-                  ) : (
-                    <Carousel
-                      // plugins={[
-                      //   AutoHeight(), // Add the AutoHeight plugin here
-                      // ]}
-                      opts={{
-                        align: "start",
-                        loop: false,
-                      }}
-                      className="h-auto"
-                    >
-                      <ListContainer
-                        parentRef={scrollableDivRef}
-                        isAtMaxHeight={isAtMaxHeight}
-                        expandList={expandList}
-                        middleList={middleList}
-                      />
-                    </Carousel>
-                  )}
-                </Suspense>
-              </div>
+              </Suspense>
             </DrawerContent>
           </DrawerPortal>
         </Drawer>
