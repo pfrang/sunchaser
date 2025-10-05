@@ -47,7 +47,7 @@ export const SunchaserResultList = ({ toggleDetailedTable }) => {
 
     mapObject?.flyTo({
       center: [item.longitude, item.latitude],
-      duration: 500,
+      duration: 700,
       zoom: 11,
     });
 

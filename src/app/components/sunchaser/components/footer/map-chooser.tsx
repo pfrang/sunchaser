@@ -12,7 +12,7 @@ export const MapChooser = ({
   setMapOption: (option: MapOptionsEnum) => void;
 }) => {
   return (
-    <div className="grid w-full flex-1 grid-cols-3 gap-4 px-6">
+    <div className="grid w-full flex-1 grid-cols-3 gap-4 px-6 h-full">
       {Object.entries(MapOptionsEnum).map(([key, value]) => (
         <MapButton
           key={key}

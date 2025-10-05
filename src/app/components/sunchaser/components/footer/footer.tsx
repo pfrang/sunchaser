@@ -3,13 +3,13 @@
 import {
   useIsFilterOpen,
   useIsMapBeingTouched,
-  useIsSettingsOpen,
   useIsSliding,
 } from "states/states";
 import React, {
   Suspense,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -20,23 +20,16 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Spinner } from "ui-kit/spinner/spinner";
-import { MapChooser } from "app/components/sunchaser/components/footer/map-chooser";
-import { ListContainer } from "./list-container";
-import { MapOptionsEnum } from "./settings-form-values";
+import { NestedDrawer } from "./nested-drawer";
 
 export type Breakpoints = [number, number, number];
 
 export const snapPoints: Breakpoints = [0.1, 0.3, 0.85];
 export const Footer = () => {
   const { isSliding } = useIsSliding();
-  const scrollableDivRef = useRef<HTMLDivElement>(null);
 
-  const { isSettingsOpen, setIsSettingsOpen } = useIsSettingsOpen();
   const { isMapBeingTouched } = useIsMapBeingTouched();
   const { isFilterOpen } = useIsFilterOpen();
-  const [mapOption, setMapOption] = useState<MapOptionsEnum>(
-    MapOptionsEnum.Standard
-  );
 
   const prevUserSnapRef = useRef<number | string | null>(snapPoints[1]);
   const [snap, setSnap] = useState<number | string | null>(snapPoints[1]);
@@ -59,10 +52,9 @@ export const Footer = () => {
     }
   }, [isMapBeingTouched, isSliding, isFilterOpen]);
 
-  const expandList = () => setSnap(snapPoints[2]);
   const middleList = () => setSnap(snapPoints[1]);
 
-  const isAtMaxHeight = snap === snapPoints[2];
+  const isAtMaxHeight = useMemo(() => snap === snapPoints[2], [snap]);
 
   useLayoutEffect(() => {
     document.addEventListener("focusin", (e) => e.stopImmediatePropagation());
@@ -71,7 +63,7 @@ export const Footer = () => {
 
   return (
     snap && (
-      <footer className="h-20">
+      <footer>
         <Drawer
           forceOpen
           snapPoints={snapPoints}
@@ -90,19 +82,10 @@ export const Footer = () => {
               className="w-full rounded-custom border-green-100 flex h-full"
             >
               <Suspense fallback={<Spinner />}>
-                {isSettingsOpen ? (
-                  <MapChooser
-                    mapOption={mapOption}
-                    setMapOption={setMapOption}
-                  />
-                ) : (
-                  <ListContainer
-                    parentRef={scrollableDivRef}
-                    isAtMaxHeight={isAtMaxHeight}
-                    expandList={expandList}
-                    middleList={middleList}
-                  />
-                )}
+                <NestedDrawer
+                  isAtMaxHeight={isAtMaxHeight}
+                  middleList={middleList}
+                />
               </Suspense>
             </DrawerContent>
           </DrawerPortal>
@@ -110,42 +93,4 @@ export const Footer = () => {
       </footer>
     )
   );
-
-  // return (
-  //   <div
-  //     ref={footerRef}
-  //     className="fixed bottom-0 z-40 w-full rounded-custom border-t-2 border-green-100"
-  //     onTouchStart={handleTouchStart}
-  //     onTouchMove={handleTouchMove}
-  //     onTouchEnd={handleTouchEnd}
-  //     style={{
-  //       height: `${height + 40}px`,
-  //       maxHeight: `${breakpoints[2] + 40}px`,
-  //       backgroundColor: "white",
-  //       overflow: "hidden",
-  //       scrollbarWidth: "none",
-  //       msOverflowStyle: "none",
-  //       touchAction: "pan-y",
-  //       willChange: "height", // Optimize for height animations
-  //     }}
-  //   >
-  //     <FooterExpandableLine
-  //       fullExpand={expandList} // Pass function that calls expandList with argument
-  //       expandableClick={clickableLine}
-  //     />
-
-  //     <Suspense fallback={<Spinner />}>
-  //       {isSettingsOpen ? (
-  //         <MapChooser mapOption={mapOption} setMapOption={setMapOption} />
-  //       ) : (
-  //         <ListContainer
-  //           parentRef={scrollableDivRef}
-  //           isAtMaxHeight={isAtMaxHeight}
-  //           expandList={expandList}
-  //           middleList={middleList}
-  //         />
-  //       )}
-  //     </Suspense>
-  //   </div>
-  // );
 };

@@ -7,9 +7,11 @@ import { splitTimesIntoDays } from "app/utils/times-helper";
 import { useCallback, useMemo } from "react";
 import { useHighlightedCard } from "states/sunchaser-result";
 import { TableItemWrapper } from "./table-item-wrapper";
+import { cn } from "@/lib/utils";
 
 interface ListWrapperProps {
   expandList: () => void;
+  isAtMaxHeight?: boolean;
 }
 
 function transformDays(
@@ -32,7 +34,10 @@ function transformDays(
   return times;
 }
 
-export const ListWrapper = ({ expandList }: ListWrapperProps) => {
+export const ListWrapper = ({
+  expandList,
+  isAtMaxHeight,
+}: ListWrapperProps) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
   const searchParams = useSearchParamsToObject();
 
@@ -64,7 +69,11 @@ export const ListWrapper = ({ expandList }: ListWrapperProps) => {
         </div>
       </div>
       <span className="block h-2"></span>
-      <div className="flex flex-col gap-4">
+      <div
+        className={cn("flex flex-col gap-4 h-full pb-36", {
+          "overflow-y-auto": isAtMaxHeight,
+        })}
+      >
         {Object.values(activeTimes).map((day: Times[], index) => {
           return (
             <TableItemWrapper expandList={expandList} key={index} day={day} />

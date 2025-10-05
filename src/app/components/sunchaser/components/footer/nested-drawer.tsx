@@ -20,26 +20,20 @@ import {
   DrawerHeader,
   DrawerPortal,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { snapPoints } from "./footer";
-import { useState } from "react";
-
-type ExpandedTable = "sunchaser" | "forecast";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useIsSettingsOpen } from "states/states";
+import { MapChooser } from "./map-chooser";
+import { MapOptionsEnum } from "./settings-form-values";
 
 type Props = {
-  parentRef: React.RefObject<HTMLDivElement | null>;
   isAtMaxHeight: boolean;
-  expandList: () => void;
   middleList: () => void;
 };
 
-export const ListContainer = ({
-  parentRef,
-  isAtMaxHeight,
-  expandList,
-  middleList,
-}: Props) => {
+export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
   const [snap, setSnap] = useState<number | string | null>(null);
@@ -49,6 +43,7 @@ export const ListContainer = ({
   const toggleDetailedTable = (
     item: AzureFunctionCoordinatesMappedItems | ForecastDay
   ) => {
+    middleList();
     setSnap(snapPoints[1]);
     if (
       item !== highlightedCard &&
@@ -57,30 +52,29 @@ export const ListContainer = ({
       setHighlightedCard(item);
     } else if (!isAzureFunctionCoordinatesMappedItems(item)) {
       setHighlightedCard(undefined);
-      mapInstance?.flyToDataLocation(11);
+      requestAnimationFrame(() => mapInstance?.flyToDataLocation(11));
     }
   };
 
   const { mapObject } = useMapObject();
+
+  const resetDetailedTable = () => {
+    requestAnimationFrame(() => resetMap());
+  };
 
   const resetMap = () => {
     if (mapObject && mapInstance && userLocation?.longitude) {
       mapInstance.removeLayer("route");
       mapObject.flyTo({
         center: [userLocation.longitude, userLocation.latitude],
-        duration: 500,
+        duration: 700,
       });
       mapInstance.setFitBounds();
     }
   };
 
-  const resetDetailedTable = () => {
-    // setDetailedTableExpanded(false); // this starts the slide-out
+  const expandList = () => setSnap(snapPoints[2]);
 
-    requestAnimationFrame(() => resetMap());
-  };
-
-  console.log("snap", snap);
   return (
     <>
       <Drawer
@@ -89,13 +83,21 @@ export const ListContainer = ({
         setActiveSnapPoint={setSnap}
         shouldScaleBackground={false}
         modal={false}
+        onClose={resetDetailedTable}
+        nested
       >
-        <div className="py-4">
-          <ForecastNew toggleDetailedTable={toggleDetailedTable} />
-        </div>
-        <span className="block h-4 border-b-4 border-greens-600"></span>
-        <div className="py-4">
-          <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
+        <div className="flex flex-col h-full w-full min-h-0">
+          <div className="py-4">
+            <ForecastNew toggleDetailedTable={toggleDetailedTable} />
+          </div>
+          <span className="block h-4 border-b-4 border-greens-600"></span>
+          <div
+            className={cn("flex-1 min-h-0  py-4 pb-32", {
+              "overflow-y-auto": isAtMaxHeight,
+            })}
+          >
+            <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
+          </div>
         </div>
 
         <DrawerHeader>
@@ -104,9 +106,13 @@ export const ListContainer = ({
             <DrawerContent
               noOverlay
               noPortal
-              className="w-full rounded-custom border-green-100 flex"
+              data-testid="detailed-table"
+              className="h-full"
             >
-              <ListWrapper expandList={expandList} />
+              <ListWrapper
+                isAtMaxHeight={snap === snapPoints[2]}
+                expandList={expandList}
+              />
             </DrawerContent>
           </DrawerPortal>
         </DrawerHeader>

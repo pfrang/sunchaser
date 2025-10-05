@@ -117,7 +117,7 @@ export class MapBoxHelper {
   flyToDataLocation(zoom: number = 8) {
     this.map.flyTo({
       center: [this.originalLon, this.originalLat],
-      duration: 500,
+      duration: 700,
       zoom: zoom,
     });
   }
