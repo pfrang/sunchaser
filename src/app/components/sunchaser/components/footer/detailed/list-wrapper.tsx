@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 interface ListWrapperProps {
   expandList: () => void;
   isAtMaxHeight?: boolean;
+  closeDetailedTable: () => void;
 }
 
 function transformDays(
@@ -37,6 +38,7 @@ function transformDays(
 export const ListWrapper = ({
   expandList,
   isAtMaxHeight,
+  closeDetailedTable,
 }: ListWrapperProps) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
   const searchParams = useSearchParamsToObject();
@@ -63,14 +65,17 @@ export const ListWrapper = ({
   return (
     <>
       <div className="flex items-center bg-white pb-2">
-        <div className="flex items-center cursor-pointer">
+        <button
+          onClick={closeDetailedTable}
+          className="flex items-center cursor-pointer"
+        >
           <KeyboardArrowLeftIcon />
           <p className="pl-2 text-2xl">{location}</p>
-        </div>
+        </button>
       </div>
       <span className="block h-2"></span>
       <div
-        className={cn("flex flex-col gap-4 h-full pb-36", {
+        className={cn("flex flex-col gap-4 h-full pb-52", {
           "overflow-y-auto": isAtMaxHeight,
         })}
       >

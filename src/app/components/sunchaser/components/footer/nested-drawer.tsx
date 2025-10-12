@@ -13,7 +13,6 @@ import { ForecastDay } from "app/api/forecast/mapper/forecast-mapper";
 import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
 import { ListWrapper } from "./detailed/list-wrapper";
-import { CarouselContent, CarouselItem } from "ui-kit/carousel/Carousel";
 import {
   Drawer,
   DrawerContent,
@@ -22,11 +21,8 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { snapPoints } from "./footer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useIsSettingsOpen } from "states/states";
-import { MapChooser } from "./map-chooser";
-import { MapOptionsEnum } from "./settings-form-values";
 
 type Props = {
   isAtMaxHeight: boolean;
@@ -50,6 +46,13 @@ export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
       isAzureFunctionCoordinatesMappedItems(item)
     ) {
       setHighlightedCard(item);
+      requestAnimationFrame(() =>
+        mapObject?.flyTo({
+          center: [item.longitude, item.latitude],
+          duration: 700,
+          zoom: 11,
+        })
+      );
     } else if (!isAzureFunctionCoordinatesMappedItems(item)) {
       setHighlightedCard(undefined);
       requestAnimationFrame(() => mapInstance?.flyToDataLocation(11));
@@ -75,9 +78,15 @@ export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
 
   const expandList = () => setSnap(snapPoints[2]);
 
+  const closeDetailedTable = () => {
+    setSnap(null);
+    requestAnimationFrame(() => resetMap());
+  };
+
   return (
     <>
       <Drawer
+        open={Boolean(snap)}
         snapPoints={[snapPoints[1], snapPoints[2]]}
         activeSnapPoint={snap}
         setActiveSnapPoint={setSnap}
@@ -92,7 +101,7 @@ export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
           </div>
           <span className="block h-4 border-b-4 border-greens-600"></span>
           <div
-            className={cn("flex-1 min-h-0  py-4 pb-32", {
+            className={cn("flex-1 min-h-0  py-4 pb-46", {
               "overflow-y-auto": isAtMaxHeight,
             })}
           >
@@ -107,9 +116,10 @@ export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
               noOverlay
               noPortal
               data-testid="detailed-table"
-              className="h-full"
+              className="h-full transition-height"
             >
               <ListWrapper
+                closeDetailedTable={closeDetailedTable}
                 isAtMaxHeight={snap === snapPoints[2]}
                 expandList={expandList}
               />
