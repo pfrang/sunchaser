@@ -3,7 +3,6 @@ import {
   useMapInstance,
   useMapObject,
 } from "states/sunchaser-result";
-import { useEffect } from "react";
 import { useUserLocation } from "app/hooks/use-user-location";
 import {
   AzureFunctionCoordinatesMappedItems,
@@ -15,30 +14,25 @@ import { ForecastNew } from "./forecast-new";
 import { SunchaserResultList } from "./sunchaser-result-list";
 import { ListWrapper } from "./detailed/list-wrapper";
 import {
-  CarouselContent,
-  CarouselItem,
-  useCarousel,
-} from "ui-kit/carousel/Carousel";
-
-type ExpandedTable = "sunchaser" | "forecast";
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerPortal,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { snapPoints } from "./footer";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 type Props = {
-  parentRef: React.RefObject<HTMLDivElement | null>;
   isAtMaxHeight: boolean;
-  expandList: () => void;
   middleList: () => void;
 };
 
-export const ListContainer = ({
-  parentRef,
-  isAtMaxHeight,
-  expandList,
-  middleList,
-}: Props) => {
+export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
 
-  const { api } = useCarousel();
-
+  const [snap, setSnap] = useState<number | string | null>(null);
   const { mapInstance } = useMapInstance();
   const { userLocation } = useUserLocation() as { userLocation: UserLocation };
 
@@ -46,60 +40,93 @@ export const ListContainer = ({
     item: AzureFunctionCoordinatesMappedItems | ForecastDay
   ) => {
     middleList();
+    setSnap(snapPoints[1]);
     if (
       item !== highlightedCard &&
       isAzureFunctionCoordinatesMappedItems(item)
     ) {
       setHighlightedCard(item);
+      requestAnimationFrame(() =>
+        mapObject?.flyTo({
+          center: [item.longitude, item.latitude],
+          duration: 700,
+          zoom: 11,
+        })
+      );
     } else if (!isAzureFunctionCoordinatesMappedItems(item)) {
       setHighlightedCard(undefined);
-      mapInstance?.flyToDataLocation(11);
+      requestAnimationFrame(() => mapInstance?.flyToDataLocation(11));
     }
   };
 
   const { mapObject } = useMapObject();
+
+  const resetDetailedTable = () => {
+    requestAnimationFrame(() => resetMap());
+  };
 
   const resetMap = () => {
     if (mapObject && mapInstance && userLocation?.longitude) {
       mapInstance.removeLayer("route");
       mapObject.flyTo({
         center: [userLocation.longitude, userLocation.latitude],
-        duration: 500,
+        duration: 700,
       });
       mapInstance.setFitBounds();
     }
   };
 
-  const resetDetailedTable = () => {
-    // setDetailedTableExpanded(false); // this starts the slide-out
+  const expandList = () => setSnap(snapPoints[2]);
 
+  const closeDetailedTable = () => {
+    setSnap(null);
     requestAnimationFrame(() => resetMap());
   };
 
-  const current = api?.selectedScrollSnap();
-
-  useEffect(() => {
-    if (current === 0) {
-      resetDetailedTable();
-    }
-  }, [current]);
-
   return (
     <>
-      <CarouselContent>
-        <CarouselItem>
-          <div className="flex gap-4">
+      <Drawer
+        open={Boolean(snap)}
+        snapPoints={[snapPoints[1], snapPoints[2]]}
+        activeSnapPoint={snap}
+        setActiveSnapPoint={setSnap}
+        shouldScaleBackground={false}
+        modal={false}
+        onClose={resetDetailedTable}
+        nested
+      >
+        <div className="flex flex-col h-full w-full min-h-0">
+          <div className="py-4">
             <ForecastNew toggleDetailedTable={toggleDetailedTable} />
           </div>
           <span className="block h-4 border-b-4 border-greens-600"></span>
-          <div className="py-4">
+          <div
+            className={cn("flex-1 min-h-0  py-4 pb-46", {
+              "overflow-y-auto": isAtMaxHeight,
+            })}
+          >
             <SunchaserResultList toggleDetailedTable={toggleDetailedTable} />
           </div>
-        </CarouselItem>
-        <CarouselItem>
-          <ListWrapper expandList={expandList} />
-        </CarouselItem>
-      </CarouselContent>
+        </div>
+
+        <DrawerHeader>
+          <DrawerTitle className="hidden"></DrawerTitle>
+          <DrawerPortal>
+            <DrawerContent
+              noOverlay
+              noPortal
+              data-testid="detailed-table"
+              className="h-full transition-height"
+            >
+              <ListWrapper
+                closeDetailedTable={closeDetailedTable}
+                isAtMaxHeight={snap === snapPoints[2]}
+                expandList={expandList}
+              />
+            </DrawerContent>
+          </DrawerPortal>
+        </DrawerHeader>
+      </Drawer>
     </>
   );
 };

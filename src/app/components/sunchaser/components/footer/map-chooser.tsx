@@ -12,7 +12,7 @@ export const MapChooser = ({
   setMapOption: (option: MapOptionsEnum) => void;
 }) => {
   return (
-    <div className="grid w-full flex-1 grid-cols-3 gap-4 px-6">
+    <div className="grid w-full flex-1 grid-cols-3 gap-4 px-6 ">
       {Object.entries(MapOptionsEnum).map(([key, value]) => (
         <MapButton
           key={key}
@@ -41,7 +41,7 @@ const MapButton = ({
   const { mapInstance } = useMapInstance();
   return (
     <button
-      className={`rounded-lg border-2 border-greens-300 bg-greens-300 px-4 py-2 shadow-md ${
+      className={`rounded-lg hover:bg-greens-400 border-2 h-[84px] border-greens-300 bg-greens-300 px-4 py-2 shadow-md ${
         mapOption === style ? "ring-2 ring-blue-500" : ""
       }`}
       onClick={(e) => {

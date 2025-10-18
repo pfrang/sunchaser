@@ -59,6 +59,35 @@ function Carousel({
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
 
+  api?.on("scroll", (emblaApi) => {
+    const {
+      limit,
+      target,
+      location,
+      offsetLocation,
+      scrollTo,
+      translate,
+      scrollBody,
+    } = emblaApi.internalEngine();
+
+    let edge: number | null = null;
+
+    if (location.get() >= limit.max) edge = limit.max;
+    if (location.get() <= limit.min) edge = limit.min;
+
+    if (edge !== null) {
+      offsetLocation.set(edge);
+      location.set(edge);
+      target.set(edge);
+      translate.to(edge);
+      translate.toggleActive(false);
+      scrollBody.useDuration(0).useFriction(0);
+      scrollTo.distance(0, false);
+    } else {
+      translate.toggleActive(true);
+    }
+  });
+
   const onSelect = React.useCallback((api: CarouselApi) => {
     if (!api) return;
     setCanScrollPrev(api.canScrollPrev());

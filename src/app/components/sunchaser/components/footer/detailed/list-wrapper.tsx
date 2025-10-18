@@ -6,11 +6,13 @@ import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { splitTimesIntoDays } from "app/utils/times-helper";
 import { useCallback, useMemo } from "react";
 import { useHighlightedCard } from "states/sunchaser-result";
-import { useCarousel } from "ui-kit/carousel/Carousel";
 import { TableItemWrapper } from "./table-item-wrapper";
+import { cn } from "@/lib/utils";
 
 interface ListWrapperProps {
   expandList: () => void;
+  isAtMaxHeight?: boolean;
+  closeDetailedTable: () => void;
 }
 
 function transformDays(
@@ -33,8 +35,11 @@ function transformDays(
   return times;
 }
 
-export const ListWrapper = ({ expandList }: ListWrapperProps) => {
-  const { scrollPrev } = useCarousel();
+export const ListWrapper = ({
+  expandList,
+  isAtMaxHeight,
+  closeDetailedTable,
+}: ListWrapperProps) => {
   const { highlightedCard, setHighlightedCard } = useHighlightedCard();
   const searchParams = useSearchParamsToObject();
 
@@ -59,14 +64,21 @@ export const ListWrapper = ({ expandList }: ListWrapperProps) => {
 
   return (
     <>
-      <div className="sticky top-0 flex items-center bg-white pb-2">
-        <div className="flex items-center cursor-pointer" onClick={scrollPrev}>
+      <div className="flex items-center bg-white pb-2">
+        <button
+          onClick={closeDetailedTable}
+          className="flex items-center cursor-pointer"
+        >
           <KeyboardArrowLeftIcon />
           <p className="pl-2 text-2xl">{location}</p>
-        </div>
+        </button>
       </div>
       <span className="block h-2"></span>
-      <div className="flex flex-col gap-4">
+      <div
+        className={cn("flex flex-col gap-4 h-full pb-52", {
+          "overflow-y-auto": isAtMaxHeight,
+        })}
+      >
         {Object.values(activeTimes).map((day: Times[], index) => {
           return (
             <TableItemWrapper expandList={expandList} key={index} day={day} />

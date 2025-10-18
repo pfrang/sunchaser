@@ -11,12 +11,11 @@ import {
 import { StartAndEndCoordinates } from "app/utils/mapbox-settings";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { useMapInstance, useMapObject } from "states/sunchaser-result";
-import { useCarousel } from "ui-kit/carousel/Carousel";
+import { DrawerTrigger } from "@/components/ui/drawer";
 
 export const SunchaserResultList = ({ toggleDetailedTable }) => {
   const { mapInstance } = useMapInstance();
   const { mapObject } = useMapObject();
-  const { scrollNext } = useCarousel();
 
   const searchParams = useSearchParamsToObject();
 
@@ -30,7 +29,6 @@ export const SunchaserResultList = ({ toggleDetailedTable }) => {
 
   const onClick = (item: AzureFunctionCoordinatesMappedItems) => {
     toggleDetailedTable(item);
-    scrollNext();
     const { lat, lon } = {
       lat: item.latitude,
       lon: item.longitude,
@@ -46,12 +44,6 @@ export const SunchaserResultList = ({ toggleDetailedTable }) => {
         latitude: userLocation.latitude,
       },
     };
-
-    mapObject?.flyTo({
-      center: [item.longitude, item.latitude],
-      duration: 500,
-      zoom: 11,
-    });
 
     // mapInstance?.fitBounds(coordinates, 50, 1000);
 
@@ -85,23 +77,25 @@ export const SunchaserResultList = ({ toggleDetailedTable }) => {
               <div className="flex flex-col gap-2">
                 {ranks.map((rank, index) => {
                   return (
-                    <ListItem
-                      key={rank.index}
-                      header={{
-                        placement: index + 1,
-                        name: rank.primaryName,
-                      }}
-                      body={{
-                        icon: rank.times[0].symbol || "partlycloudy",
-                        temperature: getAverageFromKey(
-                          rank.times,
-                          "temperature"
-                        ),
-                        rain: getAverageFromKey(rank.times, "rain") || 0,
-                        wind: getAverageFromKey(rank.times, "wind"),
-                      }}
-                      onClick={() => onClick(rank)}
-                    />
+                    <DrawerTrigger key={rank.index} asChild>
+                      <ListItem
+                        key={rank.index}
+                        header={{
+                          placement: index + 1,
+                          name: rank.primaryName,
+                        }}
+                        body={{
+                          icon: rank.times[0].symbol || "partlycloudy",
+                          temperature: getAverageFromKey(
+                            rank.times,
+                            "temperature"
+                          ),
+                          rain: getAverageFromKey(rank.times, "rain") || 0,
+                          wind: getAverageFromKey(rank.times, "wind"),
+                        }}
+                        onClick={() => onClick(rank)}
+                      />
+                    </DrawerTrigger>
                   );
                 })}
               </div>
