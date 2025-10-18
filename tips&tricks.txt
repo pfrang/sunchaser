@@ -13,7 +13,29 @@ Geo permissions in mainfest file:
 
 HVIS FIELMELDING: BUMP VERSJON
 For å bumpe versjon
-yarn bump:android -vC 6 -vN 1.0.5
+yarn bump:android -vC 8 -vN 1.0.7
+
+----  COPY LOCAL FILES WAY TO ANDROID STUDIO --
+- Build android folder
+Change dep path from 
+
+C:\Users\Peder\AndroidStudioProjects
+
+include ':capacitor-android'
+project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
+
+include ':capacitor-geolocation'
+project(':capacitor-geolocation').projectDir = new File('../node_modules/@capacitor/geolocation/android')
+
+to 
+
+include ':capacitor-android'
+project(':capacitor-android').projectDir = new File('./capacitor-android/')
+
+include ':capacitor-geolocation'
+project(':capacitor-geolocation').projectDir = new File('./capacitor-geolocation/')
+
+
 
 Husk på å bumpe versjon i Gradle Scripts build.gradle.kts før APK build
 ----
