@@ -8,6 +8,7 @@ import { useCallback, useMemo } from "react";
 import { useHighlightedCard } from "states/sunchaser-result";
 import { TableItemWrapper } from "./table-item-wrapper";
 import { cn } from "@/lib/utils";
+import { DrawerClose } from "@/components/ui/drawer";
 
 interface ListWrapperProps {
   expandList: () => void;
@@ -65,13 +66,13 @@ export const ListWrapper = ({
   return (
     <>
       <div className="flex items-center bg-white pb-2">
-        <button
+        <DrawerClose
           onClick={closeDetailedTable}
           className="flex items-center cursor-pointer"
         >
           <KeyboardArrowLeftIcon />
           <p className="pl-2 text-2xl">{location}</p>
-        </button>
+        </DrawerClose>
       </div>
       <span className="block h-2"></span>
       <div

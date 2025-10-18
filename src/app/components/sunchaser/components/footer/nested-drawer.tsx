@@ -86,7 +86,6 @@ export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
   return (
     <>
       <Drawer
-        open={Boolean(snap)}
         snapPoints={[snapPoints[1], snapPoints[2]]}
         activeSnapPoint={snap}
         setActiveSnapPoint={setSnap}
