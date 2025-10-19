@@ -10,7 +10,6 @@ import LayersIcon from "@mui/icons-material/Layers";
 import { MapChooser } from "./sunchaser/components/footer/map-chooser";
 import { useState } from "react";
 import { MapOptionsEnum } from "./sunchaser/components/footer/settings-form-values";
-import { snapPoints } from "./sunchaser/components/footer/footer";
 
 export const SettingsButton = () => {
   const [snap, setSnap] = useState<number | string | null>(null);
@@ -19,18 +18,23 @@ export const SettingsButton = () => {
     MapOptionsEnum.Standard
   );
 
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Drawer
-      snapPoints={[snapPoints[1]]}
+      snapPoints={[0.35]}
       // snapPoints={[snapPoints[1], snapPoints[2]]}
       // activeSnapPoint={snap}
       // shouldScaleBackground={false}
       setActiveSnapPoint={setSnap}
+      noBodyStyles
       modal
     >
-      <div className="absolute top-20">
-        <DrawerTrigger className="mr-2 rounded-2xl border-2 bg-white p-1">
-          <LayersIcon />
+      <div className="absolute top-16">
+        <DrawerTrigger
+          onClick={() => setIsOpen(!isOpen)}
+          className="mr-2 rounded-2xl border-2 bg-white p-1"
+        >
+          <LayersIcon color={isOpen ? "info" : "action"} />
         </DrawerTrigger>
       </div>
 

@@ -160,14 +160,7 @@ const MapRenderer = ({ mapboxKey }) => {
   }
   return (
     <>
-      <div className="fixed bottom-[calc(25vh+10px)] z-30 flex w-full justify-end pr-2">
-        <div className="flex flex-col gap-2">
-          <SuitcaseButton />
-          <UserLocationButton />
-        </div>
-      </div>
-
-      <section id="section-map" className="h-full">
+      <section id="section-map" className="size-full">
         <div className="sticky top-0 flex size-full items-center justify-center">
           {isLoading && (
             <div className="absolute z-50">

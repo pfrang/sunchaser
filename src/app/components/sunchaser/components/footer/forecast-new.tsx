@@ -18,12 +18,12 @@ export const ForecastNew = ({ toggleDetailedTable }) => {
 
   return (
     <div className="flex w-full flex-col">
-      <span className="block h-2 md:h-4"></span>
+      <span className="block md:h-4"></span>
       <div className="flex">
         <PlaceIcon />
         <p className="pl-2">{locationDisplay}</p>
       </div>
-      <span className="block h-2 md:h-4"></span>
+      <span className="block h-1 md:h-4"></span>
       <div>
         <ConditionalPresenter
           isLoading={isLoading}

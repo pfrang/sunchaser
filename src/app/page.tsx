@@ -16,7 +16,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex h-lvh w-full flex-col bg-white">
+      <div className="flex w-full h-full flex-col bg-white">
         <main className="h-full">
           <div className="fixed top-6 z-30 flex w-full flex-col items-end gap-4 px-2">
             <Suspense fallback={null}>

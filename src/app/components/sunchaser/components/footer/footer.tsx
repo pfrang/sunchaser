@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/drawer";
 import { Spinner } from "ui-kit/spinner/spinner";
 import { NestedDrawer } from "./nested-drawer";
+import { SuitcaseButton } from "app/components/suitcase-button";
+import { UserLocationButton } from "app/components/user-location-button";
 
 export type Breakpoints = [number, number, number];
 
@@ -41,7 +43,7 @@ export const Footer = () => {
   }, [snap]);
 
   useEffect(() => {
-    if (isMapBeingTouched || isSliding || isFilterOpen) {
+    if (isMapBeingTouched) {
       if (snap !== snapPoints[0]) {
         prevUserSnapRef.current = snap;
       }
@@ -50,7 +52,15 @@ export const Footer = () => {
       // Restore previous user snap
       setSnap(prevUserSnapRef.current ?? snapPoints[1]);
     }
-  }, [isMapBeingTouched, isSliding, isFilterOpen]);
+  }, [isMapBeingTouched]);
+
+  const closeFooter = useMemo(() => {
+    if (isSliding || isFilterOpen) {
+      return true;
+    } else {
+      return false;
+    }
+  }, [isSliding, isFilterOpen]);
 
   const middleList = () => setSnap(snapPoints[1]);
 
@@ -62,35 +72,44 @@ export const Footer = () => {
   }, []);
 
   return (
-    snap && (
-      <footer>
-        <Drawer
-          forceOpen
-          snapPoints={snapPoints}
-          activeSnapPoint={snap}
-          shouldScaleBackground={false}
-          dismissible={false}
-          setActiveSnapPoint={setSnap}
-          modal={false}
-        >
-          <DrawerTitle className="hidden"></DrawerTitle>
-          <DrawerPortal>
-            <DrawerContent
-              noPortal
-              noOverlay
-              data-testid="content"
-              className="w-full rounded-custom border-green-100 flex h-full"
-            >
-              <Suspense fallback={<Spinner />}>
-                <NestedDrawer
-                  isAtMaxHeight={isAtMaxHeight}
-                  middleList={middleList}
-                />
-              </Suspense>
-            </DrawerContent>
-          </DrawerPortal>
-        </Drawer>
-      </footer>
-    )
+    <>
+      <div className="self-end fixed bottom-[calc(25vh+4px)] z-30 pr-2">
+        <div className="flex flex-col gap-2">
+          <SuitcaseButton />
+          <UserLocationButton />
+        </div>
+      </div>
+
+      {snap && !closeFooter && (
+        <footer>
+          <Drawer
+            forceOpen
+            snapPoints={snapPoints}
+            activeSnapPoint={snap}
+            shouldScaleBackground={false}
+            dismissible={false}
+            setActiveSnapPoint={setSnap}
+            modal={false}
+          >
+            <DrawerTitle className="hidden"></DrawerTitle>
+            <DrawerPortal>
+              <DrawerContent
+                noPortal
+                noOverlay
+                data-testid="content"
+                className="w-full rounded-custom border-green-100 flex h-full"
+              >
+                <Suspense fallback={<Spinner />}>
+                  <NestedDrawer
+                    isAtMaxHeight={isAtMaxHeight}
+                    middleList={middleList}
+                  />
+                </Suspense>
+              </DrawerContent>
+            </DrawerPortal>
+          </Drawer>
+        </footer>
+      )}
+    </>
   );
 };
