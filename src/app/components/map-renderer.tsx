@@ -160,7 +160,7 @@ const MapRenderer = ({ mapboxKey }) => {
   }
   return (
     <>
-      <div className="fixed bottom-40 z-30 flex w-full justify-end pr-2">
+      <div className="fixed bottom-[calc(25vh+10px)] z-30 flex w-full justify-end pr-2">
         <div className="flex flex-col gap-2">
           <SuitcaseButton />
           <UserLocationButton />

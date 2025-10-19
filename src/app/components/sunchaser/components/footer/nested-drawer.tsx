@@ -95,12 +95,12 @@ export const NestedDrawer = ({ isAtMaxHeight, middleList }: Props) => {
         nested
       >
         <div className="flex flex-col h-full w-full min-h-0">
-          <div className="py-4">
+          <div className="py-2 md:py-4">
             <ForecastNew toggleDetailedTable={toggleDetailedTable} />
           </div>
-          <span className="block h-4 border-b-4 border-greens-600"></span>
+          <span className="block h-2 md:h-4 border-b-4 border-greens-600"></span>
           <div
-            className={cn("flex-1 min-h-0  py-4 pb-46", {
+            className={cn("flex-1 min-h-0 py-2 md:py-4 pb-46", {
               "overflow-y-auto": isAtMaxHeight,
             })}
           >
