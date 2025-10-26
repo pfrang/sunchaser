@@ -15,9 +15,6 @@ import { sanitizeNextParams } from "../utils/sanitize-next-query";
 import { useSearchParamsToObject } from "../hooks/use-search-params";
 import { MapBoxHelper } from "../utils/mapbox-settings";
 
-import { UserLocationButton } from "./user-location-button";
-import { SuitcaseButton } from "./suitcase-button";
-
 const LocationOnIcon = ({ sx, className }) => (
   <svg
     width={sx?.fontSize || 24}
@@ -81,7 +78,7 @@ const MapRenderer = ({ mapboxKey }) => {
         dataLocation.latitude,
         userLocation.longitude,
         userLocation.latitude,
-        data.ranks
+        data.ranks,
       );
 
       const primaryMap = mapInitializer.map;
@@ -123,7 +120,7 @@ const MapRenderer = ({ mapboxKey }) => {
 
       const map = new MapboxGlobalRankSettings(
         mapInstance.map,
-        response
+        response,
       ).addCircleRanksToMap();
     };
 

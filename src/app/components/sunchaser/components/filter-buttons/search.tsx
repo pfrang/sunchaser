@@ -218,7 +218,7 @@ export const Search = () => {
                           setLocationAndClearList({
                             value: item.place,
                             id: item.place_id,
-                          })
+                          }),
                         )
                       }
                       tabIndex={0}

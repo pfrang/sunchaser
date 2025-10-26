@@ -1,6 +1,6 @@
-export const CalendarIcon = ({ fill = "currentColor" }) => {
+export const CalendarIcon = ({ fill = "currentColor", className = "" }) => {
   return (
-    <svg className="size-[36px]" fill={fill} viewBox="0 0 96 96">
+    <svg className={className} fill={fill} viewBox="0 0 96 96">
       <g clipPath="url(#clip0)" transform="translate(-75 -551)">
         <path d="M104 577C105.7 577 107 575.7 107 574L107 568C107 566.3 105.7 565 104 565 102.3 565 101 566.3 101 568L101 574C101 575.7 102.3 577 104 577Z" />
         <path d="M95 619 111 619 111 627 95 627 95 619ZM95 607 111 607 111 615 95 615 95 607ZM95 595 111 595 111 603 95 603 95 595ZM131 595 131 603 115 603 115 595 131 595ZM151 595 151 603 135 603 135 595 151 595ZM151 615 135 615 135 607 151 607 151 615ZM151 627 135 627 135 619 151 619 151 627ZM115 615 115 607 131 607 131 615 115 615ZM115 627 115 619 131 619 131 627 115 627ZM89 633 157 633 157 589 89 589 89 633Z" />

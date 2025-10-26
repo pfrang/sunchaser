@@ -106,13 +106,13 @@ export const RightButtonsWrapper = () => {
           <Form className="relative z-10 w-full">
             <div
               ref={wrapperRef}
-              className={`relative ml-auto flex flex-col content-center gap-4 transition-width duration-300 ease-in-out
+              className={`relative ml-auto flex flex-col content-center gap-3 transition-width duration-300 ease-in-out
         ${isFilterOpen ? "w-full" : "w-[52px]"}
       `}
             >
               {!isFilterOpen ? (
-                <Wrapper>
-                  <div className="flex w-full justify-center rounded-inherit bg-white">
+                <div className="relative flex bg-white h-[52px] cursor-pointer rounded-[16px] shadow-lg">
+                  <div className="flex w-full justify-center rounded-inherit">
                     <Image
                       // sizes="(max-width: 800px) 100px, 50px"
                       height={36}
@@ -129,7 +129,7 @@ export const RightButtonsWrapper = () => {
                       tabIndex={0}
                     />
                   </div>
-                </Wrapper>
+                </div>
               ) : (
                 <>
                   <Wrapper>
@@ -143,15 +143,15 @@ export const RightButtonsWrapper = () => {
                   >
                     <SliderWrapper />
                   </div>
-                  <div className="mt-6 flex w-full justify-center">
+                  <div className="flex w-full justify-center">
                     <button
                       disabled={isSubmitting}
                       type="submit"
                       className="flex w-fit gap-2 rounded-[36px] bg-greens-400  text-white"
                     >
-                      <div className="flex items-center justify-between p-4">
+                      <div className="flex items-center justify-between p-2 px-4">
                         <SunchaserLogo fill={"white"} />
-                        <p className="pl-4">Chase the sun</p>
+                        <p className="pl-4 text-sm">Chase the sun</p>
                       </div>
                     </button>
                   </div>
@@ -168,7 +168,7 @@ export const RightButtonsWrapper = () => {
 const Wrapper = ({ children }) => {
   return (
     <div
-      className={`relative flex h-[52px] cursor-pointer rounded-[16px] shadow-lg`}
+      className={`relative flex bg-white h-[42px] cursor-pointer rounded-[16px] shadow-lg`}
     >
       {children}
     </div>

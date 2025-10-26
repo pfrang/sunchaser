@@ -112,7 +112,7 @@ export const CalendarWrapper = () => {
         disabled={!isFilterOpen}
         className={`bg-inherit ${
           isFilterOpen ? "" : "hidden"
-        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-xl outline-none focus:ring-2 focus:ring-greens-400`}
+        } size-full items-center text-ellipsis rounded-inherit pl-4 pr-6 text-lg outline-none focus:ring-2 focus:ring-greens-400`}
         value={
           isFilterOpen
             ? endOfDay(values.calendar).toISOString().split("T")[0]
@@ -134,7 +134,7 @@ export const CalendarWrapper = () => {
         ref={calendarRef}
         role="button"
         aria-label={isCalendarExpanded ? "Close calendar" : "Open calendar"}
-        className="absolute right-2 top-0 flex h-full cursor-pointer items-center rounded text-greens-400 focus:outline-none focus:ring-2 focus:ring-greens-400"
+        className="absolute right-2 top-0 flex h-full cursor-pointer items-center rounded text-greens-400 focus:outline-none focus:ring-2 focus:ring-greens-400 size-[32px]"
       >
         <CalendarIcon />
       </div>
