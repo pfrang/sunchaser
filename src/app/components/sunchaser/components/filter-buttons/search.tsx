@@ -36,6 +36,12 @@ export const Search = () => {
   }, [values.townSearch]);
 
   useEffect(() => {
+    if (!values.townSearch) {
+      setFieldValue("townSearch", "Min lokasjon");
+    }
+  }, [isFilterOpen]);
+
+  useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isFilterOpen) {
         setIsUserTyping(false);

@@ -102,7 +102,7 @@ export const CalendarWrapper = () => {
   };
   return (
     <span
-      className={`w-full rounded-inherit bg-white ${isSliding && "opacity-30"}`}
+      className={`w-full rounded-inherit ${isSliding && "opacity-30"}`}
       ref={wrapperRef}
     >
       <input

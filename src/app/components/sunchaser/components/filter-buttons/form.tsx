@@ -6,7 +6,7 @@ import { useSearchParamsToObject } from "app/hooks/use-search-params";
 import { useUpdateUrl } from "app/hooks/use-update-url";
 import { useUserLocation } from "app/hooks/use-user-location";
 import { fetchTownDetails } from "app/hooks/fetch-town-details";
-import { useIsFilterOpen } from "states/states";
+import { useIsFilterOpen, useIsSliding } from "states/states";
 import { endOfDay } from "date-fns";
 import { SunchaserLogo } from "ui-kit/logo/logo";
 import { useMapInstance } from "states/sunchaser-result";
@@ -14,6 +14,7 @@ import { useMapInstance } from "states/sunchaser-result";
 import { Search } from "./search";
 import { CalendarWrapper } from "./calendar-wrapper";
 import { SliderWrapper } from "./slider";
+import { cn } from "@/lib/utils";
 
 export interface FormShape {
   townSearch: string;
@@ -25,6 +26,7 @@ export interface FormShape {
 export const RightButtonsWrapper = () => {
   const { isFilterOpen, setIsFilterOpen } = useIsFilterOpen();
   const { mapInstance } = useMapInstance();
+  const { isSliding } = useIsSliding();
 
   useEffect(() => {
     if (!isFilterOpen) {
@@ -143,7 +145,13 @@ export const RightButtonsWrapper = () => {
                   >
                     <SliderWrapper />
                   </div>
-                  <div className="flex w-full justify-center">
+                  <div
+                    className={cn(
+                      `flex w-full justify-center ${
+                        isSliding ? "pointer-events-none opacity-50" : ""
+                      }`,
+                    )}
+                  >
                     <button
                       disabled={isSubmitting}
                       type="submit"
@@ -166,9 +174,13 @@ export const RightButtonsWrapper = () => {
 };
 
 const Wrapper = ({ children }) => {
+  const { isSliding } = useIsSliding();
+
   return (
     <div
-      className={`relative flex bg-white h-[42px] cursor-pointer rounded-[16px] shadow-lg`}
+      className={`relative flex bg-white h-[42px] cursor-pointer rounded-[16px] shadow-lg ${
+        isSliding ? "pointer-events-none opacity-50" : ""
+      }`}
     >
       {children}
     </div>
